@@ -2,7 +2,7 @@ import adapter from 'svelte-adapter-github';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 // CHANGEME
-const REPO_NAME = '/p5-svelte-template';
+const REPO_NAME = '/workshop';
 const prod = process.env.ENV === 'prod';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
