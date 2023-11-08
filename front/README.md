@@ -1,16 +1,8 @@
-# P5 + svelte
+# Workshop
 
-Just a boilerplate.
+## TODO
 
--   `npm install`
--   `npm run dev`
-
-For Github pages publication:
-
--   Clone this repo
--   Create new repo on Github
--   `git remote remove origin`
--   `git remote add origin [new repo url`
--   Update the `REPO_NAME` variable in [svelte.config.js](./svelte.config.js)
--   `git push`
--   Update the repository settings to enable Github Page deployments from the branch `gh-pages`
+-   Make `<kbd>` tags work in Markdown component
+-   Fix css duplicated by Markdown in `<svelte:head>`
+-   Find a way to use `hljs.highlightElement` in Mardown to avoid calling `highlight` on already highlighted code
+-   Recreate mechanism to open note in its own page

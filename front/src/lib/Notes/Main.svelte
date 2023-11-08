@@ -4,6 +4,7 @@
 
     const notesModules = import.meta.glob("./data/*.md");
     let searchStr: string;
+    let notes: Note[] = [];
 
     const extractDataFromSource = (source: string) => {
         const titleMatch = source.match(/\[title]: # '(.*)'\n/);
@@ -18,20 +19,20 @@
         return { source, title, tags};
     }
 
-    let notes: Note[] = [];
-    for (const notePath in notesModules) {
-        notesModules[notePath]().then((noteModule) => {
+    // Import all the markdowns, extract title and tags and add to array used for display
+    const moduleResolutions = Object.keys(notesModules).map(( notePath ) => notesModules[notePath]());
+    Promise.all(moduleResolutions).then(modules => {
+        notes = modules.map(noteModule => {
             const module = noteModule as { default: string };
             if (!module?.default || typeof module?.default !== 'string') {
                 throw new Error('Invalid note content');
             };
             const noteSource = module.default;
-            const data = extractDataFromSource(noteSource);
-            notes = [...notes, data];
-        });
-    }
+            return extractDataFromSource(noteSource);
+        }).sort((a, b) => a.title < b.title ? -1 : 1);
+    });
 
-    const filterIn = (note: Note, searchStr: string) => {
+    const noteMatchesSearch = (note: Note, searchStr: string) => {
         const search = searchStr?.toLowerCase().trim() || '';
         if (!searchStr || searchStr.length === 0) {
             return true;
@@ -54,7 +55,14 @@
 </div>
 
 {#each notes as note}
-    {#if filterIn(note, searchStr) }
+<!-- Use a css class instead of an #if directive to avoid mounting all of the components when the search is changed -->
+<div class:hidden={!noteMatchesSearch(note, searchStr)} >
     <NoteComponent {note} />
-    {/if}
+</div>
 {/each}
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>

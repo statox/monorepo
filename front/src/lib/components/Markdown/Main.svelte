@@ -7,13 +7,11 @@
     import LinkRenderer from './renderers/Link.svelte';
 
     export let source: string;
-    let sourceWithFixedLinks: string;
+    // Shitty hack because I didn't figure out how to tweak the pre-renderer
+    // to properly include the baseUrl in the image links
+    const sourceWithFixedLinks= source.replaceAll('{baseUrl}', base);
 
     onMount(() => {
-        // Shitty hack because I didn't figure out how to tweak the pre-renderer
-        // to properly include the baseUrl in the image links
-        sourceWithFixedLinks = source.replaceAll('{baseUrl}', base);
-
         hljs.highlightAll();
     });
 </script>
