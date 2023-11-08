@@ -1,17 +1,17 @@
 {
-  "name": "workshop",
-  "version": "1",
-  "private": true,
-  "scripts": {
-    "dev": "vite dev --port 8080 --open",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --plugin-search-dir . --check . && eslint .",
-    "format": "prettier --plugin-search-dir . --write .",
-    "test": "vitest"
-  },
+    "name": "workshop",
+    "version": "1",
+    "private": true,
+    "scripts": {
+        "dev": "vite dev --port 8080",
+        "build": "vite build",
+        "preview": "vite preview",
+        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "lint": "prettier --plugin-search-dir . --check . && eslint .",
+        "format": "prettier --plugin-search-dir . --write .",
+        "test": "vitest"
+    },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@sveltejs/adapter-auto": "^2.1.1",
@@ -38,5 +38,5 @@
         "vite-plugin-plain-text": "^1.4.2",
         "vitest": "^0.34.6"
     },
-  "type": "module"
+    "type": "module"
 }
