@@ -1,33 +1,28 @@
 <script lang="ts">
     import Mardkown from '$lib/components/Markdown/Main.svelte';
-    import { onMount } from 'svelte';
+    import type {Note} from './types';
+    export let note: Note;
 
-    export let source: string;
-    let noteData = {
-        title: '',
-        tags: []
-    }
-
-    const extractDataFromSource = (source: string) => {
-        const title = source.match(/\[title]: # \((.*)\)\n/)[1];
-        const tagsStr = source.match(/\[tags]: # \((.*)\)\n/)[1];
-        const tags = JSON.parse(tagsStr);
-
-        noteData.title = title;
-        noteData.tags = tags;
-    }
-
-    onMount(() => {
-        extractDataFromSource(source);
-    });
+    const formattedTags = note.tags.map(t => `[${t}]`).join('');
 </script>
 
 
 <details>
     <summary>
-        <a>{ noteData.title }</a>
-        <span class="formatted-tag">{ noteData.tags }</span>
+        <span class="title">{ note.title }</span>
+        <span class="formatted-tags">{ formattedTags }</span>
     </summary>
 
-    <Mardkown {source} />
+    <Mardkown source={note.source} />
 </details>
+
+<style>
+    .title {
+        color: var(--nc-lk-1)
+    }
+    .formatted-tags {
+        font-family: var(--nc-font-mono);
+        /* Graying out https://stackoverflow.com/a/5081723/4194289 */
+        opacity: 0.6;
+    }
+</style>
