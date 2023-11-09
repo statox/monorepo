@@ -1,6 +1,9 @@
 <script lang="ts">
     import { base } from '$app/paths';
+    import '$lib/styles/new.css';
+    import '$lib/styles/new_theme.css';
 </script>
+
 <header>
     <h1>Workshop</h1>
 
