@@ -5,7 +5,7 @@
 
 That worked perfectly on my Lenovo T490s with Ubuntu 21.10 and i3 4.20. The TL;DR is directly copied from Cody's post and I keep it here only because it will be easy for me to find it back.
 
-The different available options are listed with [`man libinput`](# http://manpages.ubuntu.com/manpages/xenial/man4/libinput.4.html)
+The different available options are listed with [`man libinput`](http://manpages.ubuntu.com/manpages/xenial/man4/libinput.4.html)
 
 ```bash
 sudo mkdir -p /etc/X11/xorg.conf.d

@@ -1,4 +1,4 @@
-[tags]: # '["screen"]'
+[tags]: # '["bash", "screen"]'
 [title]: # 'Screen'
 
 ### Basic usage

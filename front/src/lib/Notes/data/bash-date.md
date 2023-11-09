@@ -1,14 +1,12 @@
 [tags]: # '["bash", "date"]'
 [title]: # 'Bash dates'
 
-_All of these notes are about `date` from GNU coreutils on Linux. I believe some parameters are diferent on MacOS._
-
-Everything in there is basically a rehash of `man date`.
+_This note is about `date` from GNU coreutils on Linux. Some parameters may differ on MacOS._
 
 ### Timestamp / Date conversions
 
 ```bash
-date +"%s"  # Get current date as timestamp
+date +"%s"  # Get current date as timestamp in seconds
 
 alias ts2date='timestamp2date' # Parse timestamp as date
 function timestamp2date {

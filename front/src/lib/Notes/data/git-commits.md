@@ -1,8 +1,8 @@
 [tags]: # '["git", "commit"]'
 [title]: # 'Git commit fixes'
 
-This link is dope https://sethrobertson.github.io/GitFixUm/fixup.html
-(And someone made a better UI [here](https://sukima.github.io/GitFixUm/))
+See [sethrobertson original page](https://sethrobertson.github.io/GitFixUm/fixup.html)
+or [this one](https://sukima.github.io/GitFixUm/) with a better UI.
 
 TODO: Extract the ones I need but can never remember
 

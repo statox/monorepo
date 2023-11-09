@@ -9,13 +9,13 @@ In order to pull images (from instruction or docker pull command) via the proxy:
     mkdir /etc/systemd/system/docker.service.d
     ```
 
-1. Add proxy in /etc/systemd/system/docker.service.d/http-proxy.conf file:
+1. Add proxy in `/etc/systemd/system/docker.service.d/http-proxy.conf` file:
 
     ```bash
     # /etc/systemd/system/docker.service.d/http-proxy.conf
     [Service]
-    Environment="HTTP_PROXY=http:/proxy.service.kwift.eu:3128"
-    Environment="HTTPS_PROXY=http://proxy.service.kwift.eu:3128"
+    Environment="HTTP_PROXY=http:/proxy.address.com:3128"
+    Environment="HTTPS_PROXY=http://proxy.address.com:3128"
     Environment="NO_PROXY=localhost,127.0.0.1,localaddress,.localdomain.com"
     ```
 
@@ -31,7 +31,7 @@ In order to pull images (from instruction or docker pull command) via the proxy:
     systemctl restart docker
     ```
 
-In order to have the apt-get working inside the Dockerfile via the proxy you have to add some build args to the command:
+In order to have `apt-get` working inside the Dockerfile via the proxy you have to add some build args to the command:
 
 ```bash
 docker build --build-arg http_proxy=http://proxy.service.kwift.eu:3128 --build-arg https_proxy=http://proxy.service.kwift.eu:3128 .

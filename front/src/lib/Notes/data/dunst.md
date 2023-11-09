@@ -1,7 +1,7 @@
 [tags]: # '["dunst", "dunstctl", "notification"]'
 [title]: # 'Dunst'
 
-The [Arch wiki article](https://wiki.archlinux.org/title/Dunst) says it all.
+Good reference in the [Arch wiki article](https://wiki.archlinux.org/title/Dunst).
 
 ### Test notification
 
