@@ -6,13 +6,17 @@
 
     let searchString = '';
 
-    const nbLatestChords = 10;
-    const latestChords = chords
-    .filter(c => c.creationDate)
-    .sort((a, b) => {
-        return b.creationDate - a.creationDate;
-    })
-    .slice(0, nbLatestChords);
+    let nbLatestChords = 6;
+    let latestChords: Chord[] = [];
+    const getMoreLatestSongs = () => {
+        nbLatestChords += 4;
+        latestChords = chords
+        .filter(c => c.creationDate)
+        .sort((a, b) => {
+            return b.creationDate - a.creationDate;
+        })
+        .slice(0, nbLatestChords);
+    };
 
     const nbRandomChords = 4;
     let randomChordIndexes: number[] = [];
@@ -52,7 +56,10 @@
         return byArtist;
     }, {} as chordsByArtist);
 
-    onMount(() => {getRandomSongs()});
+    onMount(() => {
+        getRandomSongs();
+        getMoreLatestSongs();
+    });
 </script>
 
 <h2>Chords</h2>
@@ -70,12 +77,13 @@
             </li>
         {/each}
     </ul>
+    <button on:click={() => getMoreLatestSongs()}>More...</button>
 </div>
 <br/>
 
 <div>
     <h3>Random song</h3>
-    <button on:click={getRandomSongs}>Get a random song</button>
+    <button on:click={getRandomSongs}>Get more random songs</button>
     {#if randomChordIndexes.length > nbRandomChords}
         <button on:click={getPreviousRandomSongs}>&nbsp↶&nbsp</button>
     {/if}

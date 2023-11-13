@@ -400,7 +400,8 @@ th {
     background: var(--nc-bg-2);
 }
 
-tr:nth-child(even) {
+/* Only activate stripes when .stripped class is set */
+table.stripped tr:nth-child(even) {
     /* Set every other cell slightly darker. Improves readability. */
     background: var(--nc-bg-2);
 }
