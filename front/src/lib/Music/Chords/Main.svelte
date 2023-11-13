@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { alphaSort } from '$lib/helpers';
+    import { alphaLowerSort } from '$lib/helpers';
     import type { Chord } from './types';
     import ChordLink from './ChordLink.svelte';
     export let chords: Chord[];
@@ -108,7 +108,7 @@
 <br/>
 
 <table>
-    {#each Object.keys(chordsByArtist).sort(alphaSort) as artist}
+    {#each Object.keys(chordsByArtist).sort(alphaLowerSort) as artist}
         {@const chords = chordsByArtist[artist].sort((a, b) => a.title < b.title ? -1 : 1) }
         {@const artistTags = artist + ';' + chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '')}
 
