@@ -22,6 +22,7 @@
 
     const nbRandomChords = 4;
     let randomChordIndexes: number[] = [];
+    let randomChords: Chord[] = [];
     const getRandomSongs = () => {
         if (randomChordIndexes.length >= chords.length - nbRandomChords) {
             randomChordIndexes = [];
@@ -35,7 +36,9 @@
             randomChordIndexes.push(randomIndex);
         }
 
-        randomChordIndexes = randomChordIndexes;
+        randomChords = randomChordIndexes
+            .slice(randomChordIndexes.length - nbRandomChords)
+            .map(i => chords[i]);
     }
 
     const getPreviousRandomSongs = () => {
@@ -43,7 +46,9 @@
             return;
         }
         randomChordIndexes.splice(randomChordIndexes.length - nbRandomChords);
-        randomChordIndexes = randomChordIndexes;
+        randomChords = randomChordIndexes
+            .slice(randomChordIndexes.length - nbRandomChords)
+            .map(i => chords[i]);
     };
 
     type chordsByArtist = {
@@ -101,8 +106,7 @@
     <br/>
 
     <ul class="ul2col-container">
-        {#each randomChordIndexes.slice(randomChordIndexes.length - nbRandomChords) as chordIndex}
-            {@const chord = chords[chordIndex]}
+        {#each randomChords as chord (chord.url)}
             <li class="ul2col-item">
                 <ChordLink {chord} showArtist={true} />
             </li>
@@ -110,7 +114,6 @@
     </ul>
 </div>
 <br/>
-
 
 <div>
     <h3>All chords</h3>
