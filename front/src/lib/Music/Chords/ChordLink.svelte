@@ -25,3 +25,17 @@
     <a href={chord.url} target="_blank" rel="noopener noreferrer">{text}</a>
 </span>
 <span class={iconClass}></span>
+
+<style>
+.fa-file-word {
+    color: #1d5af4;
+}
+
+.fa-file-pdf {
+    color: #e82236;
+}
+
+.fa-link {
+    color: #727171;
+}
+</style>
