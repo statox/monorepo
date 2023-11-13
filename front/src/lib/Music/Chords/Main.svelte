@@ -81,7 +81,10 @@
 <p>This is a list of {chords.length} song chords I have been gathering for the past 10 years and that I like to play.</p>
 
 <div>
-    <h3>Latest additions</h3>
+    <h3>
+        Latest additions
+        <button class="pull-right" on:click={() => getMoreLatestSongs()}>More...</button>
+    </h3>
     <ul class="ul2col-container">
         {#each latestChords as chord}
             <li class="ul2col-item">
@@ -89,7 +92,6 @@
             </li>
         {/each}
     </ul>
-    <button on:click={() => getMoreLatestSongs()}>More...</button>
 </div>
 <br/>
 
