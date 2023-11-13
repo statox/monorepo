@@ -77,9 +77,9 @@
 
 <div>
     <h3>Latest additions</h3>
-    <ul class="ul2col">
+    <ul class="ul2col-container">
         {#each latestChords as chord}
-            <li>
+            <li class="ul2col-item">
                 <ChordLink {chord} />
             </li>
         {/each}
@@ -96,10 +96,10 @@
     {/if}
     <br/>
 
-    <ul>
+    <ul class="ul2col-container">
         {#each randomChordIndexes.slice(randomChordIndexes.length - nbRandomChords) as chordIndex}
             {@const chord = chords[chordIndex]}
-            <li>
+            <li class="ul2col-item">
                 <ChordLink {chord} showArtist={true} />
             </li>
         {/each}
@@ -123,11 +123,11 @@
         {#if searchString.length === 0 || artistTags.toLowerCase().match(searchString.toLowerCase())}
             <tr>
                 <td>{artist}
-                    <ul class="ul2col">
+                    <ul class="ul2col-container">
                         {#each chords as chord}
                             {@const chordTags = artist + ';' + chord.title + ';' + chord.tags.join(',')}
                             {#if searchString.length === 0 || chordTags.toLowerCase().match(searchString.toLowerCase())}
-                                <li>
+                                <li class="ul2col-item">
                                     <ChordLink {chord} />
                                 </li>
                             {/if}
@@ -141,10 +141,14 @@
 
 <style>
 @media screen and (min-width: 600px) {
-    .ul2col {
-        columns: 2;
-        -webkit-columns: 2;
-        -moz-columns: 2;
+    .ul2col-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .ul2col-item {
+        flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
+        list-style-type: none; /* Optional: Removes the bullet points */
     }
 }
 </style>
