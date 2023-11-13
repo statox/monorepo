@@ -2,6 +2,7 @@
     import { base } from '$app/paths';
     import '$lib/styles/new.css';
     import '$lib/styles/new_theme.css';
+    import '$lib/styles/helpers.css';
 </script>
 
 <header>

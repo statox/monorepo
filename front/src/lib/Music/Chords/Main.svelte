@@ -63,7 +63,12 @@
     });
 </script>
 
-<h2>Chords</h2>
+<h2>
+    Chords
+    <a class="pull-right" href="https://github.com/statox/blog/issues/105#new_comment_field" target="_blank" rel="noopener noreferrer">
+        <button>Add a song</button>
+    </a>
+</h2>
 
 <p>This is a list of {chords.length} song chords I have been gathering for the past 10 years and that I like to play.</p>
 
