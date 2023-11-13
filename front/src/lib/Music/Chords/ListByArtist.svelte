@@ -2,6 +2,7 @@
     import { alphaLowerSort } from "$lib/helpers";
     import ChordLink from "./ChordLink.svelte";
     import type { Chord } from './types';
+    import AlphabeticalIndexBar from "./AlphabeticalIndexBar.svelte";
 
 
     export let searchString: string;
@@ -19,19 +20,32 @@
         byArtist[artist].push(chord);
         return byArtist;
     }, {} as ChordsByArtist);
+
+    const tags: { letter: string, tag: string}[] = [];
+    const artistsList = Object.keys(chordsByArtist)
+    .sort(alphaLowerSort)
+    .map((artist, index, list) => {
+        if (index === 0 || artist[0].toLowerCase() != list[index-1][0].toLowerCase()) {
+            const tag = 'anchor_letter_' + artist[0]
+            tags.push({letter: artist[0], tag});
+            return { name: artist, tag }
+        }
+        return {name: artist};
+    });
 </script>
 
+<AlphabeticalIndexBar {tags} />
 <table>
-    {#each Object.keys(chordsByArtist).sort(alphaLowerSort) as artist}
-        {@const chords = chordsByArtist[artist].sort((a, b) => a.title < b.title ? -1 : 1) }
+    {#each artistsList as artist}
+        {@const chords = chordsByArtist[artist.name].sort((a, b) => a.title < b.title ? -1 : 1) }
         {@const artistTags = artist + ';' + chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '')}
 
         {#if searchString.length === 0 || artistTags.toLowerCase().match(searchString.toLowerCase())}
             <tr>
-                <td>{artist}
+                <td id={artist.tag}>{artist.name}
                     <ul class="ul2col-container">
                         {#each chords as chord}
-                            {@const chordTags = artist + ';' + chord.title + ';' + chord.tags.join(',')}
+                            {@const chordTags = artist.name + ';' + chord.title + ';' + chord.tags.join(',')}
                             {#if searchString.length === 0 || chordTags.toLowerCase().match(searchString.toLowerCase())}
                                 <li class="ul2col-item">
                                     <ChordLink {chord} />
@@ -66,5 +80,4 @@ tr {
     border-bottom: solid thin;
     border-bottom-color: var(--nc-bg-0);
 }
-
 </style>
