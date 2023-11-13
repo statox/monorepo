@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { alphaSort } from '$lib/helpers';
     import type { Chord } from './types';
+    import ChordLink from './ChordLink.svelte';
     export let chords: Chord[];
 
     let searchString = '';
@@ -71,9 +72,7 @@
     <ul class="ul2col">
         {#each latestChords as chord}
             <li>
-                <span>
-                    <a href={chord.url} target="_blank" rel="noopener noreferrer">{chord.title}</a>
-                </span>
+                <ChordLink {chord} />
             </li>
         {/each}
     </ul>
@@ -93,9 +92,7 @@
         {#each randomChordIndexes.slice(randomChordIndexes.length - nbRandomChords) as chordIndex}
             {@const chord = chords[chordIndex]}
             <li>
-                <span>
-                    <a href={chord.url} target="_blank" rel="noopener noreferrer">{chord.artist} - {chord.title}</a>
-                </span>
+                <ChordLink {chord} showArtist={true} />
             </li>
         {/each}
     </ul>
@@ -123,9 +120,7 @@
                             {@const chordTags = artist + ';' + chord.title + ';' + chord.tags.join(',')}
                             {#if searchString.length === 0 || chordTags.toLowerCase().match(searchString.toLowerCase())}
                                 <li>
-                                    <span>
-                                        <a href={chord.url} target="_blank" rel="noopener noreferrer">{chord.title}</a>
-                                    </span>
+                                    <ChordLink {chord} />
                                 </li>
                             {/if}
                         {/each}
