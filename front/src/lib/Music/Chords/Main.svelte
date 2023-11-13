@@ -89,11 +89,15 @@
 <br/>
 
 <div>
-    <h3>Random song</h3>
-    <button on:click={getRandomSongs}>Get more random songs</button>
-    {#if randomChordIndexes.length > nbRandomChords}
-        <button on:click={getPreviousRandomSongs}>&nbsp↶&nbsp</button>
-    {/if}
+    <h3>
+        Random song
+        <span class='pull-right'>
+            {#if randomChordIndexes.length > nbRandomChords}
+                <button on:click={getPreviousRandomSongs}>&nbsp↶&nbsp</button>
+            {/if}
+            <button on:click={getRandomSongs}>Get more random songs</button>
+        </span>
+    </h3>
     <br/>
 
     <ul class="ul2col-container">
