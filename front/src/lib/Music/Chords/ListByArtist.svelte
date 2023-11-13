@@ -2,8 +2,6 @@
     import { alphaLowerSort } from "$lib/helpers";
     import ChordLink from "./ChordLink.svelte";
     import type { Chord } from './types';
-    import AlphabeticalIndexBar from "./AlphabeticalIndexBar.svelte";
-
 
     export let searchString: string;
     export let chords: Chord[];
@@ -32,10 +30,41 @@
         }
         return {name: artist};
     });
+
+    let y: number;
+    let barTop: number = 0;
+    let tableElement: HTMLElement;
+
+    const onScroll = (_y: number) => {
+        if (!tableElement) {
+            return;
+        }
+        var rect = tableElement.getBoundingClientRect();
+
+        if (rect.top < 20) {
+            barTop = 20;
+            return;
+        }
+
+        barTop = rect.top;
+    };
+
+    $: onScroll(y);
 </script>
 
-<AlphabeticalIndexBar {tags} />
-<table>
+<svelte:window bind:scrollY={y}/>
+
+<ol id="indexList" class="navigationBar disable-scrollbars" style:--barTop='{barTop}px'>
+    {#each tags as tag}
+        <li class='navigationBtn'>
+            <a href={'#'+tag.tag} class='navigationLink'>
+                {tag.letter.toUpperCase()}
+            </a>
+        </li>
+    {/each}
+</ol>
+
+<table bind:this={tableElement} id="artistTable">
     {#each artistsList as artist}
         {@const chords = chordsByArtist[artist.name].sort((a, b) => a.title < b.title ? -1 : 1) }
         {@const artistTags = artist + ';' + chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '')}
@@ -79,5 +108,39 @@ td {
 tr {
     border-bottom: solid thin;
     border-bottom-color: var(--nc-bg-0);
+}
+
+.navigationBar {
+    position: fixed;
+    z-index: 1000;
+    width: 50px;
+    top: var(--barTop);
+    bottom: 10px;
+    right: 10px;
+    padding-right: 5px;
+    padding-left: 5px;
+    background: var(--nc-bg-1);
+    list-style: none;
+    overflow-x: auto;
+    display: inline-block;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: var(--nc-bg-2);
+}
+
+.navigationBtn {
+    background: var(--nc-bg-0);
+    text-align: center;
+    height: 50px;
+    width: 50px;
+    border-radius: 5px;
+}
+
+.navigationLink {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    line-height: 50px;
+    font-weight: bold;
 }
 </style>
