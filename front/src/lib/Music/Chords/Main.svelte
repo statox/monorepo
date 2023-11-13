@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { alphaLowerSort } from '$lib/helpers';
     import BackToTop from '$lib/components/BackToTop/Main.svelte';
     import type { Chord } from './types';
     import ChordLink from './ChordLink.svelte';
+    import ListByArtist from './ListByArtist.svelte';
     export let chords: Chord[];
 
     let searchString = '';
@@ -50,18 +50,6 @@
             .slice(randomChordIndexes.length - nbRandomChords)
             .map(i => chords[i]);
     };
-
-    type chordsByArtist = {
-        [artist: string]: Chord[];
-    };
-    const chordsByArtist = chords.reduce((byArtist, chord) => {
-        const artist = chord.artist;
-        if (!byArtist[artist]) {
-            byArtist[artist] = [];
-        }
-        byArtist[artist].push(chord);
-        return byArtist;
-    }, {} as chordsByArtist);
 
     onMount(() => {
         getRandomSongs();
@@ -124,29 +112,7 @@
 </div>
 <br/>
 
-<table>
-    {#each Object.keys(chordsByArtist).sort(alphaLowerSort) as artist}
-        {@const chords = chordsByArtist[artist].sort((a, b) => a.title < b.title ? -1 : 1) }
-        {@const artistTags = artist + ';' + chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '')}
-
-        {#if searchString.length === 0 || artistTags.toLowerCase().match(searchString.toLowerCase())}
-            <tr>
-                <td>{artist}
-                    <ul class="ul2col-container">
-                        {#each chords as chord}
-                            {@const chordTags = artist + ';' + chord.title + ';' + chord.tags.join(',')}
-                            {#if searchString.length === 0 || chordTags.toLowerCase().match(searchString.toLowerCase())}
-                                <li class="ul2col-item">
-                                    <ChordLink {chord} />
-                                </li>
-                            {/if}
-                        {/each}
-                    </ul>
-                </td>
-            </tr>
-        {/if}
-    {/each}
-</table>
+<ListByArtist {chords} {searchString} />
 
 <style>
 @media screen and (min-width: 600px) {
@@ -160,14 +126,4 @@
         list-style-type: none; /* Optional: Removes the bullet points */
     }
 }
-
-td {
-    border: none;
-}
-
-tr {
-    border-bottom: solid thin;
-    border-bottom-color: var(--nc-bg-0);
-}
-
 </style>
