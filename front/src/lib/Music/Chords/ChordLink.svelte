@@ -21,10 +21,10 @@
     let iconClass=getIconClass(chord);
 </script>
 
+<span class={iconClass}></span>
 <span>
     <a href={chord.url} target="_blank" rel="noopener noreferrer">{text}</a>
 </span>
-<span class={iconClass}></span>
 
 <style>
 .fa-file-word {
