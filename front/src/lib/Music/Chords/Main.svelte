@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { alphaLowerSort } from '$lib/helpers';
+    import BackToTop from '$lib/components/BackToTop/Main.svelte';
     import type { Chord } from './types';
     import ChordLink from './ChordLink.svelte';
     export let chords: Chord[];
@@ -69,6 +70,8 @@
         <button>Add a song</button>
     </a>
 </h2>
+
+<BackToTop />
 
 <p>This is a list of {chords.length} song chords I have been gathering for the past 10 years and that I like to play.</p>
 
