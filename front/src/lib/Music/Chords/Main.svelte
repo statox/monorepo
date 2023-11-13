@@ -160,4 +160,14 @@
         list-style-type: none; /* Optional: Removes the bullet points */
     }
 }
+
+td {
+    border: none;
+}
+
+tr {
+    border-bottom: solid thin;
+    border-bottom-color: var(--nc-bg-0);
+}
+
 </style>
