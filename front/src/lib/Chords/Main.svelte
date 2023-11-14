@@ -6,6 +6,18 @@
     import type { Chord } from './types';
 
     export let chords: Chord[];
+    export let lastCheckChords: any;
+
+    const getResultIconClass = (lastCheckChords: any) => {
+        if (lastCheckChords.conclusion === 'failure') {
+            return 'fa fa-exclamation-circle';
+        }
+        if (lastCheckChords.conclusion === 'success') {
+            return 'fa fa-check-circle';
+        }
+        return 'fa fa-question-circle-o';
+    };
+    let lastCheckChordsIcon = getResultIconClass(lastCheckChords);
 
     let searchString = '';
 </script>
@@ -14,7 +26,10 @@
     Chords
     <span class="pull-right">
         <a href="https://github.com/statox/workshop/actions/workflows/check_chords.yml" target="_blank" rel="noopener noreferrer">
-            <button>Check dead links</button>
+            <button>
+                Dead links
+                <span class={lastCheckChordsIcon}></span>
+            </button>
         </a>
         <a href="https://github.com/statox/blog/issues/105#new_comment_field" target="_blank" rel="noopener noreferrer">
             <button>Add a song</button>
@@ -36,3 +51,17 @@
 </div>
 
 <ListByArtist {chords} {searchString} />
+
+<style>
+.fa-question-circle-o {
+    color: #ffcf0f;
+}
+
+.fa-exclamation-circle {
+    color: #E82236;
+}
+
+.fa-check-circle {
+    color: #89E07D;
+}
+</style>
