@@ -17,31 +17,46 @@ const chords = await load();
 
 const checkChordUrl = async (chord: Chord) => {
     if (chord.url.match('s3.eu-west-3')) {
-        return;
+        return { status: 'skipped' };
     }
 
     return fetch(chord.url)
         .then((response) => {
             if (response.status !== 200) {
-                return chord;
+                return { status: response.status.toString(), chord };
             }
+            return { status: 'ok' };
         })
-        .catch((response) => {
-            return chord;
+        .catch((error) => {
+            return { status: 'error', chord, error };
         });
 };
 
 const getFailingUrls = async () => {
     return Promise.all(chords.map((c) => checkChordUrl(c))).then((result) => {
-        return result.filter((v) => v);
+        const nbChecks = result.length;
+        const nbSkipped = result.filter((r) => r.status === 'skipped').length;
+        const fails = result.filter((r) => !['ok', 'skipped'].includes(r.status.toString()));
+        const nbFails = fails.length;
+
+        return {
+            nbChecks,
+            nbSkipped,
+            fails,
+            nbFails
+        };
     });
 };
 
-const fails = await getFailingUrls();
-if (!fails.length) {
+const results = await getFailingUrls();
+if (!results.fails.length) {
+    console.log(JSON.stringify(results, null, 2));
     console.log('All urls are available!');
-} else {
-    console.log(fails.length, 'urls are failing');
-    console.log(fails);
+    process.exit(0);
 }
-process.exit(0);
+
+for (const fail of results.fails) {
+    console.log(JSON.stringify(fail, null, 2));
+}
+console.log(results.nbFails, 'urls are failing');
+process.exit(1);
