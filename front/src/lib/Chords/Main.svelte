@@ -12,9 +12,14 @@
 
 <h2>
     Chords
-    <a class="pull-right" href="https://github.com/statox/blog/issues/105#new_comment_field" target="_blank" rel="noopener noreferrer">
-        <button>Add a song</button>
-    </a>
+    <span class="pull-right">
+        <a href="https://github.com/statox/workshop/actions/workflows/check_chords.yml" target="_blank" rel="noopener noreferrer">
+            <button>Check dead links</button>
+        </a>
+        <a href="https://github.com/statox/blog/issues/105#new_comment_field" target="_blank" rel="noopener noreferrer">
+            <button>Add a song</button>
+        </a>
+    </span>
 </h2>
 
 <BackToTop />
