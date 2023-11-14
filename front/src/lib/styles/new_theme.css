@@ -1,4 +1,5 @@
 /* Override ./new.css colors */
+/* This file can be imported in components to use the variables */
 :root {
     --nc-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, 'Apple Color Emoji',
@@ -17,37 +18,4 @@
     --nc-lk-tx: #2e3c43;
     --nc-ac-1: #c3e88d;
     --nc-ac-tx: #263238;
-}
-
-body {
-    max-width: 900px;
-}
-
-/* Remove underline added by newcss under links */
-a {
-    text-decoration: none;
-}
-
-/* Limit the size of code snippets */
-pre {
-    max-height: 50rem
-}
-
-/* Center all images */
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-ul {
-    list-style-type: circle;
-}
-
-.header-anchor {
-    font-size: small;
-}
-
-.hidden {
-    display: none;
 }

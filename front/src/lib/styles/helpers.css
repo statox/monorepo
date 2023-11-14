@@ -3,7 +3,6 @@
     float: right;
 }
 
-
 /* https://stackoverflow.com/a/54410301/4194289 */
 .disable-scrollbars::-webkit-scrollbar {
     background: transparent; /* Chrome/Safari/Webkit */

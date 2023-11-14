@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '$lib/styles/new_theme.css';
     import { alphaLowerSort } from "$lib/helpers";
     import ChordLink from "./ChordLink.svelte";
     import type { Chord } from './types';
@@ -107,7 +108,7 @@ td {
 
 tr {
     border-bottom: solid thin;
-    border-bottom-color: var(--nc-bg-0);
+    border-bottom-color: var(--nc-bg-3);
 }
 
 .navigationBar {
@@ -129,7 +130,7 @@ tr {
 }
 
 .navigationBtn {
-    background: var(--nc-bg-0);
+    background: var(--nc-bg-3);
     text-align: center;
     height: 50px;
     width: 50px;

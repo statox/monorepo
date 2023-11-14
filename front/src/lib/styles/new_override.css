@@ -1,0 +1,34 @@
+/* overrides of newcss which should probably be merged in the original file */
+body {
+    max-width: 900px;
+}
+
+/* Remove underline added by newcss under links */
+a {
+    text-decoration: none;
+}
+
+/* Limit the size of code snippets */
+pre {
+    max-height: 50rem
+}
+
+/* Center all images */
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul {
+    list-style-type: circle;
+}
+
+.header-anchor {
+    font-size: small;
+}
+
+.hidden {
+    display: none;
+}
+

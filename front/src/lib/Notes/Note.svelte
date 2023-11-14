@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '$lib/styles/new_theme.css';
     import Mardkown from '$lib/components/Markdown/Main.svelte';
     import type {Note} from './types';
     export let note: Note;
@@ -18,7 +19,7 @@
 
 <style>
     .title {
-        color: var(--nc-lk-1)
+        color: var(--nc-lk-2)
     }
     .formatted-tags {
         font-family: var(--nc-font-mono);
