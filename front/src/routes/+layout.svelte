@@ -3,6 +3,8 @@
     import '$lib/styles/new.css';
     import '$lib/styles/new_theme.css';
     import '$lib/styles/new_override.css';
+    import '$lib/styles/highlightjs_gruvbox_dark.css';
+    import '$lib/styles/highlightjs_override.css';
     import '$lib/styles/helpers.css';
 </script>
 

@@ -16,14 +16,6 @@
     });
 </script>
 
-<svelte:head>
-    <!-- TODO Find a way to avoid adding this line several time when we have multiple Markdown components -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.3.2/build/styles/night-owl.min.css"
-    />
-</svelte:head>
-
 <SvelteMarkdown
     source={sourceWithFixedLinks}
     renderers={{ image: ImageRenderer, link: LinkRenderer }}
