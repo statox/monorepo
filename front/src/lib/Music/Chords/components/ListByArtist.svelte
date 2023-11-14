@@ -2,7 +2,7 @@
     import '$lib/styles/new_theme.css';
     import { alphaLowerSort } from "$lib/helpers";
     import ChordLink from "./ChordLink.svelte";
-    import type { Chord } from './types';
+    import type { Chord } from '../types';
 
     export let searchString: string;
     export let chords: Chord[];
@@ -68,7 +68,7 @@
 <table bind:this={tableElement} id="artistTable">
     {#each artistsList as artist}
         {@const chords = chordsByArtist[artist.name].sort((a, b) => a.title < b.title ? -1 : 1) }
-        {@const artistTags = artist + ';' + chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '')}
+        {@const artistTags = artist.name + ';' + chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '')}
 
         {#if searchString.length === 0 || artistTags.toLowerCase().match(searchString.toLowerCase())}
             <tr>

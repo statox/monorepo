@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Chord } from './types';
+    import type { Chord } from '../types';
     export let chord: Chord;
     export let showArtist = false;
 
