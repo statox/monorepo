@@ -1,5 +1,4 @@
 <script lang="ts">
-    import '$lib/styles/new_theme.css';
     import { onMount } from "svelte";
     import ChordLink from "./ChordLink.svelte";
     import type { Chord } from "../types";
@@ -70,24 +69,3 @@
         {/each}
     </ul>
 </div>
-
-<style>
-@media screen and (min-width: 600px) {
-    .ul2col-container {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .ul2col-item {
-        flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
-        list-style-type: none; /* Optional: Removes the bullet points */
-    }
-
-    .ul2col-separator {
-        font-size:small;
-        color: var(--nc-tx-3);
-        flex: 1 0 100%;
-        list-style-type: none;
-    }
-}
-</style>

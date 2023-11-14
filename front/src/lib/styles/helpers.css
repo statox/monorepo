@@ -13,3 +13,23 @@
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* IE 10+ */
 }
+
+/* classes for <ul> elements with the items on 2 equal columns */
+@media screen and (min-width: 600px) {
+    .ul2col-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .ul2col-item {
+        flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
+        list-style-type: none;
+    }
+
+    .ul2col-separator {
+        font-size:small;
+        color: var(--nc-tx-3);
+        flex: 1 0 100%;
+        list-style-type: none;
+    }
+}

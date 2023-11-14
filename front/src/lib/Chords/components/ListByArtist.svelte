@@ -90,18 +90,6 @@
 </table>
 
 <style>
-@media screen and (min-width: 600px) {
-    .ul2col-container {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .ul2col-item {
-        flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
-        list-style-type: none; /* Optional: Removes the bullet points */
-    }
-}
-
 td {
     border: none;
 }
