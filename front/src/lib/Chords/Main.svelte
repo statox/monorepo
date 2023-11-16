@@ -1,6 +1,7 @@
 <script lang="ts">
     import BackToTop from '$lib/components/BackToTop/Main.svelte';
     import ListByArtist from './components/ListByArtist.svelte';
+    import ListByTags from './components/ListByTags.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord } from './types';
@@ -21,6 +22,12 @@
     let showLastCheckDate = false;
 
     let searchString = '';
+
+    let view: 'listByArtist' | 'listByTags' = 'listByArtist';
+    const views={
+        'listByArtist': ListByArtist,
+        'listByTags': ListByTags
+    }
 </script>
 
 <h2>
@@ -59,9 +66,11 @@
     <h3>All chords</h3>
     Search an artist, a title or a tag: <input type="text" bind:value={searchString} >
     <button on:click={() => searchString = ''}>&nbsp✖&nbsp</button>
+    <button class="pull-right" on:click={() => view = view === 'listByTags' ? 'listByArtist' : 'listByTags'}>Change view</button>
 </div>
 
-<ListByArtist {chords} {searchString} />
+
+<svelte:component this={views[view]}  {chords} {searchString}/>
 
 <style>
 .fa-question-circle-o {
