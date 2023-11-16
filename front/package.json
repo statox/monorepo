@@ -12,7 +12,7 @@
         "format": "prettier --plugin-search-dir . --write .",
         "test": "vitest",
         "helpers": "==========================================",
-        "checkChords": "npx ts-node --esm src/lib/Chords/scripts/urlsChecker.ts"
+        "checkChords": "npx ts-node --esm src/lib/Chords/scripts/urlsChecker.ts > ./check_chords_results.json"
     },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "^15.2.3",

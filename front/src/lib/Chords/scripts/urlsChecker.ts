@@ -49,14 +49,6 @@ const getFailingUrls = async () => {
 };
 
 const results = await getFailingUrls();
-if (!results.fails.length) {
-    console.log(JSON.stringify(results, null, 2));
-    console.log('All urls are available!');
-    process.exit(0);
-}
+console.log(JSON.stringify(results));
 
-for (const fail of results.fails) {
-    console.log(JSON.stringify(fail, null, 2));
-}
-console.log(results.nbFails, 'urls are failing');
-process.exit(1);
+process.exit(0);

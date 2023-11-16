@@ -49,3 +49,7 @@ jobs:
                   ENV: prod
             - name: Do checks
               run: npm run checkChords
+            - uses: actions/upload-artifact@v3
+              with:
+                name: check_chords_results
+                path: ./check_chords_results.json
