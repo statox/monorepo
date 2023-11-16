@@ -21,6 +21,9 @@ const config = {
             domain: '',
             jekyll: false
         }),
+        alias: {
+            $config: 'src/config'
+        },
         paths: {
             base
         }

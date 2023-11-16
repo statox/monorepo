@@ -47,6 +47,7 @@ jobs:
                   npm run build
               env:
                   ENV: prod
+                  OCTOKIT_PAT: ${{ secrets.OCTOKIT_PAT }}
             - name: Do checks
               run: npm run checkChords
             - uses: actions/upload-artifact@v3
