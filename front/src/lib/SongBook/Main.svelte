@@ -31,7 +31,7 @@
 </script>
 
 <h2>
-    Chords
+    Song book
     <span class="pull-right">
         <a href="https://github.com/statox/workshop/actions/workflows/check_chords.yml" target="_blank" rel="noopener noreferrer">
             <button style:position='relative'
@@ -63,7 +63,7 @@
 <RandomSongs {chords} />
 
 <div>
-    <h3>All chords</h3>
+    <h3>All songs</h3>
     Search an artist, a title or a tag: <input type="text" bind:value={searchString} >
     <button on:click={() => searchString = ''}>&nbsp✖&nbsp</button>
     <button class="pull-right" on:click={() => view = view === 'listByTags' ? 'listByArtist' : 'listByTags'}>Change view</button>
