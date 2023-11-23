@@ -1,13 +1,17 @@
 <script lang="ts">
     // https://hellomusictheory.com/learn/scale-degree-names/
+    // https://ianring.com/musictheory/scales/
 
-    type Interval = 'W' | 'H';
+    type Interval = number;
     const notes = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
 
+    // Intervals a numbers of semitones
     type Scale = { name: string, intervals: Interval[] };
     const scales: Scale[] = [
-        { name: 'Major', intervals: ['W', 'W', 'H', 'W', 'W', 'W', 'H']},
-        { name: 'Natural minor', intervals: [ 'W','H','W','W','H','W','W']}
+        { name: 'Major', intervals: [2, 2, 1, 2, 2, 2, 1]},
+        { name: 'Natural minor', intervals: [ 2, 1, 2, 2, 1, 2, 2]},
+        { name: 'Pentatonic major', intervals: [2, 2, 3, 2, 3]},
+        { name: 'Pentatonic minor', intervals: [3, 2, 2, 3, 2]},
     ];
 
     type Mode = { name: string, degree: number };
@@ -36,7 +40,7 @@
 
         let index = tonicIndex;
         for (const interval of intervals) {
-            index = (index + (interval === 'W' ? 2 : 1)) % notes.length;
+            index = (index + interval) % notes.length;
             scaleNotes.push(notes[index]);
         }
 
