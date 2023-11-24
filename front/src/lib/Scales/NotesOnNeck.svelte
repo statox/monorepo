@@ -136,8 +136,12 @@
             p5.background([200, 190, 170]);
             drawNeck(p5);
             drawNotes(p5);
+            p5.noLoop();
         };
     };
+
+    // Re run draw() when notesToDisplay change
+    $: if (notesToDisplay) _p5?.draw();
 
     onDestroy(() => {
         _p5?.remove();
