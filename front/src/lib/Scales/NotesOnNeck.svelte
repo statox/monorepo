@@ -2,12 +2,12 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
+    import { notes } from './utils';
 
     let _p5: p5;
 
     export let notesToDisplay: string[];
 
-    const notes = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
     const stringsBase = ['E', 'A', 'D', 'G', 'B', 'E'];
     const NB_FRETS = 15;
     const strings = stringsBase.map(base => {

@@ -1,12 +1,11 @@
 <script lang="ts">
     import NotesOnNeck from "./NotesOnNeck.svelte";
-    import { degreeToRoman } from "./utils";
+    import { degreeToRoman, notes } from "./utils";
 
     // https://hellomusictheory.com/learn/scale-degree-names/
     // https://ianring.com/musictheory/scales/
 
     type Interval = number;
-    const notes = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
 
     // Intervals a numbers of semitones
     type Scale = { name: string, intervals: Interval[] };
