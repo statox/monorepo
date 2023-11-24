@@ -1,5 +1,6 @@
 <script lang="ts">
     import NotesOnNeck from "./NotesOnNeck.svelte";
+    import Progressions from "./Progressions.svelte";
     import { degreeToRoman, notes } from "./utils";
 
     // https://hellomusictheory.com/learn/scale-degree-names/
@@ -122,6 +123,12 @@
 </table>
 
 <NotesOnNeck notesToDisplay={scaleNotes} />
+
+{#if ['Major', 'Natural minor'].includes(scale.name)}
+    {#key scaleNotes}
+    <Progressions {scaleNotes} />
+    {/key}
+{/if}
 
 <style>
     th, td {
