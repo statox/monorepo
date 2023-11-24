@@ -1,4 +1,5 @@
 <script lang="ts">
+    import NotesOnNeck from "./NotesOnNeck.svelte";
     import { degreeToRoman } from "./utils";
 
     // https://hellomusictheory.com/learn/scale-degree-names/
@@ -120,6 +121,8 @@
     {/each}
     </tr>
 </table>
+
+<NotesOnNeck notesToDisplay={scaleNotes} />
 
 <style>
     th, td {
