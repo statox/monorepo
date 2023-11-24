@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { degreeToRoman } from "./utils";
+
     // https://hellomusictheory.com/learn/scale-degree-names/
     // https://ianring.com/musictheory/scales/
 
@@ -28,10 +30,11 @@
     let tonic = 'C';
     let scale = scales[0];
     let mode = modes[0];
+    let scaleNotes: string[] = [];
 
     const getScale = (tonic: string, scale: Scale, mode: Mode) => {
         const { intervals } = scale;
-        const scaleNotes = [tonic];
+        scaleNotes = [tonic];
 
         const tonicIndex = notes.indexOf(tonic);
         if (tonicIndex === -1) {
@@ -50,46 +53,76 @@
         for (let i=1; i<mode.degree; i++) {
             scaleNotes.push(scaleNotes.shift()!);
         }
-
-        return scaleNotes;
     };
+
+    $: getScale(tonic, scale, mode);
 </script>
 
 <h2>Scales</h2>
 
-<span>
-    <label for='tonicInput'>Tonic</label>
-    <select id='tonicInput' bind:value={tonic} >
-        {#each notes as note}
-            <option value={note}>
-                {note}
-            </option>
-        {/each}
-    </select>
-</span>
 
-<span>
-    <label for='scaleInput'>Scale</label>
-    <select id='scaleInput' bind:value={scale} >
-        {#each scales as scale}
-            <option value={scale}>
-                {scale.name}
-            </option>
-        {/each}
-    </select>
-</span>
+<table>
+    <tr>
+        <th>
+            <label for='tonicInput'>Tonic</label>
+        </th>
+        <th>
+            <label for='scaleInput'>Scale</label>
+        </th>
+        <th>
+            <label for='modeInput'>mode</label>
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <select id='tonicInput' bind:value={tonic} >
+                {#each notes as note}
+                    <option value={note}>
+                        {note}
+                    </option>
+                {/each}
+            </select>
+        </td>
 
-<span>
-    <label for='modeInput'>mode</label>
-    <select id='modeInput' bind:value={mode} >
-        {#each modes as mode}
-            <option value={mode}>
-                {mode.name}
-            </option>
-        {/each}
-    </select>
-</span>
+        <td>
+            <select id='scaleInput' bind:value={scale} >
+                {#each scales as scale}
+                    <option value={scale}>
+                        {scale.name}
+                    </option>
+                {/each}
+            </select>
+        </td>
+
+        <td>
+            <select id='modeInput' bind:value={mode} >
+                {#each modes as mode}
+                    <option value={mode}>
+                        {mode.name}
+                    </option>
+                {/each}
+            </select>
+        </td>
+    </tr>
+</table>
 
 <br/>
 
-{getScale(tonic, scale, mode).join(' ')}
+<table>
+    <tr>
+        {#each scaleNotes as _, index}
+            <th>{degreeToRoman(index + 1)}</th>
+        {/each}
+    </tr>
+    <tr>
+    {#each scaleNotes as note}
+        <td>{note}</td>
+    {/each}
+    </tr>
+</table>
+
+<style>
+    th, td {
+        text-align: center;
+    }
+</style>
