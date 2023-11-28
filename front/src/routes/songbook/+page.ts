@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import type { Chord } from '$lib/Chords//types';
+import type { Chord } from '$lib/SongBook/types';
 
 const CHORDS_URL = 'https://raw.githubusercontent.com/statox/blog/master/src/_data/chords.json';
 
