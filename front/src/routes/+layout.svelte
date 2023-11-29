@@ -16,7 +16,6 @@
         <a href="{base}/notes">Notes</a> |
         <a href="{base}/songbook">Song book</a> |
         <a href="{base}/scales">Scales</a> |
-        <a href="{base}/monitoring">Monitoring</a> |
     </nav>
 </header>
 

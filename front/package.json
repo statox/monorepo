@@ -15,7 +15,6 @@
         "checkChords": "npx ts-node --esm src/lib/Chords/scripts/urlsChecker.ts > ./check_chords_results.json"
     },
     "devDependencies": {
-        "@octokit/types": "^12.3.0",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@sveltejs/adapter-auto": "^2.1.1",
         "@sveltejs/kit": "^1.27.3",
@@ -26,7 +25,6 @@
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-svelte": "^2.35.0",
         "highlight.js": "^11.9.0",
-        "octokit": "^3.1.2",
         "p5": "^1.8.0",
         "p5-svelte": "^3.1.2",
         "prettier": "^3.0.3",

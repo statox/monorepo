@@ -9,17 +9,7 @@
     export let chords: Chord[];
     export let lastCheckChords: any;
 
-    const getResultIconClass = (lastCheckChords: any) => {
-        if (lastCheckChords.conclusion === 'failure') {
-            return 'fa fa-exclamation-circle';
-        }
-        if (lastCheckChords.conclusion === 'success') {
-            return 'fa fa-check-circle';
-        }
-        return 'fa fa-question-circle-o';
-    };
-    let lastCheckChordsIcon = getResultIconClass(lastCheckChords);
-    let showLastCheckDate = false;
+    console.log({lastCheckChords});
 
     let searchString = '';
 
@@ -33,22 +23,6 @@
 <h2>
     Song book
     <span class="pull-right">
-        <a href="https://github.com/statox/workshop/actions/workflows/check_chords.yml" target="_blank" rel="noopener noreferrer">
-            <button style:position='relative'
-                on:focus={() => showLastCheckDate = true}
-                on:mouseover={() => showLastCheckDate = true}
-                on:mouseout={() => showLastCheckDate = false}
-                on:blur={() => showLastCheckDate = false}
-            >
-                Dead links
-                <span class={lastCheckChordsIcon}></span>
-                {#if showLastCheckDate}
-                    <span class="btn-overlay">
-                        {lastCheckChords.created_at}
-                    </span>
-                {/if}
-            </button>
-        </a>
         <a href="https://github.com/statox/blog/issues/105#new_comment_field" target="_blank" rel="noopener noreferrer">
             <button>Add a song</button>
         </a>
@@ -71,28 +45,3 @@
 
 
 <svelte:component this={views[view]}  {chords} {searchString}/>
-
-<style>
-.fa-question-circle-o {
-    color: #ffcf0f;
-}
-
-.fa-exclamation-circle {
-    color: #E82236;
-}
-
-.fa-check-circle {
-    color: #89E07D;
-}
-
-.btn-overlay {
-    position: absolute;
-    padding: 0;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    transition: opacity .5s;
-}
-</style>
