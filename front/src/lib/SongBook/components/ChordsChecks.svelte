@@ -4,6 +4,9 @@
     const failures = lastChordsCheck?.fails.sort((a: any, b: any) =>
         a.chord.url < b.chord.url ? 1 : -1
     );
+
+    const lastCheckDate = new Date(lastChordsCheck?.timestamp);
+    const lastCheckDateStr = lastCheckDate.toDateString() + ' ' + lastCheckDate.toTimeString();
 </script>
 
 <div>
@@ -13,11 +16,13 @@
     {:else}
         <table>
             <tr>
+                <th>Last Check</th>
                 <th>Checks</th>
                 <th>Skipped</th>
                 <th>Errors</th>
             </tr>
             <tr>
+                <td>{lastCheckDateStr}</td>
                 <td>{lastChordsCheck.nbChecks}</td>
                 <td>{lastChordsCheck.nbSkipped}</td>
                 <td>{lastChordsCheck.nbFails}</td>
