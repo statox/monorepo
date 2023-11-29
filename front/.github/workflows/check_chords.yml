@@ -12,8 +12,8 @@ name: Check chords.json for dead links
 on:
     workflow_dispatch:
     schedule:
-      # 00:10 every days
-      - cron:  '15 0 * * *'
+        # 00:10 every days
+        - cron: '15 0 * * *'
 
 jobs:
     build:
@@ -52,5 +52,5 @@ jobs:
               run: npm run checkChords
             - uses: actions/upload-artifact@v3
               with:
-                name: check_chords_results
-                path: ./check_chords_results.json
+                  name: check_chords_results
+                  path: ./check_chords_results.json

@@ -10,7 +10,7 @@ a {
 
 /* Limit the size of code snippets */
 pre {
-    max-height: 50rem
+    max-height: 50rem;
 }
 
 /* Center all images */
@@ -31,4 +31,3 @@ ul {
 .hidden {
     display: none;
 }
-

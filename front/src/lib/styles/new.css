@@ -1,23 +1,26 @@
 /* https://github.com/xz/new.css/blob/80e7107b49/new.css */
 
 /* Font https://docs.xz.style/fonts/inter */
-@import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/inter.min.css");
+@import url('https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/inter.min.css');
 
 :root {
-    --nc-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --nc-font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier, monospace;
+    --nc-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+        Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol';
+    --nc-font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier,
+        monospace;
 
     /* Light theme */
     --nc-tx-1: #000000;
-    --nc-tx-2: #1A1A1A;
-    --nc-bg-1: #FFFFFF;
-    --nc-bg-2: #F6F8FA;
-    --nc-bg-3: #E5E7EB;
-    --nc-lk-1: #0070F3;
-    --nc-lk-2: #0366D6;
-    --nc-lk-tx: #FFFFFF;
-    --nc-ac-1: #79FFE1;
-    --nc-ac-tx: #0C4047;
+    --nc-tx-2: #1a1a1a;
+    --nc-bg-1: #ffffff;
+    --nc-bg-2: #f6f8fa;
+    --nc-bg-3: #e5e7eb;
+    --nc-lk-1: #0070f3;
+    --nc-lk-2: #0366d6;
+    --nc-lk-tx: #ffffff;
+    --nc-ac-1: #79ffe1;
+    --nc-ac-tx: #0c4047;
 
     /* Dark theme */
     --nc-d-tx-1: #ffffff;
@@ -25,11 +28,11 @@
     --nc-d-bg-1: #000000;
     --nc-d-bg-2: #111111;
     --nc-d-bg-3: #222222;
-    --nc-d-lk-1: #3291FF;
-    --nc-d-lk-2: #0070F3;
-    --nc-d-lk-tx: #FFFFFF;
-    --nc-d-ac-1: #7928CA;
-    --nc-d-ac-tx: #FFFFFF;
+    --nc-d-lk-1: #3291ff;
+    --nc-d-lk-2: #0070f3;
+    --nc-d-lk-tx: #ffffff;
+    --nc-d-ac-1: #7928ca;
+    --nc-d-ac-tx: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -87,7 +90,10 @@ video {
     margin-bottom: 1rem;
 }
 
-html,input,select,button {
+html,
+input,
+select,
+button {
     /* Set body font family and some finicky elements */
     font-family: var(--nc-font-sans);
 }
@@ -115,10 +121,15 @@ body {
     color: var(--nc-ac-tx);
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     line-height: 1;
     color: var(--nc-tx-1);
-    padding-top: .875rem;
+    padding-top: 0.875rem;
 }
 
 h1,
@@ -133,7 +144,7 @@ h3 {
 h4,
 h5,
 h6 {
-    margin-bottom: .3rem;
+    margin-bottom: 0.3rem;
 }
 
 h1 {
@@ -157,7 +168,7 @@ h5 {
 }
 
 h6 {
-    font-size: .875rem;
+    font-size: 0.875rem;
 }
 
 a {
@@ -227,9 +238,9 @@ header > *:last-child {
 
 a button,
 button,
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
+input[type='submit'],
+input[type='reset'],
+input[type='button'] {
     font-size: 1rem;
     display: inline-block;
     padding: 6px 12px;
@@ -247,11 +258,11 @@ input[type="button"] {
 
 a button[disabled],
 button[disabled],
-input[type="submit"][disabled],
-input[type="reset"][disabled],
-input[type="button"][disabled] {
+input[type='submit'][disabled],
+input[type='reset'][disabled],
+input[type='button'][disabled] {
     cursor: default;
-    opacity: .5;
+    opacity: 0.5;
 
     /* Set the [X] cursor while hovering a disabled link */
     cursor: not-allowed;
@@ -261,12 +272,12 @@ input[type="button"][disabled] {
 .button:enabled:hover,
 button:focus,
 button:enabled:hover,
-input[type="submit"]:focus,
-input[type="submit"]:enabled:hover,
-input[type="reset"]:focus,
-input[type="reset"]:enabled:hover,
-input[type="button"]:focus,
-input[type="button"]:enabled:hover {
+input[type='submit']:focus,
+input[type='submit']:enabled:hover,
+input[type='reset']:focus,
+input[type='reset']:enabled:hover,
+input[type='button']:focus,
+input[type='button']:enabled:hover {
     background: var(--nc-lk-2);
 }
 
@@ -329,7 +340,7 @@ code pre {
 
 details {
     /* Make the <details> look more "clickable" */
-    padding: .6rem 1rem;
+    padding: 0.6rem 1rem;
     background: var(--nc-bg-2);
     border: 1px solid var(--nc-bg-3);
     border-radius: 4px;
@@ -343,7 +354,7 @@ summary {
 
 details[open] {
     /* Adjust the <details> padding while open */
-    padding-bottom: .75rem;
+    padding-bottom: 0.75rem;
 }
 
 details[open] summary {
@@ -351,7 +362,7 @@ details[open] summary {
     margin-bottom: 6px;
 }
 
-details[open]>*:last-child {
+details[open] > *:last-child {
     /* Resets the bottom margin of the last element in the <details> while <details> is opened. This prevents double margins/paddings. */
     margin-bottom: 0;
 }
@@ -380,20 +391,20 @@ fieldset {
 }
 
 legend {
-    padding: auto .5rem;
+    padding: auto 0.5rem;
 }
 
 table {
     /* border-collapse sets the table's elements to share borders, rather than floating as separate "boxes". */
     border-collapse: collapse;
-    width: 100%
+    width: 100%;
 }
 
 td,
 th {
     border: 1px solid var(--nc-bg-3);
     text-align: left;
-    padding: .5rem;
+    padding: 0.5rem;
 }
 
 th {
@@ -408,7 +419,7 @@ table.stripped tr:nth-child(even) {
 
 table caption {
     font-weight: bold;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 }
 
 textarea {
@@ -423,7 +434,7 @@ ul {
 }
 
 li {
-    margin-top: .4rem;
+    margin-top: 0.4rem;
 }
 
 ul ul,
@@ -443,7 +454,7 @@ textarea,
 select,
 input {
     padding: 6px 12px;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
     background: var(--nc-bg-2);
     color: var(--nc-tx-2);
     border: 1px solid var(--nc-bg-3);
