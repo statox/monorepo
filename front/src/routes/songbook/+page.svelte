@@ -3,7 +3,7 @@
     import type { Chord } from '$lib/SongBook//types';
 
     // From +page.ts load() function
-    export let data: { chords: Chord[], lastCheckChords: any };
+    export let data: { chords: Chord[], lastChordsCheck: any };
 </script>
 
-<Chords chords={data.chords} lastCheckChords={data.lastCheckChords} />
+<Chords chords={data.chords} lastChordsCheck={data.lastChordsCheck} />
