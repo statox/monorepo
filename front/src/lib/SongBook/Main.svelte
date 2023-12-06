@@ -6,6 +6,7 @@
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord } from './types';
+    import { openModal } from '$lib/components/Modal';
 
     export let chords: Chord[];
     export let lastChordsCheck: any;
@@ -25,7 +26,6 @@
         return 'ok'
     };
 
-    let showChordsChecks = false;
     const chordsCheckIcon = chordsChecksIcons[getChordsCheckStatus()];
 
     let searchString = '';
@@ -35,12 +35,16 @@
         'listByArtist': ListByArtist,
         'listByTags': ListByTags
     }
+
+    const openChordsCheckModal = () => {
+        openModal(ChordsChecks, { lastChordsCheck })
+    }
 </script>
 
 <h2>
     Song book
     <span class="pull-right">
-        <button style:position='relative' on:click={() => showChordsChecks = !showChordsChecks}>
+        <button style:position='relative' on:click={openChordsCheckModal}>
             Dead links
             {#if lastChordsCheck?.nbFails > 0}
                 ({ lastChordsCheck.nbFails })
@@ -58,9 +62,6 @@
 
 <p>This is a list of {chords.length} song chords I have been gathering for the past 10 years and that I like to play.</p>
 
-{#if showChordsChecks}
-<ChordsChecks {lastChordsCheck} />
-{/if}
 <LatestAdditions {chords} />
 <RandomSongs {chords} />
 
