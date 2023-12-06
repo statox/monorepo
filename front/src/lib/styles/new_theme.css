@@ -7,15 +7,15 @@
     --nc-font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier,
         monospace;
 
-    --nc-tx-1: #ffffff;
-    --nc-tx-2: #b7b7b7;
-    --nc-tx-3: #8a8d87;
-    --nc-bg-1: #1e272c;
-    --nc-bg-2: #161d21;
-    --nc-bg-3: #263238;
-    --nc-lk-1: #5e92ff;
-    --nc-lk-2: #99b2e8;
-    --nc-lk-tx: #2e3c43;
-    --nc-ac-1: #c3e88d;
-    --nc-ac-tx: #263238;
+    --nc-tx-1: #546e7a;
+    --nc-tx-2: #161d21;
+    --nc-tx-3: #6d7169;
+    --nc-bg-1: #f4f4f4;
+    --nc-bg-2: #eae8e8;
+    --nc-bg-3: #fafafa;
+    --nc-lk-1: #176166;
+    --nc-lk-2: #528aff;
+    --nc-lk-tx: #f3f4f5;
+    --nc-ac-1: #91b859;
+    --nc-ac-tx: #fafafa;
 }

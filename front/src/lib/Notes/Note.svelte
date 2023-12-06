@@ -19,7 +19,7 @@
 
 <style>
     .title {
-        color: var(--nc-lk-2)
+        color: var(--nc-lk-1)
     }
     .formatted-tags {
         font-family: var(--nc-font-mono);
