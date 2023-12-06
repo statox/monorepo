@@ -4,7 +4,7 @@
     import { onDestroy } from 'svelte';
     import { wheel } from './wheel-config';
     import type { WheelTiles } from './types';
-    import { drawShape, drawShapeInformation, drawTile, makeWheelTiles, modulo, rotateWheel } from './wheel-service';
+    import { drawShape, drawShapeInformation, drawTile, makeWheelTiles, rotateWheel } from './wheel-service';
 
     let _p5: p5;
     let wheelTiles: WheelTiles;
@@ -36,25 +36,25 @@
         p5.draw = () => {
             p5.background(50);
             p5.translate(p5.width / 2, p5.height / 2);
-            wheelTiles.tilesInnerRing.forEach((tile) => drawTile(tile, p5));
-            wheelTiles.tilesMiddleRing.forEach((tile) => drawTile(tile, p5));
-            wheelTiles.tilesOuterRing.forEach((tile) => drawTile(tile, p5));
+            wheelTiles.tilesInnerRing.forEach((tile) => drawTile(p5, tile));
+            wheelTiles.tilesMiddleRing.forEach((tile) => drawTile(p5, tile));
+            wheelTiles.tilesOuterRing.forEach((tile) => drawTile(p5, tile));
             drawShape(
+                p5,
                 shapePosition,
                 wheelTiles.tilesInnerRing,
                 wheelTiles.tilesMiddleRing,
-                wheelTiles.tilesOuterRing,
-                p5
+                wheelTiles.tilesOuterRing
             );
-            drawShapeInformation(shapePosition, wheel, p5);
+            drawShapeInformation(p5, shapePosition, wheel);
         };
 
         p5.keyPressed = () => {
             if (p5.keyCode === p5.LEFT_ARROW) {
-                shapePosition = modulo(shapePosition - 1, wheelTiles.tilesInnerRing.length);
+                shapePosition--;
             }
             if (p5.keyCode === p5.RIGHT_ARROW) {
-                shapePosition = modulo(shapePosition + 1, wheelTiles.tilesInnerRing.length);
+                shapePosition++;
             }
             if (p5.keyCode === p5.UP_ARROW) {
                 rotateWheelCounterClockwise();
@@ -64,22 +64,50 @@
             }
         };
 
-        let swipeBeginX: number;
-        p5.touchStarted = (event) => {
-            swipeBeginX = p5.mouseX;
+        let swipeStartPosition: {
+            x: number;
+            y: number;
+        }
+        p5.touchStarted = () => {
+            swipeStartPosition = {
+                x: p5.mouseX,
+                y: p5.mouseY
+            }
         };
-        p5.touchEnded = (event) => {
-            if (!swipeBeginX) {
+        p5.touchMoved = () => {
+            if (!swipeStartPosition) {
                 return;
             }
-            if (Math.abs(p5.mouseX - swipeBeginX) < 100) {
+            const swipeX = p5.mouseX - swipeStartPosition.x;
+            const swipeY = p5.mouseY - swipeStartPosition.y;
+            const absSwipeX = Math.abs(swipeX);
+            const absSwipeY = Math.abs(swipeY);
+
+            if (absSwipeX < 50 && absSwipeY < 50) {
                 return;
             }
-            const clockwise = p5.mouseX > swipeBeginX;
-            if (clockwise) {
-                shapePosition = modulo(shapePosition + 1, wheelTiles.tilesInnerRing.length);
+
+            if (absSwipeX > absSwipeY) {
+                const clockwise = swipeX < 0;
+                if (clockwise) {
+                    shapePosition--;
+                } else {
+                    shapePosition++;
+                }
             } else {
-                shapePosition = modulo(shapePosition - 1, wheelTiles.tilesInnerRing.length);
+                const clockwise = swipeY > 0;
+                if (clockwise) {
+                    rotateWheelClockwise();
+                } else {
+                    rotateWheelCounterClockwise()
+                }
+            }
+
+            // Reset start position so that next touchMoved event has
+            // the right info eventhough touchStarted isn't triggered again
+            swipeStartPosition = {
+                x: p5.mouseX,
+                y: p5.mouseY
             }
         };
 
@@ -110,7 +138,7 @@
         Wheel rotation
         <button class="fa fa-repeat" on:click={rotateWheelClockwise}></button>
     </p>
-    <p>On mobile you can also swipe left and right to rotate the shape</p>
+    <p>On mobile you can also swipe left/right to rotate the shape and up/down to rotate the wheel</p>
 </div>
 
 <div>

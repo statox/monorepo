@@ -5,7 +5,7 @@ import type { Wheel, Ring, Tile, WheelTiles } from './types';
  * TODO: Work out the math to replace the magic numbers by accurate coefficients
  */
 
-export const modulo = (value: number, modulo: number): number => {
+const modulo = (value: number, modulo: number): number => {
     if (value >= 0) {
         return value % modulo;
     }
@@ -16,12 +16,12 @@ export const modulo = (value: number, modulo: number): number => {
     return value;
 };
 
-export const makeTile = (
+const makeTile = (
+    p5: p5,
     ring: Ring,
     labelIndex: number,
     wheelPosition: number,
-    scale: number,
-    p5: p5
+    scale: number
 ): Tile => {
     if (labelIndex < 0 || labelIndex >= ring.labels.length) {
         throw new Error(`OOB labelIndex: ${labelIndex}`);
@@ -64,13 +64,13 @@ export const makeTile = (
 export const makeWheelTiles = (p5: p5, wheel: Wheel): WheelTiles => {
     const { scale } = wheel;
     const tilesInnerRing = wheel.innerRing.labels.map((_, i) =>
-        makeTile(wheel.innerRing, i, wheel.position, scale, p5)
+        makeTile(p5, wheel.innerRing, i, wheel.position, scale)
     );
     const tilesMiddleRing = wheel.middleRing.labels.map((_, i) =>
-        makeTile(wheel.middleRing, i, wheel.position * 2, scale, p5)
+        makeTile(p5, wheel.middleRing, i, wheel.position * 2, scale)
     );
     const tilesOuterRing = wheel.outerRing.labels.map((_, i) =>
-        makeTile(wheel.outerRing, i, wheel.position, scale, p5)
+        makeTile(p5, wheel.outerRing, i, wheel.position, scale)
     );
 
     return {
@@ -80,10 +80,10 @@ export const makeWheelTiles = (p5: p5, wheel: Wheel): WheelTiles => {
     };
 };
 
-export const drawTile = (tile: Tile, p5: p5) => {
+export const drawTile = (p5: p5, tile: Tile) => {
     p5.strokeWeight(2);
     p5.stroke([0, 0, 0, 0.5]);
-    p5.fill(`hsb(${tile.colorHue}, 50%, 60%)`);
+    p5.fill(`hsb(${tile.colorHue}, 50%, 70%)`);
 
     const [bottomLeft, topLeft, topMiddle, topRight, bottomRight, bottomMiddle] = tile.vertices;
     p5.beginShape();
@@ -102,11 +102,11 @@ export const drawTile = (tile: Tile, p5: p5) => {
 };
 
 export const drawShape = (
+    p5: p5,
     position: number,
     tilesInnerRing: Tile[],
     tilesMiddleRing: Tile[],
-    tilesOuterRing: Tile[],
-    p5: p5
+    tilesOuterRing: Tile[]
 ) => {
     const selectedTiles = [
         tilesInnerRing[modulo(position - 1, tilesInnerRing.length)],
@@ -143,7 +143,7 @@ export const drawShape = (
     }
 };
 
-export const drawShapeInformation = (position: number, wheel: Wheel, p5: p5) => {
+export const drawShapeInformation = (p5: p5, position: number, wheel: Wheel) => {
     const { scale } = wheel;
     p5.textSize(10);
     p5.push();
