@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { openModal } from '$lib/components/Modal';
     import BackToTop from '$lib/components/BackToTop/Main.svelte';
     import ChordsChecks from './components/ChordsChecks.svelte';
     import ListByArtist from './components/ListByArtist.svelte';
@@ -6,27 +7,8 @@
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord } from './types';
-    import { openModal } from '$lib/components/Modal';
 
     export let chords: Chord[];
-    export let lastChordsCheck: any;
-
-    const chordsChecksIcons = {
-        'error': 'fa fa-question-circle-o',
-        'failures':  'fa fa-exclamation-circle',
-        'ok': 'fa fa-check-circle'
-    };
-    const getChordsCheckStatus = () => {
-        if (!lastChordsCheck) {
-            return 'error';
-        }
-        if (lastChordsCheck.nbFails > 0) {
-            return 'failures';
-        }
-        return 'ok'
-    };
-
-    const chordsCheckIcon = chordsChecksIcons[getChordsCheckStatus()];
 
     let searchString = '';
 
@@ -35,21 +17,13 @@
         'listByArtist': ListByArtist,
         'listByTags': ListByTags
     }
-
-    const openChordsCheckModal = () => {
-        openModal(ChordsChecks, { lastChordsCheck })
-    }
 </script>
 
 <h2>
     Song book
     <span class="pull-right">
-        <button style:position='relative' on:click={openChordsCheckModal}>
-            Dead links
-            {#if lastChordsCheck?.nbFails > 0}
-                ({ lastChordsCheck.nbFails })
-            {/if}
-            <span class={chordsCheckIcon}></span>
+        <button style:position='relative' on:click={() => openModal(ChordsChecks)}>
+            Check dead links
         </button>
 
         <a href="https://github.com/statox/blog/issues/105#new_comment_field" target="_blank" rel="noopener noreferrer">
@@ -74,24 +48,3 @@
 
 
 <svelte:component this={views[view]}  {chords} {searchString}/>
-
-<style>
-.fa-exclamation-circle {
-    color: #E82236;
-}
-
-.fa-check-circle {
-    color: #89E07D;
-}
-
-.btn-overlay {
-    position: absolute;
-    padding: 0;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    transition: opacity .5s;
-}
-</style>
