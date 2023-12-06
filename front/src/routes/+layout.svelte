@@ -23,7 +23,8 @@
 </header>
 
 <Modals>
-  <div
+  <!-- Using a button instead of a div to avoid a11y warnings -->
+  <button
     slot="backdrop"
     class="backdrop"
     on:click={closeModal}
@@ -39,6 +40,9 @@
     bottom: 0;
     right: 0;
     left: 0;
+    background: rgba(0,0,0,0.20)
+  }
+  .backdrop:enabled:hover {
     background: rgba(0,0,0,0.20)
   }
 </style>
