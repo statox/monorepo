@@ -30,49 +30,44 @@
 {#if isOpen}
     <div role="dialog" class="modal">
         <div class="contents">
-            <h3>Urls checks</h3>
+            <h3 class="title-bar">
+                Urls checks
+                <button on:click="{closeModal}">Close</button>
+            </h3>
+
             {#await lastChordsCheck}
                 <p>Fetching results...</p>
             {:then checks}
             {@const lastCheckDate = formatTimestamp(checks)}
             {@const failures = sortFails(checks)}
-                <table>
-                    <tr>
-                        <th>Last Check</th>
-                        <th>Checks</th>
-                        <th>Skipped</th>
-                        <th>Errors</th>
-                    </tr>
-                    <tr>
-                        <td>{lastCheckDate}</td>
-                        <td>{checks.nbChecks}</td>
-                        <td>{checks.nbSkipped}</td>
-                        <td>{checks.nbFails}</td>
-                    </tr>
-                </table>
-                <table>
-                    <tr>
-                        <th>Status</th>
-                        <th>Ref</th>
-                        <th>Url</th>
-                        <th>Data</th>
-                    </tr>
+                <div class="rows">
+                    <span class="col table-head">Last Check</span>
+                    <span class="col table-head">Checks</span>
+                    <span class="col table-head">Skipped</span>
+                    <span class="col table-head">Errors</span>
+
+                    <span class="col">{lastCheckDate}</span>
+                    <span class="col">{checks.nbChecks}</span>
+                    <span class="col">{checks.nbSkipped}</span>
+                    <span class="col">{checks.nbFails}</span>
+                </div>
+                <br/>
+                <div class="rows">
+                    <span class="col table-head">Status</span>
+                    <span class="col table-head">Ref</span>
+                    <span class="col table-head">Host</span>
+                    <span class="col table-head">Data</span>
                     {#each failures as failure}
-                        <tr>
-                            <td>{failure.status}</td>
-                            <td>{failure.chord.artist} - {failure.chord.title}</td>
-                            <td><a href="{failure.chord.url}" target="_blank" rel="noopener noreferrer" >{failure.chord.url}</a></td>
-                            <td>{failure.error ? JSON.stringify(failure.error) : ''}</td>
-                        </tr>
+                        <span class="col">{failure.status}</span>
+                        <span class="col">{failure.chord.artist} - {failure.chord.title}</span>
+                        <span class="col"><a href="{failure.chord.url}" target="_blank" rel="noopener noreferrer" >{new URL(failure.chord.url).hostname}</a></span>
+                        <span class="col">{failure.error ? JSON.stringify(failure.error) : ''}</span>
                     {/each}
-                </table>
+                </div>
             {:catch error}
                 <p style="color: red">Could not retrieve checks: {error.message}</p>
             {/await}
 
-            <div class="actions">
-                <button on:click="{closeModal}">Close</button>
-            </div>
         </div>
     </div>
 {/if}
@@ -84,12 +79,8 @@
         bottom: 0;
         right: 0;
         left: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-
         margin: 3em;
+        z-index: 9999;
 
         /* allow click-through to backdrop */
         pointer-events: none;
@@ -97,21 +88,33 @@
 
     .contents {
         min-width: 240px;
-        border-radius: 6px;
+        border-radius: 26px;
         padding: 16px;
         background: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         pointer-events: auto;
 
         max-height: 90%;
         overflow: auto;
     }
 
-    .actions {
-        margin-top: 32px;
+    .title-bar {
+        margin-bottom: 1em;
         display: flex;
-        justify-content: flex-end;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .table-head {
+        background-color: var(--nc-bg-2);
+        font-weight: bold;
+    }
+
+    .rows {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+    }
+    .rows .col {
+        padding: 0.5em;
+        border: 1px solid var(--nc-bg-3);
     }
 </style>
