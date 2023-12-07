@@ -43,12 +43,12 @@
 </script>
 
 <div class="container">
-    <span class="col col-first table-head">BPM</span>
+    <span class="col table-head">BPM</span>
     <span class="col table-head">Tempo</span>
     <span class="col table-head">Description</span>
 
     {#each tempos as tempo}
-        <span class="col col-first" class:selected={selected(currentBpm, tempo)}>{formatBPM(tempo)}</span>
+        <span class="col" class:selected={selected(currentBpm, tempo)}>{formatBPM(tempo)}</span>
         <span class="col" class:selected={selected(currentBpm, tempo)}>{tempo.name}</span>
         <span class="col" class:selected={selected(currentBpm, tempo)}>{tempo.description}</span>
     {/each}
