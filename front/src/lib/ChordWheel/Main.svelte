@@ -68,17 +68,6 @@
             x: number;
             y: number;
         }
-        p5.touchStarted = (e: TouchEvent) => {
-            // @ts-expect-error
-            if (e.target?.className !== 'p5Canvas') {
-                return;
-            }
-            e.preventDefault();
-            swipeStartPosition = {
-                x: p5.mouseX,
-                y: p5.mouseY
-            }
-        };
         p5.touchMoved = (e: TouchEvent) => {
             // @ts-expect-error
             if (e.target?.className !== 'p5Canvas') {
@@ -86,6 +75,10 @@
             }
             e.preventDefault();
             if (!swipeStartPosition) {
+                swipeStartPosition = {
+                    x: p5.mouseX,
+                    y: p5.mouseY
+                }
                 return;
             }
             const swipeX = p5.mouseX - swipeStartPosition.x;
