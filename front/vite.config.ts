@@ -1,8 +1,8 @@
+import type { UserConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import plainText from 'vite-plugin-plain-text';
 
-/** @type {import('vite').UserConfig} */
-const config = {
+const config: UserConfig = {
     plugins: [
         plainText(['**/*.md'], {
             namedExport: false,
@@ -10,8 +10,7 @@ const config = {
             distAutoClean: false
         }),
         sveltekit()
-    ],
-    test: {}
+    ]
 };
 
 export default config;
