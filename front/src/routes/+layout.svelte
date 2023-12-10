@@ -19,6 +19,7 @@
         <a href="{base}/scales">Scales</a> |
         <a href="{base}/chordwheel">Chord Wheel</a> |
         <a href="{base}/taptempo">Tap Tempo</a> |
+        <a href="{base}/metronome">Metronome</a> |
     </nav>
 </header>
 
