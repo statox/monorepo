@@ -49,7 +49,13 @@
             drawShapeInformation(p5, shapePosition, wheel);
         };
 
-        p5.keyPressed = () => {
+        p5.keyPressed = (e: KeyboardEvent) => {
+            const validEvents = [p5.LEFT_ARROW, p5.RIGHT_ARROW, p5.UP_ARROW, p5.DOWN_ARROW];
+            if (!validEvents.includes(p5.keyCode)) {
+                return;
+            }
+            e.preventDefault();
+
             if (p5.keyCode === p5.LEFT_ARROW) {
                 shapePosition--;
             }
