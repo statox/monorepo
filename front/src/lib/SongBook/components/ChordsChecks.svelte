@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { PUBLIC_API_URL } from '$env/static/public';
     import { closeModal } from "$lib/components/Modal";
     import type { Chord } from "../types";
     export let isOpen: boolean;
@@ -14,7 +15,8 @@
         nbFails: number;
         timestamp: number;
     }
-    const CHORDS_CHECK_URL = 'https://statox-backend-631a602a9744.herokuapp.com/checkChordsUrl';
+
+    const CHORDS_CHECK_URL = `${PUBLIC_API_URL}/checkChordsUrl`;
     let lastChordsCheck: Promise<ApiResult> = fetch(CHORDS_CHECK_URL).then((response) => response.json());
 
     const formatTimestamp = (checks: ApiResult) => {
