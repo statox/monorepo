@@ -1,4 +1,5 @@
 <script lang="ts">
+    import NotesOnKeyboard from "./NotesOnKeyboard.svelte";
     import NotesOnNeck from "./NotesOnNeck.svelte";
     import Progressions from "./Progressions.svelte";
     import { degreeToRoman, notes } from "./utils";
@@ -147,6 +148,7 @@
 </table>
 
 <NotesOnNeck notesToDisplay={scaleNotes} />
+<NotesOnKeyboard notesToDisplay={scaleNotes} />
 
 {#if ['Major', 'Natural minor'].includes(scale.name)}
     {#key scaleNotes}
