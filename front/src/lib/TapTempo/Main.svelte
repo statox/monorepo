@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Beats from "./Beats.svelte";
-    import TempoList from "./TempoList.svelte";
+    import Beats from './Beats.svelte';
+    import TempoList from './TempoList.svelte';
 
     let taps: number[] = [];
 
@@ -23,9 +23,9 @@
         taps = taps;
 
         taped = true;
-        setTimeout(() => taped = false, 100);
+        setTimeout(() => (taped = false), 100);
         computeBPM();
-    }
+    };
 
     let lastTap = 0;
     let previousTap = 0;
@@ -84,7 +84,7 @@
         if (e.key === C) {
             reset();
         }
-    }
+    };
 
     const onKeyUp = (e: KeyboardEvent) => {
         const SPACE = ' ';
@@ -92,21 +92,21 @@
             keyReleased = true;
             e.preventDefault();
         }
-    }
+    };
 </script>
 
 <h3>Tap Tempo</h3>
 
 <div class="container">
-    <div>
-        Press the space bar or click/tap anywhere on the page to get a bpm.
-    </div>
+    <div>Press the space bar or click/tap anywhere on the page to get a bpm.</div>
 
-    <div class="bpm" class:tapped={taped}>{bpm}<br/>BPM</div>
+    <div class="bpm" class:tapped={taped}>{bpm}<br />BPM</div>
 
     <div class="controls">
         <button class="control-button" on:click={reset}>Reset (c)</button>
-        <button class="control-button" on:click={() => pause = !pause}>{pause ? 'Play' : 'Pause'} (Enter)</button>
+        <button class="control-button" on:click={() => (pause = !pause)}
+            >{pause ? 'Play' : 'Pause'} (Enter)</button
+        >
     </div>
 
     <Beats {taps} {keptDuration} {pause} />
@@ -142,7 +142,7 @@
             font-size: 9em;
         }
     }
-    @media screen and (min-width: 600px){
+    @media screen and (min-width: 600px) {
         .bpm {
             font-size: 12em;
         }

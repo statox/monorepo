@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Chords from '$lib/SongBook/Main.svelte'
+    import Chords from '$lib/SongBook/Main.svelte';
     import type { Chord } from '$lib/SongBook//types';
 
     // From +page.ts load() function

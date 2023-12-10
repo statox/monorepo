@@ -11,8 +11,8 @@
 
 For now environement variables are all public (only the backend url so far) and can have different values depending on the environement:
 
-- Write values for local dev in `env.local`
-- Write values for prod in `env.prod`
+-   Write values for local dev in `env.local`
+-   Write values for prod in `env.prod`
 
 A script in `svelte.config.js` copies the file corresponding to the environement in `.env`.
 

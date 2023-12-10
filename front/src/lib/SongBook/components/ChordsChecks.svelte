@@ -1,7 +1,7 @@
 <script lang="ts">
     import { PUBLIC_API_URL } from '$env/static/public';
-    import { closeModal } from "$lib/components/Modal";
-    import type { Chord } from "../types";
+    import { closeModal } from '$lib/components/Modal';
+    import type { Chord } from '../types';
     export let isOpen: boolean;
 
     type ApiResult = {
@@ -10,23 +10,24 @@
         fails: {
             status: string;
             error: any;
-            chord: Chord
+            chord: Chord;
         }[];
         nbFails: number;
         timestamp: number;
-    }
+    };
 
     const CHORDS_CHECK_URL = `${PUBLIC_API_URL}/checkChordsUrl`;
-    let lastChordsCheck: Promise<ApiResult> = fetch(CHORDS_CHECK_URL).then((response) => response.json());
+    let lastChordsCheck: Promise<ApiResult> = fetch(CHORDS_CHECK_URL).then((response) =>
+        response.json()
+    );
 
     const formatTimestamp = (checks: ApiResult) => {
         const lastCheckDate = new Date(checks.timestamp);
         return lastCheckDate.toDateString() + ' ' + lastCheckDate.toTimeString();
-    }
+    };
 
-    const sortFails = (checks: ApiResult) => checks.fails.sort((a: any, b: any) =>
-        a.chord.url < b.chord.url ? -1 : 1
-    )
+    const sortFails = (checks: ApiResult) =>
+        checks.fails.sort((a: any, b: any) => (a.chord.url < b.chord.url ? -1 : 1));
 </script>
 
 {#if isOpen}
@@ -34,14 +35,14 @@
         <div class="contents">
             <h3 class="title-bar">
                 Urls checks
-                <button on:click="{closeModal}">Close</button>
+                <button on:click={closeModal}>Close</button>
             </h3>
 
             {#await lastChordsCheck}
                 <p>Fetching results...</p>
             {:then checks}
-            {@const lastCheckDate = formatTimestamp(checks)}
-            {@const failures = sortFails(checks)}
+                {@const lastCheckDate = formatTimestamp(checks)}
+                {@const failures = sortFails(checks)}
                 <div class="rows">
                     <span class="col table-head">Last Check</span>
                     <span class="col table-head">Checks</span>
@@ -53,7 +54,7 @@
                     <span class="col">{checks.nbSkipped}</span>
                     <span class="col">{checks.nbFails}</span>
                 </div>
-                <br/>
+                <br />
                 <div class="rows">
                     <span class="col table-head">Status</span>
                     <span class="col table-head">Ref</span>
@@ -62,14 +63,18 @@
                     {#each failures as failure}
                         <span class="col">{failure.status}</span>
                         <span class="col">{failure.chord.artist} - {failure.chord.title}</span>
-                        <span class="col"><a href="{failure.chord.url}" target="_blank" rel="noopener noreferrer" >{new URL(failure.chord.url).hostname}</a></span>
-                        <span class="col">{failure.error ? JSON.stringify(failure.error) : ''}</span>
+                        <span class="col"
+                            ><a href={failure.chord.url} target="_blank" rel="noopener noreferrer"
+                                >{new URL(failure.chord.url).hostname}</a
+                            ></span
+                        >
+                        <span class="col">{failure.error ? JSON.stringify(failure.error) : ''}</span
+                        >
                     {/each}
                 </div>
             {:catch error}
                 <p style="color: red">Could not retrieve checks: {error.message}</p>
             {/await}
-
         </div>
     </div>
 {/if}

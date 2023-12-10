@@ -1,17 +1,16 @@
 <script lang="ts">
     import '$lib/styles/new_theme.css';
     import Mardkown from '$lib/components/Markdown/Main.svelte';
-    import type {Note} from './types';
+    import type { Note } from './types';
     export let note: Note;
 
-    const formattedTags = note.tags.map(t => `[${t}]`).join('');
+    const formattedTags = note.tags.map((t) => `[${t}]`).join('');
 </script>
-
 
 <details>
     <summary>
-        <span class="title">{ note.title }</span>
-        <span class="formatted-tags">{ formattedTags }</span>
+        <span class="title">{note.title}</span>
+        <span class="formatted-tags">{formattedTags}</span>
     </summary>
 
     <Mardkown source={note.source} />
@@ -19,7 +18,7 @@
 
 <style>
     .title {
-        color: var(--nc-lk-1)
+        color: var(--nc-lk-1);
     }
     .formatted-tags {
         font-family: var(--nc-font-mono);

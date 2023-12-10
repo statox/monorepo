@@ -4,7 +4,13 @@
     import { onDestroy } from 'svelte';
     import { wheel } from './wheel-config';
     import type { WheelTiles } from './types';
-    import { drawShape, drawShapeInformation, drawTile, makeWheelTiles, rotateWheel } from './wheel-service';
+    import {
+        drawShape,
+        drawShapeInformation,
+        drawTile,
+        makeWheelTiles,
+        rotateWheel
+    } from './wheel-service';
 
     let _p5: p5;
     let wheelTiles: WheelTiles;
@@ -73,7 +79,7 @@
         let swipeStartPosition: {
             x: number;
             y: number;
-        }
+        };
         p5.touchMoved = (e: TouchEvent) => {
             // @ts-expect-error
             if (e.target?.className !== 'p5Canvas') {
@@ -84,7 +90,7 @@
                 swipeStartPosition = {
                     x: p5.mouseX,
                     y: p5.mouseY
-                }
+                };
                 return;
             }
             const swipeX = p5.mouseX - swipeStartPosition.x;
@@ -108,7 +114,7 @@
                 if (clockwise) {
                     rotateWheelClockwise();
                 } else {
-                    rotateWheelCounterClockwise()
+                    rotateWheelCounterClockwise();
                 }
             }
 
@@ -117,7 +123,7 @@
             swipeStartPosition = {
                 x: p5.mouseX,
                 y: p5.mouseY
-            }
+            };
         };
 
         p5.windowResized = () => {
@@ -138,39 +144,72 @@
 
 <div class="justify-content-center">
     <p>
-        <button class="fa fa-undo" on:click={() => shapePosition -= 1}></button>
+        <button class="fa fa-undo" on:click={() => (shapePosition -= 1)}></button>
         Shape rotation
-        <button class="fa fa-repeat" on:click={() => shapePosition += 1}></button>
+        <button class="fa fa-repeat" on:click={() => (shapePosition += 1)}></button>
     </p>
     <p>
         <button class="fa fa-undo" on:click={rotateWheelCounterClockwise}></button>
         Wheel rotation
         <button class="fa fa-repeat" on:click={rotateWheelClockwise}></button>
     </p>
-    <p>On mobile you can also swipe left/right to rotate the shape and up/down to rotate the wheel</p>
+    <p>
+        On mobile you can also swipe left/right to rotate the shape and up/down to rotate the wheel
+    </p>
 </div>
 
 <div>
-    This page is an implementation of <a href="https://chordwheel.com/" target="_blank" rel="noopener noreferrer">Jim Fleser's Chord Wheel</a>
+    This page is an implementation of <a
+        href="https://chordwheel.com/"
+        target="_blank"
+        rel="noopener noreferrer">Jim Fleser's Chord Wheel</a
+    >
     it is intended for my personal use. If you are using this implementation you should definitely
-    <a href="https://chordwheel.com/index.php?option=com_content&view=article&id=16&Itemid=4" target="_blank" rel="noopener noreferrer">buy his book</a> or
-    <a href="https://apps.apple.com/us/app/the-chord-wheel/id444931977" target="_blank" rel="noopener noreferrer">buy his app</a> (which is much more complete than this page).
+    <a
+        href="https://chordwheel.com/index.php?option=com_content&view=article&id=16&Itemid=4"
+        target="_blank"
+        rel="noopener noreferrer">buy his book</a
+    >
+    or
+    <a
+        href="https://apps.apple.com/us/app/the-chord-wheel/id444931977"
+        target="_blank"
+        rel="noopener noreferrer">buy his app</a
+    > (which is much more complete than this page).
 </div>
 
 <div>
-    This tool only works for songs in major keys. 
+    This tool only works for songs in major keys.
     <ul>
-        <li><a href="https://chordwheel.com/index.php?option=com_content&view=article&id=5&Itemid=17" target="_blank" rel="noopener noreferrer">Analyzing songs and compositional styles</a></li>
-        <li><a href="https://chordwheel.com/index.php?option=com_content&view=article&id=8:soloing-and-improvisation&catid=8:using-the-chordwheel&Itemid=8" target="_blank" rel="noopener noreferrer">Soloing and improvisation</a></li>
-        <li><a href="https://chordwheel.com/index.php?option=com_content&view=article&id=9&Itemid=5" target="_blank" rel="noopener noreferrer">Transpositions</a></li>
+        <li>
+            <a
+                href="https://chordwheel.com/index.php?option=com_content&view=article&id=5&Itemid=17"
+                target="_blank"
+                rel="noopener noreferrer">Analyzing songs and compositional styles</a
+            >
+        </li>
+        <li>
+            <a
+                href="https://chordwheel.com/index.php?option=com_content&view=article&id=8:soloing-and-improvisation&catid=8:using-the-chordwheel&Itemid=8"
+                target="_blank"
+                rel="noopener noreferrer">Soloing and improvisation</a
+            >
+        </li>
+        <li>
+            <a
+                href="https://chordwheel.com/index.php?option=com_content&view=article&id=9&Itemid=5"
+                target="_blank"
+                rel="noopener noreferrer">Transpositions</a
+            >
+        </li>
     </ul>
 </div>
 
 <style>
-.justify-content-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+    .justify-content-center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 </style>

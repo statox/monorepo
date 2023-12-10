@@ -13,7 +13,7 @@
             randomChordIndexes = [];
         }
 
-        for (let i=0; i<nbRandomChords; i++) {
+        for (let i = 0; i < nbRandomChords; i++) {
             let randomIndex = -1;
             while (randomIndex === -1 || randomChordIndexes.includes(randomIndex)) {
                 randomIndex = Math.floor(Math.random() * chords.length);
@@ -23,8 +23,8 @@
 
         randomChords = randomChordIndexes
             .slice(randomChordIndexes.length - nbRandomChords)
-            .map(i => chords[i]);
-    }
+            .map((i) => chords[i]);
+    };
 
     const getPreviousRandomSongs = () => {
         if (randomChordIndexes.length <= nbRandomChords) {
@@ -33,7 +33,7 @@
         randomChordIndexes.splice(randomChordIndexes.length - nbRandomChords);
         randomChords = randomChordIndexes
             .slice(randomChordIndexes.length - nbRandomChords)
-            .map(i => chords[i]);
+            .map((i) => chords[i]);
     };
 
     onMount(() => {
@@ -44,14 +44,14 @@
 <div>
     <h3>
         Random song
-        <span class='pull-right'>
+        <span class="pull-right">
             {#if randomChordIndexes.length > nbRandomChords}
                 <button on:click={getPreviousRandomSongs}>&nbsp↶&nbsp</button>
             {/if}
             <button on:click={getRandomSongs}>Get more random songs</button>
         </span>
     </h3>
-    <br/>
+    <br />
 
     <ul class="ul2col-container">
         {#each randomChords as chord (chord.url)}

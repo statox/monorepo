@@ -25,8 +25,8 @@
         });
     }
 
-    Object.keys(chordsByTags).forEach(tag => {
-        chordsByTags[tag].sort((a,b) => {
+    Object.keys(chordsByTags).forEach((tag) => {
+        chordsByTags[tag].sort((a, b) => {
             const artisteA = a.artist.toLowerCase();
             const artisteB = b.artist.toLowerCase();
             const titleA = a.title.toLowerCase();

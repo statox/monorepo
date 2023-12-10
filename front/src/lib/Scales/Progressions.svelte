@@ -1,6 +1,6 @@
 <script lang="ts">
     import { progressions, type Chord } from './progressions';
-    import { degreeToRoman, notes } from "./utils";
+    import { degreeToRoman, notes } from './utils';
 
     export let scaleNotes: string[] = [];
 
@@ -20,8 +20,8 @@
         let noteIndex = notes.indexOf(scaleNote);
         if (chord.flat) {
             noteIndex--;
-            if (noteIndex===-1) {
-                noteIndex = notes.length-1;
+            if (noteIndex === -1) {
+                noteIndex = notes.length - 1;
             }
         }
 
@@ -40,10 +40,10 @@
     <div>
         <h4>{progression.name}</h4>
         {#if progression.examples}
-        <span>
-            <b>Examples:</b>
-            {progression.examples.join(', ')}
-        </span>
+            <span>
+                <b>Examples:</b>
+                {progression.examples.join(', ')}
+            </span>
         {/if}
         <table>
             <tr>
@@ -58,11 +58,12 @@
             </tr>
         </table>
     </div>
-    <br/>
+    <br />
 {/each}
 
 <style>
-    th, td {
+    th,
+    td {
         text-align: center;
     }
 </style>

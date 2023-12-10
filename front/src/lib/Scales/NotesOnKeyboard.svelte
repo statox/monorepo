@@ -15,12 +15,12 @@
     const NB_FULL_KEYS = 14;
 
     const drawBoard = (p5: p5) => {
-        const linesColor = [80, 70, 60, 150]
+        const linesColor = [80, 70, 60, 150];
         const halfKeyColor = [80, 70, 60];
         const fullKeyW = p5.width / NB_FULL_KEYS;
 
-        for (let i=0; i<NB_FULL_KEYS; i++) {
-            const note = fullKeys[i%fullKeys.length];
+        for (let i = 0; i < NB_FULL_KEYS; i++) {
+            const note = fullKeys[i % fullKeys.length];
             p5.strokeWeight(1);
             p5.stroke(linesColor);
             p5.noFill();
@@ -28,10 +28,10 @@
             // Draw the full notes
             p5.rect(fullKeyW * i, 0, fullKeyW, p5.height);
 
-            const halfKey = note+'#';
+            const halfKey = note + '#';
             if (halfKeys.includes(halfKey)) {
                 p5.fill(halfKeyColor);
-                p5.rect(fullKeyW * i + (2*fullKeyW/3), 0, fullKeyW/2, p5.height * 0.65);
+                p5.rect(fullKeyW * i + (2 * fullKeyW) / 3, 0, fullKeyW / 2, p5.height * 0.65);
             }
         }
     };
@@ -50,8 +50,8 @@
 
     const drawNotes = (p5: p5) => {
         const fullKeyW = p5.width / NB_FULL_KEYS;
-        for (let i=0; i<NB_FULL_KEYS; i++) {
-            const note = fullKeys[i%fullKeys.length];
+        for (let i = 0; i < NB_FULL_KEYS; i++) {
+            const note = fullKeys[i % fullKeys.length];
 
             const noteIndex = notesToDisplay.indexOf(note);
             if (noteIndex >= 0) {
@@ -71,7 +71,7 @@
                 p5.text(label, x - p5.textWidth(label) / 2, y + p5.textSize() / 2);
             }
 
-            const sharpNote = note+'#';
+            const sharpNote = note + '#';
             const sharpNoteIndex = notesToDisplay.indexOf(sharpNote);
             if (sharpNoteIndex >= 0) {
                 if (sharpNoteIndex === 0) {

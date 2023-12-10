@@ -23,26 +23,22 @@
 </header>
 
 <Modals>
-  <!-- Using a button instead of a div to avoid a11y warnings -->
-  <button
-    slot="backdrop"
-    class="backdrop"
-    on:click={closeModal}
-  />
+    <!-- Using a button instead of a div to avoid a11y warnings -->
+    <button slot="backdrop" class="backdrop" on:click={closeModal} />
 </Modals>
 
 <slot />
 
 <style>
-  .backdrop {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background: rgba(0,0,0,0.20)
-  }
-  .backdrop:enabled:hover {
-    background: rgba(0,0,0,0.20)
-  }
+    .backdrop {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.2);
+    }
+    .backdrop:enabled:hover {
+        background: rgba(0, 0, 0, 0.2);
+    }
 </style>
