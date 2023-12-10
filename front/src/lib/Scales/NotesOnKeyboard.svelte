@@ -6,7 +6,7 @@
 
     let _p5: p5;
     type LabelMode = 'name' | 'degree';
-    let labelMode: LabelMode = 'name';
+    export let labelMode: LabelMode = 'name';
 
     export let notesToDisplay: string[];
 
@@ -116,5 +116,4 @@
 
 <div class="d-flex justify-content-center">
     <P5 {sketch} />
-    <button on:click={() => labelMode = labelMode==='name'?'degree':'name'}>{labelMode}</button>
 </div>
