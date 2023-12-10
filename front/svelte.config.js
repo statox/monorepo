@@ -1,12 +1,13 @@
 import adapter from 'svelte-adapter-github';
 import { vitePreprocess } from '@sveltejs/kit/vite';
-import { Config } from '@sveltejs/kit';
 
+// CHANGEME
 const REPO_NAME = '/workshop';
 const prod = process.env.ENV === 'prod';
 const base = prod ? REPO_NAME : '';
 
-const config: Config = {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
     // Consult https://kit.svelte.dev/docs/integrations#preprocessors
     // for more information about preprocessors
     preprocess: vitePreprocess(),
@@ -15,7 +16,7 @@ const config: Config = {
         adapter: adapter({
             pages: 'docs',
             assets: 'docs',
-            fallback: undefined,
+            fallback: null,
             precompress: false,
             domain: '',
             jekyll: false
