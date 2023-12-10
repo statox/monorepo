@@ -2,9 +2,11 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
-    import { notes } from './utils';
+    import { degreeToRoman, notes } from './utils';
 
     let _p5: p5;
+    type LabelMode = 'name' | 'degree';
+    let labelMode: LabelMode = 'name';
 
     export let notesToDisplay: string[];
 
@@ -78,6 +80,18 @@
         }
     };
 
+    const getNoteName = (notes: string[], note: string, mode: 'name' | 'degree') => {
+        if (mode === 'name') {
+            return note;
+        }
+        const index = notes.indexOf(note);
+        if (index === -1) {
+            throw new Error('note not in scale');
+        }
+
+        return degreeToRoman(index + 1);
+    };
+
     const drawNotes = (p5: p5) => {
         for (let i=0; i<6; i++) {
             const string = strings[i];
@@ -99,7 +113,8 @@
 
                 p5.noStroke();
                 p5.fill('white');
-                p5.text(note, x - p5.textWidth(note) / 2, y + p5.textSize() / 2);
+                const label = getNoteName(notesToDisplay, note, labelMode);
+                p5.text(label, x - p5.textWidth(label) / 2, y + p5.textSize() / 2);
             }
         }
     };
@@ -131,6 +146,7 @@
         p5.setup = () => {
             _p5 = p5;
             p5.createCanvas(900, 300);
+            p5.textStyle(p5.BOLD);
         };
         p5.draw = () => {
             p5.background([200, 190, 170]);
@@ -141,7 +157,7 @@
     };
 
     // Re run draw() when notesToDisplay change
-    $: if (notesToDisplay) _p5?.draw();
+    $: if (notesToDisplay || labelMode) _p5?.draw();
 
     onDestroy(() => {
         _p5?.remove();
@@ -150,4 +166,5 @@
 
 <div class="d-flex justify-content-center">
     <P5 {sketch} />
+    <button on:click={() => labelMode = labelMode==='name'?'degree':'name'}>{labelMode}</button>
 </div>
