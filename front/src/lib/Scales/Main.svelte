@@ -7,14 +7,15 @@
     // https://ianring.com/musictheory/scales/
 
     type Interval = number;
+    type TypeOfChord = 'major' | 'minor' | 'diminished';
 
     // Intervals a numbers of semitones
-    type Scale = { name: string, intervals: Interval[] };
+    type Scale = { name: string, intervals: Interval[], chords: TypeOfChord[] };
     const scales: Scale[] = [
-        { name: 'Major', intervals: [2, 2, 1, 2, 2, 2, 1]},
-        { name: 'Natural minor', intervals: [ 2, 1, 2, 2, 1, 2, 2]},
-        { name: 'Pentatonic major', intervals: [2, 2, 3, 2, 3]},
-        { name: 'Pentatonic minor', intervals: [3, 2, 2, 3, 2]},
+        { name: 'Major', intervals: [2, 2, 1, 2, 2, 2, 1], chords: ['major', 'minor', 'minor', 'diminished', 'major', 'minor', 'major']},
+        { name: 'Natural minor', intervals: [ 2, 1, 2, 2, 1, 2, 2], chords: ['minor', 'diminished', 'major', 'minor', 'major', 'major', 'minor']},
+        { name: 'Pentatonic major', intervals: [2, 2, 3, 2, 3], chords: ['major', 'minor', 'minor', 'major', 'minor']},
+        { name: 'Pentatonic minor', intervals: [3, 2, 2, 3, 2], chords: ['minor', 'major', 'minor', 'major', 'major']},
     ];
 
     type Mode = { name: string, degree: number };
@@ -55,6 +56,28 @@
             scaleNotes.push(scaleNotes.shift()!);
         }
     };
+
+    const formatDegreeName = (degree: number, chord: TypeOfChord) => {
+        let roman = degreeToRoman(degree);
+        if (chord === 'minor') {
+            roman = roman.toLowerCase();
+        } else if (chord === 'diminished') {
+            roman += '°';
+        }
+
+        return roman;
+    }
+
+    const formatDegreeNote = (note: string, chord: TypeOfChord) => {
+        let label = note;
+        if (chord === 'minor') {
+            label += 'm';
+        } else if (chord === 'diminished') {
+            label += '°';
+        }
+
+        return label;
+    }
 
     $: getScale(tonic, scale, mode);
 </script>
@@ -111,13 +134,14 @@
 
 <table>
     <tr>
-        {#each scaleNotes as _, index}
-            <th>{degreeToRoman(index + 1)}</th>
+        {#each scale.chords as chord, index}
+            <th>{formatDegreeName(index + 1, chord)}</th>
         {/each}
     </tr>
     <tr>
-    {#each scaleNotes as note}
-        <td>{note}</td>
+    {#each scaleNotes as note, index}
+    {@const type = scale.chords[index]}
+        <td>{formatDegreeNote(note, type)}</td>
     {/each}
     </tr>
 </table>
