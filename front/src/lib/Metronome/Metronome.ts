@@ -18,7 +18,7 @@ export class Metronome {
     isRunning: boolean;
     intervalID: ReturnType<typeof setInterval> | null;
 
-    // Functions used to update the GUI
+    // Functions uses to update the GUI
     onBeatStart: (beatNumber: number) => void;
     onBeatEnd: () => void;
 
@@ -102,42 +102,11 @@ export class Metronome {
     start() {
         if (this.isRunning) return;
 
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) {
-            throw new Error('no audio context available');
-        }
         if (!this.audioContext) {
-            this.audioContext = new AudioContext();
+            // Code to try to fix iOS safari
+            // https://gist.github.com/kus/3f01d60569eeadefe3a1
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
-
-        // Try to fix iOS safari
-        // https://gist.github.com/kus/3f01d60569eeadefe3a1
-        const audioContext = this.audioContext;
-        const fixAudioContext = function (e) {
-            if (audioContext) {
-                // Create empty buffer
-                const buffer = audioContext.createBuffer(1, 1, 22050);
-                const source = audioContext.createBufferSource();
-                source.buffer = buffer;
-                // Connect to output (speakers)
-                source.connect(audioContext.destination);
-                // Play sound
-                if (source.start) {
-                    source.start(0);
-                    // } else if (source.play) {
-                    //     source.play(0);
-                    // } else if (source.noteOn) {
-                    //     source.noteOn(0);
-                }
-            }
-            // Remove events
-            document.removeEventListener('touchstart', fixAudioContext);
-            document.removeEventListener('touchend', fixAudioContext);
-        };
-        // iOS 6-8
-        document.addEventListener('touchstart', fixAudioContext);
-        // iOS 9
-        document.addEventListener('touchend', fixAudioContext);
 
         this.isRunning = true;
 
