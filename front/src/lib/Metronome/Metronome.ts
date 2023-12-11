@@ -18,7 +18,7 @@ export class Metronome {
     isRunning: boolean;
     intervalID: ReturnType<typeof setInterval> | null;
 
-    // Functions uses to update the GUI
+    // Functions used to update the GUI
     onBeatStart: (beatNumber: number) => void;
     onBeatEnd: () => void;
 
