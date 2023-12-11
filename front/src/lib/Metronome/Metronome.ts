@@ -18,7 +18,11 @@ export class Metronome {
     isRunning: boolean;
     intervalID: ReturnType<typeof setInterval> | null;
 
-    constructor(tempo = 120) {
+    // Functions uses to update the GUI
+    onBeatStart: (beatNumber: number) => void;
+    onBeatEnd: () => void;
+
+    constructor(tempo = 120, onNoteStart: (beatNumber: number) => void, onNoteEnd: () => void) {
         this.audioContext = null;
         this.notesInQueue = []; // notes that have been put into the web audio and may or may not have been played yet {note, time}
         this.currentBeatInBar = 0;
@@ -29,6 +33,9 @@ export class Metronome {
         this.nextNoteTime = 0.0; // when the next note is due
         this.isRunning = false;
         this.intervalID = null;
+
+        this.onBeatStart = onNoteStart;
+        this.onBeatEnd = onNoteEnd;
     }
 
     nextNote() {
@@ -54,7 +61,7 @@ export class Metronome {
         const osc = this.audioContext.createOscillator();
         const envelope = this.audioContext.createGain();
 
-        osc.frequency.value = beatNumber % this.beatsPerBar == 0 ? 1000 : 800;
+        osc.frequency.value = beatNumber % this.beatsPerBar == 0 ? 1000 : 400;
         envelope.gain.value = 1;
         envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
         envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.02);
@@ -62,8 +69,22 @@ export class Metronome {
         osc.connect(envelope);
         envelope.connect(this.audioContext.destination);
 
-        osc.start(time);
-        osc.stop(time + 0.03);
+        // The constantSourceNode is a hack to trigger a function when the oscillator
+        // starts playing. See SO:
+        // https://stackoverflow.com/a/69958258/4194289
+        const constantSourceNode = this.audioContext.createConstantSource();
+        constantSourceNode.onended = () => {
+            this.onBeatStart(beatNumber);
+            osc.start();
+            osc.stop(time + 0.03);
+
+            osc.onended = () => {
+                this.onBeatEnd();
+            };
+        };
+
+        constantSourceNode.start(time);
+        constantSourceNode.stop(this.audioContext.currentTime + 0.0001); // stop immediately after starting
     }
 
     scheduler() {
@@ -82,6 +103,8 @@ export class Metronome {
         if (this.isRunning) return;
 
         if (!this.audioContext) {
+            // Code to try to fix iOS safari
+            // https://gist.github.com/kus/3f01d60569eeadefe3a1
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
 
