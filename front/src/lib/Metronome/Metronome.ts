@@ -21,14 +21,10 @@ export class Metronome {
     intervalID: ReturnType<typeof setInterval> | null;
 
     // Functions used to update the GUI
-    onBeatStart: (beatNumber: number, subdivisionNumber: number) => void;
-    onBeatEnd: () => void;
+    onBeatStart?: (beatNumber: number, subdivisionNumber: number) => void;
+    onBeatEnd?: () => void;
 
-    constructor(
-        tempo = 120,
-        onNoteStart: (beatNumber: number, subdivisionNumber: number) => void,
-        onNoteEnd: () => void
-    ) {
+    constructor(tempo = 80) {
         this.audioContext = null;
         this.notesInQueue = []; // notes that have been put into the web audio and may or may not have been played yet {note, time}
         this.currentBeatInBar = 0;
@@ -41,9 +37,6 @@ export class Metronome {
         this.nextNoteTime = 0.0; // when the next note is due
         this.isRunning = false;
         this.intervalID = null;
-
-        this.onBeatStart = onNoteStart;
-        this.onBeatEnd = onNoteEnd;
     }
 
     nextNote() {
@@ -97,12 +90,12 @@ export class Metronome {
         // https://stackoverflow.com/a/69958258/4194289
         const constantSourceNode = this.audioContext.createConstantSource();
         constantSourceNode.onended = () => {
-            this.onBeatStart(beatNumber, subdivisionNumber);
+            this.onBeatStart && this.onBeatStart(beatNumber, subdivisionNumber);
             osc.start();
             osc.stop(time + 0.03);
 
             osc.onended = () => {
-                this.onBeatEnd();
+                this.onBeatEnd && this.onBeatEnd();
             };
         };
 
