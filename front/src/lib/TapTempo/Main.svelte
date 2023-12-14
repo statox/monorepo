@@ -1,61 +1,27 @@
 <script lang="ts">
     import Beats from './Beats.svelte';
     import TempoList from './TempoList.svelte';
+    import { TapTempo } from './TapTempo';
 
-    let taps: number[] = [];
-
-    const keptDuration = 1000 * 15;
+    let tapTempo = new TapTempo();
     let taped = false;
-    let bpm = 0;
-
-    const reset = () => {
-        taps = [];
-        bpm = 0;
-        lastTap = 0;
-    };
 
     const addBeat = () => {
-        const now = Date.now();
-        taps.push(Date.now());
-        while (taps.length && taps[0] < now - keptDuration) {
-            taps.shift();
-        }
-        taps = taps;
-
-        taped = true;
-        setTimeout(() => (taped = false), 100);
-        computeBPM();
-    };
-
-    let lastTap = 0;
-    let previousTap = 0;
-    let groundZero = 0;
-    let counter = 0;
-    const computeBPM = () => {
         if (pause) {
             return;
         }
-        const now = Date.now();
+        tapTempo.addBeat();
+        tapTempo = tapTempo;
 
-        if (lastTap === 0) {
-            groundZero = now;
-            counter = 0;
-        }
-
-        lastTap = now;
-        const elapsed = now - previousTap;
-
-        previousTap = lastTap;
-        const tapDiff = lastTap - groundZero;
-        if (tapDiff !== 0) {
-            bpm = Math.round((60000 * counter) / tapDiff);
-        }
-        counter++;
-
-        if (elapsed > 3000) {
-            lastTap = 0;
-        }
+        taped = true;
+        setTimeout(() => (taped = false), 100);
     };
+
+    const reset = () => {
+        tapTempo.reset();
+        tapTempo = tapTempo;
+    }
+
     let pause = false;
 
     let keyReleased = true;
@@ -83,6 +49,7 @@
         }
         if (e.key === C) {
             reset();
+            tapTempo = tapTempo;
         }
     };
 
@@ -100,18 +67,18 @@
 <div class="container">
     <div>Press the space bar or click/tap anywhere on the page to get a bpm.</div>
 
-    <div class="bpm" class:tapped={taped}>{bpm}<br />BPM</div>
+    <div class="bpm" class:tapped={taped}>{tapTempo.bpm}<br />BPM</div>
 
     <div class="controls">
         <button class="control-button" on:click={reset}>Reset (c)</button>
-        <button class="control-button" on:click={() => (pause = !pause)}
-            >{pause ? 'Play' : 'Pause'} (Enter)</button
-        >
+        <button class="control-button" on:click={() => (pause = !pause)}>
+            {pause ? 'Play' : 'Pause'} (Enter)
+        </button>
     </div>
 
-    <Beats {taps} {keptDuration} {pause} />
+    <Beats taps={tapTempo.taps} keptDuration={tapTempo.keptDuration} {pause} />
 
-    <TempoList currentBpm={bpm} />
+    <TempoList currentBpm={tapTempo.bpm} />
 </div>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} on:pointerdown={addBeat} />
