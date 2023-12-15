@@ -5,6 +5,7 @@
     import TempoControls from './TempoControls.svelte';
     import PlayPause from './PlayPause.svelte';
     import MetronomeVisualization from './MetronomeVisualization.svelte';
+    import Tap from './Tap.svelte';
 
     let metronome = new Metronome(80);
 
@@ -18,6 +19,7 @@
 
     <PlayPause {metronome} />
     <TempoControls {metronome} />
+    <Tap onNewBPM={(newBPM) => {metronome.tempo = newBPM; metronome=metronome}} />
     <BeatsControls {metronome} />
     <MetronomeVisualization {metronome} />
 </div>
