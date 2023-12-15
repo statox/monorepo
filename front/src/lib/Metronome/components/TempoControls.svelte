@@ -2,6 +2,18 @@
     import type { Metronome } from "../Metronome";
 
     export let metronome: Metronome;
+
+    const updateTempo = (event: Event) => {
+        if (!event || !event.target) {
+            return;
+        }
+        const target = event.target as HTMLInputElement;
+        const value = Number(target.value);
+        if (!value || value < 1) {
+            return;
+        }
+        metronome.tempo = value;
+    };
 </script>
 
 <div class="tempo-container">
@@ -10,7 +22,7 @@
         <button on:click={() => metronome.tempo = Number(metronome.tempo) - 1}>-1</button>
     </div>
     <div class="tempo-value" style="font-size: x-large">
-        <input style="font-size: x-large; margin-right: 0.1em;" type="number" min="1" max="400" bind:value={metronome.tempo} /> BPM
+        <input style="font-size: x-large; margin-right: 0.1em;" type="number" min="1" max="400" value={metronome.tempo} on:change={updateTempo} /> BPM
     </div>
     <div class="tempo-more">
         <button on:click={() => metronome.tempo = Number(metronome.tempo) + 1}>+1</button>

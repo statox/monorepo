@@ -10,7 +10,9 @@
         taped = true;
         setTimeout(() => (taped = false), 100);
 
-        onNewBPM(tapTempo.bpm);
+        if (tapTempo.bpm > 0) {
+            onNewBPM(Math.ceil(tapTempo.bpm));
+        }
     };
 </script>
 
