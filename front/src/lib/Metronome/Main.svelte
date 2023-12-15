@@ -1,11 +1,13 @@
 <script lang="ts">
     import { Metronome } from './Metronome';
     import { onDestroy } from 'svelte';
+    import { openModal } from '$lib/components/Modal';
     import BeatsControls from './BeatsControls.svelte';
     import TempoControls from './TempoControls.svelte';
     import PlayPause from './PlayPause.svelte';
     import MetronomeVisualization from './MetronomeVisualization.svelte';
     import Tap from './Tap.svelte';
+    import InfoModal from './InfoModal.svelte';
 
     let metronome = new Metronome(80);
 
@@ -15,7 +17,14 @@
 </script>
 
 <div class="main">
-    <h3>Metronome</h3>
+    <h3>
+        Metronome
+        <span>
+            <button style:position="relative" on:click={() => openModal(InfoModal)}>
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+            </button>
+        </span>
+    </h3>
 
     <div>
         <PlayPause {metronome} />
