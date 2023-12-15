@@ -42,10 +42,4 @@
         flex-direction: column;
         justify-content: space-evenly;
     }
-    @media screen and (min-width: 700px) {
-        .controls-container {
-            flex-direction: row;
-            justify-content: space-around;
-        }
-    }
 </style>

@@ -17,16 +17,29 @@
 <div class="main">
     <h3>Metronome</h3>
 
-    <PlayPause {metronome} />
-    <TempoControls {metronome} />
-    <Tap onNewBPM={(newBPM) => {metronome.tempo = newBPM; metronome=metronome}} />
-    <BeatsControls {metronome} />
-    <MetronomeVisualization {metronome} />
+    <div>
+        <PlayPause {metronome} />
+    </div>
+    <div class="section">
+        <TempoControls {metronome} />
+        <Tap onNewBPM={(newBPM) => {metronome.tempo = newBPM / metronome.subdivisionsInBeat; metronome=metronome}} />
+    </div>
+    <div class="section">
+        <BeatsControls {metronome} />
+    </div>
+    <div class="section">
+        <MetronomeVisualization {metronome} />
+    </div>
 </div>
 
 
 <style>
     .main {
         min-width: 300px;
+    }
+    .section {
+        min-width: 300px;
+        margin: 1em;
+        border: 1px solid var(--nc-bg-3);
     }
 </style>

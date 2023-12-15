@@ -15,7 +15,7 @@
 </script>
 
 <div class="controls-container">
-    <button class:taped style="min-width: 300px" on:click={addBeat}>
+    <button class:taped on:click={addBeat}>
         Tap
     </button>
 </div>
@@ -33,11 +33,5 @@
 
         flex-direction: column;
         justify-content: space-evenly;
-    }
-    @media screen and (min-width: 700px) {
-        .controls-container {
-            flex-direction: row;
-            justify-content: space-around;
-        }
     }
 </style>
