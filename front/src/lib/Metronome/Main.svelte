@@ -2,12 +2,12 @@
     import { Metronome } from './Metronome';
     import { onDestroy } from 'svelte';
     import { openModal } from '$lib/components/Modal';
-    import BeatsControls from './BeatsControls.svelte';
-    import TempoControls from './TempoControls.svelte';
-    import PlayPause from './PlayPause.svelte';
-    import MetronomeVisualization from './MetronomeVisualization.svelte';
-    import Tap from './Tap.svelte';
-    import InfoModal from './InfoModal.svelte';
+    import BeatsControls from './components/BeatsControls.svelte';
+    import TempoControls from './components/TempoControls.svelte';
+    import PlayPause from './components/PlayPause.svelte';
+    import MetronomeVisualization from './components/MetronomeVisualization.svelte';
+    import Tap from './components/Tap.svelte';
+    import InfoModal from './components/InfoModal.svelte';
 
     let metronome = new Metronome(80);
 

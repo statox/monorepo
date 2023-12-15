@@ -26,6 +26,14 @@
                     <li>The visualization at the bottom follow the beats and their subdivisions.</li>
                 </ul>
             </div>
+
+            <br />
+            <h5>Bugs</h5>
+            <ul>
+                <li>While it goes against my opinion on what the web should look like, this page works better with Chrome-based browsers.</li>
+                <li>For some reason the display of the tempo settings is broken on Firefox, the input doesn't resize properly.</li>
+                <li>The sound doesn't work on Safari on iOS (and maybe on MacOS too).</li>
+            </ul>
         </div>
     </div>
 {/if}
