@@ -26,6 +26,7 @@ const config = {
             assets: 'docs',
             fallback: null,
             precompress: false,
+            fallback: '404.html',
             domain: '',
             jekyll: false
         }),
