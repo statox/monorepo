@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import adapter from 'svelte-adapter-github';
-import { vitePreprocess } from '@sveltejs/kit/vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 // CHANGEME
 const REPO_NAME = '/workshop';
@@ -33,6 +33,7 @@ const config = {
             $config: 'src/config'
         },
         paths: {
+            relative: false,
             base
         }
     }
