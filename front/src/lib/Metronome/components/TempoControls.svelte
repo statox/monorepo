@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Metronome } from "../Metronome";
+    import type { Metronome } from '../Metronome';
 
     export let metronome: Metronome;
 
@@ -18,15 +18,22 @@
 
 <div class="tempo-container">
     <div class="tempo-less">
-        <button on:click={() => metronome.tempo = Number(metronome.tempo) - 5}>-5</button>
-        <button on:click={() => metronome.tempo = Number(metronome.tempo) - 1}>-1</button>
+        <button on:click={() => (metronome.tempo = Number(metronome.tempo) - 5)}>-5</button>
+        <button on:click={() => (metronome.tempo = Number(metronome.tempo) - 1)}>-1</button>
     </div>
     <div class="tempo-value" style="font-size: x-large">
-        <input style="font-size: x-large; margin-right: 0.1em;" type="number" min="1" max="400" value={metronome.tempo} on:change={updateTempo} /> BPM
+        <input
+            style="font-size: x-large; margin-right: 0.1em;"
+            type="number"
+            min="1"
+            max="400"
+            value={metronome.tempo}
+            on:change={updateTempo}
+        /> BPM
     </div>
     <div class="tempo-more">
-        <button on:click={() => metronome.tempo = Number(metronome.tempo) + 1}>+1</button>
-        <button on:click={() => metronome.tempo = Number(metronome.tempo) + 5}>+5</button>
+        <button on:click={() => (metronome.tempo = Number(metronome.tempo) + 1)}>+1</button>
+        <button on:click={() => (metronome.tempo = Number(metronome.tempo) + 5)}>+5</button>
     </div>
 </div>
 

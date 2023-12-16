@@ -20,7 +20,7 @@
     const reset = () => {
         tapTempo.reset();
         tapTempo = tapTempo;
-    }
+    };
 
     let pause = false;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
-    import type { Metronome } from "../Metronome";
+    import type { Metronome } from '../Metronome';
     import { onDestroy, onMount } from 'svelte';
 
     export let metronome: Metronome;
@@ -9,9 +9,13 @@
     let beatIsPlaying = false;
     let beatPlaying = 0;
     let subdivisionPlaying = 0;
-    const onBeatStart = (beatNumber: number, subdivisionNumber: number) => {beatIsPlaying = true; beatPlaying = beatNumber, subdivisionPlaying = subdivisionNumber};
-    const onBeatEnd = () => {beatIsPlaying = false};
-
+    const onBeatStart = (beatNumber: number, subdivisionNumber: number) => {
+        beatIsPlaying = true;
+        (beatPlaying = beatNumber), (subdivisionPlaying = subdivisionNumber);
+    };
+    const onBeatEnd = () => {
+        beatIsPlaying = false;
+    };
 
     let _p5: p5;
     let beatItemColor = 'white';
@@ -27,7 +31,7 @@
             if (containerElement) {
                 const containerWidth = containerElement?.clientWidth || 600;
                 if (p5.width !== containerWidth) {
-                    p5.resizeCanvas(containerWidth, Math.max(containerWidth/3, 100));
+                    p5.resizeCanvas(containerWidth, Math.max(containerWidth / 3, 100));
                 }
             }
 
@@ -37,22 +41,26 @@
             const beatW = Math.min(p5.width / metronome.beatsPerBar, p5.height);
             const subdivisionH = p5.height / metronome.subdivisionsInBeat;
 
-            for (let i=0; i<metronome.beatsPerBar; i++) {
+            for (let i = 0; i < metronome.beatsPerBar; i++) {
                 if (i === beatPlaying) {
                     p5.strokeWeight(5);
                 } else {
                     p5.strokeWeight(1);
                 }
                 p5.noFill();
-                p5.circle(i*beatW + beatW/2, p5.height/2, beatW * 0.9);
+                p5.circle(i * beatW + beatW / 2, p5.height / 2, beatW * 0.9);
                 p5.strokeWeight(1);
-                for (let j=0; j<metronome.subdivisionsInBeat; j++) {
+                for (let j = 0; j < metronome.subdivisionsInBeat; j++) {
                     if (beatIsPlaying && i === beatPlaying && j === subdivisionPlaying) {
                         p5.fill(beatItemColor);
                     } else {
                         p5.noFill();
                     }
-                    p5.circle(i*beatW + beatW/2, j*subdivisionH + subdivisionH / 2, (beatW / metronome.subdivisionsInBeat) * 0.9);
+                    p5.circle(
+                        i * beatW + beatW / 2,
+                        j * subdivisionH + subdivisionH / 2,
+                        (beatW / metronome.subdivisionsInBeat) * 0.9
+                    );
                 }
             }
 
@@ -63,8 +71,12 @@
             }
 
             p5.fill(beatItemColor);
-            const beatPlayingStr = (beatPlaying+1).toString();
-            p5.text(beatPlayingStr, beatPlaying*beatW + beatW / 2 - p5.textWidth(beatPlayingStr) / 2, p5.height / 2 + p5.textSize()/2);
+            const beatPlayingStr = (beatPlaying + 1).toString();
+            p5.text(
+                beatPlayingStr,
+                beatPlaying * beatW + beatW / 2 - p5.textWidth(beatPlayingStr) / 2,
+                p5.height / 2 + p5.textSize() / 2
+            );
         };
     };
 

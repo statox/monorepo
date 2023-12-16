@@ -31,7 +31,12 @@
     </div>
     <div class="section">
         <TempoControls {metronome} />
-        <Tap onNewBPM={(newBPM) => {metronome.tempo = newBPM / metronome.subdivisionsInBeat; metronome=metronome}} />
+        <Tap
+            onNewBPM={(newBPM) => {
+                metronome.tempo = newBPM / metronome.subdivisionsInBeat;
+                metronome = metronome;
+            }}
+        />
     </div>
     <div class="section">
         <BeatsControls {metronome} />
@@ -40,7 +45,6 @@
         <MetronomeVisualization {metronome} />
     </div>
 </div>
-
 
 <style>
     .main {
