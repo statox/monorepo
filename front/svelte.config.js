@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import adapter from 'svelte-adapter-github';
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 // CHANGEME
