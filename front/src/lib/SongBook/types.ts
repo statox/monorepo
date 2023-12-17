@@ -5,3 +5,8 @@ export type Chord = {
     creationDate: number;
     tags: string[];
 };
+
+export type ChordData = {
+    count: number;
+    lastAccessDateUnix: number;
+};

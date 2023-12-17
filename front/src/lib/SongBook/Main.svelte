@@ -4,6 +4,7 @@
     import ChordsChecks from './components/ChordsChecks.svelte';
     import ListByArtist from './components/ListByArtist.svelte';
     import ListByTags from './components/ListByTags.svelte';
+    import ListByVisitsCounts from './components/ListByVisitsCounts.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord } from './types';
@@ -12,10 +13,11 @@
 
     let searchString = '';
 
-    let view: 'listByArtist' | 'listByTags' = 'listByArtist';
+    let view: 'listByArtist' | 'listByTags' | 'listByVisitsCount' = 'listByArtist';
     const views = {
         listByArtist: ListByArtist,
-        listByTags: ListByTags
+        listByTags: ListByTags,
+        listByVisitsCount: ListByVisitsCounts
     };
 </script>
 
@@ -50,11 +52,29 @@
     <h3>All songs</h3>
     Search an artist, a title or a tag:<input type="text" bind:value={searchString} />
     <button on:click={() => (searchString = '')}>&nbsp✖&nbsp</button>
-    <button
-        class="pull-right"
-        on:click={() => (view = view === 'listByTags' ? 'listByArtist' : 'listByTags')}
-        >Change view</button
-    >
+    <div class="view-controls">
+        <button class:selected={view==='listByArtist'} class="pull-right" on:click={() => view = 'listByArtist'}>
+            By artists
+        </button>
+        <button class:selected={view==='listByTags'} class="pull-right" on:click={() => view = 'listByTags'}>
+            By tags
+        </button>
+        <button class:selected={view==='listByVisitsCount'} class="pull-right" on:click={() => view = 'listByVisitsCount'}>
+            By visits count
+        </button>
+    </div>
 </div>
 
 <svelte:component this={views[view]} {chords} {searchString} />
+
+<style>
+    .view-controls {
+        display: flex;
+        gap: 0.1em;
+    }
+
+    button.selected {
+        background-color: var(--nc-lk-2);
+        font-weight: bold;
+    }
+</style>

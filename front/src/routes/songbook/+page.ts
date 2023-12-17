@@ -11,6 +11,7 @@ export const load: PageLoad = async ({ fetch }): Promise<{ chords: Chord[] }> =>
 
         return response.json();
     });
+
     // TODO Add type checking
     return { chords };
 };

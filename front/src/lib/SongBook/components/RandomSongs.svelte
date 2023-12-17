@@ -5,7 +5,7 @@
 
     export let chords: Chord[];
 
-    const nbRandomChords = 4;
+    const nbRandomChords = 6;
     let randomChordIndexes: number[] = [];
     let randomChords: Chord[] = [];
     const getRandomSongs = () => {

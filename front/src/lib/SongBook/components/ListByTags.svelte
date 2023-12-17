@@ -44,8 +44,6 @@
             return 1;
         });
     });
-
-    console.log(chordsByTags);
 </script>
 
 {#each Object.keys(chordsByTags).sort(alphaLowerSort) as tag}
