@@ -15,11 +15,7 @@
     <nav>
         <a href="{base}/">Home</a> |
         <a href="{base}/notes">Notes</a> |
-        <a href="{base}/songbook">Song book</a> |
-        <a href="{base}/scales">Scales</a> |
-        <a href="{base}/chordwheel">Chord Wheel</a> |
-        <a href="{base}/taptempo">Tap Tempo</a> |
-        <a href="{base}/metronome">Metronome</a> |
+        <a href="{base}/music">Music</a> |
     </nav>
 </header>
 
