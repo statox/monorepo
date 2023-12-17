@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { PUBLIC_API_URL } from '$env/static/public';
     import type { Chord } from '../types';
     export let chord: Chord;
     export let showArtist = false;
@@ -19,11 +20,24 @@
         return 'fas fa-xs fa-link';
     };
     let iconClass = getIconClass(chord);
+
+    const addVisit = () => {
+        const visitUrl = PUBLIC_API_URL + '/addChordLinkVisit';
+        const data = { url: chord.url };
+        fetch(visitUrl, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        });
+    };
 </script>
 
 <span class={iconClass}></span>
 <span>
-    <a href={chord.url} target="_blank" rel="noopener noreferrer">{text}</a>
+    <a href={chord.url} target="_blank" rel="noopener noreferrer" on:click={addVisit}>{text}</a>
 </span>
 
 <style>
