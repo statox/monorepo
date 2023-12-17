@@ -10,7 +10,7 @@
 </script>
 
 <header>
-    <h1>Workshop</h1>
+    <h1>My Apps</h1>
 
     <nav>
         <a href="{base}/">Home</a> |

@@ -2,10 +2,10 @@ import * as fs from 'fs';
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-// CHANGEME
-const REPO_NAME = '/workshop';
 const prod = process.env.ENV === 'prod';
-const base = prod ? REPO_NAME : '';
+
+// Repo accessed with apps.statox.fr/ so base remain empty even on prod
+const base = '';
 
 // Copy env file depending on the environment
 if (prod) {
