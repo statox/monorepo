@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { PUBLIC_API_URL } from '$env/static/public';
     import { login, getAccessToken, logout, user } from '$lib/auth/service';
 
     let token: string;
@@ -9,7 +10,7 @@
             message = 'cant make call, token is not defined';
             return;
         }
-        fetch('http://localhost:3000/protected', {
+        fetch(PUBLIC_API_URL + '/protected', {
             method: "GET",
             mode: "cors",
             headers: {
