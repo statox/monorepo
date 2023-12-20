@@ -7,6 +7,8 @@
 -   Find a way to use `hljs.highlightElement` in Mardown to avoid calling `highlight` on already highlighted code
 -   Recreate mechanism to open note in its own page
 
+-   Get toast library from https://github.com/zerodevx/svelte-toast/blob/master/src/lib/ToastItem.svelte
+
 ## Environement variable
 
 For now environement variables are all public (only the backend url so far) and can have different values depending on the environement:
