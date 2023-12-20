@@ -7,6 +7,12 @@
     import '$lib/styles/highlightjs_override.css';
     import '$lib/styles/helpers.css';
     import { Modals, closeModal } from '$lib/components/Modal';
+    import { onMount } from 'svelte';
+    import { initializeAuth0 } from '$lib/auth/service';
+
+    onMount(async () => {
+        await initializeAuth0();
+    });
 </script>
 
 <header>
@@ -16,6 +22,7 @@
         <a href="{base}/">Home</a> |
         <a href="{base}/notes">Notes</a> |
         <a href="{base}/music">Music</a> |
+        <a href="{base}/auth">Auth</a> |
     </nav>
 </header>
 
