@@ -24,6 +24,8 @@ export class Metronome {
     onBeatStart?: (beatNumber: number, subdivisionNumber: number) => void;
     onBeatEnd?: () => void;
 
+    ranFixAudioContext: boolean;
+
     constructor(tempo = 80) {
         this.audioContext = null;
         this.notesInQueue = []; // notes that have been put into the web audio and may or may not have been played yet {note, time}
@@ -37,6 +39,8 @@ export class Metronome {
         this.nextNoteTime = 0.0; // when the next note is due
         this.isRunning = false;
         this.intervalID = null;
+
+        this.ranFixAudioContext = false;
     }
 
     nextNote() {
@@ -131,6 +135,24 @@ export class Metronome {
         this.nextNoteTime = this.audioContext.currentTime + 0.05;
 
         this.intervalID = setInterval(() => this.scheduler(), this.lookahead);
+    }
+
+    fixAudioContext() {
+        if (this.ranFixAudioContext || !this.audioContext) {
+            return;
+        }
+
+        this.ranFixAudioContext = true;
+        // Create empty buffer
+        var buffer = this.audioContext.createBuffer(1, 1, 22050);
+        var source = this.audioContext.createBufferSource();
+        source.buffer = buffer;
+        // Connect to output (speakers)
+        source.connect(this.audioContext.destination);
+        // Play sound
+        if (source.start) {
+            source.start(0);
+        }
     }
 
     stop() {

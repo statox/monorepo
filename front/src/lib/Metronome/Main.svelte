@@ -46,6 +46,8 @@
     </div>
 </div>
 
+<svelte:window on:touchstart={() => metronome?.fixAudioContext()} />
+
 <style>
     .main {
         min-width: 300px;
