@@ -1,20 +1,15 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-
+    import { goto } from '$app/navigation';
 </script>
 
 <div class="container">
     <button class="app" on:click={() => goto('/songbook')}>
         <h2>Song Book</h2>
-        <div class="description">
-            The list of my guitar tablatures
-        </div>
+        <div class="description">The list of my guitar tablatures</div>
     </button>
     <button class="app" on:click={() => goto('/metronome')}>
         <h2>Metronome</h2>
-        <div class="description">
-            Never miss a beat
-        </div>
+        <div class="description">Never miss a beat</div>
     </button>
     <button class="app" on:click={() => goto('/scales')}>
         <h2>Scales</h2>
@@ -24,15 +19,11 @@
     </button>
     <button class="app" on:click={() => goto('/chordwheel')}>
         <h2>Chord Wheel</h2>
-        <div class="description">
-            A tool to find the key of a song and work with scale degrees
-        </div>
+        <div class="description">A tool to find the key of a song and work with scale degrees</div>
     </button>
     <button class="app" on:click={() => goto('/taptempo')}>
         <h2>Tap Tempo</h2>
-        <div class="description">
-            Find a tempo by tapping it on the screen or the keyboard
-        </div>
+        <div class="description">Find a tempo by tapping it on the screen or the keyboard</div>
     </button>
 </div>
 
@@ -57,5 +48,4 @@
     .description {
         color: var(--nc-tx-1);
     }
-
 </style>

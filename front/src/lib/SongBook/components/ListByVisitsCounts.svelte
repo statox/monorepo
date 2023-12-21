@@ -8,7 +8,7 @@
     export let chords: Chord[];
 
     let chordsData: Map<string, ChordData>;
-    visitCountsStore.subscribe(visitCountsMap => {
+    visitCountsStore.subscribe((visitCountsMap) => {
         if (!visitCountsMap) {
             return;
         }
@@ -39,13 +39,14 @@
 
 <ul class="ul2col-container">
     {#each chords as chord}
-    {@const data = chordsData.get(chord.url)}
-        {#if searchString.length === 0
-            || chord.artist.toLowerCase().match(searchString.toLowerCase())
-            || chord.title.toLowerCase().match(searchString.toLowerCase())
-        }
+        {@const data = chordsData.get(chord.url)}
+        {#if searchString.length === 0 || chord.artist
+                .toLowerCase()
+                .match(searchString.toLowerCase()) || chord.title
+                .toLowerCase()
+                .match(searchString.toLowerCase())}
             <li class="ul2col-item">
-                {#if data}({ data.count }){/if}
+                {#if data}({data.count}){/if}
                 <ChordLink {chord} showArtist={true} />
             </li>
         {/if}

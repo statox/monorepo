@@ -9,12 +9,12 @@
         getAccessToken()
             .then((token) =>
                 fetch(PUBLIC_API_URL + '/protected', {
-                    method: "GET",
-                    mode: "cors",
+                    method: 'GET',
+                    mode: 'cors',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`
-                    },
+                    }
                 })
             )
             .then(async (response) => {
@@ -22,7 +22,7 @@
             })
             .catch((error) => {
                 message = error.message;
-                toast.push(message,  {
+                toast.push(message, {
                     theme: {
                         '--toastBarBackground': '#FF0000'
                     }
@@ -41,7 +41,7 @@
 
 <div class="user">
     {#if $user}
-        <img class="user-profile" alt='user profile' src={$user.picture} />
+        <img class="user-profile" alt="user profile" src={$user.picture} />
         <span>{$user.nickname} - {$user.email}</span>
     {:else}
         <span>Not authenticated</span>

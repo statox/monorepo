@@ -7,14 +7,14 @@
     export let showArtist = false;
 
     let toolTipContent: string;
-    visitCountsStore.subscribe(visitCountsMap => {
+    visitCountsStore.subscribe((visitCountsMap) => {
         if (!visitCountsMap) {
             return;
         }
         if (visitCountsMap.has(chord.url)) {
             const data = visitCountsMap.get(chord.url)!;
             const lastVisit = new Date(data.lastAccessDateUnix);
-            toolTipContent = `visits: ${data.count} - last: ${lastVisit.toLocaleDateString()}`
+            toolTipContent = `visits: ${data.count} - last: ${lastVisit.toLocaleDateString()}`;
         }
     });
 
@@ -39,20 +39,19 @@
         const visitUrl = PUBLIC_API_URL + '/addChordLinkVisit';
         const data = { url: chord.url };
         fetch(visitUrl, {
-            method: "POST",
-            mode: "cors",
+            method: 'POST',
+            mode: 'cors',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        })
-        .then(() => {
+        }).then(() => {
             // Once we made the call and it succeeded update the store
             // to reflect the change without having to call the API again
             const map = get(visitCountsStore);
-            const data=map.get(chord.url) || { count: 0, lastAccessDateUnix: 0};
+            const data = map.get(chord.url) || { count: 0, lastAccessDateUnix: 0 };
             data.count++;
-            data.lastAccessDateUnix=Date.now() / 1000;
+            data.lastAccessDateUnix = Date.now() / 1000;
             map.set(chord.url, data);
             visitCountsStore.set(map);
         });
@@ -61,7 +60,13 @@
 
 <span class={iconClass}></span>
 <span>
-    <a href={chord.url} target="_blank" rel="noopener noreferrer" title={toolTipContent} on:click={addVisit}>{text}</a>
+    <a
+        href={chord.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={toolTipContent}
+        on:click={addVisit}>{text}</a
+    >
 </span>
 
 <style>

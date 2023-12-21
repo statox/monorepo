@@ -30,8 +30,8 @@ $ npm i -D @zerodevx/svelte-toast
 
 The following are exported:
 
-- `SvelteToast` as the toast container;
-- `toast` as the toast controller.
+-   `SvelteToast` as the toast container;
+-   `toast` as the toast controller.
 
 ### Svelte
 
@@ -61,10 +61,10 @@ Use anywhere in your app - just import the toast controller.
 
 ```html
 <script>
-  import { toast } from '@zerodevx/svelte-toast'
+    import { toast } from '@zerodevx/svelte-toast';
 </script>
 
-<button on:click={() => toast.push('Hello world!')}>SHOW TOAST</button>
+<button on:click="{()" ="">toast.push('Hello world!')}>SHOW TOAST</button>
 ```
 
 ### Vanilla JS
@@ -95,25 +95,25 @@ Or if you prefer to go old-school javascript and a CDN:
 
 ```html
 <head>
-  ...
-  <!-- Load `toast` and `SvelteToast` into global scope  -->
-  <script src="https://cdn.jsdelivr.net/npm/@zerodevx/svelte-toast@0"></script>
-  <!-- Register the app -->
-  <script>
-    const toastApp = new SvelteToast({
-      // Set where the toast container should be appended into
-      target: document.body,
-      props: {
-        options: {
-          // Optionally set default options here
-          ...
-        }
-      }
-    })
+    ...
+    <!-- Load `toast` and `SvelteToast` into global scope  -->
+    <script src="https://cdn.jsdelivr.net/npm/@zerodevx/svelte-toast@0"></script>
+    <!-- Register the app -->
+    <script>
+        const toastApp = new SvelteToast({
+          // Set where the toast container should be appended into
+          target: document.body,
+          props: {
+            options: {
+              // Optionally set default options here
+              ...
+            }
+          }
+        })
 
-    // Now you can `toast` anywhere!
-    toast.push('Hello world!')
-  </script>
+        // Now you can `toast` anywhere!
+        toast.push('Hello world!')
+    </script>
 </head>
 ```
 
@@ -138,52 +138,52 @@ In general, use CSS variables - the following (self-explanatory) vars are expose
  */
 
 ._toastContainer {
-  top: var(--toastContainerTop, 1.5rem);
-  right: var(--toastContainerRight, 2rem);
-  bottom: var(--toastContainerBottom, auto);
-  left: var(--toastContainerLeft, auto);
-  z-index: var(--toastContainerZIndex, 9999);
+    top: var(--toastContainerTop, 1.5rem);
+    right: var(--toastContainerRight, 2rem);
+    bottom: var(--toastContainerBottom, auto);
+    left: var(--toastContainerLeft, auto);
+    z-index: var(--toastContainerZIndex, 9999);
 }
 
 ._toastItem {
-  width: var(--toastWidth, 16rem);
-  height: var(--toastHeight, auto);
-  min-height: var(--toastMinHeight, 3.5rem);
-  margin: var(--toastMargin, 0 0 0.5rem 0);
-  padding: var(--toastPadding, 0);
-  background: var(--toastBackground, rgba(66, 66, 66, 0.9));
-  color: var(--toastColor, #fff);
-  box-shadow: var(
-    --toastBoxShadow,
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06)
-  );
-  border: var(--toastBorder, none);
-  border-radius: var(--toastBorderRadius, 0.125rem);
+    width: var(--toastWidth, 16rem);
+    height: var(--toastHeight, auto);
+    min-height: var(--toastMinHeight, 3.5rem);
+    margin: var(--toastMargin, 0 0 0.5rem 0);
+    padding: var(--toastPadding, 0);
+    background: var(--toastBackground, rgba(66, 66, 66, 0.9));
+    color: var(--toastColor, #fff);
+    box-shadow: var(
+        --toastBoxShadow,
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06)
+    );
+    border: var(--toastBorder, none);
+    border-radius: var(--toastBorderRadius, 0.125rem);
 }
 
 ._toastMsg {
-  padding: var(--toastMsgPadding, 0.75rem 0.5rem);
+    padding: var(--toastMsgPadding, 0.75rem 0.5rem);
 }
 
 ._toastBtn {
-  width: var(--toastBtnWidth, 2rem);
-  height: var(--toastBtnHeight, 100%);
-  font: var(--toastBtnFont, 1rem sans-serif);
+    width: var(--toastBtnWidth, 2rem);
+    height: var(--toastBtnHeight, 100%);
+    font: var(--toastBtnFont, 1rem sans-serif);
 }
 
 ._toastBtn::after {
-  content: var(--toastBtnContent, '✕');
+    content: var(--toastBtnContent, '✕');
 }
 
 ._toastBar {
-  background: var(--toastBarBackground, rgba(33, 150, 243, 0.75));
-  top: var(--toastBarTop, auto);
-  right: var(--toastBarRight, auto);
-  bottom: var(--toastBarBottom, 0);
-  left: var(--toastBarLeft, 0);
-  height: var(--toastBarHeight, 6px);
-  width: var(--toastBarWidth, 100%);
+    background: var(--toastBarBackground, rgba(33, 150, 243, 0.75));
+    top: var(--toastBarTop, auto);
+    right: var(--toastBarRight, auto);
+    bottom: var(--toastBarBottom, 0);
+    left: var(--toastBarLeft, 0);
+    height: var(--toastBarHeight, 6px);
+    width: var(--toastBarWidth, 100%);
 }
 ```
 
@@ -243,10 +243,10 @@ export const failure = m => toast.push(m, { theme: { ... } })
 Then simply import these stubs in your consuming component:
 
 ```js
-import { success, warning, failure } from './my-theme'
+import { success, warning, failure } from './my-theme';
 
 // Do something, then
-success('It works!')
+success('It works!');
 ```
 
 ### Rich HTML
@@ -256,7 +256,7 @@ Toast messages can be in rich HTML too - for example:
 ```js
 // Definitely not spam
 toast.push(`<strong>You won the jackpot!</strong><br>
-  Click <a href="#" target="_blank">here</a> for details! 😛`)
+  Click <a href="#" target="_blank">here</a> for details! 😛`);
 ```
 
 ### Custom Fonts and Styles
@@ -346,10 +346,10 @@ compatibility until the next major. The recommended way to remove all toasts fro
 
 ```js
 // Remove all toasts from "new" container
-toast.pop((i) => i.target !== 'new') // DEPRECATED
+toast.pop((i) => i.target !== 'new'); // DEPRECATED
 
 // Or remove ALL active toasts from ALL containers
-toast.pop(0)
+toast.pop(0);
 ```
 
 #### Accepting Object as First Param
@@ -357,13 +357,13 @@ toast.pop(0)
 `push()` and `set()` can also take an object as its first parameter.
 
 ```js
-let id = toast.push('Yo!', { duration: 2000 })
+let id = toast.push('Yo!', { duration: 2000 });
 // ...is semantically equivalent to
-id = toast.push({ msg: 'Yo!', duration: 2000 })
+id = toast.push({ msg: 'Yo!', duration: 2000 });
 
-toast.set(id, { msg: 'Waddup!' })
+toast.set(id, { msg: 'Waddup!' });
 // ...is semantically equivalent to
-toast.set({ id, msg: 'Waddup!' })
+toast.set({ id, msg: 'Waddup!' });
 ```
 
 ### New from `v0.5`
@@ -374,7 +374,7 @@ Progress bar tweens can now be paused when the mouse cursor (on desktop) is hove
 item. This behaviour is **disabled** by default. To enable, set option `pausable: true`.
 
 ```js
-toast.push('Hover me!', { pausable: true })
+toast.push('Hover me!', { pausable: true });
 ```
 
 #### Send Svelte Component as a Message
@@ -453,16 +453,16 @@ or inline icons.
 
 ```html
 <script>
-  import { toast, SvelteToast } from '@zerodevx/svelte-toast'
+    import { toast, SvelteToast } from '@zerodevx/svelte-toast';
 
-  const options = {
-    theme: {
-      '--toastBtnContent': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' ...")`
-    }
-  }
+    const options = {
+        theme: {
+            '--toastBtnContent': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' ...")`
+        }
+    };
 </script>
 
-<button on:click={() => toast.push('Hello!')}>SHOW TOAST</button>
+<button on:click="{()" ="">toast.push('Hello!')}>SHOW TOAST</button>
 
 <SvelteToast {options} />
 ```
@@ -476,10 +476,10 @@ Removing all toasts from a particular container target has just become more _tar
 
 ```js
 // Remove all toasts from "new" container
-toast.pop({ target: 'new' })
+toast.pop({ target: 'new' });
 
 // Or remove ALL active toasts from ALL containers
-toast.pop(0)
+toast.pop(0);
 ```
 
 #### Big Tooling Upgrade
@@ -491,8 +491,8 @@ consumers, there's a change in import path:
 
 ```js
 // For non-Svelte users, import the compiled code
-import { toast, SvelteToast } from '@zerodevx/svelte-toast/dist' // ESM
-const { toast, SvelteToast } = require('@zerodevx/svelte-toast/dist') // CJS
+import { toast, SvelteToast } from '@zerodevx/svelte-toast/dist'; // ESM
+const { toast, SvelteToast } = require('@zerodevx/svelte-toast/dist'); // CJS
 ```
 
 ## Toast Options

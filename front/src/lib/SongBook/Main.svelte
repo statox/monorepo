@@ -53,13 +53,25 @@
     Search an artist, a title or a tag:<input type="text" bind:value={searchString} />
     <button on:click={() => (searchString = '')}>&nbsp✖&nbsp</button>
     <div class="view-controls">
-        <button class:selected={view==='listByArtist'} class="pull-right" on:click={() => view = 'listByArtist'}>
+        <button
+            class:selected={view === 'listByArtist'}
+            class="pull-right"
+            on:click={() => (view = 'listByArtist')}
+        >
             By artists
         </button>
-        <button class:selected={view==='listByTags'} class="pull-right" on:click={() => view = 'listByTags'}>
+        <button
+            class:selected={view === 'listByTags'}
+            class="pull-right"
+            on:click={() => (view = 'listByTags')}
+        >
             By tags
         </button>
-        <button class:selected={view==='listByVisitsCount'} class="pull-right" on:click={() => view = 'listByVisitsCount'}>
+        <button
+            class:selected={view === 'listByVisitsCount'}
+            class="pull-right"
+            on:click={() => (view = 'listByVisitsCount')}
+        >
             By visits count
         </button>
     </div>

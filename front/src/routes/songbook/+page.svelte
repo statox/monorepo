@@ -12,7 +12,7 @@
         const COUNTS_URL = PUBLIC_API_URL + '/getChordLinksVisitCount';
         fetch(COUNTS_URL)
             .then((response) => response.json())
-            .then(countsData => {
+            .then((countsData) => {
                 const counts: any = countsData.reduce((counts: any, count: any) => {
                     counts.set(count.url, {
                         ...count

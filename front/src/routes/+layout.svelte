@@ -11,8 +11,6 @@
     import { initializeAuth0 } from '$lib/auth/service';
     import { SvelteToast } from '$lib/components/Toast';
 
-    const toastOptions = {
-    }
     onMount(async () => {
         await initializeAuth0();
     });
@@ -34,7 +32,7 @@
     <button slot="backdrop" class="backdrop" on:click={closeModal} />
 </Modals>
 
-<SvelteToast  />
+<SvelteToast />
 
 <slot />
 
