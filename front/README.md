@@ -13,7 +13,7 @@
 ### Improvements
 
 -   [ ] Add checks to allow dependabots MRs to be merged automatically
--   [ ] Add link to the last GitHub Pages deployment
+-   [x] Add link to the last GitHub Pages deployment
 -   [ ] Rework `fetch` calls into a framework for unified access to api.statox.fr
 -   [ ] Rework CSS. Default should be dark theme. Add a button to switch themes
 -   [ ] Recreate mechanism to open note in its own page

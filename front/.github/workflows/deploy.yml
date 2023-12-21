@@ -60,6 +60,10 @@ jobs:
                   npm run build
               env:
                   ENV: prod
+                  PUBLIC_GITHUB_COMMIT_SHA: ${{ github.event.head_commit.id }}
+                  PUBLIC_GITHUB_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+                  PUBLIC_GITHUB_COMMIT_URL: ${{ github.event.head_commit.url }}
+                  PUBLIC_GITHUB_RUN_ID: ${{ github.run_id }}
             - name: Deploy to GitHub Pages
               uses: JamesIves/github-pages-deploy-action@v4
               with:
