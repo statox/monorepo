@@ -1,11 +1,11 @@
 import { get, writable } from 'svelte/store';
 import config from './config';
-import { createAuth0Client } from '@auth0/auth0-spa-js';
+import { Auth0Client, User, createAuth0Client } from '@auth0/auth0-spa-js';
 
-const auth0Client = writable<any>();
+const auth0Client = writable<Auth0Client>();
 const isAuthenticated = writable(false);
 const isLoading = writable(true);
-export const user = writable<any | null>(null);
+export const user = writable<User | null>(null);
 const error = writable<unknown>();
 
 export const initializeAuth0 = async () => {
@@ -41,7 +41,7 @@ export const initializeAuth0 = async () => {
 };
 
 export const login = async () => {
-    await get(auth0Client).loginWithRedirect();
+    get(auth0Client).loginWithRedirect();
 };
 
 export const logout = async () => {
@@ -49,7 +49,5 @@ export const logout = async () => {
 };
 
 export const getAccessToken = async () => {
-    const token = await get(auth0Client).getTokenSilently();
-    console.log(token);
-    return token;
+    return await get(auth0Client).getTokenSilently();
 };

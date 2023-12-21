@@ -2,26 +2,26 @@
     import { PUBLIC_API_URL } from '$env/static/public';
     import { login, getAccessToken, logout, user } from '$lib/auth/service';
 
-    let token: string;
     let message: string;
 
-    const testAPIcall = () => {
-        if (!token) {
-            message = 'cant make call, token is not defined';
-            return;
-        }
-        fetch(PUBLIC_API_URL + '/protected', {
-            method: "GET",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-        }).then(async (response) => {
-            message = await response.json();
-        }).catch((reason) => {
-                message = reason;
-        });
+    const testAPIcall = async () => {
+        getAccessToken()
+            .then((token) =>
+                fetch(PUBLIC_API_URL + '/protected', {
+                    method: "GET",
+                    mode: "cors",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                })
+            )
+            .then(async (response) => {
+                message = await response.json();
+            })
+            .catch((error) => {
+                message = error.message;
+            });
     };
 </script>
 
@@ -29,26 +29,32 @@
 
 <div>
     <button on:click={() => login()}>Login</button>
-    <button on:click={async () => token = await getAccessToken()}>Token</button>
     <button on:click={() => testAPIcall()}>API</button>
     <button on:click={() => logout()}>Logout</button>
 </div>
 
-{#if $user}
-    <div>
+<div class="user">
+    {#if $user}
+        <img class="user-profile" alt='user profile' src={$user.picture} />
         <span>{$user.nickname} - {$user.email}</span>
-        <img alt='user profile' src={$user.picture} />
-    </div>
-{/if}
-
-{#if token}
-    <div>
-        <span>{token}</span>
-    </div>
-{/if}
+    {:else}
+        <span>Not authenticated</span>
+    {/if}
+</div>
 
 {#if message}
     <div>
         <span>{JSON.stringify(message)}</span>
     </div>
 {/if}
+
+<style>
+    .user {
+        display: flex;
+        justify-content: flex-start;
+    }
+    .user-profile {
+        height: 2em;
+        width: 2em;
+    }
+</style>
