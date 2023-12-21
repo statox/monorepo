@@ -3,6 +3,8 @@
     import { type Chord } from '../types';
     import { visitCountsStore } from '../store';
     import { get } from 'svelte/store';
+    import { toast } from '$lib/components/Toast';
+    import { getAccessToken } from '$lib/auth/service';
     export let chord: Chord;
     export let showArtist = false;
 
@@ -38,23 +40,45 @@
     const addVisit = () => {
         const visitUrl = PUBLIC_API_URL + '/addChordLinkVisit';
         const data = { url: chord.url };
-        fetch(visitUrl, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(() => {
-            // Once we made the call and it succeeded update the store
-            // to reflect the change without having to call the API again
-            const map = get(visitCountsStore);
-            const data = map.get(chord.url) || { count: 0, lastAccessDateUnix: 0 };
-            data.count++;
-            data.lastAccessDateUnix = Date.now() / 1000;
-            map.set(chord.url, data);
-            visitCountsStore.set(map);
-        });
+
+        const catchError = (error: Error) => {
+            const message = `<strong>Visit not counted</strong><br/> ${error.message}`;
+            toast.push(message, {
+                // Don't automatically dismiss to see the error when coming back
+                initial: 0,
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
+        };
+
+        getAccessToken()
+            .then((token) => {
+                fetch(visitUrl, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then((response) => {
+                        if (response && response.status !== 200) {
+                            throw new Error(response.statusText);
+                        }
+                        // Once we made the call and it succeeded update the store
+                        // to reflect the change without having to call the API again
+                        const map = get(visitCountsStore);
+                        const data = map.get(chord.url) || { count: 0, lastAccessDateUnix: 0 };
+                        data.count++;
+                        data.lastAccessDateUnix = Date.now() / 1000;
+                        map.set(chord.url, data);
+                        visitCountsStore.set(map);
+                    })
+                    .catch(catchError);
+            })
+            .catch(catchError);
     };
 </script>
 
