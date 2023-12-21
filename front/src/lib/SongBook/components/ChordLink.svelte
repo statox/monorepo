@@ -15,7 +15,7 @@
         }
         if (visitCountsMap.has(chord.url)) {
             const data = visitCountsMap.get(chord.url)!;
-            const lastVisit = new Date(data.lastAccessDateUnix);
+            const lastVisit = new Date(data.lastAccessDateUnix * 1000);
             toolTipContent = `visits: ${data.count} - last: ${lastVisit.toLocaleDateString()}`;
         }
     });
