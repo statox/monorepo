@@ -10,6 +10,7 @@
     import { onMount } from 'svelte';
     import { initializeAuth0 } from '$lib/auth/service';
     import { SvelteToast } from '$lib/components/Toast';
+    import AuthNavItem from '$lib/auth/AuthNavItem.svelte';
 
     onMount(async () => {
         await initializeAuth0();
@@ -23,7 +24,7 @@
         <a href="{base}/">Home</a> |
         <a href="{base}/notes">Notes</a> |
         <a href="{base}/music">Music</a> |
-        <a href="{base}/auth">Auth</a> |
+        <AuthNavItem />
     </nav>
 </header>
 
@@ -37,6 +38,11 @@
 <slot />
 
 <style>
+    nav {
+        display: flex;
+        gap: 0.2em;
+        align-items: center;
+    }
     .backdrop {
         position: fixed;
         top: 0;
