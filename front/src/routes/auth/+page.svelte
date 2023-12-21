@@ -1,6 +1,7 @@
 <script lang="ts">
     import { PUBLIC_API_URL } from '$env/static/public';
     import { login, getAccessToken, logout, user } from '$lib/auth/service';
+    import { toast } from '$lib/components/Toast';
 
     let message: string;
 
@@ -21,6 +22,11 @@
             })
             .catch((error) => {
                 message = error.message;
+                toast.push(message,  {
+                    theme: {
+                        '--toastBarBackground': '#FF0000'
+                    }
+                });
             });
     };
 </script>

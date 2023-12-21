@@ -9,7 +9,10 @@
     import { Modals, closeModal } from '$lib/components/Modal';
     import { onMount } from 'svelte';
     import { initializeAuth0 } from '$lib/auth/service';
+    import { SvelteToast } from '$lib/components/Toast';
 
+    const toastOptions = {
+    }
     onMount(async () => {
         await initializeAuth0();
     });
@@ -31,6 +34,8 @@
     <button slot="backdrop" class="backdrop" on:click={closeModal} />
 </Modals>
 
+<SvelteToast  />
+
 <slot />
 
 <style>
@@ -44,5 +49,9 @@
     }
     .backdrop:enabled:hover {
         background: rgba(0, 0, 0, 0.2);
+    }
+    :root {
+        --toastContainerTop: auto;
+        --toastContainerBottom: 2rem;
     }
 </style>
