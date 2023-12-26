@@ -1,6 +1,7 @@
 <script lang="ts">
     import {
         modals,
+        closeModals,
         exitBeforeEnter,
         transitioning,
         type SvelteModalComponent,
@@ -14,6 +15,28 @@
     async function getComponent(component: LazySvelteModalComponent<any>) {
         return component().then((res) => res.default);
     }
+
+    const allowedKeys = ['Escape'];
+    let keyReleased = true;
+    const onKeyDown = (e: KeyboardEvent) => {
+        if (!allowedKeys.includes(e.key)) {
+            return;
+        }
+        if (!keyReleased) {
+            return;
+        }
+        keyReleased = false;
+        if (closeModals()) {
+            e.preventDefault();
+        }
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+        if (!keyReleased && allowedKeys.includes(e.key)) {
+            keyReleased = true;
+            e.preventDefault();
+        }
+    };
 </script>
 
 {#if $modals.length > 0}
@@ -55,3 +78,5 @@
         {/if}
     {/each}
 </slot>
+
+<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
