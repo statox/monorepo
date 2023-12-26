@@ -8,7 +8,9 @@
         type LazySvelteModalComponent
     } from './store';
 
-    function isLazyModal(component: SvelteModalComponent<any> | LazySvelteModalComponent<any>) {
+    function isLazyModal(
+        component: SvelteModalComponent<any> | LazySvelteModalComponent<any>
+    ): component is LazySvelteModalComponent<any> {
         return typeof component.prototype === 'undefined';
     }
 
