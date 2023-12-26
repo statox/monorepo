@@ -1,7 +1,7 @@
 <script lang="ts">
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
-    import type { Metronome } from '../Metronome';
+    import type { Metronome } from '$lib/Metronome';
     import { onDestroy, onMount } from 'svelte';
 
     export let metronome: Metronome;

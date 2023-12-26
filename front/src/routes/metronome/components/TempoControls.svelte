@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Metronome } from '../Metronome';
+    import type { Metronome } from '$lib/Metronome';
 
     export let metronome: Metronome;
 

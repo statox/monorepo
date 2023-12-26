@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { TapTempo } from '$lib/TapTempo/TapTempo';
+    import { TapTempo } from '$lib/TapTempo';
 
     export let onNewBPM: (bpm: number) => void;
     let tapTempo = new TapTempo();

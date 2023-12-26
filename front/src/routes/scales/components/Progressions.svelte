@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { progressions, type Chord } from './progressions';
-    import { degreeToRoman, notes } from './utils';
+    import { progressions, type Chord } from '$lib/Scales/progressions';
+    import { degreeToRoman, notes } from '$lib/Scales/utils';
 
     export let scaleNotes: string[] = [];
 
