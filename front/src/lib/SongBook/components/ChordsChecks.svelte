@@ -16,7 +16,7 @@
         timestamp: number;
     };
 
-    const CHORDS_CHECK_URL = `${PUBLIC_API_URL}/checkChordsUrl`;
+    const CHORDS_CHECK_URL = PUBLIC_API_URL + '/chords/checkLinks';
     let lastChordsCheck: Promise<ApiResult> = fetch(CHORDS_CHECK_URL).then((response) =>
         response.json()
     );

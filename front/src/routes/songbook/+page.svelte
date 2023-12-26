@@ -9,7 +9,7 @@
     export let data: { chords: Chord[] };
 
     onMount(() => {
-        const COUNTS_URL = PUBLIC_API_URL + '/getChordLinksVisitCount';
+        const COUNTS_URL = PUBLIC_API_URL + '/chords/getLinksVisitsCount';
         fetch(COUNTS_URL)
             .then((response) => response.json())
             .then((countsData) => {

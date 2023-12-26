@@ -38,7 +38,7 @@
     let iconClass = getIconClass(chord);
 
     const addVisit = () => {
-        const visitUrl = PUBLIC_API_URL + '/addChordLinkVisit';
+        const visitUrl = PUBLIC_API_URL + '/chords/addLinkVisit';
         const data = { url: chord.url };
 
         const catchError = (error: Error) => {
