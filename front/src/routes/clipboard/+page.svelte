@@ -1,7 +1,8 @@
 <script lang="ts">
     import { user } from '$lib/auth/service';
     import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
-    import Clipboard from './components/Clipboard.svelte';
+    import ClipboardPrivateView from './components/ClipboardPrivateView.svelte';
+    import ClipboardPublicView from './components/ClipboardPublicView.svelte';
     import ClipboardForm from './components/ClipboardForm.svelte';
 
     const getClipboard = () => {
@@ -22,7 +23,11 @@
 {#await clipboardApi}
     <p>Loading data</p>
 {:then clipboard}
-    <Clipboard {clipboard} />
+    {#if $user}
+        <ClipboardPrivateView {clipboard} on:delete={() => clipboardApi = getClipboard()} />
+    {:else}
+        <ClipboardPublicView {clipboard} />
+    {/if}
 {:catch error}
     <p>Something went wrong</p>
     <p>{JSON.stringify(error)}</p>

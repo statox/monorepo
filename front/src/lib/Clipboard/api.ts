@@ -45,3 +45,18 @@ export const uploadToClipboard = async (data: ClipboardUploadData) => {
         });
     });
 };
+
+export const deleteClipboardEntry = async (name: string) => {
+    const url = PUBLIC_API_URL + '/clipboard/deleteEntry';
+    return getAccessToken().then(async (token) => {
+        return fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ name })
+        });
+    });
+};
