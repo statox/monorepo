@@ -22,12 +22,12 @@ const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
         style: 'short'
     });
 
-    let expirationStatus: ExpirationStatus = 'not soon';
+    let expirationStatus: ExpirationStatus = 'not_soon';
     if (expirationDate < now) {
         expirationStatus = 'expired';
     } else if (expirationInSeconds < 60 * 60) {
         // 1 hour
-        expirationStatus = 'very soon';
+        expirationStatus = 'very_soon';
     } else if (expirationInSeconds < 60 * 60 * 24) {
         // 1 day
         expirationStatus = 'soon';

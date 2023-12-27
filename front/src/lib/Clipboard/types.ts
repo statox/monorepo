@@ -8,7 +8,7 @@ export type ClipboardEntry = {
     linkId: string;
 };
 
-export type ExpirationStatus = 'expired' | 'very soon' | 'soon' | 'not soon';
+export type ExpirationStatus = 'expired' | 'very_soon' | 'soon' | 'not_soon';
 
 export type ClipboardEntryEnriched = ClipboardEntry & {
     formatedCreationDate: string;
