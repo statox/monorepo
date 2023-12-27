@@ -19,6 +19,7 @@
         "@sveltejs/adapter-static": "^3.0.0",
         "@sveltejs/kit": "^2.0.4",
         "@sveltejs/vite-plugin-svelte": "^3.0.0",
+        "@types/luxon": "^3.3.7",
         "@types/p5": "^1.7.6",
         "@typescript-eslint/eslint-plugin": "^6.10.0",
         "@typescript-eslint/parser": "^6.13.1",
@@ -41,5 +42,8 @@
         "vite-plugin-plain-text": "^1.4.2",
         "vitest": "^1.0.0"
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "luxon": "^3.4.4"
+    }
 }

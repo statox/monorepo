@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { type ClipboardEntry } from '$lib/Clipboard/types';
+    import { type ClipboardEntryEnriched } from '$lib/Clipboard/types';
     import { deleteClipboardEntry } from '$lib/Clipboard/api';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
-    export let clipboard: ClipboardEntry[];
+    export let clipboard: ClipboardEntryEnriched[];
 
     const deleteEntry = (name: string) => {
         deleteClipboardEntry(name).then((_response) => dispatch('delete'));
@@ -14,14 +14,18 @@
 <div class="container">
     <div>Name</div>
     <div>Content</div>
-    <div>Creation date</div>
+    <div>Creation</div>
+    <div>Expiration</div>
+    <div>Expiration Status</div>
     <div>Public</div>
     <div>Action</div>
 
     {#each clipboard.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
         <div>{entry.name}</div>
         <div>{entry.content}</div>
-        <div>{entry.creationDateUnix}</div>
+        <div>{entry.formatedCreationDate}</div>
+        <div>{entry.formatedExpirationDate}</div>
+        <div>{entry.expirationStatus}</div>
         <input type="checkbox" bind:checked={entry.isPublic} disabled />
         <button class="delete-button" on:click={() => deleteEntry(entry.name)}>
             <i class="fas fa-trash-alt"></i>
@@ -32,7 +36,7 @@
 <style>
     .container {
         display: grid;
-        grid-template-columns: repeat(5, auto);
+        grid-template-columns: repeat(7, auto);
     }
     .delete-button {
         background: red;
