@@ -57,7 +57,6 @@
     <p>
         <button on:click={upload}>Upload</button>
     </p>
-
 {:else}
     <p>Login to upload content</p>
 {/if}

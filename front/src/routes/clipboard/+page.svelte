@@ -17,14 +17,14 @@
 <h2>Clipboard</h2>
 
 <h3>Upload</h3>
-<ClipboardForm on:upload={() => clipboardApi = getClipboard()} />
+<ClipboardForm on:upload={() => (clipboardApi = getClipboard())} />
 
 <h3>Content</h3>
 {#await clipboardApi}
     <p>Loading data</p>
 {:then clipboard}
     {#if $user}
-        <ClipboardPrivateView {clipboard} on:delete={() => clipboardApi = getClipboard()} />
+        <ClipboardPrivateView {clipboard} on:delete={() => (clipboardApi = getClipboard())} />
     {:else}
         <ClipboardPublicView {clipboard} />
     {/if}
