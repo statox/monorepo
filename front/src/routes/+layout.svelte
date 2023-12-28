@@ -22,9 +22,6 @@
 
     <nav>
         <a href="{base}/">Home</a> |
-        <a href="{base}/notes">Notes</a> |
-        <a href="{base}/music">Music</a> |
-        <a href="{base}/clipboard">Clipboard</a> |
         <AuthNavItem />
     </nav>
 </header>

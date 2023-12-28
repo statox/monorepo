@@ -1,5 +1,6 @@
-<h2>Home</h2>
+<script lang="ts">
+    import AppsList from '$lib/components/AppsList/Main.svelte';
+    import { allApps } from '$lib/components/AppsList/apps'
+</script>
 
-<p>Here be lardons</p>
-
-<a href="/about">About page</a>
+<AppsList sections={allApps} />
