@@ -42,7 +42,7 @@
         min-height: 300px;
         background-color: var(--nc-bg-2);
         white-space: normal;
-        border-radius: 5%;
+        border-radius: 15px;
     }
 
     .description {
