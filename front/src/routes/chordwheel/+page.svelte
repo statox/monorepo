@@ -2,6 +2,8 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
+    import { openModal } from '$lib/components/Modal';
+    import InfoModal from './components/InfoModal.svelte';
     import { wheel } from '$lib/ChordWheel/wheel-config';
     import type { WheelTiles } from '$lib/ChordWheel/types';
     import {
@@ -136,7 +138,14 @@
     });
 </script>
 
-<h3>Chord wheel</h3>
+<h3>
+    Chord wheel
+    <span>
+        <button style:position="relative" on:click={() => openModal(InfoModal)}>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+        </button>
+    </span>
+</h3>
 
 <div class="d-flex justify-content-center">
     <P5 {sketch} />
@@ -156,53 +165,6 @@
     <p>
         On mobile you can also swipe left/right to rotate the shape and up/down to rotate the wheel
     </p>
-</div>
-
-<div>
-    This page is an implementation of <a
-        href="https://chordwheel.com/"
-        target="_blank"
-        rel="noopener noreferrer">Jim Fleser's Chord Wheel</a
-    >
-    it is intended for my personal use. If you are using this implementation you should definitely
-    <a
-        href="https://chordwheel.com/index.php?option=com_content&view=article&id=16&Itemid=4"
-        target="_blank"
-        rel="noopener noreferrer">buy his book</a
-    >
-    or
-    <a
-        href="https://apps.apple.com/us/app/the-chord-wheel/id444931977"
-        target="_blank"
-        rel="noopener noreferrer">buy his app</a
-    > (which is much more complete than this page).
-</div>
-
-<div>
-    This tool only works for songs in major keys.
-    <ul>
-        <li>
-            <a
-                href="https://chordwheel.com/index.php?option=com_content&view=article&id=5&Itemid=17"
-                target="_blank"
-                rel="noopener noreferrer">Analyzing songs and compositional styles</a
-            >
-        </li>
-        <li>
-            <a
-                href="https://chordwheel.com/index.php?option=com_content&view=article&id=8:soloing-and-improvisation&catid=8:using-the-chordwheel&Itemid=8"
-                target="_blank"
-                rel="noopener noreferrer">Soloing and improvisation</a
-            >
-        </li>
-        <li>
-            <a
-                href="https://chordwheel.com/index.php?option=com_content&view=article&id=9&Itemid=5"
-                target="_blank"
-                rel="noopener noreferrer">Transpositions</a
-            >
-        </li>
-    </ul>
 </div>
 
 <style>
