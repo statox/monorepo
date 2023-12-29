@@ -2,15 +2,15 @@
     import { login, logout, user } from '$lib/auth/service';
 </script>
 
-<span>
-    {#if $user}
-        <button on:click={() => logout()}>
-            <img class="user-profile" alt="user profile" src={$user.picture} />
-        </button>
-    {:else}
-        <button type="button" on:click={() => login()}>Login</button>
-    {/if}
-</span>
+{#if $user}
+    <button title="Log out" on:click={() => logout()}>
+        <img class="user-profile" alt="user profile" src={$user.picture} />
+    </button>
+{:else}
+    <button title="Log in" type="button" on:click={() => login()}>
+        <i class="fa fa-sign-in" aria-hidden="true"></i>
+    </button>
+{/if}
 
 <style>
     button {
@@ -21,6 +21,9 @@
     button:hover {
         background: none;
         color: var(--nc-lk-2);
+    }
+    .fa {
+        font-size: 1.5em;
     }
 
     .user-profile {

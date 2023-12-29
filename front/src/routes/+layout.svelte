@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { base } from '$app/paths';
     import '$lib/styles/new.css';
     import '$lib/styles/new_theme.css';
     import '$lib/styles/new_override.css';
@@ -10,7 +9,8 @@
     import { onMount } from 'svelte';
     import { initializeAuth0 } from '$lib/auth/service';
     import { SvelteToast } from '$lib/components/Toast';
-    import AuthNavItem from '$lib/auth/AuthNavItem.svelte';
+    import HomeNavItem from '$lib/components/NavItems/HomeNavItem.svelte';
+    import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
 
     onMount(async () => {
         await initializeAuth0();
@@ -21,7 +21,7 @@
     <h1>My Apps</h1>
 
     <nav>
-        <a href="{base}/">Home</a> |
+        <HomeNavItem /> |
         <AuthNavItem />
     </nav>
 </header>
