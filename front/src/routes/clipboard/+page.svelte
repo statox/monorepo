@@ -14,6 +14,18 @@
     let clipboardApi = getClipboard();
 </script>
 
+<svelte:head>
+    <title>Clipboard</title>
+    <meta name="description" content="Description of my page">
+    <!-- Icon used when saving the page as an app on iOS -->
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <!-- Title used when saving the page as an app on iOS -->
+    <meta name="apple-mobile-web-app-title" content="Clipboard">
+    <!-- Hide the Safari UI and status bar when saving the page as an app on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+</svelte:head>
+
 <h2>Clipboard</h2>
 
 <h3>Upload</h3>
