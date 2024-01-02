@@ -6,6 +6,7 @@
     import { get } from 'svelte/store';
     import { toast } from '$lib/components/Toast';
     import { getAccessToken } from '$lib/auth/service';
+    import { getTypeIconClass } from '../utils';
     export let chord: Chord;
     export let showArtist = false;
 
@@ -23,29 +24,13 @@
 
     const text = (showArtist ? chord.artist + ' - ' : '') + chord.title;
 
-    const getIconClass = (chord: Chord) => {
-        const url = chord.url;
-        if (url.includes('.doc')) {
-            return 'fas fa-xs fa-file-word';
-        }
-        if (url.includes('.pdf')) {
-            return 'fas fa-xs fa-file-pdf';
-        }
-        if (url.includes('youtube')) {
-            return 'fa fa-xs fa-youtube';
-        }
-        return 'fas fa-xs fa-link';
-    };
-    let iconClass = getIconClass(chord);
-
     const formatLink = (chord: Chord) => {
-        const url = chord.url;
-        if (url.includes('.doc')) {
+        if (chord.type === 'doc') {
             return `${base}/docviewer/${chord.url}`;
         }
 
-        return url;
-    }
+        return chord.url;
+    };
 
     const addVisit = () => {
         const visitUrl = PUBLIC_API_URL + '/chords/addLinkVisit';
@@ -92,7 +77,7 @@
     };
 </script>
 
-<span class={iconClass}></span>
+<span class={getTypeIconClass(chord.type)}></span>
 <span>
     <a
         href={formatLink(chord)}

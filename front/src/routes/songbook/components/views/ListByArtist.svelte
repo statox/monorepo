@@ -2,10 +2,11 @@
     import '$lib/styles/new_theme.css';
     import { alphaLowerSort } from '$lib/helpers';
     import ChordLink from '../ChordLink.svelte';
-    import type { Chord } from '../../types';
+    import type { Chord, Filters } from '../../types';
 
     export let searchString: string;
     export let chords: Chord[];
+    export let filters: Filters;
 
     type ChordsByArtist = {
         [artist: string]: Chord[];
@@ -51,6 +52,42 @@
     };
 
     $: onScroll(y);
+
+    const getArtistFilteredChords = (artist: string, searchString: string, filters: Filters) => {
+        const chords = chordsByArtist[artist]
+            .sort((a, b) => (a.title < b.title ? -1 : 1))
+            .filter((chord) => {
+                const type = chord.type;
+                if (filters[type] === false) {
+                    return false;
+                }
+                if (searchString.length === 0) {
+                    return true;
+                }
+                const chordTags = artist + ';' + chord.title + ';' + chord.tags.join(',');
+                return chordTags.toLowerCase().match(searchString.toLowerCase());
+            });
+        return chords;
+    };
+
+    const shouldDisplayArtist = (
+        artist: string,
+        chords: Chord[],
+        searchString: string,
+        filters: Filters
+    ) => {
+        if (chords.length === 0) {
+            return false;
+        }
+        if (searchString.length === 0) {
+            return true;
+        }
+        const artistTags =
+            artist +
+            ';' +
+            chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '');
+        return artistTags.toLowerCase().match(searchString.toLowerCase());
+    };
 </script>
 
 <svelte:window bind:scrollY={y} />
@@ -67,29 +104,17 @@
 
 <table bind:this={tableElement} id="artistTable">
     {#each artistsList as artist}
-        {@const chords = chordsByArtist[artist.name].sort((a, b) => (a.title < b.title ? -1 : 1))}
-        {@const artistTags =
-            artist.name +
-            ';' +
-            chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '')}
+        {@const chords = getArtistFilteredChords(artist.name, searchString, filters)}
 
-        {#if searchString.length === 0 || artistTags
-                .toLowerCase()
-                .match(searchString.toLowerCase())}
+        {#if shouldDisplayArtist(artist.name, chords, searchString, filters)}
             <tr>
-                <td id={artist.tag}
-                    >{artist.name}
+                <td id={artist.tag}>
+                    {artist.name}
                     <ul class="ul2col-container">
                         {#each chords as chord}
-                            {@const chordTags =
-                                artist.name + ';' + chord.title + ';' + chord.tags.join(',')}
-                            {#if searchString.length === 0 || chordTags
-                                    .toLowerCase()
-                                    .match(searchString.toLowerCase())}
-                                <li class="ul2col-item">
-                                    <ChordLink {chord} />
-                                </li>
-                            {/if}
+                            <li class="ul2col-item">
+                                <ChordLink {chord} />
+                            </li>
                         {/each}
                     </ul>
                 </td>

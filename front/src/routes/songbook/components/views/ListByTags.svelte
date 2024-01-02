@@ -1,11 +1,12 @@
 <script lang="ts">
     import { alphaLowerSort } from '$lib/helpers';
     import '$lib/styles/new_theme.css';
-    import type { Chord } from '../../types';
+    import type { Chord, Filters } from '../../types';
     import ChordLink from '.././ChordLink.svelte';
 
     export let searchString: string;
     export let chords: Chord[];
+    export let filters: Filters;
 
     const formatTag = (t: string) => {
         return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
@@ -52,9 +53,11 @@
             <span>{formatTag(tag)}</span>
             <ul class="ul2col-container">
                 {#each chordsByTags[tag] as chord}
-                    <li class="ul2col-item">
-                        <ChordLink {chord} showArtist={true} />
-                    </li>
+                    {#if filters[chord.type]}
+                        <li class="ul2col-item">
+                            <ChordLink {chord} showArtist={true} />
+                        </li>
+                    {/if}
                 {/each}
             </ul>
         </div>

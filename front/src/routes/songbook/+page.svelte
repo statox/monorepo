@@ -11,10 +11,11 @@
     import ChordsChecks from './components/ChordsChecks.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
-    import type { Chord } from './types';
+    import type { Chord, Filters, FilterType } from './types';
     import { onMount } from 'svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { visitCountsStore } from './store';
+    import { getTypeIconClass } from './utils';
 
     // From +page.ts load() function
     export let data: { chords: Chord[] };
@@ -45,6 +46,14 @@
         { label: 'By access date', component: ListByAccessDate }
     ];
     let currentView = views[0];
+
+    let filters: Filters = {
+        pdf: true,
+        doc: true,
+        youtube: true,
+        link: true
+    };
+    const filtersKey: FilterType[] = Object.keys(filters) as FilterType[];
 </script>
 
 <HeadIOS title="Song Book" description="My song book" />
@@ -81,38 +90,84 @@
     Search an artist, a title or a tag:<input type="text" bind:value={searchString} />
     <button on:click={() => (searchString = '')}>&nbsp✖&nbsp</button>
 
-    <div class="view-controls">
+    <h4>Filters</h4>
+    <div class="filter-controls-container">
+        {#each filtersKey as filter}
+            <button
+                class="filter-control"
+                on:click={() => {
+                    filters[filter] = !filters[filter];
+                    filters = filters;
+                }}
+            >
+                <input id={filter} type="checkbox" bind:checked={filters[filter]} />
+                <span class={getTypeIconClass(filter)}></span>
+            </button>
+        {/each}
+    </div>
+
+    <h4>View</h4>
+    <div class="view-controls-container">
         {#each views as option}
-            <button class:selected={currentView === option} on:click={() => (currentView = option)}>
+            <button
+                class="control"
+                class:selected={currentView === option}
+                on:click={() => (currentView = option)}
+            >
                 {option.label}
             </button>
         {/each}
     </div>
 </div>
 
-<svelte:component this={currentView.component} {chords} {searchString} />
+<svelte:component this={currentView.component} {chords} {searchString} {filters} />
 
 <style>
-    .view-controls {
+    .view-controls-container {
         display: flex;
+        justify-content: space-around;
+    }
+    .filter-controls-container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .control {
+        flex-grow: 1;
+    }
+
+    .filter-control {
+        flex-grow: 1;
+        background: none;
     }
 
     @media screen and (max-width: 750px) {
-        .view-controls {
+        .view-controls-container {
             flex-direction: column;
             gap: 0.3em;
         }
     }
     @media screen and (min-width: 750px) {
-        .view-controls {
+        .view-controls-container {
             flex-direction: row;
             gap: 1em;
         }
     }
 
-
     button.selected {
         background-color: var(--nc-lk-2);
         font-weight: bold;
+    }
+
+    .fa-file-word {
+        color: #1d5af4;
+    }
+
+    .fa-file-pdf {
+        color: #e82236;
+    }
+
+    .fa-link {
+        color: #727171;
     }
 </style>
