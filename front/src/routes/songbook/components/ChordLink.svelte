@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { base } from '$app/paths';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { type Chord } from '../types';
     import { visitCountsStore } from '../store';
@@ -36,6 +37,15 @@
         return 'fas fa-xs fa-link';
     };
     let iconClass = getIconClass(chord);
+
+    const formatLink = (chord: Chord) => {
+        const url = chord.url;
+        if (url.includes('.doc')) {
+            return `${base}/docviewer/${chord.url}`;
+        }
+
+        return url;
+    }
 
     const addVisit = () => {
         const visitUrl = PUBLIC_API_URL + '/chords/addLinkVisit';
@@ -85,7 +95,7 @@
 <span class={iconClass}></span>
 <span>
     <a
-        href={chord.url}
+        href={formatLink(chord)}
         target="_blank"
         rel="noopener noreferrer"
         title={toolTipContent}
