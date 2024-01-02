@@ -95,8 +95,21 @@
 <style>
     .view-controls {
         display: flex;
-        gap: 0.1em;
     }
+
+    @media screen and (max-width: 750px) {
+        .view-controls {
+            flex-direction: column;
+            gap: 0.3em;
+        }
+    }
+    @media screen and (min-width: 750px) {
+        .view-controls {
+            flex-direction: row;
+            gap: 1em;
+        }
+    }
+
 
     button.selected {
         background-color: var(--nc-lk-2);
