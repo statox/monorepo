@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { visitCountsStore } from '../store';
+    import { visitCountsStore } from '../../store';
     import '$lib/styles/new_theme.css';
-    import type { Chord, ChordData } from '../types';
-    import ChordLink from './ChordLink.svelte';
+    import type { Chord, ChordData } from '../../types';
+    import ChordLink from '../ChordLink.svelte';
 
     export let searchString: string;
     export let chords: Chord[];

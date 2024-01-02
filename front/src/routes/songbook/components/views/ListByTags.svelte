@@ -1,8 +1,8 @@
 <script lang="ts">
     import { alphaLowerSort } from '$lib/helpers';
     import '$lib/styles/new_theme.css';
-    import type { Chord } from '../types';
-    import ChordLink from './ChordLink.svelte';
+    import type { Chord } from '../../types';
+    import ChordLink from '.././ChordLink.svelte';
 
     export let searchString: string;
     export let chords: Chord[];

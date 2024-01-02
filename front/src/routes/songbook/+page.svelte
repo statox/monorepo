@@ -2,10 +2,8 @@
     import { openModal } from '$lib/components/Modal';
     import BackToTop from '$lib/components/BackToTop/Main.svelte';
     import HeadIOS from '$lib/components/HeadIOS/Main.svelte';
+    import { ListByArtist, ListByTags, ListByVisitsCounts } from './components/views';
     import ChordsChecks from './components/ChordsChecks.svelte';
-    import ListByArtist from './components/ListByArtist.svelte';
-    import ListByTags from './components/ListByTags.svelte';
-    import ListByVisitsCounts from './components/ListByVisitsCounts.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord } from './types';
@@ -35,12 +33,12 @@
 
     let searchString = '';
 
-    let view: 'listByArtist' | 'listByTags' | 'listByVisitsCount' = 'listByArtist';
-    const views = {
-        listByArtist: ListByArtist,
-        listByTags: ListByTags,
-        listByVisitsCount: ListByVisitsCounts
-    };
+    const views = [
+        {label: 'By artist', component: ListByArtist},
+        {label: 'By tags', component: ListByTags},
+        {label: 'By frequency', component: ListByVisitsCounts},
+    ];
+    let currentView = views[0];
 </script>
 
 <HeadIOS title="Song Book" description="My song book" />
@@ -76,32 +74,17 @@
     <h3>All songs</h3>
     Search an artist, a title or a tag:<input type="text" bind:value={searchString} />
     <button on:click={() => (searchString = '')}>&nbsp✖&nbsp</button>
+
     <div class="view-controls">
-        <button
-            class:selected={view === 'listByArtist'}
-            class="pull-right"
-            on:click={() => (view = 'listByArtist')}
-        >
-            By artists
+    {#each views as option}
+        <button class:selected={currentView === option} on:click={() => (currentView = option)}>
+            {option.label}
         </button>
-        <button
-            class:selected={view === 'listByTags'}
-            class="pull-right"
-            on:click={() => (view = 'listByTags')}
-        >
-            By tags
-        </button>
-        <button
-            class:selected={view === 'listByVisitsCount'}
-            class="pull-right"
-            on:click={() => (view = 'listByVisitsCount')}
-        >
-            By visits count
-        </button>
+    {/each}
     </div>
 </div>
 
-<svelte:component this={views[view]} {chords} {searchString} />
+<svelte:component this={currentView.component} {chords} {searchString} />
 
 <style>
     .view-controls {
