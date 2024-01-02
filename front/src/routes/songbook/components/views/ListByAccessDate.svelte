@@ -13,7 +13,7 @@
             return;
         }
         chordsData = visitCountsMap;
-        chords.sort((a, b) => {
+        chords = chords.sort((a, b) => {
             const dataA = visitCountsMap.get(a.url);
             const dataB = visitCountsMap.get(b.url);
 
@@ -34,18 +34,20 @@
     });
 </script>
 
-<ul class="ul2col-container">
-    {#each chords as chord}
-        {@const data = chordsData.get(chord.url)}
-        {#if searchString.length === 0 || chord.artist
-                .toLowerCase()
-                .match(searchString.toLowerCase()) || chord.title
-                .toLowerCase()
-                .match(searchString.toLowerCase())}
-            <li class="ul2col-item">
-                {#if data}({data.count}){/if}
-                <ChordLink {chord} showArtist={true} />
-            </li>
-        {/if}
-    {/each}
-</ul>
+{#key chords}
+    <ul class="ul2col-container">
+        {#each chords as chord}
+            {@const data = chordsData.get(chord.url)}
+            {#if searchString.length === 0 || chord.artist
+                    .toLowerCase()
+                    .match(searchString.toLowerCase()) || chord.title
+                    .toLowerCase()
+                    .match(searchString.toLowerCase())}
+                <li class="ul2col-item">
+                    {#if data}({data.count}){/if}
+                    <ChordLink {chord} showArtist={true} />
+                </li>
+            {/if}
+        {/each}
+    </ul>
+{/key}
