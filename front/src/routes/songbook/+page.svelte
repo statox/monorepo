@@ -34,9 +34,9 @@
     let searchString = '';
 
     const views = [
-        {label: 'By artist', component: ListByArtist},
-        {label: 'By tags', component: ListByTags},
-        {label: 'By frequency', component: ListByVisitsCounts},
+        { label: 'By artist', component: ListByArtist },
+        { label: 'By tags', component: ListByTags },
+        { label: 'By frequency', component: ListByVisitsCounts }
     ];
     let currentView = views[0];
 </script>
@@ -76,11 +76,11 @@
     <button on:click={() => (searchString = '')}>&nbsp✖&nbsp</button>
 
     <div class="view-controls">
-    {#each views as option}
-        <button class:selected={currentView === option} on:click={() => (currentView = option)}>
-            {option.label}
-        </button>
-    {/each}
+        {#each views as option}
+            <button class:selected={currentView === option} on:click={() => (currentView = option)}>
+                {option.label}
+            </button>
+        {/each}
     </div>
 </div>
 

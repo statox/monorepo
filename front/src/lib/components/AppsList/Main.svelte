@@ -5,11 +5,11 @@
         link: string;
         name: string;
         description: string;
-    }
+    };
     type Section = {
         name: string;
         apps: App[];
-    }
+    };
 
     export let sections: Section[];
 </script>

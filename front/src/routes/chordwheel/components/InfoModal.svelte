@@ -57,7 +57,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
     </div>
 {/if}
@@ -94,4 +93,3 @@
         justify-content: space-between;
     }
 </style>
-
