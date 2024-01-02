@@ -1,6 +1,7 @@
 <script lang="ts">
     import { openModal } from '$lib/components/Modal';
     import BackToTop from '$lib/components/BackToTop/Main.svelte';
+    import HeadIOS from '$lib/components/HeadIOS/Main.svelte';
     import ChordsChecks from './components/ChordsChecks.svelte';
     import ListByArtist from './components/ListByArtist.svelte';
     import ListByTags from './components/ListByTags.svelte';
@@ -41,6 +42,8 @@
         listByVisitsCount: ListByVisitsCounts
     };
 </script>
+
+<HeadIOS title="Song Book" description="My song book" />
 
 <h2>
     Song book
