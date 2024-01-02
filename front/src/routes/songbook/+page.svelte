@@ -2,7 +2,12 @@
     import { openModal } from '$lib/components/Modal';
     import BackToTop from '$lib/components/BackToTop/Main.svelte';
     import HeadIOS from '$lib/components/HeadIOS/Main.svelte';
-    import { ListByArtist, ListByTags, ListByVisitsCounts } from './components/views';
+    import {
+        ListByAccessDate,
+        ListByArtist,
+        ListByTags,
+        ListByVisitsCounts
+    } from './components/views';
     import ChordsChecks from './components/ChordsChecks.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
@@ -36,7 +41,8 @@
     const views = [
         { label: 'By artist', component: ListByArtist },
         { label: 'By tags', component: ListByTags },
-        { label: 'By frequency', component: ListByVisitsCounts }
+        { label: 'By frequency', component: ListByVisitsCounts },
+        { label: 'By access date', component: ListByAccessDate }
     ];
     let currentView = views[0];
 </script>
