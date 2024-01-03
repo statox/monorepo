@@ -55,7 +55,9 @@ export class Metronome {
     }
 
     scheduleNote(beatNumber: number, subdivisionNumber: number, time: number) {
+        console.log('schedule note');
         if (!this.audioContext) {
+            console.log('no audio context stopping scheduler');
             return;
         }
 
@@ -89,7 +91,9 @@ export class Metronome {
         // starts playing. See SO:
         // https://stackoverflow.com/a/69958258/4194289
         const constantSourceNode = this.audioContext.createConstantSource();
+        console.log({ constantSourceNode });
         constantSourceNode.onended = () => {
+            console.log('on constantSourceNode ended');
             this.onBeatStart && this.onBeatStart(beatNumber, subdivisionNumber);
             osc.start();
             osc.stop(time + 0.03);
@@ -101,10 +105,12 @@ export class Metronome {
 
         constantSourceNode.start(time);
         constantSourceNode.stop(this.audioContext.currentTime + 0.0001); // stop immediately after starting
+        console.log('done scheduleNote');
     }
 
     scheduler() {
         if (!this.audioContext) {
+            console.log('no audio context, stopping scheduler');
             return;
         }
 
@@ -116,20 +122,27 @@ export class Metronome {
     }
 
     start() {
-        if (this.isRunning) return;
+        console.log('metronome start');
+        if (this.isRunning) {
+            console.log('already running');
+            return;
+        }
 
         if (!this.audioContext) {
+            console.log('trying to create new audio context');
             // Code to try to fix iOS safari
             // https://gist.github.com/kus/3f01d60569eeadefe3a1
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
 
+        console.log('audio context ready');
         this.isRunning = true;
 
         this.currentBeatInBar = 0;
         this.currentSubdivision = 0;
         this.nextNoteTime = this.audioContext.currentTime + 0.05;
 
+        console.log('start interval');
         this.intervalID = setInterval(() => this.scheduler(), this.lookahead);
     }
 
@@ -143,8 +156,10 @@ export class Metronome {
 
     startStop() {
         if (this.isRunning) {
+            console.log('startstop stop');
             this.stop();
         } else {
+            console.log('startstop start');
             this.start();
         }
     }
