@@ -10,7 +10,6 @@
     let beatPlaying = 0;
     let subdivisionPlaying = 0;
     const onBeatStart = (beatNumber: number, subdivisionNumber: number) => {
-        console.log('beat start', {beatNumber, subdivisionNumber});
         beatIsPlaying = true;
         (beatPlaying = beatNumber), (subdivisionPlaying = subdivisionNumber);
     };

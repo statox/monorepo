@@ -9,10 +9,7 @@
     import Tap from './components/Tap.svelte';
     import InfoModal from './components/InfoModal.svelte';
 
-    console.log('before creating metronome');
     let metronome = new Metronome(80);
-    console.log('metronome');
-    console.log({metronome});
 
     onDestroy(() => {
         metronome.stop();
