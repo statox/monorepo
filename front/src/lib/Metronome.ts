@@ -103,9 +103,6 @@ export class Metronome {
             };
         };
 
-        this.audioContext.resume();
-        console.log('audio context state');
-        console.log(this.audioContext);
         constantSourceNode.start(time);
         constantSourceNode.stop(this.audioContext.currentTime + 0.0001); // stop immediately after starting
         console.log('done scheduleNote');
@@ -121,26 +118,6 @@ export class Metronome {
         while (this.nextNoteTime < this.audioContext.currentTime + this.scheduleAheadTime) {
             this.scheduleNote(this.currentBeatInBar, this.currentSubdivision, this.nextNoteTime);
             this.nextNote();
-        }
-    }
-
-    fixAudioContext() {
-        if (this.audioContext) {
-            // Create empty buffer
-            var buffer = this.audioContext.createBuffer(1, 1, 22050);
-            var source = this.audioContext.createBufferSource();
-            source.buffer = buffer;
-            // Connect to output (speakers)
-            source.connect(this.audioContext.destination);
-            this.audioContext.resume();
-            // Play sound
-            if (source.start) {
-                source.start(0);
-            } else if (source.play) {
-                source.play(0);
-            } else if (source.noteOn) {
-                source.noteOn(0);
-            }
         }
     }
 

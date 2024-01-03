@@ -17,17 +17,6 @@
     onDestroy(() => {
         metronome.stop();
     });
-
-    let doneFixAudioContext = false;
-    const doFixAudioContext = () => {
-        if (doneFixAudioContext) {
-            console.log('already fixed audio context');
-            return;
-        }
-        console.log('fix audio context');
-        metronome?.fixAudioContext();
-        doneFixAudioContext = true;
-    }
 </script>
 
 <div class="main">
@@ -59,9 +48,6 @@
         <MetronomeVisualization {metronome} />
     </div>
 </div>
-
-<svelte:window on:touchstart={doFixAudioContext} on:touchend={doFixAudioContext} />
-
 
 <style>
     .main {
