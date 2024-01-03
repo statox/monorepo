@@ -1,7 +1,7 @@
 <script lang="ts">
     import { user } from '$lib/auth/service';
     import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
-    import HeadIOS from '$lib/components/HeadIOS/Main.svelte';
+    import { HeadIOS } from '$lib/components/HeadIOS';
     import ClipboardPrivateView from './components/ClipboardPrivateView.svelte';
     import ClipboardPublicView from './components/ClipboardPublicView.svelte';
     import ClipboardForm from './components/ClipboardForm.svelte';

@@ -1,6 +1,6 @@
 <script lang="ts">
     import '$lib/styles/new_theme.css';
-    import Mardkown from '$lib/components/Markdown/Main.svelte';
+    import { Markdown } from '$lib/components/Markdown';
     import type { Note } from '$lib/Notes/types';
     export let note: Note;
 
@@ -13,7 +13,7 @@
         <span class="formatted-tags">{formattedTags}</span>
     </summary>
 
-    <Mardkown source={note.source} />
+    <Markdown source={note.source} />
 </details>
 
 <style>

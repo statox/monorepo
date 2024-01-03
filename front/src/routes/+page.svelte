@@ -1,6 +1,5 @@
 <script lang="ts">
-    import AppsList from '$lib/components/AppsList/Main.svelte';
-    import { allApps } from '$lib/components/AppsList/apps';
+    import { allApps, AppsList } from '$lib/components/AppsList';
 </script>
 
 <AppsList sections={allApps} />

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { openModal } from '$lib/components/Modal';
-    import BackToTop from '$lib/components/BackToTop/Main.svelte';
-    import HeadIOS from '$lib/components/HeadIOS/Main.svelte';
+    import { BackToTop } from '$lib/components/BackToTop';
+    import { HeadIOS } from '$lib/components/HeadIOS';
     import {
         ListByAccessDate,
         ListByArtist,
