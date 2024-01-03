@@ -50,8 +50,11 @@ export const getPublicClipboard = async (): Promise<ClipboardEntryEnriched[]> =>
             'Content-Type': 'application/json'
         }
     })
-        .then((response) => {
-            return response.json();
+        .then(async (response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(await response.text());
         })
         .then((entries: ClipboardEntry[]) => {
             return entries.map((entry) => enrichEntry(entry));
@@ -60,50 +63,60 @@ export const getPublicClipboard = async (): Promise<ClipboardEntryEnriched[]> =>
 
 export const getAllClipboard = async (): Promise<ClipboardEntryEnriched[]> => {
     const url = PUBLIC_API_URL + '/clipboard/getAllEntries';
-    return getAccessToken().then(async (token) => {
-        return fetch(url, {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then((response) => {
+    const token = await getAccessToken();
+    return fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    })
+        .then(async (response) => {
+            if (response.ok) {
                 return response.json();
-            })
-            .then((entries: ClipboardEntry[]) => {
-                return entries.map((entry) => enrichEntry(entry));
-            });
-    });
+            }
+            throw new Error(await response.text());
+        })
+        .then((entries: ClipboardEntry[]) => {
+            return entries.map((entry) => enrichEntry(entry));
+        });
 };
 
 export const uploadToClipboard = async (data: ClipboardUploadData) => {
     const url = PUBLIC_API_URL + '/clipboard/addEntry';
-    return getAccessToken().then(async (token) => {
-        return fetch(url, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(data)
-        });
+    const token = await getAccessToken();
+    return fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    }).then(async (response) => {
+        if (response.ok) {
+            return;
+        }
+        throw new Error(await response.text());
     });
 };
 
 export const deleteClipboardEntry = async (name: string) => {
     const url = PUBLIC_API_URL + '/clipboard/deleteEntry';
-    return getAccessToken().then(async (token) => {
-        return fetch(url, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ name })
-        });
+    const token = await getAccessToken();
+    return fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ name })
+    }).then(async (response) => {
+        if (response.ok) {
+            return;
+        }
+        throw new Error(await response.text());
     });
 };

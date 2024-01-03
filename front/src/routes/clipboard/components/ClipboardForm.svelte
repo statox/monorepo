@@ -1,5 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import { uploadToClipboard } from '$lib/Clipboard/api';
     import { Duration, type DurationLikeObject } from 'luxon';
@@ -14,10 +15,10 @@
     const ttlInput = {
         value: 10,
         unit: ttlUnits[0]
-    }
+    };
 
     let error: string;
-    const upload = () => {
+    const upload = async () => {
         if (!name.length) {
             error = 'name should be defined';
             return;
@@ -28,7 +29,7 @@
         }
 
         const durationLikeObj: DurationLikeObject = {};
-        durationLikeObj[ttlInput.unit as 'minutes'|'hours'|'days'] = ttlInput.value;
+        durationLikeObj[ttlInput.unit as 'minutes' | 'hours' | 'days'] = ttlInput.value;
         const ttlDuration = Duration.fromObject(durationLikeObj);
         let ttlSeconds = ttlDuration.as('seconds');
         if (ttlSeconds < 0) {
@@ -36,11 +37,17 @@
             return;
         }
 
-        uploadToClipboard({ name, content, ttlSeconds, isPublic })
-            .then((_response) => dispatch('upload'))
-            .catch((apiError) => {
-                error = apiError.message;
+        try {
+            await uploadToClipboard({ name, content, ttlSeconds, isPublic });
+            dispatch('upload');
+        } catch (error: unknown) {
+            const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
             });
+        }
     };
 </script>
 
