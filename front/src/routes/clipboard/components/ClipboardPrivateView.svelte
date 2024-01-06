@@ -35,6 +35,13 @@
         </div>
         <div>{entry.name}</div>
         <div class="entry-content" on:click={() => copyContent(entry)}>{entry.content}</div>
+        <div>
+            {#if entry.s3PresignedUrl}
+                <a href={entry.s3PresignedUrl}>Download file</a>
+            {:else}
+                <span>-</span>
+            {/if}
+        </div>
     {/each}
 </div>
 
@@ -51,7 +58,7 @@
     }
     @media screen and (min-width: 750px) {
         .container {
-            grid-template-columns: 25% 25% 75%;
+            grid-template-columns: 25% 25% 35% 35%;
         }
     }
 

@@ -6,6 +6,8 @@ export type ClipboardEntry = {
     ttl: number;
     isPublic: boolean;
     linkId: string;
+    s3Key?: string;
+    s3PresignedUrl?: string;
 };
 
 export type ExpirationStatus = 'expired' | 'very_soon' | 'soon' | 'not_soon';
