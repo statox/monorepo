@@ -9,6 +9,7 @@
 
     let name: string;
     let content: string;
+    let files: FileList;
     let isPublic = false;
 
     const ttlUnits = ['minutes', 'hours', 'days'];
@@ -37,8 +38,13 @@
             return;
         }
 
+        let file: File | undefined;
+        if (files && files.length) {
+            file = files[0] || undefined;
+        }
+
         try {
-            await uploadToClipboard({ name, content, ttlSeconds, isPublic });
+            await uploadToClipboard({ name, content, ttlSeconds, isPublic, file });
             dispatch('upload');
         } catch (error: unknown) {
             const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
@@ -60,6 +66,11 @@
     <p>
         <label for="content">Content</label>
         <input type="text" bind:value={content} />
+    </p>
+
+    <p>
+        <label for="file">File</label>
+        <input type="file" bind:files />
     </p>
 
     <p>

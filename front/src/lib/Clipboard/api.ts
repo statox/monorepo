@@ -7,6 +7,7 @@ import type {
     ClipboardUploadData,
     ExpirationStatus
 } from './types';
+import superagent from 'superagent';
 
 const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
     const now = DateTime.now();
@@ -86,6 +87,21 @@ export const getAllClipboard = async (): Promise<ClipboardEntryEnriched[]> => {
 export const uploadToClipboard = async (data: ClipboardUploadData) => {
     const url = PUBLIC_API_URL + '/clipboard/addEntry';
     const token = await getAccessToken();
+
+    if (data.file) {
+        await superagent
+            .post(url)
+            .auth(token, { type: 'bearer' })
+            .field('name', data.name)
+            .field('content', data.content)
+            .field('ttlSeconds', data.ttlSeconds)
+            .field('isPublic', data.isPublic)
+            // TODO: Fix types
+            // @ts-ignore
+            .attach('file', data.file);
+        return;
+    }
+
     return fetch(url, {
         method: 'POST',
         mode: 'cors',

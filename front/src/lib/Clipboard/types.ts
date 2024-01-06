@@ -21,4 +21,5 @@ export type ClipboardUploadData = {
     content: string;
     ttlSeconds: number;
     isPublic: boolean;
+    file?: File;
 };
