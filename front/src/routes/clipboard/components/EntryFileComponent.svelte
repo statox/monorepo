@@ -1,6 +1,6 @@
 <script lang="ts">
     import mime from 'mime';
-    import type { ClipboardEntryEnriched } from "$lib/Clipboard/types";
+    import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
 
     export let entry: ClipboardEntryEnriched;
 
@@ -13,7 +13,7 @@
         const ext = (url.pathname.match(/[^.]+$/) ?? [])[0];
         const filetype = mime.getType(ext ?? '');
         if (filetype?.includes('image')) {
-            type = 'image'
+            type = 'image';
         }
     }
 </script>

@@ -28,7 +28,12 @@
     {#each clipboard.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
         <div class="info-container">
             <ExpirationInfo {entry} />
-            <input class="is-public-checkbox" type="checkbox" bind:checked={entry.isPublic} disabled />
+            <input
+                class="is-public-checkbox"
+                type="checkbox"
+                bind:checked={entry.isPublic}
+                disabled
+            />
             <button class="delete-button" on:click={() => deleteEntry(entry.name)}>
                 <i class="fas fa-trash-alt"></i>
             </button>
