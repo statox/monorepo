@@ -2,6 +2,7 @@
     import { toast } from '$lib/components/Toast';
     import { type ClipboardEntryEnriched } from '$lib/Clipboard/types';
     import ExpirationInfo from './ExpirationInfo.svelte';
+    import EntryFileComponent from './EntryFileComponent.svelte';
 
     export let clipboard: ClipboardEntryEnriched[];
 
@@ -21,6 +22,7 @@
         <ExpirationInfo {entry} />
         <div>{entry.name}</div>
         <div class="entry-content" on:click={() => copyContent(entry)}>{entry.content}</div>
+        <EntryFileComponent {entry} />
     {/each}
 </div>
 
@@ -37,7 +39,7 @@
     }
     @media screen and (min-width: 750px) {
         .container {
-            grid-template-columns: 5% 25% 75%;
+            grid-template-columns: 25% 25% 35% 35%;
         }
     }
 
