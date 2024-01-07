@@ -4,6 +4,7 @@
     import { deleteClipboardEntry } from '$lib/Clipboard/api';
     import { createEventDispatcher } from 'svelte';
     import ExpirationInfo from './ExpirationInfo.svelte';
+    import EntryFileComponent from './EntryFileComponent.svelte';
 
     const dispatch = createEventDispatcher();
     export let clipboard: ClipboardEntryEnriched[];
@@ -27,7 +28,7 @@
     {#each clipboard.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
         <div class="info-container">
             <ExpirationInfo {entry} />
-            <input type="checkbox" bind:checked={entry.isPublic} disabled />
+            <input class="is-public-checkbox" type="checkbox" bind:checked={entry.isPublic} disabled />
             <button class="delete-button" on:click={() => deleteEntry(entry.name)}>
                 <i class="fas fa-trash-alt"></i>
             </button>
@@ -35,13 +36,7 @@
         </div>
         <div>{entry.name}</div>
         <div class="entry-content" on:click={() => copyContent(entry)}>{entry.content}</div>
-        <div>
-            {#if entry.s3PresignedUrl}
-                <a href={entry.s3PresignedUrl}>Download file</a>
-            {:else}
-                <span>-</span>
-            {/if}
-        </div>
+        <EntryFileComponent {entry} />
     {/each}
 </div>
 
@@ -73,6 +68,10 @@
         color: white;
         padding: 0;
         width: 2em;
+        height: 2em;
+    }
+    .is-public-checkbox {
+        height: 2em;
     }
     .entry-content {
         cursor: pointer;

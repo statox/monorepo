@@ -46,6 +46,7 @@
     "dependencies": {
         "@types/superagent": "^8.1.1",
         "luxon": "^3.4.4",
+        "mime": "^4.0.1",
         "superagent": "^8.1.2"
     }
 }
