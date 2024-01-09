@@ -8,6 +8,7 @@
     import MetronomeVisualization from './components/MetronomeVisualization.svelte';
     import Tap from './components/Tap.svelte';
     import InfoModal from './components/InfoModal.svelte';
+    import { HeadIOS } from '$lib/components/HeadIOS';
 
     let metronome = new Metronome(80);
 
@@ -15,6 +16,8 @@
         metronome.stop();
     });
 </script>
+
+<HeadIOS title="Metronome" description="Metronome" />
 
 <div class="main">
     <h3>
