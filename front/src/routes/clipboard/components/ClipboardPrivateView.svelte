@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { toast } from '$lib/components/Toast';
     import { type ClipboardEntryEnriched } from '$lib/Clipboard/types';
     import { deleteClipboardEntry } from '$lib/Clipboard/api';
     import { createEventDispatcher } from 'svelte';
     import ExpirationInfo from './ExpirationInfo.svelte';
+    import EntryContentComponent from './EntryContentComponent.svelte';
     import EntryFileComponent from './EntryFileComponent.svelte';
 
     const dispatch = createEventDispatcher();
@@ -11,16 +11,6 @@
 
     const deleteEntry = (name: string) => {
         deleteClipboardEntry(name).then((_response) => dispatch('delete'));
-    };
-
-    const copyContent = (entry: ClipboardEntryEnriched) => {
-        navigator.clipboard.writeText(entry.content);
-        toast.push('<i class="fas fa-check"></i> Copied to clipboard', {
-            duration: 1000,
-            theme: {
-                '--toastBarHeight': 0
-            }
-        });
     };
 </script>
 
@@ -40,7 +30,7 @@
             <div>{entry.formatedCreationDate}</div>
         </div>
         <div>{entry.name}</div>
-        <div class="entry-content" on:click={() => copyContent(entry)}>{entry.content}</div>
+        <EntryContentComponent {entry} />
         <EntryFileComponent {entry} />
     {/each}
 </div>
@@ -77,8 +67,5 @@
     }
     .is-public-checkbox {
         height: 2em;
-    }
-    .entry-content {
-        cursor: pointer;
     }
 </style>
