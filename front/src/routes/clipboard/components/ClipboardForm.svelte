@@ -9,7 +9,8 @@
 
     let name: string;
     let content: string;
-    let files: FileList;
+    let fileInput: HTMLInputElement;
+    let files: FileList | null;
     let isPublic = false;
 
     const ttlUnits = ['minutes', 'hours', 'days'];
@@ -71,7 +72,10 @@
 
     <p class="file-section">
         <label for="file">File</label>
-        <input class="file-input" type="file" bind:files />
+        <input class="file-input" type="file" bind:files bind:this={fileInput} />
+        <button on:click={() => {fileInput.value = ''}}>
+            <i class="fas fa-times-circle"></i>
+        </button>
     </p>
 
     <div class="visibility-section">
@@ -110,6 +114,7 @@
     .file-section {
         display: flex;
         flex-wrap: wrap;
+        align-items: baseline;
     }
     .file-input {
         flex-grow: 2;
