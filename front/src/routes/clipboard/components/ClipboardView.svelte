@@ -15,7 +15,7 @@
         <div><b>{entry.name}</b></div>
         <div class="entry-data-section">
             <EntryContentComponent {entry} />
-            <br/>
+            <br />
             <EntryFileComponent {entry} />
         </div>
     {/each}

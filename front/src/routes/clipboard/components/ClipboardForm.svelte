@@ -73,7 +73,11 @@
     <p class="file-section">
         <label for="file">File</label>
         <input class="file-input" type="file" bind:files bind:this={fileInput} />
-        <button on:click={() => {fileInput.value = ''}}>
+        <button
+            on:click={() => {
+                fileInput.value = '';
+            }}
+        >
             <i class="fas fa-times-circle"></i>
         </button>
     </p>
@@ -91,7 +95,11 @@
 
         <p class="visibility-section-item">
             <label for="isPublic">Access</label>
-            <button class="visibility-status" class:visibility-public={isPublic} on:click={() => isPublic = !isPublic}>
+            <button
+                class="visibility-status"
+                class:visibility-public={isPublic}
+                on:click={() => (isPublic = !isPublic)}
+            >
                 {#if isPublic}
                     Public
                     <i class="fas fa-lock-open"></i>
@@ -156,5 +164,4 @@
             flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
         }
     }
-
 </style>

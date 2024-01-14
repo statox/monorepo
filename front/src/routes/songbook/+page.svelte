@@ -56,7 +56,7 @@
     const filtersKey: FilterType[] = Object.keys(filters) as FilterType[];
 </script>
 
-<HeadIOS title="Song Book" description="My song book" iconPath='/songbook.png' />
+<HeadIOS title="Song Book" description="My song book" iconPath="/songbook.png" />
 
 <h2>
     Song book
