@@ -2,8 +2,7 @@
     import { user } from '$lib/auth/service';
     import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import ClipboardPrivateView from './components/ClipboardPrivateView.svelte';
-    import ClipboardPublicView from './components/ClipboardPublicView.svelte';
+    import ClipboardView from './components/ClipboardView.svelte';
     import ClipboardForm from './components/ClipboardForm.svelte';
 
     const getClipboard = () => {
@@ -26,11 +25,7 @@
 {#await clipboardApi}
     <p>Loading data</p>
 {:then clipboard}
-    {#if $user}
-        <ClipboardPrivateView {clipboard} on:delete={() => (clipboardApi = getClipboard())} />
-    {:else}
-        <ClipboardPublicView {clipboard} />
-    {/if}
+    <ClipboardView {clipboard} on:delete={() => (clipboardApi = getClipboard())} />
 {:catch error}
     <p>Something went wrong</p>
     <p>{JSON.stringify(error)}</p>
