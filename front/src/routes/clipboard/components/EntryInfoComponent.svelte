@@ -17,12 +17,14 @@
     <ExpirationInfo {entry} />
 
     {#if $user}
-        <input
-            class="is-public-checkbox"
-            type="checkbox"
-            bind:checked={entry.isPublic}
-            disabled
-        />
+        <button class="visibility-status" class:visibility-public={entry.isPublic} disabled>
+            {#if entry.isPublic}
+                <i class="fas fa-lock-open"></i>
+            {:else}
+                <i class="fas fa-lock"></i>
+            {/if}
+        </button>
+
         <button class="delete-button" on:click={() => deleteEntry(entry.name)}>
             <i class="fas fa-trash-alt"></i>
         </button>
@@ -38,15 +40,19 @@
         justify-content: flex-start;
         margin-right: 10px;
     }
+    .visibility-status {
+        height: 33px;
+        width: 40px;
+        background-color: #07a761;
+    }
+    .visibility-public {
+        background-color: #ff8f00;
+    }
     .delete-button {
+        height: 33px;
         background: red;
         color: white;
-        padding: 0;
-        width: 2em;
-        height: 2em;
-    }
-    .is-public-checkbox {
-        height: 2em;
+        width: 40px;
     }
     .creation-date {
         width: max-content;

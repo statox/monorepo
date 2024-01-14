@@ -90,8 +90,16 @@
         </p>
 
         <p class="visibility-section-item">
-            <label for="isPublic">Public</label>
-            <input type="checkbox" bind:checked={isPublic} />
+            <label for="isPublic">Access</label>
+            <button class="visibility-status" class:visibility-public={isPublic} on:click={() => isPublic = !isPublic}>
+                {#if isPublic}
+                    Public
+                    <i class="fas fa-lock-open"></i>
+                {:else}
+                    Private
+                    <i class="fas fa-lock"></i>
+                {/if}
+            </button>
         </p>
     </div>
 
@@ -110,6 +118,12 @@
     .visibility-section {
         display: flex;
         flex-wrap: wrap;
+    }
+    .visibility-status {
+        background-color: #07a761;
+    }
+    .visibility-public {
+        background-color: #ff8f00;
     }
     .file-section {
         display: flex;
