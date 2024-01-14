@@ -12,7 +12,7 @@
 <div class="container">
     {#each clipboard.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
         <EntryInfoComponent {entry} on:delete={() => dispatch('delete')} />
-        <div>{entry.name}</div>
+        <div><b>{entry.name}</b></div>
         <EntryContentComponent {entry} />
         <EntryFileComponent {entry} />
     {/each}
@@ -31,7 +31,7 @@
     }
     @media screen and (min-width: 750px) {
         .container {
-            grid-template-columns: 25% 25% 35% 35%;
+            grid-template-columns: auto 25% 35% 35%;
         }
     }
 </style>

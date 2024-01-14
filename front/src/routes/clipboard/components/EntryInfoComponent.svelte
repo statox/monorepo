@@ -26,7 +26,7 @@
         <button class="delete-button" on:click={() => deleteEntry(entry.name)}>
             <i class="fas fa-trash-alt"></i>
         </button>
-        <div>{entry.formatedCreationDate}</div>
+        <div class="creation-date">{entry.formatedCreationDate}</div>
     {/if}
 </div>
 
@@ -36,6 +36,7 @@
         flex-direction: row;
         gap: 10px 10px;
         justify-content: flex-start;
+        margin-right: 10px;
     }
     .delete-button {
         background: red;
@@ -46,5 +47,8 @@
     }
     .is-public-checkbox {
         height: 2em;
+    }
+    .creation-date {
+        width: max-content;
     }
 </style>
