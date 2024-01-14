@@ -17,7 +17,7 @@
 -   [ ] Rework `fetch` calls into a framework for unified access to api.statox.fr
 -   [ ] Rework CSS. Default should be dark theme. Add a button to switch themes
 -   [ ] Recreate mechanism to open note in its own page
--   [ ] Rework home page to be more descriptive and useful
+-   [x] Rework home page to be more descriptive and useful
 -   [x] Get toast library from https://github.com/zerodevx/svelte-toast/blob/master/src/lib/ToastItem.svelte
 
 ### Features
