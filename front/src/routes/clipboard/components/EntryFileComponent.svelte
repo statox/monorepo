@@ -25,7 +25,5 @@
         <a href={entry.s3PresignedUrl} download={entry.name}>
             <img src={entry.s3PresignedUrl} alt={entry.name} />
         </a>
-    {:else}
-        <span>-</span>
     {/if}
 </div>

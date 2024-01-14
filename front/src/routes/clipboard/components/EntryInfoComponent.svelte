@@ -38,6 +38,7 @@
         flex-direction: row;
         gap: 10px 10px;
         justify-content: flex-start;
+        align-items: baseline;
         margin-right: 10px;
     }
     .visibility-status {

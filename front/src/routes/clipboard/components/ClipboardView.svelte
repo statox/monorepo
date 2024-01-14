@@ -13,8 +13,11 @@
     {#each clipboard.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
         <EntryInfoComponent {entry} on:delete={() => dispatch('delete')} />
         <div><b>{entry.name}</b></div>
-        <EntryContentComponent {entry} />
-        <EntryFileComponent {entry} />
+        <div class="entry-data-section">
+            <EntryContentComponent {entry} />
+            <br/>
+            <EntryFileComponent {entry} />
+        </div>
     {/each}
 </div>
 
@@ -28,10 +31,15 @@
         .container {
             grid-template-columns: 100%;
         }
+        .entry-data-section {
+            padding-bottom: 1em;
+            margin-bottom: 1em;
+            border-bottom: 5px solid var(--nc-tx-1);
+        }
     }
     @media screen and (min-width: 750px) {
         .container {
-            grid-template-columns: auto 25% 35% 35%;
+            grid-template-columns: auto 25% 1fr;
         }
     }
 </style>
