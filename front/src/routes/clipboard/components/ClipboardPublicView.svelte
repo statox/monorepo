@@ -1,6 +1,6 @@
 <script lang="ts">
     import { type ClipboardEntryEnriched } from '$lib/Clipboard/types';
-    import ExpirationInfo from './ExpirationInfo.svelte';
+    import EntryInfoComponent from './EntryInfoComponent.svelte';
     import EntryContentComponent from './EntryContentComponent.svelte';
     import EntryFileComponent from './EntryFileComponent.svelte';
 
@@ -9,7 +9,7 @@
 
 <div class="container">
     {#each clipboard.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
-        <ExpirationInfo {entry} />
+        <EntryInfoComponent {entry} />
         <div>{entry.name}</div>
         <EntryContentComponent {entry} />
         <EntryFileComponent {entry} />
