@@ -53,5 +53,5 @@ export const logout = async () => {
 };
 
 export const getAccessToken = async () => {
-    return await get(auth0Client).getTokenSilently();
+    return await get(auth0Client)?.getTokenSilently();
 };
