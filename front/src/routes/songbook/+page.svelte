@@ -88,7 +88,9 @@
 <div>
     <h3>All songs</h3>
     Search an artist, a title or a tag:<input type="text" bind:value={searchString} />
-    <button on:click={() => (searchString = '')}>&nbsp✖&nbsp</button>
+    <button on:click={() => (searchString = '')}>
+        <i class="fas fa-times-circle"></i>
+    </button>
 
     <h4>Filters</h4>
     <div class="filter-controls-container">
