@@ -1,4 +1,5 @@
 import { get, writable } from 'svelte/store';
+import { toast } from '$lib/components/Toast';
 import config from './config';
 import { Auth0Client, User, createAuth0Client } from '@auth0/auth0-spa-js';
 
@@ -39,7 +40,11 @@ export const initializeAuth0 = async () => {
         error.set(err);
     } finally {
         isAuthenticated.set(await get(auth0Client).isAuthenticated());
-        user.set((await get(auth0Client).getUser()) || null);
+        if (isAuthenticated) {
+            user.set((await get(auth0Client).getUser()) || null);
+        } else {
+            user.set(null);
+        }
         isLoading.set(false);
     }
 };
@@ -53,5 +58,16 @@ export const logout = async () => {
 };
 
 export const getAccessToken = async () => {
-    return await get(auth0Client)?.getTokenSilently();
+    try {
+        return await get(auth0Client)?.getTokenSilently();
+    } catch (error) {
+        console.log(error);
+        user.set(null);
+        toast.push(`getAccessToken error\n${(error as Error).message}`, {
+            duration: 5000,
+            theme: {
+                '--toastBarHeight': 0
+            }
+        });
+    }
 };

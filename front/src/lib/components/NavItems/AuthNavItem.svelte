@@ -8,6 +8,7 @@
     onMount(() => getAccessToken());
 </script>
 
+{#key $user}
 {#if $user}
     <button title="Log out" on:click={() => logout()}>
         <img class="user-profile" alt="user profile" src={$user.picture} />
@@ -17,6 +18,7 @@
         <i class="fa fa-sign-in" aria-hidden="true"></i>
     </button>
 {/if}
+{/key}
 
 <style>
     button {
