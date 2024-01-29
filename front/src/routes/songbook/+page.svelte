@@ -11,7 +11,7 @@
     import ChordsChecks from './components/ChordsChecks.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
-    import type { Chord, Filters, FilterType } from './types';
+    import type { Chord, Filters, FilterType } from '$lib/Songbook/types';
     import { onMount } from 'svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { visitCountsStore } from './store';

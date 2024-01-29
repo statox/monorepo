@@ -1,7 +1,7 @@
 <script lang="ts">
     import { visitCountsStore } from '../../store';
     import '$lib/styles/new_theme.css';
-    import type { Chord, ChordData, Filters } from '../../types';
+    import type { Chord, ChordData, Filters } from '$lib/Songbook/types';
     import ChordLink from '../ChordLink.svelte';
 
     export let searchString: string;

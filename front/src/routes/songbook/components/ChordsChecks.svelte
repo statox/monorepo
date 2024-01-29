@@ -1,7 +1,7 @@
 <script lang="ts">
     import { PUBLIC_API_URL } from '$env/static/public';
+    import type { Chord } from '$lib/Songbook/types';
     import { closeModal } from '$lib/components/Modal';
-    import type { Chord } from '../types';
     export let isOpen: boolean;
 
     type ApiResult = {

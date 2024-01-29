@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import ChordLink from './ChordLink.svelte';
-    import type { Chord } from '../types';
+    import type { Chord } from '$lib/Songbook/types';
 
     export let chords: Chord[];
 

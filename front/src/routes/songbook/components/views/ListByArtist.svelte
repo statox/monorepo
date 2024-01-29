@@ -2,7 +2,7 @@
     import '$lib/styles/new_theme.css';
     import { alphaLowerSort } from '$lib/helpers';
     import ChordLink from '../ChordLink.svelte';
-    import type { Chord, Filters } from '../../types';
+    import type { Chord, Filters } from '$lib/Songbook/types';
 
     export let searchString: string;
     export let chords: Chord[];

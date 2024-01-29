@@ -1,12 +1,12 @@
 <script lang="ts">
     import { base } from '$app/paths';
     import { PUBLIC_API_URL } from '$env/static/public';
-    import { type Chord } from '../types';
     import { visitCountsStore } from '../store';
     import { get } from 'svelte/store';
     import { toast } from '$lib/components/Toast';
     import { getAccessToken } from '$lib/auth/service';
     import { getTypeIconClass } from '../utils';
+    import type { Chord } from '$lib/Songbook/types';
     export let chord: Chord;
     export let showArtist = false;
 
