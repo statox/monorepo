@@ -10,6 +10,7 @@
     } from './components/views';
     import ChordsChecks from './components/ChordsChecks.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
+    import NewChordModal from './components/NewChordModal.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord, Filters, FilterType } from '$lib/Songbook/types';
     import { onMount } from 'svelte';
@@ -65,13 +66,9 @@
             Check dead links
         </button>
 
-        <a
-            href="https://github.com/statox/blog/issues/105#new_comment_field"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <button>Add a song</button>
-        </a>
+        <button style:position="relative" on:click={() => openModal(NewChordModal)}>
+            Add a song
+        </button>
     </span>
 </h2>
 

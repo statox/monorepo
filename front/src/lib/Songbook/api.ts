@@ -1,4 +1,5 @@
 import { PUBLIC_API_URL } from '$env/static/public';
+import { getAccessToken } from '$lib/auth/service';
 import type { Chord } from './types';
 
 type RawChord = {
@@ -44,5 +45,29 @@ export const getSongbook = async (): Promise<Chord[]> => {
             ...chord,
             type: getType(chord)
         };
+    });
+};
+
+export const uploadNewSong = async (data: {
+    artist: string;
+    title: string;
+    url: string;
+    tags: string[];
+}) => {
+    const url = PUBLIC_API_URL + '/chords/addEntry';
+    const token = await getAccessToken();
+    return fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    }).then(async (response) => {
+        if (response.ok) {
+            return;
+        }
+        throw new Error(await response.text());
     });
 };
