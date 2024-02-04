@@ -9,15 +9,15 @@
 </script>
 
 {#key $user}
-{#if $user}
-    <button title="Log out" on:click={() => logout()}>
-        <img class="user-profile" alt="user profile" src={$user.picture} />
-    </button>
-{:else}
-    <button title="Log in" type="button" on:click={() => login()}>
-        <i class="fa fa-sign-in" aria-hidden="true"></i>
-    </button>
-{/if}
+    {#if $user}
+        <button title="Log out" on:click={() => logout()}>
+            <img class="user-profile" alt="user profile" src={$user.picture} />
+        </button>
+    {:else}
+        <button title="Log in" type="button" on:click={() => login()}>
+            <i class="fa fa-sign-in" aria-hidden="true"></i>
+        </button>
+    {/if}
 {/key}
 
 <style>
