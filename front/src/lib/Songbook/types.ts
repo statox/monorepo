@@ -2,12 +2,15 @@ export type FilterType = 'link' | 'doc' | 'pdf' | 'youtube';
 
 export type Filters = Record<FilterType, boolean>;
 
-export type Chord = {
+export type RawChord = {
     artist: string;
     title: string;
     url: string;
     creationDate: number;
     tags: string[];
+};
+
+export type Chord = RawChord & {
     type: FilterType;
 };
 

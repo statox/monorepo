@@ -10,13 +10,13 @@
     } from './components/views';
     import ChordsChecks from './components/ChordsChecks.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
-    import NewChordModal from './components/NewChordModal.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord, Filters, FilterType } from '$lib/Songbook/types';
     import { onMount } from 'svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { visitCountsStore } from './store';
     import { getTypeIconClass } from './utils';
+    import { goto } from '$app/navigation';
 
     // From +page.ts load() function
     export let data: { chords: Chord[] };
@@ -66,9 +66,7 @@
             Check dead links
         </button>
 
-        <button style:position="relative" on:click={() => openModal(NewChordModal)}>
-            Add a song
-        </button>
+        <button style:position="relative" on:click={() => goto('/songbook/edit')}> Edit </button>
     </span>
 </h2>
 

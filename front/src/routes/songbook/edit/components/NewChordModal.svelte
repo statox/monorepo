@@ -1,7 +1,14 @@
 <script lang="ts">
-    import { uploadNewSong } from '$lib/Songbook/api';
     import { closeModal } from '$lib/components/Modal';
+    import { user } from '$lib/auth/service';
     export let isOpen: boolean;
+
+    export let onNewSongSubmit: (params: {
+        title: string;
+        artist: string;
+        url: string;
+        tags: string[];
+    }) => Promise<void>;
 
     let title: string;
     let artist: string;
@@ -10,10 +17,8 @@
 
     const submit = () => {
         const tags = tagsStr.replaceAll(' ', '').split(',');
-        console.log('submitting');
-        console.log({title, artist, url, tags});
-        uploadNewSong({title, artist, url, tags});
-    }
+        onNewSongSubmit({ title, artist, url, tags });
+    };
 </script>
 
 {#if isOpen}
@@ -24,7 +29,7 @@
                 <button on:click={closeModal}>Close</button>
             </h4>
 
-            <form>
+            <form class="form-content">
                 <label for="artist">Artist</label>
                 <input type="text" bind:value={artist} />
 
@@ -37,13 +42,26 @@
                 <label for="tags">Tags</label>
                 <input type="text" bind:value={tagsStr} />
 
-                <button on:click={submit}>Submit</button>
+                {#if $user}
+                    <button class="form-action" on:click={submit}>Submit</button>
+                {:else}
+                    <span class="form-action">Login to update a new song</span>
+                {/if}
             </form>
         </div>
     </div>
 {/if}
 
 <style>
+    .form-action {
+        grid-column: span 2;
+    }
+
+    .form-content {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+
     .modal {
         position: fixed;
         top: 0;

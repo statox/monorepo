@@ -24,10 +24,10 @@ const getType = (chord: RawChord) => {
     return 'link';
 };
 
-export const getSongbook = async (): Promise<Chord[]> => {
+export const getChords = async (): Promise<RawChord[]> => {
     const url = PUBLIC_API_URL + '/chords/getAll';
 
-    let chords = await fetch(url, {
+    return await fetch(url, {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -39,6 +39,10 @@ export const getSongbook = async (): Promise<Chord[]> => {
         }
         throw new Error(await response.text());
     });
+};
+
+export const getSongbook = async (): Promise<Chord[]> => {
+    const chords = await getChords();
 
     return chords.map((chord: RawChord) => {
         return {
@@ -48,13 +52,9 @@ export const getSongbook = async (): Promise<Chord[]> => {
     });
 };
 
-export const uploadNewSong = async (data: {
-    artist: string;
-    title: string;
-    url: string;
-    tags: string[];
-}) => {
-    const url = PUBLIC_API_URL + '/chords/addEntry';
+export const uploadChords = async (chords: RawChord[]) => {
+    const body = JSON.stringify({ chords });
+    const url = PUBLIC_API_URL + '/chords/updateAll';
     const token = await getAccessToken();
     return fetch(url, {
         method: 'POST',
@@ -63,7 +63,7 @@ export const uploadNewSong = async (data: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(data)
+        body
     }).then(async (response) => {
         if (response.ok) {
             return;
