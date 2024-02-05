@@ -16,7 +16,10 @@
     let tagsStr: string;
 
     const submit = () => {
-        const tags = tagsStr.replaceAll(' ', '').split(',');
+        const tags = []
+        if (tagsStr) {
+            tags.push(...tagsStr.replaceAll(' ', '').split(','));
+        }
         onNewSongSubmit({ title, artist, url, tags });
     };
 </script>
