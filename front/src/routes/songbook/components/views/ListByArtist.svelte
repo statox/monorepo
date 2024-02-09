@@ -64,29 +64,14 @@
                 if (searchString.length === 0) {
                     return true;
                 }
-                const chordTags = artist + ';' + chord.title + ';' + chord.tags.join(',');
-                return chordTags.toLowerCase().match(searchString.toLowerCase());
+                const chordTags = chord.title;
+                return Boolean(chordTags.toLowerCase().match(searchString.toLowerCase()));
             });
         return chords;
     };
 
-    const shouldDisplayArtist = (
-        artist: string,
-        chords: Chord[],
-        searchString: string,
-        filters: Filters
-    ) => {
-        if (chords.length === 0) {
-            return false;
-        }
-        if (searchString.length === 0) {
-            return true;
-        }
-        const artistTags =
-            artist +
-            ';' +
-            chords.reduce((tags, chord) => tags + chord.title + ';' + chord.tags.join(','), '');
-        return artistTags.toLowerCase().match(searchString.toLowerCase());
+    const artistNameMatchesSearch = (artist: string, searchString: string) => {
+        return Boolean(artist.toLowerCase().match(searchString.toLowerCase()));
     };
 </script>
 
@@ -104,14 +89,18 @@
 
 <table bind:this={tableElement} id="artistTable">
     {#each artistsList as artist}
-        {@const chords = getArtistFilteredChords(artist.name, searchString, filters)}
+        {@const artistFilteredChords = getArtistFilteredChords(artist.name, searchString, filters)}
+        {@const artistNameMatches = artistNameMatchesSearch(artist.name, searchString)}
 
-        {#if shouldDisplayArtist(artist.name, chords, searchString, filters)}
+        {#if artistNameMatches || artistFilteredChords.length > 0}
+            {@const chordsToDisplay = artistNameMatches
+                ? chordsByArtist[artist.name]
+                : artistFilteredChords}
             <tr>
                 <td id={artist.tag}>
                     {artist.name}
                     <ul class="ul2col-container">
-                        {#each chords as chord}
+                        {#each chordsToDisplay as chord}
                             <li class="ul2col-item">
                                 <ChordLink {chord} />
                             </li>

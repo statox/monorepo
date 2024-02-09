@@ -87,8 +87,8 @@
         <i class="fas fa-times-circle"></i>
     </button>
 
-    <h4>Filters</h4>
     <div class="filter-controls-container">
+        <h4>Filters</h4>
         {#each filtersKey as filter}
             <button
                 class="filter-control"
