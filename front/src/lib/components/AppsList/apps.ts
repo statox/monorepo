@@ -43,6 +43,11 @@ export const utilsSection = {
             link: '/clipboard'
         },
         {
+            name: 'Reactor',
+            description: 'My collection of memes and various reaction images',
+            link: '/reactor'
+        },
+        {
             name: 'About',
             description: 'The about section of this website',
             link: '/about'
