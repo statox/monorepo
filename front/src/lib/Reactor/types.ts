@@ -5,7 +5,7 @@ export interface ReactorEntryForPublic {
     s3PresignedUrl: string;
 }
 
-export type ClipboardUploadData = {
+export type ReactorUploadData = {
     name: string;
     commaSeparatedTags: string;
     file: File;

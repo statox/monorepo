@@ -7,7 +7,7 @@
     const dispatch = createEventDispatcher();
 
     let name: string;
-    let commaSeparatedTags: string;
+    let commaSeparatedTags = '';
     let fileInput: HTMLInputElement;
     let files: FileList | null;
 

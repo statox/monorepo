@@ -6,15 +6,24 @@
 
 <div class="container">
     {#each reactions.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
-        <div><b>{entry.name}</b></div>
-        <div class="entry-data-section">
+        <div>
+            <div><b>{entry.name}</b></div>
             <div>
-                <a href={entry.s3PresignedUrl} download={entry.name}>
-                    <img src={entry.s3PresignedUrl} alt={entry.name} />
-                </a>
+                {#each entry.tags as tag}
+                    <span class="tag">{tag}</span>
+                {/each}
             </div>
         </div>
-        <div>{entry.tags}</div>
+        <div>
+            <a
+                href={entry.s3PresignedUrl}
+                download={entry.name}
+                rel="noopener noreferrer"
+                target="blank"
+            >
+                <img src={entry.s3PresignedUrl} alt={entry.name} />
+            </a>
+        </div>
     {/each}
 </div>
 
@@ -24,19 +33,22 @@
         row-gap: 1em;
     }
 
+    .tag {
+        margin: 0.3em;
+        padding: 0.3em;
+        background-color: var(--nc-bg-2);
+        color: var(--nc-tx-1);
+        border-radius: 5px;
+    }
+
     @media screen and (max-width: 750px) {
         .container {
             grid-template-columns: 100%;
         }
-        .entry-data-section {
-            padding-bottom: 1em;
-            margin-bottom: 1em;
-            border-bottom: 5px solid var(--nc-tx-1);
-        }
     }
     @media screen and (min-width: 750px) {
         .container {
-            grid-template-columns: auto 25% 1fr;
+            grid-template-columns: auto 1fr;
         }
     }
 </style>

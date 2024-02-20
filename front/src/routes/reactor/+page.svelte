@@ -7,9 +7,9 @@
     let reactionsApi = getReactionsForPublic();
 </script>
 
-<HeadIOS title="Clipboard" description="My universal clipboard app" />
+<HeadIOS title="Reactor" description="My collection of memes" />
 
-<h2>Clipboard</h2>
+<h2>Reactor</h2>
 
 <h3>Upload</h3>
 <ReactorForm on:upload={() => (reactionsApi = getReactionsForPublic())} />
