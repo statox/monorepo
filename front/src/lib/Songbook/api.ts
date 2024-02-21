@@ -87,3 +87,25 @@ export const uploadChords = async (chords: RawChord[]) => {
         throw new Error(await response.text());
     });
 };
+
+export const uploadLinkVisit = async (chordUrl: string) => {
+    const data = { url: chordUrl };
+    const body = JSON.stringify(data);
+    const visitUrl = PUBLIC_API_URL + '/chords/addLinkVisit';
+
+    const token = await getAccessToken();
+    return fetch(visitUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body
+    }).then(async (response) => {
+        if (response.ok) {
+            return;
+        }
+        throw new Error(await response.text());
+    });
+};
