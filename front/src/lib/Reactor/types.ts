@@ -3,6 +3,7 @@ export interface ReactorEntryForPublic {
     tags: string[];
     creationDateUnix: number;
     s3PresignedUrl: string;
+    uri: string;
 }
 
 export type ReactorUploadData = {

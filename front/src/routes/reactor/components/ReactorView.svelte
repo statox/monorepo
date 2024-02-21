@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { PUBLIC_API_URL } from '$env/static/public';
     import { type ReactorEntryForPublic } from '$lib/Reactor/types';
 
     export let reactions: ReactorEntryForPublic[];
@@ -16,12 +17,12 @@
         </div>
         <div>
             <a
-                href={entry.s3PresignedUrl}
+                href={PUBLIC_API_URL + entry.uri}
                 download={entry.name}
                 rel="noopener noreferrer"
                 target="blank"
             >
-                <img src={entry.s3PresignedUrl} alt={entry.name} />
+                <img src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
             </a>
         </div>
     {/each}
