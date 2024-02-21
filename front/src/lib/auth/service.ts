@@ -59,7 +59,7 @@ export const logout = async () => {
 
 export const getAccessToken = async () => {
     try {
-        return await get(auth0Client)?.getTokenSilently();
+        return get(auth0Client)?.getTokenSilently();
     } catch (error) {
         console.log(error);
         user.set(null);

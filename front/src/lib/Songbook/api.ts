@@ -27,7 +27,7 @@ const getType = (chord: RawChord) => {
 export const getChords = async (): Promise<RawChord[]> => {
     const url = PUBLIC_API_URL + '/chords/getAll';
 
-    return await fetch(url, {
+    return fetch(url, {
         method: 'GET',
         mode: 'cors',
         headers: {
