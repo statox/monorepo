@@ -18,3 +18,9 @@ export type ChordData = {
     count: number;
     lastAccessDateUnix: number;
 };
+
+export type ChordVisitItem = {
+    url: string;
+    count: number;
+    lastAccessDateUnix: number;
+};

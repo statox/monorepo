@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getLinksVisitsCount } from '$lib/Songbook/api';
     import { openModal } from '$lib/components/Modal';
     import { BackToTop } from '$lib/components/BackToTop';
     import { HeadIOS } from '$lib/components/HeadIOS';
@@ -11,31 +12,42 @@
     import ChordsChecks from './components/ChordsChecks.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
-    import type { Chord, Filters, FilterType } from '$lib/Songbook/types';
+    import type { Chord, ChordVisitItem, Filters, FilterType } from '$lib/Songbook/types';
     import { onMount } from 'svelte';
-    import { PUBLIC_API_URL } from '$env/static/public';
     import { visitCountsStore } from './store';
     import { getTypeIconClass } from './utils';
     import { goto } from '$app/navigation';
+    import { toast } from '$lib/components/Toast';
 
     // From +page.ts load() function
     export let data: { chords: Chord[] };
     const { chords } = data;
 
-    onMount(() => {
-        const COUNTS_URL = PUBLIC_API_URL + '/chords/getLinksVisitsCount';
-        fetch(COUNTS_URL)
-            .then((response) => response.json())
-            .then((countsData) => {
-                const counts: any = countsData.reduce((counts: any, count: any) => {
+    onMount(async () => {
+        try {
+            const countsData = await getLinksVisitsCount();
+            const counts = countsData.reduce(
+                (counts: Map<string, ChordVisitItem>, count: ChordVisitItem) => {
                     counts.set(count.url, {
                         ...count
                     });
                     return counts;
-                }, new Map());
+                },
+                new Map()
+            );
 
-                visitCountsStore.set(counts);
+            visitCountsStore.set(counts);
+        } catch (error) {
+            const message = `<strong>Couldn't get visits count</strong><br/> ${
+                (error as Error).message
+            }`;
+            toast.push(message, {
+                duration: 0,
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
             });
+        }
     });
 
     let searchString = '';
