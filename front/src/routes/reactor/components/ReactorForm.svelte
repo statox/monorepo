@@ -11,19 +11,18 @@
     let fileInput: HTMLInputElement;
     let files: FileList | null;
 
-    let error: string;
     const upload = async () => {
-        if (!name.length) {
-            error = 'name should be defined';
-            return;
-        }
-
-        let file: File | undefined;
-        if (files && files.length) {
-            file = files[0] || undefined;
-        }
-
         try {
+            if (!name?.length) {
+                throw new Error('A name is required for upload');
+            }
+            let file: File | undefined;
+            if (files && files.length) {
+                file = files[0];
+            }
+            if (!file) {
+                throw new Error('A file is required for upload');
+            }
             await uploadToReactor({ name, commaSeparatedTags, file });
             dispatch('upload');
         } catch (error: unknown) {
