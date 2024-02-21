@@ -27,6 +27,8 @@
         <a href={entry.content} target="_blank" rel="noopener noreferrer">{contentUrl.hostname}</a>
     </div>
 {:else}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="entry-content" on:click={() => copyContent(entry)}>{entry.content}</div>
 {/if}
 

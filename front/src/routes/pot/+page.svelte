@@ -58,13 +58,14 @@
 
 <HeadIOS title="Pot" description="A WIP honey pot" iconPath="/pot.png" />
 
+<!-- svelte-ignore a11y-media-has-caption -->
 <video class:hidden={hideVideoSrc} id="video" autoplay playsinline></video>
 
 <button on:click={toggleHideVideoSrc}>{hideVideoSrc ? 'show src' : 'hide src'}</button>
 <button id="capture" on:click={takePicture}>Capture</button>
 
 <canvas id="canvas" style="display:none;"></canvas>
-<img id="photo" alt="The captured photo will appear in this box." />
+<img alt="The captured camera" />
 
 <style>
     .hidden {
