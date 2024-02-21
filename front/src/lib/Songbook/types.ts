@@ -24,3 +24,15 @@ export type ChordVisitItem = {
     count: number;
     lastAccessDateUnix: number;
 };
+
+export type LinksChecks = {
+    nbChecks: number;
+    nbSkipped: number;
+    fails: {
+        status: string;
+        error: any;
+        chord: Chord;
+    }[];
+    nbFails: number;
+    timestamp: number;
+};

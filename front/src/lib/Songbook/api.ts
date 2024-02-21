@@ -1,6 +1,6 @@
 import { PUBLIC_API_URL } from '$env/static/public';
 import { getAccessToken } from '$lib/auth/service';
-import type { Chord, ChordVisitItem } from './types';
+import type { Chord, ChordVisitItem, LinksChecks } from './types';
 
 type RawChord = {
     artist: string;
@@ -55,6 +55,22 @@ export const getSongbook = async (): Promise<Chord[]> => {
 export const getLinksVisitsCount = async (): Promise<ChordVisitItem[]> => {
     const COUNTS_URL = PUBLIC_API_URL + '/chords/getLinksVisitsCount';
     return fetch(COUNTS_URL, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(async (response) => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error(await response.text());
+    });
+};
+
+export const getLinksChecks = async (): Promise<LinksChecks> => {
+    const CHORDS_CHECK_URL = PUBLIC_API_URL + '/chords/checkLinks';
+    return fetch(CHORDS_CHECK_URL, {
         method: 'GET',
         mode: 'cors',
         headers: {

@@ -1,32 +1,15 @@
 <script lang="ts">
-    import { PUBLIC_API_URL } from '$env/static/public';
-    import type { Chord } from '$lib/Songbook/types';
+    import { getLinksChecks } from '$lib/Songbook/api';
+    import type { LinksChecks } from '$lib/Songbook/types';
     import { closeModal } from '$lib/components/Modal';
     export let isOpen: boolean;
 
-    type ApiResult = {
-        nbChecks: number;
-        nbSkipped: number;
-        fails: {
-            status: string;
-            error: any;
-            chord: Chord;
-        }[];
-        nbFails: number;
-        timestamp: number;
-    };
-
-    const CHORDS_CHECK_URL = PUBLIC_API_URL + '/chords/checkLinks';
-    let lastChordsCheck: Promise<ApiResult> = fetch(CHORDS_CHECK_URL).then((response) =>
-        response.json()
-    );
-
-    const formatTimestamp = (checks: ApiResult) => {
+    const formatTimestamp = (checks: LinksChecks) => {
         const lastCheckDate = new Date(checks.timestamp);
         return lastCheckDate.toDateString() + ' ' + lastCheckDate.toTimeString();
     };
 
-    const sortFails = (checks: ApiResult) =>
+    const sortFails = (checks: LinksChecks) =>
         checks.fails.sort((a: any, b: any) => (a.chord.url < b.chord.url ? -1 : 1));
 </script>
 
@@ -38,7 +21,7 @@
                 <button on:click={closeModal}>Close</button>
             </h3>
 
-            {#await lastChordsCheck}
+            {#await getLinksChecks()}
                 <p>Fetching results...</p>
             {:then checks}
                 {@const lastCheckDate = formatTimestamp(checks)}
