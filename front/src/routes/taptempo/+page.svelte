@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { HeadIOS } from '$lib/components/HeadIOS';
     import Beats from './components/Beats.svelte';
     import TempoList from './components/TempoList.svelte';
     import { TapTempo } from '$lib/TapTempo';
@@ -61,6 +62,8 @@
         }
     };
 </script>
+
+<HeadIOS title="TapTempo" description="Tap Tempo Metronome" iconPath="/tap_tempo.png" />
 
 <h3>Tap Tempo</h3>
 
