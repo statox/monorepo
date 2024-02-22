@@ -12,8 +12,13 @@
     import HomeNavItem from '$lib/components/NavItems/HomeNavItem.svelte';
     import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
 
+    let auth0Error: Error;
     onMount(async () => {
-        await initializeAuth0();
+        try {
+            await initializeAuth0();
+        } catch (error: any) {
+            auth0Error = error;
+        }
     });
 </script>
 
@@ -33,6 +38,20 @@
 </Modals>
 
 <SvelteToast />
+
+<!-- TODO: this error display is just a try while reworking authentication  -->
+<!-- 1. The errors thrown by initializeAuth0() might not really happen or not be relevant -->
+<!-- 2. It might be better to use svelte built-in page error mecanism that I'm not familiar with already -->
+{#if auth0Error}
+    <div class="auth-error">
+        <div>
+            Something went wrong with auth0 setup
+        </div>
+        <div>
+            {auth0Error}
+        </div>
+    </div>
+{/if}
 
 <slot />
 
@@ -56,5 +75,8 @@
     :root {
         --toastContainerTop: auto;
         --toastContainerBottom: 2rem;
+    }
+    .auth-error {
+        background-color: #830707;
     }
 </style>
