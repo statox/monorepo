@@ -3,6 +3,7 @@ import { getAccessToken } from '$lib/auth/service';
 
 interface GetOptions {
     path: string;
+    authorize?: true;
 }
 
 export const requestAPIGet = async <ResponseType>(options: GetOptions): Promise<ResponseType> => {
@@ -14,6 +15,11 @@ export const requestAPIGet = async <ResponseType>(options: GetOptions): Promise<
 
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
+
+    if (options.authorize) {
+        const token = await getAccessToken();
+        headers.set('Authorization', `Bearer ${token}`);
+    }
 
     const response = await fetch(`${PUBLIC_API_URL}${path}`, {
         method: 'GET',

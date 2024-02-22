@@ -1,22 +1,11 @@
 import { PUBLIC_API_URL } from '$env/static/public';
+import { requestAPIGet } from '$lib/api';
 import { getAccessToken } from '$lib/auth/service';
 import type { ReactorEntryForPublic, ReactorUploadData } from './types';
 import superagent from 'superagent';
 
-export const getReactionsForPublic = async (): Promise<ReactorEntryForPublic[]> => {
-    const url = PUBLIC_API_URL + '/reactor/getEntriesForPublic';
-    return fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(async (response) => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error(await response.text());
-    });
+export const getReactionsForPublic = () => {
+    return requestAPIGet<ReactorEntryForPublic[]>({ path: '/reactor/getEntriesForPublic' });
 };
 
 export const uploadToReactor = async (data: ReactorUploadData) => {

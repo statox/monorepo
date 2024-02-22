@@ -8,6 +8,7 @@ import type {
     ExpirationStatus
 } from './types';
 import superagent from 'superagent';
+import { requestAPIGet, requestAPIPost } from '$lib/api';
 
 const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
     const now = DateTime.now();
@@ -42,46 +43,17 @@ const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
     };
 };
 
-export const getPublicClipboard = async (): Promise<ClipboardEntryEnriched[]> => {
-    const url = PUBLIC_API_URL + '/clipboard/getPublicEntries';
-    return fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(async (response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error(await response.text());
-        })
-        .then((entries: ClipboardEntry[]) => {
-            return entries.map((entry) => enrichEntry(entry));
-        });
+export const getPublicClipboard = async () => {
+    const entries = await requestAPIGet<ClipboardEntry[]>({ path: '/clipboard/getPublicEntries' });
+    return entries.map((entry) => enrichEntry(entry));
 };
 
-export const getAllClipboard = async (): Promise<ClipboardEntryEnriched[]> => {
-    const url = PUBLIC_API_URL + '/clipboard/getAllEntries';
-    const token = await getAccessToken();
-    return fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        }
-    })
-        .then(async (response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error(await response.text());
-        })
-        .then((entries: ClipboardEntry[]) => {
-            return entries.map((entry) => enrichEntry(entry));
-        });
+export const getAllClipboard = async () => {
+    const entries = await requestAPIGet<ClipboardEntry[]>({
+        authorize: true,
+        path: '/clipboard/getAllEntries'
+    });
+    return entries.map((entry) => enrichEntry(entry));
 };
 
 export const uploadToClipboard = async (data: ClipboardUploadData) => {
@@ -102,37 +74,9 @@ export const uploadToClipboard = async (data: ClipboardUploadData) => {
         return;
     }
 
-    return fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-    }).then(async (response) => {
-        if (response.ok) {
-            return;
-        }
-        throw new Error(await response.text());
-    });
+    return requestAPIPost<void>({ path: '/clipboard/addEntry', data });
 };
 
-export const deleteClipboardEntry = async (name: string) => {
-    const url = PUBLIC_API_URL + '/clipboard/deleteEntry';
-    const token = await getAccessToken();
-    return fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ name })
-    }).then(async (response) => {
-        if (response.ok) {
-            return;
-        }
-        throw new Error(await response.text());
-    });
+export const deleteClipboardEntry = (name: string) => {
+    return requestAPIPost<void>({ path: '/clipboard/deleteEntry', data: { name } });
 };
