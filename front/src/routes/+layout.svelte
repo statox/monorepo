@@ -18,12 +18,13 @@
 </script>
 
 <header>
-    <h1>My Apps</h1>
-
-    <nav>
-        <HomeNavItem /> |
-        <AuthNavItem />
-    </nav>
+    <h1>
+        <span>My Apps</span>
+        <nav>
+            <HomeNavItem />
+            <AuthNavItem />
+        </nav>
+    </h1>
 </header>
 
 <Modals>
@@ -37,9 +38,9 @@
 
 <style>
     nav {
-        display: flex;
-        gap: 0.2em;
-        align-items: center;
+        display: inline-flex;
+        flex-direction: row;
+        gap: 0.3em;
     }
     .backdrop {
         position: fixed;

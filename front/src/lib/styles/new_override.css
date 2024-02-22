@@ -24,8 +24,8 @@ ul {
     list-style-type: circle;
 }
 
-.header-anchor {
-    font-size: small;
+header {
+    padding-bottom: 0.1rem;
 }
 
 .hidden {
