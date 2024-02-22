@@ -68,9 +68,8 @@
             await uploadChords(content.json);
             toast.push('<i class="fas fa-check"></i> Uploaded');
         } catch (error) {
-            const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
+            const message = `<strong>Upload failed</strong><br/> ${(error as Error).message}`;
             toast.push(message, {
-                duration: 0,
                 theme: {
                     '--toastBarBackground': '#FF0000'
                 }

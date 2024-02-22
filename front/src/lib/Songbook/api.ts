@@ -1,5 +1,4 @@
-import { PUBLIC_API_URL } from '$env/static/public';
-import { getAccessToken } from '$lib/auth/service';
+import { requestAPIGet, requestAPIPost } from '$lib/api';
 import type { Chord, ChordVisitItem, LinksChecks } from './types';
 
 type RawChord = {
@@ -24,21 +23,8 @@ const getType = (chord: RawChord) => {
     return 'link';
 };
 
-export const getChords = async (): Promise<RawChord[]> => {
-    const url = PUBLIC_API_URL + '/chords/getAll';
-
-    return fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(async (response) => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error(await response.text());
-    });
+export const getChords = async () => {
+    return requestAPIGet<RawChord[]>({ path: '/chords/getAll' });
 };
 
 export const getSongbook = async (): Promise<Chord[]> => {
@@ -52,76 +38,18 @@ export const getSongbook = async (): Promise<Chord[]> => {
     });
 };
 
-export const getLinksVisitsCount = async (): Promise<ChordVisitItem[]> => {
-    const COUNTS_URL = PUBLIC_API_URL + '/chords/getLinksVisitsCount';
-    return fetch(COUNTS_URL, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(async (response) => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error(await response.text());
-    });
+export const getLinksVisitsCount = () => {
+    return requestAPIGet<ChordVisitItem[]>({ path: '/chords/getLinksVisitsCount' });
 };
 
-export const getLinksChecks = async (): Promise<LinksChecks> => {
-    const CHORDS_CHECK_URL = PUBLIC_API_URL + '/chords/checkLinks';
-    return fetch(CHORDS_CHECK_URL, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(async (response) => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error(await response.text());
-    });
+export const getLinksChecks = () => {
+    return requestAPIGet<LinksChecks>({ path: '/chords/checkLinks' });
 };
 
-export const uploadChords = async (chords: RawChord[]) => {
-    const body = JSON.stringify({ chords });
-    const url = PUBLIC_API_URL + '/chords/updateAll';
-    const token = await getAccessToken();
-    return fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body
-    }).then(async (response) => {
-        if (response.ok) {
-            return;
-        }
-        throw new Error(await response.text());
-    });
+export const uploadChords = (chords: RawChord[]) => {
+    return requestAPIPost({ path: '/chords/updateAll', data: { chords } });
 };
 
-export const uploadLinkVisit = async (chordUrl: string) => {
-    const data = { url: chordUrl };
-    const body = JSON.stringify(data);
-    const visitUrl = PUBLIC_API_URL + '/chords/addLinkVisit';
-
-    const token = await getAccessToken();
-    return fetch(visitUrl, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body
-    }).then(async (response) => {
-        if (response.ok) {
-            return;
-        }
-        throw new Error(await response.text());
-    });
+export const uploadLinkVisit = (chordUrl: string) => {
+    return requestAPIPost({ path: '/chords/addLinkVisit', data: { url: chordUrl } });
 };
