@@ -20,10 +20,10 @@ export const initializeAuth0 = async () => {
         // TODO: This is not secure as the token could be read by an attacker via XSS
         // https://auth0.com/docs/secure/security-guidance/data-security/token-storage#browser-local-storage-scenarios
         // But that allow to stay authorized after page refreshes
-        cacheLocation: 'localstorage',
+        cacheLocation: 'localstorage'
         // Testing refresh tokens to see if it helps with disconnections.
         // Not sure this is immplemented properly
-        useRefreshTokens: true
+        // useRefreshTokens: true
     });
     auth0Client.set(client);
 
