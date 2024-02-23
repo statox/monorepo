@@ -1,11 +1,5 @@
 <script lang="ts">
-    import { getAccessToken, login, logout, user } from '$lib/auth/service';
-    import { onMount } from 'svelte';
-
-    // TODO Check that really works
-    // Putting that here to make sure the app see the user when refreshing in dev
-    // or when reopening the client after some time
-    onMount(() => getAccessToken());
+    import { login, logout, user } from '$lib/auth/service';
 </script>
 
 {#key $user}
