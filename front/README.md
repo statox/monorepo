@@ -16,7 +16,7 @@
 -   [x] Add link to the last GitHub Pages deployment
 -   [x] Rework `fetch` calls into a framework for unified access to api.statox.fr
 -   [ ] Rework CSS. Default should be dark theme. Add a button to switch themes
-    - [ ] Extend colors to get warning red, info blue, success green, ...
+    -   [ ] Extend colors to get warning red, info blue, success green, ...
 -   [ ] Recreate mechanism to open note in its own page
 -   [x] Rework home page to be more descriptive and useful
 -   [x] Get toast library from https://github.com/zerodevx/svelte-toast/blob/master/src/lib/ToastItem.svelte

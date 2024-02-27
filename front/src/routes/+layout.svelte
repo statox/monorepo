@@ -44,9 +44,7 @@
 <!-- 2. It might be better to use svelte built-in page error mecanism that I'm not familiar with already -->
 {#if auth0Error}
     <div class="auth-error">
-        <div>
-            Something went wrong with auth0 setup
-        </div>
+        <div>Something went wrong with auth0 setup</div>
         <div>
             {auth0Error}
         </div>
