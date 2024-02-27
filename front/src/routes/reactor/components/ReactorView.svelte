@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { toast } from '$lib/components/Toast';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { type ReactorEntryForPublic } from '$lib/Reactor/types';
 
@@ -25,6 +26,16 @@
 
         return false;
     };
+
+    const copyEntryUrlToClipboard = (entry: ReactorEntryForPublic) => {
+        navigator.clipboard.writeText(PUBLIC_API_URL + entry.uri);
+        toast.push('<i class="fas fa-check"></i> Link copied to clipboard', {
+            duration: 1000,
+            theme: {
+                '--toastBarHeight': 0
+            }
+        });
+    };
 </script>
 
 <input type="text" bind:value={searchString} />
@@ -40,6 +51,12 @@
                     {#each entry.tags as tag}
                         <span class="tag">{tag}</span>
                     {/each}
+                </div>
+                <div>
+                    <button on:click={() => copyEntryUrlToClipboard(entry)}>
+                        <i class="fas fa-copy"></i>
+                        Copy link
+                    </button>
                 </div>
             </div>
             <div>
