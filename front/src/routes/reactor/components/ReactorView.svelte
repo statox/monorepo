@@ -3,30 +3,58 @@
     import { type ReactorEntryForPublic } from '$lib/Reactor/types';
 
     export let reactions: ReactorEntryForPublic[];
+
+    let searchString = '';
+
+    const matchSearch = (entry: ReactorEntryForPublic, searchString: string) => {
+        if (!searchString.length) {
+            return true;
+        }
+
+        const formatedName = entry.name.toLowerCase();
+        if (formatedName.includes(searchString.toLowerCase())) {
+            return true;
+        }
+
+        for (const tag of entry.tags) {
+            const formatedTag = tag.toLowerCase();
+            if (formatedTag.includes(searchString.toLowerCase())) {
+                return true;
+            }
+        }
+
+        return false;
+    };
 </script>
 
-<div class="container">
-    {#each reactions.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
-        <div>
-            <div><b>{entry.name}</b></div>
+<input type="text" bind:value={searchString} />
+
+{#key searchString}
+    <div class="container">
+        {#each reactions
+            .filter((entry) => matchSearch(entry, searchString))
+            .sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
             <div>
-                {#each entry.tags as tag}
-                    <span class="tag">{tag}</span>
-                {/each}
+                <div><b>{entry.name}</b></div>
+                <div>
+                    {#each entry.tags as tag}
+                        <span class="tag">{tag}</span>
+                    {/each}
+                </div>
             </div>
-        </div>
-        <div>
-            <a
-                href={PUBLIC_API_URL + entry.uri}
-                download={entry.name}
-                rel="noopener noreferrer"
-                target="blank"
-            >
-                <img src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
-            </a>
-        </div>
-    {/each}
-</div>
+            <div>
+                <a
+                    href={PUBLIC_API_URL + entry.uri}
+                    download={entry.name}
+                    rel="noopener noreferrer"
+                    target="blank"
+                >
+                    <img src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
+                </a>
+            </div>
+        {/each}
+    </div>
+{/key}
 
 <style>
     .container {
