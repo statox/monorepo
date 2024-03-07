@@ -66,10 +66,8 @@ export const requestAPIPost = async <ResponseType>(
     try {
         return await response.json();
     } catch (error) {
-        if (error instanceof SyntaxError) {
-            // This happens when server doesn't return anything
-            return Promise.resolve();
-        }
-        throw error;
+        console.error('Error while trying to parse response from ' + path);
+        console.error(error);
+        return Promise.resolve();
     }
 };
