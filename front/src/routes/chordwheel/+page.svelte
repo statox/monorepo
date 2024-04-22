@@ -83,7 +83,8 @@
             y: number;
         };
         p5.touchMoved = (e: TouchEvent) => {
-            // @ts-expect-error
+            // TODO fix typing
+            // @ts-expect-error property className doesn't exists on EventTarget
             if (e.target?.className !== 'p5Canvas') {
                 return;
             }

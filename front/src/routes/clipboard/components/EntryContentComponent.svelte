@@ -16,7 +16,10 @@
     let contentUrl: URL | undefined;
     try {
         contentUrl = new URL(entry.content);
-    } catch (_error) {}
+    } catch (error) {
+        console.log('We ignored the following error');
+        console.error(error);
+    }
 </script>
 
 {#if contentUrl}

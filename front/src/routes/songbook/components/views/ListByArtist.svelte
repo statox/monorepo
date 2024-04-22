@@ -37,6 +37,7 @@
     let barTop: number = 0;
     let tableElement: HTMLElement;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const onScroll = (_y: number) => {
         if (!tableElement) {
             return;

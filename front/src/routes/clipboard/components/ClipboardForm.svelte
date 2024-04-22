@@ -19,14 +19,15 @@
         unit: ttlUnits[0]
     };
 
-    let error: string;
     const upload = async () => {
         if (!name.length) {
-            error = 'name should be defined';
+            // TODO handle this error in the UI
+            console.error('name should be defined');
             return;
         }
         if (!content.length) {
-            error = 'content should be defined';
+            // TODO handle this error in the UI
+            console.error('content should be defined');
             return;
         }
 
@@ -35,7 +36,8 @@
         const ttlDuration = Duration.fromObject(durationLikeObj);
         let ttlSeconds = ttlDuration.as('seconds');
         if (ttlSeconds < 0) {
-            error = 'TTL should be positive';
+            // TODO handle this error in the UI
+            console.error('TTL should be positive');
             return;
         }
 

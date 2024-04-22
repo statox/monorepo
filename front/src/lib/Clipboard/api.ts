@@ -68,8 +68,7 @@ export const uploadToClipboard = async (data: ClipboardUploadData) => {
             .field('content', data.content)
             .field('ttlSeconds', data.ttlSeconds)
             .field('isPublic', data.isPublic)
-            // TODO: Fix types
-            // @ts-ignore
+            // @ts-expect-error TODO: Fix types
             .attach('file', data.file);
         return;
     }

@@ -75,8 +75,8 @@
     onMount(listen);
 
     onDestroy(() => {
-        if (check(item.onpop, 'function')) {
-            // @ts-ignore
+        if (item && check(item.onpop, 'function')) {
+            // @ts-expect-error TODO find out the actual issue and fix
             item.onpop(item.id);
         }
         unlisten && unlisten();
@@ -96,6 +96,7 @@
         {#if item.component}
             <svelte:component this={item.component.src} {...cprops} />
         {:else}
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html item.msg}
         {/if}
     </div>

@@ -41,7 +41,7 @@ export class Metronome {
 
     nextNote() {
         // Advance current note and time by a quarter note (crotchet if you're posh)
-        var secondsPerBeat = 60.0 / this.subdivisionsInBeat / this.tempo; // Notice this picks up the CURRENT tempo value to calculate beat length.
+        const secondsPerBeat = 60.0 / this.subdivisionsInBeat / this.tempo; // Notice this picks up the CURRENT tempo value to calculate beat length.
         this.nextNoteTime += secondsPerBeat; // Add beat length to last beat time
 
         this.currentSubdivision++;

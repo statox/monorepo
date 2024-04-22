@@ -17,8 +17,7 @@ export const uploadToReactor = async (data: ReactorUploadData) => {
         .auth(token, { type: 'bearer' })
         .field('name', data.name)
         .field('commaSeparatedTags', data.commaSeparatedTags)
-        // TODO: Fix types
-        // @ts-ignore
+        // @ts-expect-error TODO Fix types
         .attach('file', data.file);
     return;
 };
