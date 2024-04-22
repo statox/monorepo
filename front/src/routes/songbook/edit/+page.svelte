@@ -65,7 +65,7 @@
 
         try {
             const content = editor.get() as JSONContent;
-            await uploadChords(content.json);
+            await uploadChords(content.json as RawChord[]);
             toast.push('<i class="fas fa-check"></i> Uploaded');
         } catch (error) {
             const message = `<strong>Upload failed</strong><br/> ${(error as Error).message}`;

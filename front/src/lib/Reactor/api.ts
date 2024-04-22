@@ -12,6 +12,11 @@ export const uploadToReactor = async (data: ReactorUploadData) => {
     const url = PUBLIC_API_URL + '/reactor/addEntry';
     const token = await getAccessToken();
 
+    // TODO Fix return type of getAccessToken()
+    if (typeof token !== 'string') {
+        return;
+    }
+
     await superagent
         .post(url)
         .auth(token, { type: 'bearer' })

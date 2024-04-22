@@ -121,6 +121,7 @@ export class Metronome {
         if (!this.audioContext) {
             // Code to try to fix iOS safari
             // https://gist.github.com/kus/3f01d60569eeadefe3a1
+            // @ts-expect-error TODO don't know how to fix this
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
 

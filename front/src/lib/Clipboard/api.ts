@@ -60,6 +60,11 @@ export const uploadToClipboard = async (data: ClipboardUploadData) => {
     const url = PUBLIC_API_URL + '/clipboard/addEntry';
     const token = await getAccessToken();
 
+    // TODO Fix return type of getAccessToken()
+    if (typeof token !== 'string') {
+        return;
+    }
+
     if (data.file) {
         await superagent
             .post(url)

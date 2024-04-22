@@ -56,5 +56,6 @@ export const getAccessToken = async () => {
                 '--toastBarHeight': 0
             }
         });
+        return error;
     }
 };
