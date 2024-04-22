@@ -9,8 +9,9 @@
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "eslint --ext .ts,.svelte src",
+        "lint:fix": "eslint --fix --ext .ts,.svelte src",
         "prettier": "prettier --check .",
-        "format": "prettier --write .",
+        "prettier:fix": "prettier --write .",
         "test": "vitest"
     },
     "devDependencies": {
