@@ -1,20 +1,41 @@
+// See https://github.com/sveltejs/eslint-plugin-svelte?tab=readme-ov-file#parser-configuration
+
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
-    plugins: ['svelte3', '@typescript-eslint'],
+    extends: [
+        'eslint:recommended',
+        'plugin:svelte/recommended',
+        'plugin:svelte/prettier',
+        'plugin:@typescript-eslint/recommended',
+        'prettier'
+    ],
+    plugins: ['@typescript-eslint'],
     ignorePatterns: ['*.cjs'],
-    overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
-    settings: {
-        'svelte3/typescript': () => require('typescript')
-    },
     parserOptions: {
         sourceType: 'module',
-        ecmaVersion: 2020
+        ecmaVersion: 2020,
+        project: './tsconfig.json',
+        extraFileExtensions: ['.svelte'] // This is a required setting in `@typescript-eslint/parser` v4.24.0.
     },
+    overrides: [
+        // Override the parser for svelte files
+        {
+            files: ['*.svelte'],
+            parser: 'svelte-eslint-parser',
+            // Parse the `<script>` in `.svelte` as TypeScript by adding the following configuration.
+            parserOptions: {
+                parser: '@typescript-eslint/parser'
+            }
+        }
+    ],
     env: {
         browser: true,
         es2017: true,
         node: true
+    },
+    rules: {
+        // TODO Fix code to re-enable this rule
+        "@typescript-eslint/no-explicit-any": "off"
     }
 };
