@@ -36,6 +36,6 @@ module.exports = {
     },
     rules: {
         // TODO Fix code to re-enable this rule
-        "@typescript-eslint/no-explicit-any": "off"
+        '@typescript-eslint/no-explicit-any': 'off'
     }
 };
