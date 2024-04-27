@@ -54,25 +54,37 @@
                 {progression.examples.join(', ')}
             </span>
         {/if}
-        <table>
-            <tr>
-                {#each progression.chords as chord}
-                    <th>{formatChord(chord)}</th>
-                {/each}
-            </tr>
-            <tr>
-                {#each progression.chords as chord}
-                    <td>{chordInScaleFromDegree(chord)}</td>
-                {/each}
-            </tr>
-        </table>
+        <div class="progression-table">
+            {#each progression.chords as chord}
+                <div class="progression-step">
+                    <div class="step-degree">{formatChord(chord)}</div>
+                    <div class="step-value">{chordInScaleFromDegree(chord)}</div>
+                </div>
+            {/each}
+        </div>
     </div>
     <br />
 {/each}
 
 <style>
-    th,
-    td {
+    .progression-table {
+        display: grid;
+        row-gap: 1em;
+        grid-template-columns: repeat(4, 25%);
+        margin: 1em;
+    }
+
+    .step-degree {
+        font-weight: bold;
+        background: var(--nc-bg-3);
+    }
+
+    .step-degree,
+    .step-value {
         text-align: center;
+        width: 100%;
+        border: 1px solid var(--nc-bg-3);
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
     }
 </style>
