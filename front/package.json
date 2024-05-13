@@ -12,6 +12,7 @@
         "lint:fix": "eslint --fix --ext .ts,.svelte src",
         "prettier": "prettier --check .",
         "prettier:fix": "prettier --write .",
+        "setup-githooks": "./githooks/setup.sh",
         "test": "vitest"
     },
     "devDependencies": {
