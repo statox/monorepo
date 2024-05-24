@@ -20,10 +20,10 @@ export const initializeAuth0 = async () => {
         // TODO: This is not secure as the token could be read by an attacker via XSS
         // https://auth0.com/docs/secure/security-guidance/data-security/token-storage#browser-local-storage-scenarios
         // But that allow to stay authorized after page refreshes
-        cacheLocation: 'localstorage'
+        cacheLocation: 'localstorage',
         // Testing refresh tokens to see if it helps with disconnections.
         // Not sure this is immplemented properly
-        // useRefreshTokens: true
+        useRefreshTokens: true
     });
     auth0Client.set(client);
 
@@ -40,6 +40,8 @@ export const initializeAuth0 = async () => {
     } else {
         user.set(undefined);
     }
+
+    refreshUserPeriodically();
 };
 
 export const login = () => get(auth0Client).loginWithRedirect();
@@ -47,7 +49,9 @@ export const logout = () => get(auth0Client).logout();
 
 export const getAccessToken = async () => {
     try {
-        return get(auth0Client)?.getTokenSilently();
+        const token = await get(auth0Client)?.getTokenSilently();
+        user.set(await get(auth0Client).getUser());
+        return token;
     } catch (error) {
         user.set(undefined);
         toast.push(`getAccessToken error\n${(error as Error).message}`, {
@@ -58,4 +62,20 @@ export const getAccessToken = async () => {
         });
         return error;
     }
+};
+
+// Experiment to see if I manage to logged out in the UI when I don't use the
+// app for long enough
+// (Current issue is that on mobile when I open the app the user's picture is
+// stil in the header but when makin a call I'm logged out)
+const refreshUserPeriodically = async () => {
+    try {
+        const token = await get(auth0Client)?.getTokenSilently();
+        user.set(await get(auth0Client).getUser());
+        return token;
+    } catch (error) {
+        user.set(undefined);
+    }
+
+    setTimeout(refreshUserPeriodically, 1000 * 60 * 5);
 };
