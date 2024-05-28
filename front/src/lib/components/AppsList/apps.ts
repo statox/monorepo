@@ -48,6 +48,11 @@ export const utilsSection = {
             link: '/reactor'
         },
         {
+            name: 'Web Watcher',
+            description: 'Monitor pages on the web and notify me when they change',
+            link: '/webwatcher'
+        },
+        {
             name: 'About',
             description: 'The about section of this website',
             link: '/about'
