@@ -1,10 +1,21 @@
 <script lang="ts">
     import { Duration, type DurationLikeObject, type DurationUnit } from 'luxon';
 
-    const units: DurationUnit[] = ['seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years'];
+    const units: DurationUnit[] = [
+        'seconds',
+        'minutes',
+        'hours',
+        'days',
+        'weeks',
+        'months',
+        'years'
+    ];
 
     export let allowedUnits: DurationUnit[] = units;
-    export let defaultDuration: { value: number, unit: DurationUnit } = { value: 10, unit: allowedUnits[0]};
+    export let defaultDuration: { value: number; unit: DurationUnit } = {
+        value: 10,
+        unit: allowedUnits[0]
+    };
     export let valueInSeconds: number;
 
     let inputUnit = defaultDuration.unit;

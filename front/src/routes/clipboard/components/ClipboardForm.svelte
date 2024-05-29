@@ -81,10 +81,9 @@
             <DurationPicker
                 bind:valueInSeconds={ttlSeconds}
                 allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
-                defaultDuration={{value: 1, unit: 'days'}}
+                defaultDuration={{ value: 1, unit: 'days' }}
             />
         </p>
-
 
         <p class="visibility-section-item">
             <label for="isPublic">Access</label>

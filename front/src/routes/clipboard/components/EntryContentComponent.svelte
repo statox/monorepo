@@ -7,7 +7,10 @@
     try {
         contentUrl = new URL(entry.content);
     } catch (error) {
-        console.log('(Not an issue) Content of the following clipboard entry is not an URL', entry.id);
+        console.log(
+            '(Not an issue) Content of the following clipboard entry is not an URL',
+            entry.id
+        );
     }
 </script>
 

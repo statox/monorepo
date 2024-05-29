@@ -25,7 +25,7 @@
     {#await watchersApi}
         <p>Loading data</p>
     {:then watchers}
-        <WatchersView {watchers} />
+        <WatchersView {watchers} on:delete={() => (watchersApi = getWatchers())} />
     {:catch error}
         <p>Something went wrong</p>
         <p>{JSON.stringify(error)}</p>

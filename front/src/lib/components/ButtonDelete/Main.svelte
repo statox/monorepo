@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
 
     type State = 'initial' | 'triggered' | 'confirmed';
-    let state: State = 'initial'
+    let state: State = 'initial';
 
     const dispatch = createEventDispatcher();
     const confirmDelete = () => {
@@ -12,7 +12,7 @@
 </script>
 
 {#if state === 'initial'}
-    <button class="delete-button" on:click={() => state = 'triggered'} title="Delete?">
+    <button class="delete-button" on:click={() => (state = 'triggered')} title="Delete?">
         <i class="fas fa-trash-alt"></i>
     </button>
 {:else if state === 'triggered'}

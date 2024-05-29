@@ -73,7 +73,7 @@
             <DurationPicker
                 bind:valueInSeconds={checkIntervalSeconds}
                 allowedUnits={['minutes', 'hours', 'days']}
-                defaultDuration={{value: 1, unit: 'hours'}}
+                defaultDuration={{ value: 1, unit: 'hours' }}
             />
         </p>
     </div>
