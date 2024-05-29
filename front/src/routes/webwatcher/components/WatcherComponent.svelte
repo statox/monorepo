@@ -103,6 +103,19 @@
             </p>
         </div>
 
+        {#if watcher.lastErrorDateUnix }
+            <div class="section error-section">
+                <p class="section-4-item">
+                    <label for="last-check">Last error</label>
+                    <input disabled type="textarea" value={formatTimestamp(watcher.lastErrorDateUnix)} />
+                </p>
+                <p class="section-4-item">
+                    <label for="last-update">Last error message</label>
+                    <input disabled type="textarea" value={watcher.lastErrorMessage} />
+                </p>
+            </div>
+        {/if}
+
         <div class="section">
             <p class="section-3-item">
                 <label for="last-update">Last content</label>
@@ -128,6 +141,12 @@
     .section {
         display: flex;
         flex-wrap: wrap;
+    }
+
+    .error-section {
+        padding: 0.5em;
+        border-radius: 5px;
+        border: 1px solid #FF0000;
     }
 
     .section-2-item {

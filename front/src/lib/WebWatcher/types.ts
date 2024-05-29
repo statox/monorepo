@@ -8,6 +8,8 @@ export interface WatchedContent {
     lastCheckDateUnix: number;
     lastUpdateDateUnix: number;
     checkIntervalSeconds: number;
+    lastErrorDateUnix: number;
+    lastErrorMessage: string;
 }
 
 export interface NewWatcherParams {
