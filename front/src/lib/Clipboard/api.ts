@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, type DurationUnit } from 'luxon';
 import { PUBLIC_API_URL } from '$env/static/public';
 import { getAccessToken } from '$lib/auth/service';
 import type {
@@ -19,10 +19,28 @@ const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
     const expirationTs = entry.creationDateUnix + entry.ttl;
     const expirationDate = DateTime.fromSeconds(expirationTs);
     const expirationInSeconds = expirationDate.diffNow('seconds').get('seconds');
+    const expirationDuration = expirationDate.diff(now).rescale();
+    const keptUnits: DurationUnit[] = [];
+    if (expirationDuration.years > 0) {
+        keptUnits.push('years');
+        keptUnits.push('months');
+    } else if (expirationDuration.months > 0) {
+        keptUnits.push('months');
+    } else if (expirationDuration.days > 0) {
+        keptUnits.push('days');
+    } else if (expirationDuration.hours > 0) {
+        keptUnits.push('hours');
+        keptUnits.push('minutes');
+    } else if (expirationDuration.minutes) {
+        keptUnits.push('minutes');
+    } else {
+        keptUnits.push('seconds');
+    }
 
-    const formatedExpirationDate = expirationDate.toRelative({
-        style: 'short'
-    });
+    const formatedExpirationDate = expirationDuration
+        .shiftTo(...keptUnits)
+        .mapUnits((x) => Math.ceil(x))
+        .toHuman();
 
     let expirationStatus: ExpirationStatus = 'not_soon';
     if (expirationDate < now) {
