@@ -40,31 +40,36 @@
 </script>
 
 {#if $user}
-    <div class="meta-section">
-        <p class="meta-section-item">
+    <div class="section">
+        <p class="section-1-item">
             <label for="name">Name</label>
             <input type="text" bind:value={name} />
         </p>
-        <p class="meta-section-item">
-            <label for="content">URL</label>
-            <input type="textarea" bind:value={url} />
+        <p class="section-1-item">
+            <label for="check-interval">Check interval (seconds)</label>
+            <input type="number" bind:value={checkIntervalSeconds} />
         </p>
     </div>
 
-    <p>
-        <label for="notification-message">Notification message</label>
-        <input type="textarea" bind:value={notificationMessage} />
-    </p>
+    <div class="section">
+        <p class="section-2-item">
+            <label for="notification-message"
+                >Notification message (the @mention is automatically added)</label
+            >
+            <input type="textarea" bind:value={notificationMessage} />
+        </p>
+    </div>
 
-    <p>
-        <label for="css-selector">CSS selector</label>
-        <input type="textarea" bind:value={cssSelector} />
-    </p>
-
-    <p>
-        <label for="check-interval">Check interval (seconds)</label>
-        <input type="textarea" bind:value={checkIntervalSeconds} />
-    </p>
+    <div class="section">
+        <p class="section-3-item">
+            <label for="content">URL</label>
+            <input type="textarea" bind:value={url} />
+        </p>
+        <p class="section-3-item">
+            <label for="css-selector">CSS selector</label>
+            <input type="textarea" bind:value={cssSelector} />
+        </p>
+    </div>
 
     <p>
         <button on:click={upload}>Upload</button>
@@ -74,8 +79,39 @@
 {/if}
 
 <style>
-    .meta-section {
+    .section {
         display: flex;
         flex-wrap: wrap;
+    }
+
+    .section-2-item {
+        flex: 1 0 100%;
+    }
+    .section-2-item > input {
+        width: 100%;
+    }
+
+    .section-3-item {
+        flex: 1 0 100%;
+    }
+    .section-3-item > input {
+        width: 100%;
+    }
+
+    @media screen and (max-width: 750px) {
+        .section-1-item {
+            flex: 1 0 100%;
+        }
+        .section-1-item > input {
+            width: 100%;
+        }
+    }
+    @media screen and (min-width: 750px) {
+        .section-1-item {
+            flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
+        }
+        .section-1-item > input {
+            width: 100%;
+        }
     }
 </style>

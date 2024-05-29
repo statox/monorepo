@@ -16,10 +16,12 @@
 <h2>Web Watchers</h2>
 
 {#if $user}
-    <h3>Create new watcher</h3>
-    <WatcherForm on:upload={() => (watchersApi = getWatchers())} />
+    <details>
+        <summary>Create a new watcher</summary>
+        <WatcherForm on:upload={() => (watchersApi = getWatchers())} />
+    </details>
 
-    <h3>Content</h3>
+    <h3>Watchers</h3>
     {#await watchersApi}
         <p>Loading data</p>
     {:then watchers}
