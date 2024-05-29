@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { CopyButton, copyToClipboard } from '$lib/components/CopyButton';
+    import { ButtonCopy, copyToClipboard } from '$lib/components/ButtonCopy';
     import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
     export let entry: ClipboardEntryEnriched;
 
@@ -13,7 +13,7 @@
 
 {#if contentUrl}
     <div>
-        <CopyButton content={entry.content} />
+        <ButtonCopy content={entry.content} />
         <a href={entry.content} target="_blank" rel="noopener noreferrer">{contentUrl.hostname}</a>
     </div>
 {:else}

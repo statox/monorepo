@@ -1,6 +1,6 @@
 <script lang="ts">
     // import { createEventDispatcher } from 'svelte';
-    import { CopyButton } from '$lib/components/CopyButton';
+    import { ButtonCopy } from '$lib/components/ButtonCopy';
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import type { WatchedContent } from '$lib/WebWatcher/types';
@@ -85,8 +85,7 @@
             <p class="section-3-item">
                 <label for="css-selector">
                     CSS selector
-
-                    <CopyButton content={watcher.cssSelector} />
+                    <ButtonCopy content={watcher.cssSelector} />
                 </label>
                 <input disabled type="textarea" bind:value={watcher.cssSelector} />
             </p>
