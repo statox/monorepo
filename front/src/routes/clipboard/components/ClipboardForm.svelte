@@ -1,9 +1,9 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import { DurationPicker } from '$lib/components/DurationPicker';
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import { uploadToClipboard } from '$lib/Clipboard/api';
-    import { Duration, type DurationLikeObject } from 'luxon';
 
     const dispatch = createEventDispatcher();
 
@@ -12,12 +12,7 @@
     let fileInput: HTMLInputElement;
     let files: FileList | null;
     let isPublic = false;
-
-    const ttlUnits = ['minutes', 'hours', 'days'];
-    const ttlInput = {
-        value: 10,
-        unit: ttlUnits[0]
-    };
+    let ttlSeconds: number;
 
     const upload = async () => {
         if (!name.length) {
@@ -31,10 +26,6 @@
             return;
         }
 
-        const durationLikeObj: DurationLikeObject = {};
-        durationLikeObj[ttlInput.unit as 'minutes' | 'hours' | 'days'] = ttlInput.value;
-        const ttlDuration = Duration.fromObject(durationLikeObj);
-        let ttlSeconds = ttlDuration.as('seconds');
         if (ttlSeconds < 0) {
             // TODO handle this error in the UI
             console.error('TTL should be positive');
@@ -87,13 +78,13 @@
     <div class="visibility-section">
         <p class="visibility-section-item">
             <label for="ttlSeconds">TTL</label>
-            <input type="number" min="0" bind:value={ttlInput.value} />
-            <select bind:value={ttlInput.unit}>
-                {#each ttlUnits as unit}
-                    <option value={unit}>{unit}</option>
-                {/each}
-            </select>
+            <DurationPicker
+                bind:valueInSeconds={ttlSeconds}
+                allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
+                defaultDuration={{value: 1, unit: 'days'}}
+            />
         </p>
+
 
         <p class="visibility-section-item">
             <label for="isPublic">Access</label>

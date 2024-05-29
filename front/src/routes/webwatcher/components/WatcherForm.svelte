@@ -1,5 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import { DurationPicker } from '$lib/components/DurationPicker';
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import { createWatcher } from '$lib/WebWatcher/api';
@@ -10,12 +11,34 @@
     let notificationMessage: string;
     let url: string;
     let cssSelector: string;
-    let checkIntervalSeconds: number = 15 * 60;
+    let checkIntervalSeconds: number;
 
     const upload = async () => {
-        if (!name.length || !url || !notificationMessage || !cssSelector) {
+        if (!name.length || !notificationMessage || !cssSelector) {
             // TODO handle this error in the UI
             console.error('name should be defined');
+            return;
+        }
+
+        try {
+            new URL(url);
+        } catch (error) {
+            const message = `<strong>URL is invalid</strong>`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
+            return;
+        }
+
+        if (checkIntervalSeconds < 15 * 60) {
+            const message = `<strong>Check interval too small</strong><br/>Must be >= 15mn`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
             return;
         }
 
@@ -28,7 +51,7 @@
                 checkIntervalSeconds
             });
             dispatch('upload');
-        } catch (error: unknown) {
+        } catch (error) {
             const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
             toast.push(message, {
                 theme: {
@@ -46,8 +69,12 @@
             <input type="text" bind:value={name} />
         </p>
         <p class="section-1-item">
-            <label for="check-interval">Check interval (seconds)</label>
-            <input type="number" bind:value={checkIntervalSeconds} />
+            <label for="check-interval">Check interval</label>
+            <DurationPicker
+                bind:valueInSeconds={checkIntervalSeconds}
+                allowedUnits={['minutes', 'hours', 'days']}
+                defaultDuration={{value: 1, unit: 'hours'}}
+            />
         </p>
     </div>
 
