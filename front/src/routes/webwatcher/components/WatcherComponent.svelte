@@ -5,6 +5,7 @@
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import type { WatchedContent } from '$lib/WebWatcher/types';
+    import { Duration } from 'luxon';
 
     // const dispatch = createEventDispatcher();
 
@@ -23,6 +24,7 @@
         watcher.lastUpdateDateUnix === 0
             ? 'Never changed'
             : formatTimestamp(watcher.lastUpdateDateUnix);
+    const humanCheckInterval = Duration.fromMillis(watcher.checkIntervalSeconds * 1000).rescale().toHuman();
 
     const deleteWatcher = async () => {
         if (!watcher.id) {
@@ -64,15 +66,15 @@
         </h4>
         <div class="section">
             <p class="section-1-item">
-                <label for="check-interval">Check interval (seconds)</label>
-                <input disabled type="number" bind:value={watcher.checkIntervalSeconds} />
+                <label for="check-interval">Check interval</label>
+                <input disabled type="textarea" value={humanCheckInterval} />
             </p>
         </div>
 
         <div class="section">
             <p class="section-2-item">
                 <label for="notification-message">Notification message</label>
-                <input disabled type="textarea" bind:value={watcher.notificationMessage} />
+                <input disabled type="textarea" value={watcher.notificationMessage} />
             </p>
         </div>
 
@@ -86,7 +88,7 @@
                     CSS selector
                     <ButtonCopy content={watcher.cssSelector} />
                 </label>
-                <input disabled type="textarea" bind:value={watcher.cssSelector} />
+                <input disabled type="textarea" value={watcher.cssSelector} />
             </p>
         </div>
 
