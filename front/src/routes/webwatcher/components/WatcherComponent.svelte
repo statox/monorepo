@@ -1,6 +1,7 @@
 <script lang="ts">
     // import { createEventDispatcher } from 'svelte';
     import { ButtonCopy } from '$lib/components/ButtonCopy';
+    import { ButtonDelete } from '$lib/components/ButtonDelete';
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import type { WatchedContent } from '$lib/WebWatcher/types';
@@ -59,9 +60,7 @@
     <div class="item">
         <h4 class="item-title">
             {watcher.name}
-            <button class="delete-button" on:click={deleteWatcher}>
-                <i class="fas fa-trash-alt"></i>
-            </button>
+            <ButtonDelete on:delete={deleteWatcher} />
         </h4>
         <div class="section">
             <p class="section-1-item">
@@ -122,13 +121,6 @@
     .item-title {
         display: flex;
         justify-content: space-between;
-    }
-
-    .delete-button {
-        height: 33px;
-        background: red;
-        color: white;
-        width: 40px;
     }
 
     .section {

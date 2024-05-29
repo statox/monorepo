@@ -3,6 +3,7 @@
     import { user } from '$lib/auth/service';
     import { deleteClipboardEntry } from '$lib/Clipboard/api';
     import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
+    import { ButtonDelete } from '$lib/components/ButtonDelete';
     import ExpirationInfo from './ExpirationInfo.svelte';
 
     export let entry: ClipboardEntryEnriched;
@@ -25,9 +26,7 @@
             {/if}
         </button>
 
-        <button class="delete-button" on:click={() => deleteEntry(entry.name)}>
-            <i class="fas fa-trash-alt"></i>
-        </button>
+        <ButtonDelete on:delete={() => deleteEntry(entry.name)} />
         <div class="creation-date">{entry.formatedCreationDate}</div>
     {/if}
 </div>
@@ -48,12 +47,6 @@
     }
     .visibility-public {
         background-color: #ff8f00;
-    }
-    .delete-button {
-        height: 33px;
-        background: red;
-        color: white;
-        width: 40px;
     }
     .creation-date {
         width: max-content;
