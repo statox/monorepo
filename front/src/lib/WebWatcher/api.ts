@@ -8,3 +8,7 @@ export const getAllWatchers = async () => {
 export const createWatcher = async (newWatcher: NewWatcherParams) => {
     return requestAPIPost<void>({ path: '/webWatcher/createWatcher', data: newWatcher });
 };
+
+export const deleteWatcherAPI = async (watcherId: number) => {
+    return requestAPIPost<void>({ path: '/webWatcher/deleteWatcher', data: { id: watcherId } });
+};

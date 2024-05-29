@@ -1,13 +1,14 @@
 <script lang="ts">
-    // import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import { ButtonCopy } from '$lib/components/ButtonCopy';
     import { ButtonDelete } from '$lib/components/ButtonDelete';
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import type { WatchedContent } from '$lib/WebWatcher/types';
     import { Duration } from 'luxon';
+    import { deleteWatcherAPI } from '$lib/WebWatcher/api';
 
-    // const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
     export let watcher: WatchedContent;
 
@@ -24,7 +25,9 @@
         watcher.lastUpdateDateUnix === 0
             ? 'Never changed'
             : formatTimestamp(watcher.lastUpdateDateUnix);
-    const humanCheckInterval = Duration.fromMillis(watcher.checkIntervalSeconds * 1000).rescale().toHuman();
+    const humanCheckInterval = Duration.fromMillis(watcher.checkIntervalSeconds * 1000)
+        .rescale()
+        .toHuman();
 
     const deleteWatcher = async () => {
         if (!watcher.id) {
@@ -33,28 +36,17 @@
             return;
         }
 
-        toast.push('TODO implement deletion', {
-            theme: {
-                '--toastBarBackground': '#FF0000'
-            }
-        });
-        // try {
-        //     await createWatcher({
-        //         name,
-        //         notificationMessage,
-        //         url,
-        //         cssSelector,
-        //         checkIntervalSeconds
-        //     });
-        //     dispatch('upload');
-        // } catch (error: unknown) {
-        //     const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
-        //     toast.push(message, {
-        //         theme: {
-        //             '--toastBarBackground': '#FF0000'
-        //         }
-        //     });
-        // }
+        try {
+            await deleteWatcherAPI(watcher.id);
+            dispatch('delete');
+        } catch (error: unknown) {
+            const message = `<strong>Watcher not deleted</strong><br/> ${(error as Error).message}`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
+        }
     };
 </script>
 
@@ -81,7 +73,7 @@
         <div class="section">
             <p class="section-3-item">
                 <label for="content">URL</label>
-                <a target="_blank" rel="noopener noreferrer" href="{watcher.url}">{watcher.url}</a>
+                <a target="_blank" rel="noopener noreferrer" href={watcher.url}>{watcher.url}</a>
             </p>
             <p class="section-3-item">
                 <label for="css-selector">
@@ -103,11 +95,15 @@
             </p>
         </div>
 
-        {#if watcher.lastErrorDateUnix }
+        {#if watcher.lastErrorDateUnix}
             <div class="section error-section">
                 <p class="section-4-item">
                     <label for="last-check">Last error</label>
-                    <input disabled type="textarea" value={formatTimestamp(watcher.lastErrorDateUnix)} />
+                    <input
+                        disabled
+                        type="textarea"
+                        value={formatTimestamp(watcher.lastErrorDateUnix)}
+                    />
                 </p>
                 <p class="section-4-item">
                     <label for="last-update">Last error message</label>
@@ -146,7 +142,7 @@
     .error-section {
         padding: 0.5em;
         border-radius: 5px;
-        border: 1px solid #FF0000;
+        border: 1px solid #ff0000;
     }
 
     .section-2-item {
