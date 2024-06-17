@@ -63,7 +63,7 @@
                 {/each}
             </div>
             <div>
-                <button on:click={() => copyEntryUrlToClipboard(entry)}>
+                <button class="full-width" on:click={() => copyEntryUrlToClipboard(entry)}>
                     <i class="fas fa-copy"></i>
                     Copy link
                 </button>
@@ -76,7 +76,7 @@
                 rel="noopener noreferrer"
                 target="blank"
             >
-                <img src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
+                <img class="medium-margin" src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
             </a>
         </div>
     {/each}
@@ -98,6 +98,11 @@
         background-color: var(--nc-bg-2);
         color: var(--nc-tx-1);
         border-radius: 5px;
+    }
+
+    div > .tag:first-of-type {
+        margin-left: 0;
+        padding-left: 0;
     }
 
     .full-width {
