@@ -4,7 +4,7 @@
     import { type ReactorEntryForPublic } from '$lib/Reactor/types';
 
     export let reactions: ReactorEntryForPublic[];
-    const pageSize = 3;
+    const pageSize = 10;
     let page = 1;
     let displayedReactions: ReactorEntryForPublic[] = [];
 
@@ -38,6 +38,10 @@
                 '--toastBarHeight': 0
             }
         });
+    };
+
+    const isVideoEntry = (entry: ReactorEntryForPublic) => {
+        return entry.s3PresignedUrl.includes('.mp4');
     };
 
     $: displayedReactions = reactions
@@ -76,13 +80,22 @@
                 rel="noopener noreferrer"
                 target="blank"
             >
-                <img class="medium-margin" src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
+                {#if isVideoEntry(entry)}
+                    <video
+                        class="medium-margin"
+                        style="max-width: 100%"
+                        controls
+                        src={PUBLIC_API_URL + entry.uri}
+                    />
+                {:else}
+                    <img class="medium-margin" src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
+                {/if}
             </a>
         </div>
     {/each}
 </div>
 
-{#if searchString.length === 0}
+{#if searchString.length === 0 && page * pageSize < reactions.length}
     <button class="full-width medium-margin" on:click={() => page++}>More...</button>
 {/if}
 
