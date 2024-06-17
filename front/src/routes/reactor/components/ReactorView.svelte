@@ -4,6 +4,9 @@
     import { type ReactorEntryForPublic } from '$lib/Reactor/types';
 
     export let reactions: ReactorEntryForPublic[];
+    const pageSize = 3;
+    let page = 1;
+    let displayedReactions: ReactorEntryForPublic[] = [];
 
     let searchString = '';
 
@@ -36,42 +39,52 @@
             }
         });
     };
+
+    $: displayedReactions = reactions
+        .filter((entry) => matchSearch(entry, searchString))
+        .sort((a, b) => b.creationDateUnix - a.creationDateUnix)
+        .slice(0, searchString.length ? undefined : page * pageSize);
 </script>
 
-<input type="text" bind:value={searchString} />
+<input
+    class="full-width medium-margin"
+    type="text"
+    placeholder="Search by tags or name"
+    bind:value={searchString}
+/>
 
-{#key searchString}
-    <div class="container">
-        {#each reactions
-            .filter((entry) => matchSearch(entry, searchString))
-            .sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
+<div class="container">
+    {#each displayedReactions as entry}
+        <div>
+            <div><b>{entry.name}</b></div>
             <div>
-                <div><b>{entry.name}</b></div>
-                <div>
-                    {#each entry.tags as tag}
-                        <span class="tag">{tag}</span>
-                    {/each}
-                </div>
-                <div>
-                    <button on:click={() => copyEntryUrlToClipboard(entry)}>
-                        <i class="fas fa-copy"></i>
-                        Copy link
-                    </button>
-                </div>
+                {#each entry.tags as tag}
+                    <span class="tag">{tag}</span>
+                {/each}
             </div>
             <div>
-                <a
-                    href={PUBLIC_API_URL + entry.uri}
-                    download={entry.name}
-                    rel="noopener noreferrer"
-                    target="blank"
-                >
-                    <img src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
-                </a>
+                <button on:click={() => copyEntryUrlToClipboard(entry)}>
+                    <i class="fas fa-copy"></i>
+                    Copy link
+                </button>
             </div>
-        {/each}
-    </div>
-{/key}
+        </div>
+        <div>
+            <a
+                href={PUBLIC_API_URL + entry.uri}
+                download={entry.name}
+                rel="noopener noreferrer"
+                target="blank"
+            >
+                <img src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
+            </a>
+        </div>
+    {/each}
+</div>
+
+{#if searchString.length === 0}
+    <button class="full-width medium-margin" on:click={() => page++}>More...</button>
+{/if}
 
 <style>
     .container {
@@ -85,6 +98,13 @@
         background-color: var(--nc-bg-2);
         color: var(--nc-tx-1);
         border-radius: 5px;
+    }
+
+    .full-width {
+        width: 100%;
+    }
+    .medium-margin {
+        margin: 1em;
     }
 
     @media screen and (max-width: 750px) {
