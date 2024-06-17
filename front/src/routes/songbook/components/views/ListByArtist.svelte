@@ -4,7 +4,7 @@
     import ChordLink from '../ChordLink.svelte';
     import type { Chord, Filters } from '$lib/Songbook/types';
 
-    export let searchString: string;
+    export let searchString: string = '';
     export let chords: Chord[];
     export let filters: Filters;
 
@@ -65,8 +65,7 @@
                 if (searchString.length === 0) {
                     return true;
                 }
-                const chordTags = chord.title;
-                return Boolean(chordTags.toLowerCase().match(searchString.toLowerCase()));
+                return Boolean(chord.title.toLowerCase().match(searchString.toLowerCase()));
             });
         return chords;
     };
@@ -100,13 +99,15 @@
             <tr>
                 <td id={artist.tag}>
                     {artist.name}
-                    <ul class="ul2col-container">
-                        {#each chordsToDisplay as chord}
-                            <li class="ul2col-item">
-                                <ChordLink {chord} />
-                            </li>
-                        {/each}
-                    </ul>
+                    {#key searchString}
+                        <ul class="ul2col-container">
+                            {#each chordsToDisplay as chord}
+                                <li class="ul2col-item">
+                                    <ChordLink {chord} />
+                                </li>
+                            {/each}
+                        </ul>
+                    {/key}
                 </td>
             </tr>
         {/if}
