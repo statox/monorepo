@@ -81,6 +81,7 @@
                 target="blank"
             >
                 {#if isVideoEntry(entry)}
+                    <!-- svelte-ignore a11y-media-has-caption -->
                     <video
                         class="medium-margin"
                         style="max-width: 100%"
