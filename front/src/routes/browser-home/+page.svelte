@@ -23,6 +23,16 @@
                 name: 'Ars Technica',
                 url: 'https://arstechnica.com/',
                 icon: 'https://arstechnica.com/favicon.ico'
+            },
+            {
+                name: 'Hackaday',
+                url: 'https://hackaday.com/blog/',
+                icon: 'https://hackaday.com/favicon.ico'
+            },
+            {
+                name: 'SuperCluster',
+                url: 'https://www.supercluster.com/',
+                icon: 'https://supercluster.com/favicon-32x32.png'
             }
         ],
         Perso: [
