@@ -35,6 +35,18 @@
                 icon: 'https://supercluster.com/favicon-32x32.png'
             }
         ],
+        Electronics: [
+            {
+                name: 'Adafruit Blog',
+                url: 'https://blog.adafruit.com/',
+                icon: 'https://blog.adafruit.com/favicon.ico'
+            },
+            {
+                name: 'PCB Cadence',
+                url: 'https://resources.pcb.cadence.com/blog',
+                icon: 'https://content.cdntwrk.com/files/aHViPTg1NDMzJmNtZD1mYXZpY29uJnZlcnNpb249MTcwMDE2MDIyOSZleHQ9cG5nJnNpemU9MzImc2lnPTRhYTYzYjlkM2Y5ZTg2NjcxNzRhZTA3YTRkODJkNzgx/favicon.png'
+            }
+        ],
         Perso: [
             {
                 name: 'IoT Dashboard',
