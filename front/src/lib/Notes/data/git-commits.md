@@ -39,6 +39,7 @@ Additional details in [this SO answer](https://stackoverflow.com/a/3898842)
 
 ```bash
 GIT_COMMITTER_DATE="Wed, 28 Jul 2021 08:12:19 +0200" GIT_AUTHOR_DATE="Wed, 28 Jul 2021 08:12:19 +0200" git commit
+git rebase --exec 'GIT_COMMITTER_DATE="$(now)" git commit --amend --no-edit --reset-author --date=now' -i my-branch
 ```
 
 Date formats
