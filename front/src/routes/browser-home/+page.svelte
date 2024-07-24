@@ -33,6 +33,11 @@
                 name: 'SuperCluster',
                 url: 'https://www.supercluster.com/',
                 icon: 'https://supercluster.com/favicon-32x32.png'
+            },
+            {
+                name: 'Le Blob',
+                url: 'https://leblob.fr/',
+                icon: 'https://leblob.fr/themes/custom/blob/images/favicon/favicon.ico'
             }
         ],
         Electronics: [
