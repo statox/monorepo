@@ -4,6 +4,7 @@
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import { createWatcher } from '$lib/WebWatcher/api';
+    import type { WatchType } from '$lib/WebWatcher/types';
 
     const dispatch = createEventDispatcher();
 
@@ -12,11 +13,18 @@
     let url: string;
     let cssSelector: string;
     let checkIntervalSeconds: number;
+    let watchType: WatchType;
 
     const upload = async () => {
-        if (!name.length || !notificationMessage || !cssSelector) {
+        if (!name.length || !notificationMessage) {
             // TODO handle this error in the UI
-            console.error('name should be defined');
+            console.error('name and notification message should be defined');
+            return;
+        }
+
+        if (watchType === 'CSS' && !cssSelector) {
+            // TODO handle this error in the UI
+            console.error('css selector must be defined for CSS watch type');
             return;
         }
 
@@ -43,13 +51,24 @@
         }
 
         try {
-            await createWatcher({
-                name,
-                notificationMessage,
-                url,
-                cssSelector,
-                checkIntervalSeconds
-            });
+            if (watchType === 'CSS') {
+                await createWatcher({
+                    name,
+                    notificationMessage,
+                    url,
+                    cssSelector,
+                    checkIntervalSeconds,
+                    watchType
+                });
+            } else if (watchType === 'HASH') {
+                await createWatcher({
+                    name,
+                    notificationMessage,
+                    url,
+                    checkIntervalSeconds,
+                    watchType
+                });
+            }
             dispatch('upload');
         } catch (error) {
             const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
@@ -80,9 +99,19 @@
 
     <div class="section">
         <p class="section-2-item">
-            <label for="notification-message"
-                >Notification message (the @mention is automatically added)</label
-            >
+            <label for="watch-type"> Watcher type </label>
+            <select id="watch-type" bind:value={watchType}>
+                <option value="CSS">CSS</option>
+                <option value="HASH">HASH</option>
+            </select>
+        </p>
+    </div>
+
+    <div class="section">
+        <p class="section-2-item">
+            <label for="notification-message">
+                Notification message (the @mention is automatically added)
+            </label>
             <input type="textarea" bind:value={notificationMessage} />
         </p>
     </div>
@@ -92,10 +121,12 @@
             <label for="content">URL</label>
             <input type="textarea" bind:value={url} />
         </p>
-        <p class="section-3-item">
-            <label for="css-selector">CSS selector</label>
-            <input type="textarea" bind:value={cssSelector} />
-        </p>
+        {#if watchType === 'CSS'}
+            <p class="section-3-item">
+                <label for="css-selector">CSS selector</label>
+                <input type="textarea" bind:value={cssSelector} />
+            </p>
+        {/if}
     </div>
 
     <p>

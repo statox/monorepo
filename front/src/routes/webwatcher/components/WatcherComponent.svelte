@@ -75,13 +75,15 @@
                 <label for="content">URL</label>
                 <a target="_blank" rel="noopener noreferrer" href={watcher.url}>{watcher.url}</a>
             </p>
-            <p class="section-3-item">
-                <label for="css-selector">
-                    CSS selector
-                    <ButtonCopy content={watcher.cssSelector} />
-                </label>
-                <input disabled type="textarea" value={watcher.cssSelector} />
-            </p>
+            {#if watcher.watchType === 'CSS'}
+                <p class="section-3-item">
+                    <label for="css-selector">
+                        CSS selector
+                        <ButtonCopy content={watcher.cssSelector} />
+                    </label>
+                    <input disabled type="textarea" value={watcher.cssSelector} />
+                </p>
+            {/if}
         </div>
 
         <div class="section">
