@@ -22,7 +22,7 @@
         "@sveltejs/vite-plugin-svelte": "^3.1.1",
         "@types/luxon": "^3.4.2",
         "@types/p5": "^1.7.6",
-        "@types/superagent": "^8.1.7",
+        "@types/superagent": "^8.1.8",
         "@typescript-eslint/eslint-plugin": "^7.17.0",
         "@typescript-eslint/parser": "^7.17.0",
         "eslint": "^8.57.0",
@@ -38,7 +38,7 @@
         "svelte-markdown": "^0.4.1",
         "svelte-tabs": "^1.1.0",
         "typescript": "^5.5.4",
-        "vite": "^5.3.4",
+        "vite": "^5.3.5",
         "vite-plugin-plain-text": "^1.4.2",
         "vitest": "^2.0.4"
     },
@@ -47,6 +47,6 @@
         "luxon": "^3.4.4",
         "mime": "^4.0.4",
         "superagent": "^9.0.2",
-        "svelte-jsoneditor": "^0.23.7"
+        "svelte-jsoneditor": "^0.23.8"
     }
 }
