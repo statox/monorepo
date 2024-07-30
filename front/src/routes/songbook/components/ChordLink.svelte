@@ -58,8 +58,8 @@
 
             const message = `<strong>Visit not counted</strong><br/> ${errorMessage}`;
             toast.push(message, {
-                // Don't automatically dismiss to see the error when coming back
-                initial: 0,
+                initial: 1,
+                duration: 5000,
                 theme: {
                     '--toastBarBackground': '#FF0000'
                 }
