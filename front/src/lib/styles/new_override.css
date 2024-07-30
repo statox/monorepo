@@ -1,6 +1,6 @@
 /* overrides of newcss which should probably be merged in the original file */
 body {
-    max-width: 900px;
+    max-width: 2000px;
 }
 
 /* Remove underline added by newcss under links */

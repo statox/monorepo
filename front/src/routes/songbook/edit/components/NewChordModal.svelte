@@ -73,6 +73,7 @@
         left: 0;
         margin: 3em;
         z-index: 9999;
+        max-width: 900px;
 
         /* allow click-through to backdrop */
         pointer-events: none;
