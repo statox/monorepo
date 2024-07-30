@@ -1,6 +1,6 @@
 <script lang="ts">
     import { base } from '$app/paths';
-    import { visitCountsStore } from '../store';
+    import { visitCountsStore, failedVisitCounts } from '../store';
     import { get } from 'svelte/store';
     import { toast } from '$lib/components/Toast';
     import { getTypeIconClass } from '../utils';
@@ -52,6 +52,9 @@
             } else if (error instanceof UserLoggedOutError) {
                 errorMessage = 'User is logged out';
             }
+
+            // Keep track of the failure so we can try re-uploading it when user logs in
+            $failedVisitCounts = [...$failedVisitCounts, chord.url];
 
             const message = `<strong>Visit not counted</strong><br/> ${errorMessage}`;
             toast.push(message, {

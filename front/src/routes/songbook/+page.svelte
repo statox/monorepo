@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getLinksVisitsCount } from '$lib/Songbook/api';
+    import { getLinksVisitsCount, uploadLinkVisit } from '$lib/Songbook/api';
     import { openModal } from '$lib/components/Modal';
     import { BackToTop } from '$lib/components/BackToTop';
     import { HeadIOS } from '$lib/components/HeadIOS';
@@ -14,7 +14,7 @@
     import RandomSongs from './components/RandomSongs.svelte';
     import type { Chord, ChordVisitItem, Filters, FilterType } from '$lib/Songbook/types';
     import { onMount } from 'svelte';
-    import { visitCountsStore } from './store';
+    import { visitCountsStore, failedVisitCounts } from './store';
     import { getTypeIconClass } from './utils';
     import { goto } from '$app/navigation';
     import { toast } from '$lib/components/Toast';
@@ -24,6 +24,22 @@
     const { chords } = data;
 
     onMount(async () => {
+        try {
+            if ($failedVisitCounts.length) {
+                for (const url of $failedVisitCounts) {
+                    await uploadLinkVisit(url);
+                }
+
+                $failedVisitCounts = [];
+            }
+        } catch (error) {
+            // TODO Toasts can't be triggered from onMount so update an errors variable
+            // to be displayed after the component is mounted
+            // Same to display a success and same to display errors for getLinksVisitsCount()
+            console.log('Couldnt upload failed visit counts');
+            console.log(error);
+        }
+
         try {
             const countsData = await getLinksVisitsCount();
             const counts = countsData.reduce(
@@ -38,15 +54,8 @@
 
             visitCountsStore.set(counts);
         } catch (error) {
-            const message = `<strong>Couldn't get visits count</strong><br/> ${
-                (error as Error).message
-            }`;
-            toast.push(message, {
-                duration: 0,
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
+            console.log('Couldnt upload failed visit counts');
+            console.log(error);
         }
     });
 
