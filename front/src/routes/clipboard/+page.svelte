@@ -1,7 +1,9 @@
 <script lang="ts">
+    import { openModal } from '$lib/components/Modal';
     import { user } from '$lib/auth/service';
-    import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
+    import { Notice } from '$lib/components/Notice';
     import { HeadIOS } from '$lib/components/HeadIOS';
+    import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
     import ClipboardView from './components/ClipboardView.svelte';
     import ClipboardForm from './components/ClipboardForm.svelte';
 
@@ -12,6 +14,8 @@
         return getPublicClipboard();
     };
     let clipboardApi = getClipboard();
+
+    const fetchClipboard = () => (clipboardApi = getClipboard());
 </script>
 
 <HeadIOS title="Clipboard" description="My universal clipboard app" />
@@ -19,13 +23,19 @@
 <h2>Clipboard</h2>
 
 <h3>Upload</h3>
-<ClipboardForm on:upload={() => (clipboardApi = getClipboard())} />
+{#if $user}
+    <button on:click={() => openModal(ClipboardForm, { onUpload: fetchClipboard })}>
+        Add an entry
+    </button>
+{:else}
+    <Notice item={{ level: 'info', header: 'Login to add an entry' }} />
+{/if}
 
 <h3>Content</h3>
 {#await clipboardApi}
     <p>Loading data</p>
 {:then clipboard}
-    <ClipboardView {clipboard} on:delete={() => (clipboardApi = getClipboard())} />
+    <ClipboardView {clipboard} on:delete={fetchClipboard} />
 {:catch error}
     <p>Something went wrong</p>
     <p>{JSON.stringify(error)}</p>

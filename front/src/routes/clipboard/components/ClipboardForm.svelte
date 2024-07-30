@@ -1,14 +1,16 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
+    import { closeModal } from '$lib/components/Modal';
+    import { user } from '$lib/auth/service';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
-    import { DurationPicker } from '$lib/components/DurationPicker';
     import { toast } from '$lib/components/Toast';
-    import { user } from '$lib/auth/service';
+    import { Notice, type NoticeItem } from '$lib/components/Notice';
+    import { DurationPicker } from '$lib/components/DurationPicker';
     import { uploadToClipboard } from '$lib/Clipboard/api';
-    import { Notice } from '$lib/components/Notice';
 
-    const dispatch = createEventDispatcher();
+    export let isOpen: boolean;
+    export let onUpload: () => void;
+    let noticeMessages: NoticeItem[] = [];
 
     let name: string;
     let content: string;
@@ -18,20 +20,19 @@
     let ttlSeconds: number;
 
     const upload = async () => {
-        if (!name.length) {
-            // TODO handle this error in the UI
-            console.error('name should be defined');
-            return;
+        noticeMessages = [];
+        if (!name?.length) {
+            noticeMessages.push({ level: 'error', header: 'name must be defined' });
         }
-        if (!content.length) {
-            // TODO handle this error in the UI
-            console.error('content should be defined');
-            return;
+        if (!content?.length) {
+            noticeMessages.push({ level: 'error', header: 'content must be defined' });
         }
 
         if (ttlSeconds < 0) {
-            // TODO handle this error in the UI
-            console.error('TTL should be positive');
+            noticeMessages.push({ level: 'error', header: 'TTL must be positive' });
+        }
+
+        if (noticeMessages.length) {
             return;
         }
 
@@ -42,7 +43,8 @@
 
         try {
             await uploadToClipboard({ name, content, ttlSeconds, isPublic, file });
-            dispatch('upload');
+            onUpload();
+            closeModal();
         } catch (error) {
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
@@ -60,109 +62,117 @@
     };
 </script>
 
-{#if $user}
-    <div class="meta-section">
-        <p class="meta-section-item">
-            <label for="name">Name</label>
-            <input type="text" bind:value={name} />
-        </p>
-        <p class="meta-section-item">
-            <label for="content">Content</label>
-            <input type="textarea" bind:value={content} />
-        </p>
-    </div>
+{#if isOpen}
+    <div role="dialog" class="modal">
+        <div class="contents">
+            <h4 class="title-bar">
+                Add a new clipboard entry
+                <button on:click={closeModal}>Close</button>
+            </h4>
 
-    <p class="file-section">
-        <label for="file">File</label>
-        <input class="file-input" type="file" bind:files bind:this={fileInput} />
-        <button
-            on:click={() => {
-                fileInput.value = '';
-            }}
-        >
-            <i class="fas fa-times-circle"></i>
-        </button>
-    </p>
+            {#each noticeMessages as item}
+                <Notice {item} />
+            {/each}
 
-    <div class="visibility-section">
-        <p class="visibility-section-item">
-            <label for="ttlSeconds">TTL</label>
-            <DurationPicker
-                bind:valueInSeconds={ttlSeconds}
-                allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
-                defaultDuration={{ value: 1, unit: 'days' }}
-            />
-        </p>
+            <form class="form-content">
+                <label for="name">Name</label>
+                <input type="text" bind:value={name} />
 
-        <p class="visibility-section-item">
-            <label for="isPublic">Access</label>
-            <button
-                class="visibility-status"
-                class:visibility-public={isPublic}
-                on:click={() => (isPublic = !isPublic)}
-            >
-                {#if isPublic}
-                    Public
-                    <i class="fas fa-lock-open"></i>
+                <label for="content">Content</label>
+                <input type="textarea" bind:value={content} />
+
+                <label for="file">File</label>
+                <span>
+                    <input class="file-input" type="file" bind:files bind:this={fileInput} />
+                    <button
+                        on:click={() => {
+                            fileInput.value = '';
+                        }}
+                    >
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </span>
+
+                <label for="ttlSeconds">TTL</label>
+                <DurationPicker
+                    bind:valueInSeconds={ttlSeconds}
+                    allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
+                    defaultDuration={{ value: 10, unit: 'minutes' }}
+                />
+
+                <label for="isPublic">Access</label>
+                <button
+                    class="visibility-status"
+                    class:visibility-public={isPublic}
+                    on:click={() => (isPublic = !isPublic)}
+                >
+                    {#if isPublic}
+                        Public
+                        <i class="fas fa-lock-open"></i>
+                    {:else}
+                        Private
+                        <i class="fas fa-lock"></i>
+                    {/if}
+                </button>
+
+                <br />
+                {#if $user}
+                    <button class="form-action" on:click={upload}>Submit</button>
                 {:else}
-                    Private
-                    <i class="fas fa-lock"></i>
+                    <span class="form-action">Login to upload an entry</span>
                 {/if}
-            </button>
-        </p>
+            </form>
+        </div>
     </div>
-
-    <p>
-        <button on:click={upload}>Upload</button>
-    </p>
-{:else}
-    <Notice item={{ level: 'info', header: 'Login to upload content' }} />
 {/if}
 
 <style>
-    .meta-section {
-        display: flex;
-        flex-wrap: wrap;
+    .form-action {
+        grid-column: span 2;
     }
-    .visibility-section {
+
+    .form-content {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: 3em;
+        z-index: 9999;
+        max-width: 900px;
+
+        /* allow click-through to backdrop */
+        pointer-events: none;
+    }
+    .contents {
+        min-width: 240px;
+        border-radius: 26px;
+        padding: 16px;
+        background: white;
+        pointer-events: auto;
+
+        max-height: 90%;
+        overflow: auto;
+    }
+    .title-bar {
+        margin-bottom: 1em;
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .file-input {
+        flex-grow: 2;
     }
     .visibility-status {
         background-color: #07a761;
     }
     .visibility-public {
         background-color: #ff8f00;
-    }
-    .file-section {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-    }
-    .file-input {
-        flex-grow: 2;
-    }
-
-    @media screen and (max-width: 750px) {
-        .meta-section-item {
-            flex: 1 0 100%;
-        }
-        .meta-section-item > input {
-            width: 100%;
-        }
-        .visibility-section-item {
-            flex: 1 0 100%;
-        }
-    }
-    @media screen and (min-width: 750px) {
-        .meta-section-item {
-            flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
-        }
-        .meta-section-item > input {
-            width: 100%;
-        }
-        .visibility-section-item {
-            flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
-        }
     }
 </style>
