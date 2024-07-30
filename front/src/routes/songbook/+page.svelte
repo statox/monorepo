@@ -3,6 +3,8 @@
     import { openModal } from '$lib/components/Modal';
     import { BackToTop } from '$lib/components/BackToTop';
     import { HeadIOS } from '$lib/components/HeadIOS';
+    import { Notice } from '$lib/components/Notice';
+    import type { NoticeItem } from '$lib/components/Notice';
     import {
         ListByAccessDate,
         ListByArtist,
@@ -17,11 +19,22 @@
     import { visitCountsStore, failedVisitCounts } from './store';
     import { getTypeIconClass } from './utils';
     import { goto } from '$app/navigation';
-    import { toast } from '$lib/components/Toast';
 
     // From +page.ts load() function
     export let data: { chords: Chord[] };
     const { chords } = data;
+    let noticeMessages: NoticeItem[] = [];
+
+    const enqueueNoticeMessage = (item: NoticeItem) => {
+        // Note there is a built-in way to have page errors with svelte
+        // TODO check how to use that
+        noticeMessages.push(item);
+        noticeMessages = noticeMessages;
+        setTimeout(() => {
+            noticeMessages.shift();
+            noticeMessages = noticeMessages;
+        }, 5000);
+    };
 
     onMount(async () => {
         try {
@@ -30,14 +43,14 @@
                     await uploadLinkVisit(url);
                 }
 
+                enqueueNoticeMessage({
+                    level: 'info',
+                    header: `Counted ${$failedVisitCounts.length} missed visits`
+                });
                 $failedVisitCounts = [];
             }
         } catch (error) {
-            // TODO Toasts can't be triggered from onMount so update an errors variable
-            // to be displayed after the component is mounted
-            // Same to display a success and same to display errors for getLinksVisitsCount()
-            console.log('Couldnt upload failed visit counts');
-            console.log(error);
+            enqueueNoticeMessage({ level: 'error', header: 'Couldnt upload failed visit counts' });
         }
 
         try {
@@ -54,8 +67,7 @@
 
             visitCountsStore.set(counts);
         } catch (error) {
-            console.log('Couldnt upload failed visit counts');
-            console.log(error);
+            enqueueNoticeMessage({ level: 'error', header: 'Couldnt upload failed visit counts' });
         }
     });
 
@@ -90,6 +102,10 @@
         <button style:position="relative" on:click={() => goto('/songbook/edit')}> Edit </button>
     </span>
 </h2>
+
+{#each noticeMessages as item}
+    <Notice {item} />
+{/each}
 
 <BackToTop />
 
