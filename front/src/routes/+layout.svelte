@@ -11,6 +11,7 @@
     import { SvelteToast } from '$lib/components/Toast';
     import HomeNavItem from '$lib/components/NavItems/HomeNavItem.svelte';
     import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
+    import { Notice } from '$lib/components/Notice';
 
     let auth0Error: Error;
     onMount(async () => {
@@ -42,13 +43,17 @@
 <!-- TODO: this error display is just a try while reworking authentication  -->
 <!-- 1. The errors thrown by initializeAuth0() might not really happen or not be relevant -->
 <!-- 2. It might be better to use svelte built-in page error mecanism that I'm not familiar with already -->
+<!-- Update 5 months later: I have never seen this notice displayed in real life yet. And I think the AuthNavItem
+  -- doesn't have anymore issues where it's not updated when I'm logged out. So I might remove that in the future.
+  -->
 {#if auth0Error}
-    <div class="auth-error">
-        <div>Something went wrong with auth0 setup</div>
-        <div>
-            {auth0Error}
-        </div>
-    </div>
+    <Notice
+        item={{
+            level: 'error',
+            header: 'Something went wrong with auth0 setup',
+            message: auth0Error.message
+        }}
+    />
 {/if}
 
 <slot />
@@ -73,8 +78,5 @@
     :root {
         --toastContainerTop: auto;
         --toastContainerBottom: 2rem;
-    }
-    .auth-error {
-        background-color: #830707;
     }
 </style>
