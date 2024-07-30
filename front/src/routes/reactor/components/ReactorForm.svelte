@@ -5,6 +5,7 @@
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import { uploadToReactor } from '$lib/Reactor/api';
+    import { Notice } from '$lib/components/Notice';
 
     const dispatch = createEventDispatcher();
 
@@ -72,7 +73,7 @@
         <button on:click={upload}>Upload</button>
     </p>
 {:else}
-    <p>Login to upload content</p>
+    <Notice item={{ level: 'info', header: 'Login to upload content' }} />
 {/if}
 
 <style>

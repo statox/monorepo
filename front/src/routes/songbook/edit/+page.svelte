@@ -11,6 +11,7 @@
     import type { JSONContent } from 'svelte-jsoneditor';
     import { goto } from '$app/navigation';
     import { closeModal, openModal } from '$lib/components/Modal';
+    import { Notice } from '$lib/components/Notice';
 
     // From +page.ts load() function
     export let data: { chords: RawChord[] };
@@ -121,16 +122,21 @@
     </span>
 </h2>
 
-<button style:position="relative" on:click={() => openModal(NewChordModal, { onNewSongSubmit })}>
-    Add a song
-</button>
+{#if $user}
+    <button
+        style:position="relative"
+        on:click={() => openModal(NewChordModal, { onNewSongSubmit })}
+    >
+        Add a song
+    </button>
+{/if}
 
 {#if chords?.length}
     {#if isValid}
         {#if $user}
             <button on:click={upload}>Upload</button>
         {:else}
-            <span>Login to upload changes</span>
+            <span><Notice item={{ level: 'info', header: 'Login to upload changes' }} /></span>
         {/if}
     {/if}
     <div class="json-editor jse-theme-dark" style="width: 100%">

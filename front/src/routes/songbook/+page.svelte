@@ -19,6 +19,7 @@
     import { visitCountsStore, failedVisitCounts } from './store';
     import { getTypeIconClass } from './utils';
     import { goto } from '$app/navigation';
+    import { user } from '$lib/auth/service';
 
     // From +page.ts load() function
     export let data: { chords: Chord[] };
@@ -38,13 +39,18 @@
 
     onMount(async () => {
         try {
-            if ($failedVisitCounts.length) {
+            if ($failedVisitCounts.length && $user) {
+                enqueueNoticeMessage({
+                    level: 'info',
+                    header: `Trying to count missed visits while logged out`
+                });
+
                 for (const url of $failedVisitCounts) {
                     await uploadLinkVisit(url);
                 }
 
                 enqueueNoticeMessage({
-                    level: 'info',
+                    level: 'success',
                     header: `Counted ${$failedVisitCounts.length} missed visits`
                 });
                 $failedVisitCounts = [];

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { user } from '$lib/auth/service';
+    import { Notice } from '$lib/components/Notice';
     import { getAllWatchers } from '$lib/WebWatcher/api';
     import WatcherForm from './components/WatcherForm.svelte';
     import WatchersView from './components/WatchersView.svelte';
@@ -31,5 +32,5 @@
         <p>{JSON.stringify(error)}</p>
     {/await}
 {:else}
-    <p>Login to list the watchers</p>
+    <Notice item={{ level: 'info', header: 'Login to list the watchers' }} />
 {/if}
