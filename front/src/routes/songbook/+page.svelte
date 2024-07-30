@@ -116,8 +116,8 @@
 <BackToTop />
 
 <p>
-    This is a list of {chords.length} song chords I have been gathering for the past 10 years and that
-    I like to play.
+    This is a list of {chords.length} song chords I have been gathering since I started teaching myself
+    the guitar as a teen and that I like to play.
 </p>
 
 <LatestAdditions {chords} />
