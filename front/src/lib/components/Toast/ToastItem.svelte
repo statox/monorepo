@@ -160,7 +160,11 @@
         justify-content: center;
     }
     ._toastBar {
-        top: var(--toastBarTop, auto);
+        /* top: var(--toastBarTop, auto); */
+        top: var(
+            --toastBarTop,
+            -5px
+        ); /* AFA: Trying -5px to fix a bug where the gets on the text */
         right: var(--toastBarRight, auto);
         bottom: var(--toastBarBottom, 0);
         left: var(--toastBarLeft, 0);
