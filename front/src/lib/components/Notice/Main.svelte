@@ -3,7 +3,7 @@
     export let item: NoticeItem;
 </script>
 
-<div class="container" class:info={item.level === 'info'} class:error={item.level === 'error'}>
+<div class={'container ' + item.level}>
     <div class="header">{item.header}</div>
     {#if item.message}
         <div class="message">{item.message}</div>
@@ -11,11 +11,23 @@
 </div>
 
 <style>
+    .container {
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+        padding-left: 1em;
+
+        margin-bottom: 0.3em;
+
+        border-radius: 5px;
+    }
     .container.error {
         background-color: #ab0000;
     }
     .container.info {
         background-color: #528aff;
+    }
+    .container.success {
+        background-color: #4e8759;
     }
 
     .header {

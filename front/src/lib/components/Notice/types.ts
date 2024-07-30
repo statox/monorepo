@@ -1,5 +1,5 @@
 export type NoticeItem = {
-    level: 'info' | 'error';
+    level: 'info' | 'success' | 'error';
     header: string;
     message?: string;
 };
