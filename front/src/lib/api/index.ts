@@ -26,26 +26,41 @@ export const requestAPIGet = async <ResponseType>(options: GetOptions): Promise<
         mode: 'cors',
         headers
     });
+
     if (response.status < 200 || response.status >= 300) {
-        throw new Error(await response.text());
+        let message: string;
+        try {
+            message = await response.text();
+        } catch (error) {
+            message = 'could not parse server error message';
+        }
+        throw new ApiError(response.status, message);
     }
 
     return response.json();
 };
 
+export class ApiError extends Error {
+    code: number;
+
+    constructor(code: number, message: string) {
+        super(message);
+        this.code = code;
+    }
+}
+
 interface PostOptions {
     path: string;
     data: unknown;
 }
-export const requestAPIPost = async <ResponseType>(
-    options: PostOptions
-): Promise<ResponseType | void> => {
-    const token = await getAccessToken();
+export const requestAPIPost = async <ResponseType>(options: PostOptions): Promise<ResponseType> => {
     const { path, data } = options;
 
     if (!path.length || path[0] !== '/') {
         throw new Error('Malformed path');
     }
+
+    const token = await getAccessToken();
 
     const body = JSON.stringify(data);
 
@@ -60,14 +75,14 @@ export const requestAPIPost = async <ResponseType>(
     });
 
     if (response.status < 200 || response.status >= 300) {
-        throw new Error(await response.text());
+        let message: string;
+        try {
+            message = await response.text();
+        } catch (error) {
+            message = 'could not parse server error message';
+        }
+        throw new ApiError(response.status, message);
     }
 
-    try {
-        return await response.json();
-    } catch (error) {
-        console.error('Error while trying to parse response from ' + path);
-        console.error(error);
-        return Promise.resolve();
-    }
+    return response.json();
 };

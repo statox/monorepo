@@ -1,7 +1,7 @@
 import { get, writable } from 'svelte/store';
-import { toast } from '$lib/components/Toast';
 import config from './config';
 import { Auth0Client, User, createAuth0Client } from '@auth0/auth0-spa-js';
+import { UserLoggedOutError } from './errors';
 
 const auth0Client = writable<Auth0Client>();
 export const user = writable<User | undefined>();
@@ -54,13 +54,7 @@ export const getAccessToken = async () => {
         return token;
     } catch (error) {
         user.set(undefined);
-        toast.push(`getAccessToken error\n${(error as Error).message}`, {
-            duration: 5000,
-            theme: {
-                '--toastBarHeight': 0
-            }
-        });
-        return error;
+        throw new UserLoggedOutError();
     }
 };
 

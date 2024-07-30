@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { ApiError } from '$lib/api';
+    import { UserLoggedOutError } from '$lib/auth';
     import { user } from '$lib/auth/service';
     import { toast } from '$lib/components/Toast';
     import NewChordModal from './components/NewChordModal.svelte';
@@ -68,7 +70,13 @@
             await uploadChords(content.json as RawChord[]);
             toast.push('<i class="fas fa-check"></i> Uploaded');
         } catch (error) {
-            const message = `<strong>Upload failed</strong><br/> ${(error as Error).message}`;
+            let errorMessage = (error as Error).message;
+            if (error instanceof ApiError && error.code === 401) {
+                errorMessage = 'Invalid logged in user';
+            } else if (error instanceof UserLoggedOutError) {
+                errorMessage = 'User is logged out';
+            }
+            const message = `<strong>Upload failed</strong><br/> ${errorMessage}`;
             toast.push(message, {
                 theme: {
                     '--toastBarBackground': '#FF0000'

@@ -5,6 +5,8 @@
     import { toast } from '$lib/components/Toast';
     import { getTypeIconClass } from '../utils';
     import type { Chord } from '$lib/Songbook/types';
+    import { ApiError } from '$lib/api';
+    import { UserLoggedOutError } from '$lib/auth';
     import { uploadLinkVisit } from '$lib/Songbook/api';
     export let chord: Chord;
     export let showArtist = false;
@@ -44,7 +46,14 @@
             map.set(chord.url, data);
             visitCountsStore.set(map);
         } catch (error) {
-            const message = `<strong>Visit not counted</strong><br/> ${(error as Error).message}`;
+            let errorMessage = (error as Error).message;
+            if (error instanceof ApiError && error.code === 401) {
+                errorMessage = 'Invalid logged in user';
+            } else if (error instanceof UserLoggedOutError) {
+                errorMessage = 'User is logged out';
+            }
+
+            const message = `<strong>Visit not counted</strong><br/> ${errorMessage}`;
             toast.push(message, {
                 // Don't automatically dismiss to see the error when coming back
                 initial: 0,
