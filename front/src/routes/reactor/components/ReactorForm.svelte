@@ -1,13 +1,15 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
+    import { closeModal } from '$lib/components/Modal';
+    import { user } from '$lib/auth/service';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
-    import { user } from '$lib/auth/service';
+    import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { uploadToReactor } from '$lib/Reactor/api';
-    import { Notice } from '$lib/components/Notice';
 
-    const dispatch = createEventDispatcher();
+    export let isOpen: boolean;
+    export let onUpload: () => void;
+    let noticeMessages: NoticeItem[] = [];
 
     let name: string;
     let commaSeparatedTags = '';
@@ -15,19 +17,27 @@
     let files: FileList | null;
 
     const upload = async () => {
+        noticeMessages = [];
+        if (!name?.length) {
+            noticeMessages.push({ level: 'error', header: 'name must be defined' });
+        }
+        let file: File | undefined;
+        if (files && files.length) {
+            file = files[0];
+        }
+        if (!file) {
+            noticeMessages.push({ level: 'error', header: 'a file must be uploaded' });
+        }
+
+        if (noticeMessages.length || !file) {
+            // the !file is not necessary for the logic but without it uploadToReactor() see file as potentially undefined
+            return;
+        }
+
         try {
-            if (!name?.length) {
-                throw new Error('A name is required for upload');
-            }
-            let file: File | undefined;
-            if (files && files.length) {
-                file = files[0];
-            }
-            if (!file) {
-                throw new Error('A file is required for upload');
-            }
             await uploadToReactor({ name, commaSeparatedTags, file });
-            dispatch('upload');
+            onUpload();
+            closeModal();
         } catch (error) {
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
@@ -45,65 +55,89 @@
     };
 </script>
 
-{#if $user}
-    <div class="meta-section">
-        <p class="meta-section-item">
-            <label for="name">Name</label>
-            <input type="text" bind:value={name} />
-        </p>
-        <p class="meta-section-item">
-            <label for="content">Tags</label>
-            <input type="textarea" bind:value={commaSeparatedTags} />
-        </p>
+{#if isOpen}
+    <div role="dialog" class="modal">
+        <div class="contents">
+            <h4 class="title-bar">
+                Add a new file
+                <button on:click={closeModal}>Close</button>
+            </h4>
+
+            {#each noticeMessages as item}
+                <Notice {item} />
+            {/each}
+
+            <form class="form-content">
+                <label for="name">Name</label>
+                <input type="text" bind:value={name} />
+
+                <label for="content">Tags</label>
+                <input type="textarea" bind:value={commaSeparatedTags} />
+
+                <label for="file">File</label>
+                <span>
+                    <input class="file-input" type="file" bind:files bind:this={fileInput} />
+                    <button
+                        on:click={() => {
+                            fileInput.value = '';
+                        }}
+                    >
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </span>
+
+                <br />
+                {#if $user}
+                    <button class="form-action" on:click={upload}>Submit</button>
+                {:else}
+                    <span class="form-action">Login to upload an entry</span>
+                {/if}
+            </form>
+        </div>
     </div>
-
-    <p class="file-section">
-        <label for="file">File</label>
-        <input class="file-input" type="file" bind:files bind:this={fileInput} />
-        <button
-            on:click={() => {
-                fileInput.value = '';
-            }}
-        >
-            <i class="fas fa-times-circle"></i>
-        </button>
-    </p>
-
-    <p>
-        <button on:click={upload}>Upload</button>
-    </p>
-{:else}
-    <Notice item={{ level: 'info', header: 'Login to upload content' }} />
 {/if}
 
 <style>
-    .meta-section {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .file-section {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-    }
-    .file-input {
-        flex-grow: 2;
+    .form-action {
+        grid-column: span 2;
     }
 
-    @media screen and (max-width: 750px) {
-        .meta-section-item {
-            flex: 1 0 100%;
-        }
-        .meta-section-item > input {
-            width: 100%;
-        }
+    .form-content {
+        display: grid;
+        grid-template-columns: auto auto;
     }
-    @media screen and (min-width: 750px) {
-        .meta-section-item {
-            flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
-        }
-        .meta-section-item > input {
-            width: 100%;
-        }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: 3em;
+        z-index: 9999;
+        max-width: 900px;
+
+        /* allow click-through to backdrop */
+        pointer-events: none;
+    }
+    .contents {
+        min-width: 240px;
+        border-radius: 26px;
+        padding: 16px;
+        background: white;
+        pointer-events: auto;
+
+        max-height: 90%;
+        overflow: auto;
+    }
+    .title-bar {
+        margin-bottom: 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .file-input {
+        flex-grow: 2;
     }
 </style>
