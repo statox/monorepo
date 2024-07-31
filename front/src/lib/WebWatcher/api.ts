@@ -2,7 +2,7 @@ import { requestAPIGet, requestAPIPost } from '$lib/api';
 import type { NewWatcherParams, WatchedContent } from './types';
 
 export const getAllWatchers = async () => {
-    return await requestAPIGet<WatchedContent[]>({ path: '/webWatcher/getAllWatchers' });
+    return requestAPIGet<WatchedContent[]>({ path: '/webWatcher/getAllWatchers' });
 };
 
 export const createWatcher = async (newWatcher: NewWatcherParams) => {

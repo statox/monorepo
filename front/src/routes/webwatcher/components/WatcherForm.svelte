@@ -1,13 +1,17 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
-    import { DurationPicker } from '$lib/components/DurationPicker';
-    import { toast } from '$lib/components/Toast';
+    import { closeModal } from '$lib/components/Modal';
     import { user } from '$lib/auth/service';
+    import { ApiError } from '$lib/api';
+    import { UserLoggedOutError } from '$lib/auth';
+    import { toast } from '$lib/components/Toast';
+    import { Notice, type NoticeItem } from '$lib/components/Notice';
+    import { DurationPicker } from '$lib/components/DurationPicker';
     import { createWatcher } from '$lib/WebWatcher/api';
     import type { WatchType } from '$lib/WebWatcher/types';
-    import { Notice } from '$lib/components/Notice';
 
-    const dispatch = createEventDispatcher();
+    export let isOpen: boolean;
+    export let onUpload: () => void;
+    let noticeMessages: NoticeItem[] = [];
 
     let name: string;
     let notificationMessage: string;
@@ -17,37 +21,35 @@
     let watchType: WatchType;
 
     const upload = async () => {
-        if (!name.length || !notificationMessage) {
-            // TODO handle this error in the UI
-            console.error('name and notification message should be defined');
-            return;
+        noticeMessages = [];
+        if (!name?.length) {
+            noticeMessages.push({ level: 'error', header: 'name must be defined' });
+        }
+        if (!notificationMessage) {
+            noticeMessages.push({ level: 'error', header: 'notification message must be defined' });
         }
 
         if (watchType === 'CSS' && !cssSelector) {
-            // TODO handle this error in the UI
-            console.error('css selector must be defined for CSS watch type');
-            return;
+            noticeMessages.push({
+                level: 'error',
+                header: 'A CSS watcher must have a css selector defined'
+            });
+        }
+
+        if (checkIntervalSeconds < 15 * 60) {
+            noticeMessages.push({
+                level: 'error',
+                header: 'Check interval too small. Must be >= 15mn'
+            });
         }
 
         try {
             new URL(url);
         } catch (error) {
-            const message = `<strong>URL is invalid</strong>`;
-            toast.push(message, {
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
-            return;
+            noticeMessages.push({ level: 'error', header: 'The URL is invalid' });
         }
 
-        if (checkIntervalSeconds < 15 * 60) {
-            const message = `<strong>Check interval too small</strong><br/>Must be >= 15mn`;
-            toast.push(message, {
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
+        if (noticeMessages.length) {
             return;
         }
 
@@ -70,9 +72,16 @@
                     watchType
                 });
             }
-            dispatch('upload');
+            onUpload();
+            closeModal();
         } catch (error) {
-            const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
+            let errorMessage = (error as Error).message;
+            if (error instanceof ApiError && error.code === 401) {
+                errorMessage = 'Invalid logged in user';
+            } else if (error instanceof UserLoggedOutError) {
+                errorMessage = 'User is logged out';
+            }
+            const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
             toast.push(message, {
                 theme: {
                     '--toastBarBackground': '#FF0000'
@@ -82,95 +91,96 @@
     };
 </script>
 
-{#if $user}
-    <div class="section">
-        <p class="section-1-item">
-            <label for="name">Name</label>
-            <input type="text" bind:value={name} />
-        </p>
-        <p class="section-1-item">
-            <label for="check-interval">Check interval</label>
-            <DurationPicker
-                bind:valueInSeconds={checkIntervalSeconds}
-                allowedUnits={['minutes', 'hours', 'days']}
-                defaultDuration={{ value: 1, unit: 'hours' }}
-            />
-        </p>
-    </div>
+{#if isOpen}
+    <div role="dialog" class="modal">
+        <div class="contents">
+            <h4 class="title-bar">
+                Add a new clipboard entry
+                <button on:click={closeModal}>Close</button>
+            </h4>
 
-    <div class="section">
-        <p class="section-2-item">
-            <label for="watch-type"> Watcher type </label>
-            <select id="watch-type" bind:value={watchType}>
-                <option value="CSS">CSS</option>
-                <option value="HASH">HASH</option>
-            </select>
-        </p>
-    </div>
+            {#each noticeMessages as item}
+                <Notice {item} />
+            {/each}
 
-    <div class="section">
-        <p class="section-2-item">
-            <label for="notification-message">
-                Notification message (the @mention is automatically added)
-            </label>
-            <input type="textarea" bind:value={notificationMessage} />
-        </p>
-    </div>
+            <form class="form-content">
+                <label for="name">Name</label>
+                <input type="text" bind:value={name} />
 
-    <div class="section">
-        <p class="section-3-item">
-            <label for="content">URL</label>
-            <input type="textarea" bind:value={url} />
-        </p>
-        {#if watchType === 'CSS'}
-            <p class="section-3-item">
-                <label for="css-selector">CSS selector</label>
-                <input type="textarea" bind:value={cssSelector} />
-            </p>
-        {/if}
-    </div>
+                <label for="check-interval">Check interval</label>
+                <DurationPicker
+                    bind:valueInSeconds={checkIntervalSeconds}
+                    allowedUnits={['minutes', 'hours', 'days']}
+                    defaultDuration={{ value: 1, unit: 'hours' }}
+                />
 
-    <p>
-        <button on:click={upload}>Upload</button>
-    </p>
-{:else}
-    <Notice item={{ level: 'info', header: 'Login to upload content' }} />
+                <label for="notification-message">
+                    Notification message (the @mention is automatically added)
+                </label>
+                <input type="textarea" bind:value={notificationMessage} />
+
+                <label for="watch-type"> Watcher type </label>
+                <select id="watch-type" bind:value={watchType}>
+                    <option value="CSS">CSS</option>
+                    <option value="HASH">HASH</option>
+                </select>
+
+                <label for="content">URL</label>
+                <input type="textarea" bind:value={url} />
+
+                {#if watchType === 'CSS'}
+                    <label for="css-selector">CSS selector</label>
+                    <input type="textarea" bind:value={cssSelector} />
+                {/if}
+
+                <br />
+                {#if $user}
+                    <button class="form-action" on:click={upload}>Submit</button>
+                {:else}
+                    <span class="form-action">Login to upload an entry</span>
+                {/if}
+            </form>
+        </div>
+    </div>
 {/if}
 
 <style>
-    .section {
+    .form-action {
+        grid-column: span 2;
+    }
+
+    .form-content {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: 3em;
+        z-index: 9999;
+        max-width: 900px;
+
+        /* allow click-through to backdrop */
+        pointer-events: none;
+    }
+    .contents {
+        min-width: 240px;
+        border-radius: 26px;
+        padding: 16px;
+        background: white;
+        pointer-events: auto;
+
+        max-height: 90%;
+        overflow: auto;
+    }
+    .title-bar {
+        margin-bottom: 1em;
         display: flex;
-        flex-wrap: wrap;
-    }
-
-    .section-2-item {
-        flex: 1 0 100%;
-    }
-    .section-2-item > input {
-        width: 100%;
-    }
-
-    .section-3-item {
-        flex: 1 0 100%;
-    }
-    .section-3-item > input {
-        width: 100%;
-    }
-
-    @media screen and (max-width: 750px) {
-        .section-1-item {
-            flex: 1 0 100%;
-        }
-        .section-1-item > input {
-            width: 100%;
-        }
-    }
-    @media screen and (min-width: 750px) {
-        .section-1-item {
-            flex: 1 0 50%; /* This will make the items take up 50% of the container's width, effectively creating two columns */
-        }
-        .section-1-item > input {
-            width: 100%;
-        }
+        flex-direction: row;
+        justify-content: space-between;
     }
 </style>
