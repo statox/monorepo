@@ -46,7 +46,7 @@
     "dependencies": {
         "luxon": "^3.5.0",
         "mime": "^4.0.4",
-        "superagent": "^9.0.2",
+        "superagent": "^10.0.0",
         "svelte-jsoneditor": "^0.23.8"
     }
 }
