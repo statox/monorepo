@@ -52,6 +52,14 @@ RFC 2822            = e.g. Thu, 07 Apr 2005 22:13:13 +0200
 ISO 8601            = e.g. 2005-04-07T22:13:13
 ```
 
+### Change the author and commiter of all commits but keep the original dates
+
+```bash
+# First make sure that `.git/config` has the proper [user] section
+
+git -c rebase.instructionFormat='%s%nexec GIT_COMMITTER_DATE="%cD" GIT_AUTHOR_DATE="%aD" git commit --amend --no-edit --reset-author' rebase (-i [commit] or --root)
+```
+
 ### Get the logs of a specific line
 
 See [this SO answer](https://stackoverflow.com/a/50473741)
