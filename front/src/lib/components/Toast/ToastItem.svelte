@@ -79,7 +79,7 @@
             // @ts-expect-error TODO find out the actual issue and fix
             item.onpop(item.id);
         }
-        unlisten && unlisten();
+        unlisten?.();
     });
 </script>
 

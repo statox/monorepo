@@ -90,12 +90,12 @@ export class Metronome {
         // https://stackoverflow.com/a/69958258/4194289
         const constantSourceNode = this.audioContext.createConstantSource();
         constantSourceNode.onended = () => {
-            this.onBeatStart && this.onBeatStart(beatNumber, subdivisionNumber);
+            this.onBeatStart?.(beatNumber, subdivisionNumber);
             osc.start();
             osc.stop(time + 0.03);
 
             osc.onended = () => {
-                this.onBeatEnd && this.onBeatEnd();
+                this.onBeatEnd?.();
             };
         };
 

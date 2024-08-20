@@ -11,7 +11,8 @@
     let subdivisionPlaying = 0;
     const onBeatStart = (beatNumber: number, subdivisionNumber: number) => {
         beatIsPlaying = true;
-        (beatPlaying = beatNumber), (subdivisionPlaying = subdivisionNumber);
+        beatPlaying = beatNumber;
+        subdivisionPlaying = subdivisionNumber;
     };
     const onBeatEnd = () => {
         beatIsPlaying = false;

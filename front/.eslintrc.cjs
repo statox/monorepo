@@ -11,7 +11,6 @@ module.exports = {
         'prettier'
     ],
     plugins: ['@typescript-eslint'],
-    ignorePatterns: ['*.cjs'],
     parserOptions: {
         sourceType: 'module',
         ecmaVersion: 2020,
@@ -36,6 +35,8 @@ module.exports = {
     },
     rules: {
         // TODO Fix code to re-enable this rule
-        '@typescript-eslint/no-explicit-any': 'off'
+        '@typescript-eslint/no-explicit-any': 'off',
+        // Allow try...catch blocks to not use the caught error
+        '@typescript-eslint/no-unused-vars': ['error', { caughtErrors: 'none' }]
     }
 };
