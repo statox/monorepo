@@ -66,4 +66,21 @@ export const utilsSection = {
     ]
 };
 
-export const allApps = [utilsSection, musicSection];
+export const personalSection = {
+    name: 'Perso',
+    apps: [
+        {
+            name: 'Browser home',
+            description:
+                'A page meant to be the default page of my browsers. Holding my important and often visited links',
+            link: '/browser-home'
+        },
+        {
+            name: 'Home tracker',
+            description: 'My homemade home monitoring system',
+            link: '/home-tracker'
+        }
+    ]
+};
+
+export const allApps = [personalSection, utilsSection, musicSection];
