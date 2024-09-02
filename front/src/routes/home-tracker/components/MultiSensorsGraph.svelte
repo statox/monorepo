@@ -1,7 +1,6 @@
 <script lang="ts">
     import { DateTime } from 'luxon';
     import { Line } from 'svelte-chartjs';
-    import type { SensorRecord } from '$lib/HomeTracker/types';
     import {
         Chart as ChartJS,
         Title,
@@ -33,7 +32,7 @@
             const sensorRecords = recordsBySensor[sensor];
             const sensorTimes = sensorRecords.map((r: SensorRecord) => r['@timestamp']);
             return allTimes.concat(sensorTimes);
-        }, [])
+        }, [] as number[])
         .sort((a, b) => a - b)
         .map((ts) => formatTimestampToHuman(ts));
 
