@@ -33,8 +33,8 @@
             const sensorTimes = sensorRecords.map((r: SensorRecord) => r['@timestamp']);
             return allTimes.concat(sensorTimes);
         }, [] as number[])
-        .sort((a, b) => a - b)
-        .map((ts) => formatTimestampToHuman(ts));
+        .sort((a, b) => a - b);
+    // .map((ts) => formatTimestampToHuman(ts));
 
     const indexColors = [
         [205, 130, 158],
@@ -58,7 +58,8 @@
                 recordMetric = record.document.pressurehPa;
             }
             return {
-                x: formatTimestampToHuman(record['@timestamp']),
+                // x: formatTimestampToHuman(record['@timestamp']),
+                x: record['@timestamp'],
                 y: recordMetric
             };
         });
@@ -93,7 +94,8 @@
         if (metric === 'temperature' && sensorRecords[0].document.internalTempCelsius) {
             const internalData = sensorRecords.map((record: SensorRecord) => {
                 return {
-                    x: formatTimestampToHuman(record['@timestamp']),
+                    // x: formatTimestampToHuman(record['@timestamp']),
+                    x: record['@timestamp'],
                     y: record.document.internalTempCelsius
                 };
             });
@@ -110,7 +112,8 @@
         if (metric === 'humidity' && sensorRecords[0].document.internalHumidity) {
             const internalData = sensorRecords.map((record: SensorRecord) => {
                 return {
-                    x: formatTimestampToHuman(record['@timestamp']),
+                    // x: formatTimestampToHuman(record['@timestamp']),
+                    x: record['@timestamp'],
                     y: record.document.internalHumidity
                 };
             });
@@ -136,5 +139,21 @@
 
 <h3>{metric}</h3>
 <div>
-    <Line data={dataTemp} height={300} options={{ responsive: true, maintainAspectRatio: false }} />
+    <Line
+        data={dataTemp}
+        height={300}
+        options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: {
+                        callback: (_value, index) => {
+                            return formatTimestampToHuman(allDates[index]);
+                        }
+                    }
+                }
+            }
+        }}
+    />
 </div>
