@@ -64,27 +64,31 @@
             };
         });
 
-        // @ts-expect-error TODO Fix that
-        datasets.push({
-            label: sensor,
+        const commonGraphSettings = {
             fill: true,
             lineTension: 0.3,
             backgroundColor: 'rgba(225, 204, 230, .3)',
-            borderColor: getColorString(indexColors[index], false),
             borderCapStyle: 'butt' as const,
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: 'miter' as const,
-            pointBorderColor: getColorString(indexColors[index], false),
             pointBackgroundColor: 'rgb(255, 255, 255)',
-            pointBorderWidth: 10,
+            pointBorderWidth: 5,
             pointHoverRadius: 5,
             pointHoverBackgroundColor: 'rgb(0, 0, 0)',
             pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
             pointHoverBorderWidth: 2,
             pointRadius: 1,
-            pointHitRadius: 10,
-            data
+            pointHitRadius: 10
+        };
+
+        // @ts-expect-error TODO Fix that
+        datasets.push({
+            label: sensor,
+            data,
+            borderColor: getColorString(indexColors[index], false),
+            pointBorderColor: getColorString(indexColors[index], false),
+            ...commonGraphSettings
         });
 
         if (metric === 'temperature' && sensorRecords[0].document.internalTempCelsius) {
@@ -98,24 +102,10 @@
             // @ts-expect-error TODO Fix that
             datasets.push({
                 label: sensor + ' (int)',
-                fill: true,
-                lineTension: 0.3,
-                backgroundColor: 'rgba(225, 204, 230, .3)',
+                data: internalData,
                 borderColor: getColorString(indexColors[index], true),
-                borderCapStyle: 'butt' as const,
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter' as const,
                 pointBorderColor: getColorString(indexColors[index], true),
-                pointBackgroundColor: 'rgb(255, 255, 255)',
-                pointBorderWidth: 10,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: 'rgb(0, 0, 0)',
-                pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: internalData
+                ...commonGraphSettings
             });
         }
         if (metric === 'humidity' && sensorRecords[0].document.internalHumidity) {
@@ -129,24 +119,10 @@
             // @ts-expect-error TODO Fix that
             datasets.push({
                 label: sensor + ' (int)',
-                fill: true,
-                lineTension: 0.3,
-                backgroundColor: 'rgba(225, 204, 230, .3)',
+                data: internalData,
                 borderColor: getColorString(indexColors[index], true),
-                borderCapStyle: 'butt' as const,
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter' as const,
                 pointBorderColor: getColorString(indexColors[index], true),
-                pointBackgroundColor: 'rgb(255, 255, 255)',
-                pointBorderWidth: 10,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: 'rgb(0, 0, 0)',
-                pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: internalData
+                ...commonGraphSettings
             });
         }
 
@@ -161,5 +137,5 @@
 
 <h3>{metric}</h3>
 <div>
-    <Line data={dataTemp} height={50} options={{ responsive: true }} />
+    <Line data={dataTemp} height={300} options={{ responsive: true, maintainAspectRatio: false }} />
 </div>

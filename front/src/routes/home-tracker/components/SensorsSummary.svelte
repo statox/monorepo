@@ -24,27 +24,57 @@
 </script>
 
 <div class="grid-container">
-    <span>Sensor</span>
-    <span>Last update</span>
-    <span>Temp (C)</span>
-    <span>Humidity (%)</span>
-    <span>Pressure (hPa)</span>
-    <span>Int. Temp (C)</span>
-    <span>Int. Humidity (%)</span>
+    <div class="header top sensor-name">Sensor</div>
+    <div class="header top">Last update</div>
+    <div class="header top">Temp (C)</div>
+    <div class="header top">Humidity (%)</div>
+    <div class="header top">Pressure (hPa)</div>
+    <div class="header top">Int. Temp (C)</div>
+    <div class="header top">Int. Humidity (%)</div>
 
     {#each sensors as sensor}
         {@const lastRecord = getLastRecord(recordsBySensor[sensor])}
-        <div>{sensor}</div>
-        <div>
-            {formatTimestampToHuman(lastRecord['@timestamp'])}
-            ({formatTimestampToRelative(lastRecord['@timestamp'])})
+        <div class="column sensor-name">
+            <div class="header inline">Sensor</div>
+            <div class="data">{sensor}</div>
         </div>
-        <div>{lastRecord.document.tempCelsius?.toFixed(2) || '-'}</div>
-        <div>{lastRecord.document.humidity?.toFixed(2) || '-'}</div>
-
-        <div>{lastRecord.document.pressurehPa?.toFixed(0) || '-'}</div>
-        <div>{lastRecord.document.internalTempCelsius?.toFixed(2) || '-'}</div>
-        <div>{lastRecord.document.internalHumidity?.toFixed(2) || '-'}</div>
+        <div class="column">
+            <div class="header inline">Last update</div>
+            <div class="data">
+                {formatTimestampToHuman(lastRecord['@timestamp'])}
+                ({formatTimestampToRelative(lastRecord['@timestamp'])})
+            </div>
+        </div>
+        <div class="column">
+            <div class="header inline">Temp (C)</div>
+            <div class="data">
+                {lastRecord.document.tempCelsius?.toFixed(2) || '-'}
+            </div>
+        </div>
+        <div class="column">
+            <div class="header inline">Humidity (%)</div>
+            <div class="data">
+                {lastRecord.document.humidity?.toFixed(2) || '-'}
+            </div>
+        </div>
+        <div class="column">
+            <div class="header inline">Pressure (hPa)</div>
+            <div class="data">
+                {lastRecord.document.pressurehPa?.toFixed(0) || '-'}
+            </div>
+        </div>
+        <div class="column">
+            <div class="header inline">Int. Temp (C)</div>
+            <div class="data">
+                {lastRecord.document.internalTempCelsius?.toFixed(2) || '-'}
+            </div>
+        </div>
+        <div class="column">
+            <div class="header inline">Int. Humidity (%)</div>
+            <div class="data">
+                {lastRecord.document.internalHumidity?.toFixed(2) || '-'}
+            </div>
+        </div>
     {/each}
 </div>
 
@@ -52,18 +82,39 @@
     .grid-container {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 20px;
+        column-gap: 20px;
+    }
+
+    .sensor-name {
+        background: var(--nc-bg-2);
+    }
+
+    .header {
+        font-weight: bolder;
+    }
+
+    .header.inline {
+        display: none;
+    }
+
+    .column {
+        display: block;
     }
 
     @media (max-width: 768px) {
         .grid-container {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: 1fr;
         }
-    }
+        .header.top {
+            display: none;
+        }
+        .header.inline {
+            display: block;
+        }
 
-    @media (max-width: 480px) {
-        .grid-container {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        .column {
+            display: flex;
+            justify-content: space-between;
         }
     }
 </style>
