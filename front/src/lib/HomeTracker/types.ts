@@ -1,8 +1,11 @@
 export interface HomeTrackerLatestResponse {
-    recordsBySensor: {
-        [sensorName: string]: SensorRecord[];
-    };
+    recordsBySensor: RecordsBySensor;
 }
+
+export interface RecordsBySensor {
+    [sensorName: string]: SensorRecord[];
+}
+
 export interface SensorRecord {
     '@timestamp': number;
     document: SensorLogData;

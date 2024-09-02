@@ -22,7 +22,7 @@
         records.length - 1
     ];
 
-    const formatTimestamp = (ts: number) => {
+    const formatTimestampToRelative = (ts: number) => {
         return DateTime.fromMillis(ts).toRelative();
     };
 
@@ -83,7 +83,7 @@
 <div class="container">
     <h3>{sensorName}</h3>
 
-    <p>Last update {formatTimestamp(lastRecord['@timestamp'])}</p>
+    <p>Last update {formatTimestampToRelative(lastRecord['@timestamp'])}</p>
     <p>Temp: {lastRecord.document.tempCelsius?.toFixed(2)} C</p>
     <p>Humidity: {lastRecord.document.humidity?.toFixed(2)} %</p>
 
