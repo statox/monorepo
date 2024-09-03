@@ -29,6 +29,7 @@
     <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="temperature" />
     <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="humidity" />
     <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="pressure" />
+    <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="battery" />
 {:catch error}
     <p>Something went wrong</p>
     <p>{JSON.stringify(error)}</p>

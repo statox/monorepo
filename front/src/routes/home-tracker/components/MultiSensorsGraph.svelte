@@ -25,7 +25,7 @@
     };
 
     export let recordsBySensor: RecordsBySensor;
-    export let metric: 'temperature' | 'humidity' | 'pressure';
+    export let metric: 'temperature' | 'humidity' | 'pressure' | 'battery';
 
     const allDates = Object.keys(recordsBySensor)
         .reduce((allTimes, sensor) => {
@@ -54,11 +54,12 @@
                 recordMetric = record.document.tempCelsius;
             } else if (metric === 'humidity') {
                 recordMetric = record.document.humidity;
+            } else if (metric === 'battery') {
+                recordMetric = record.document.batteryCharge;
             } else {
                 recordMetric = record.document.pressurehPa;
             }
             return {
-                // x: formatTimestampToHuman(record['@timestamp']),
                 x: record['@timestamp'],
                 y: recordMetric
             };
@@ -94,7 +95,6 @@
         if (metric === 'temperature' && sensorRecords[0].document.internalTempCelsius) {
             const internalData = sensorRecords.map((record: SensorRecord) => {
                 return {
-                    // x: formatTimestampToHuman(record['@timestamp']),
                     x: record['@timestamp'],
                     y: record.document.internalTempCelsius
                 };
@@ -112,7 +112,6 @@
         if (metric === 'humidity' && sensorRecords[0].document.internalHumidity) {
             const internalData = sensorRecords.map((record: SensorRecord) => {
                 return {
-                    // x: formatTimestampToHuman(record['@timestamp']),
                     x: record['@timestamp'],
                     y: record.document.internalHumidity
                 };
