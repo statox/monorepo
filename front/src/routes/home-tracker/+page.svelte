@@ -3,10 +3,21 @@
     import { getHomeTrackerLatest } from '$lib/HomeTracker/api';
     import SensorsSummary from './components/SensorsSummary.svelte';
     import MultiSensorsGraph from './components/MultiSensorsGraph.svelte';
+    import type { HomeTrackerLatestResponse } from '$lib/HomeTracker/types';
+    import { DateTime } from 'luxon';
 
-    let latestDataApi = getHomeTrackerLatest('1d');
-    const refreshData = (timeWindow: '3h' | '12h' | '1d' | '3d' | '7d') =>
-        (latestDataApi = getHomeTrackerLatest(timeWindow));
+    type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d';
+    let latestDataApi: Promise<HomeTrackerLatestResponse>;
+    let lastRefreshDate: DateTime;
+    let timeWindow: TimeWindow = '1d';
+
+    const refreshData = (timeWindowInput: TimeWindow) => {
+        timeWindow = timeWindowInput;
+        latestDataApi = getHomeTrackerLatest(timeWindow);
+        lastRefreshDate = DateTime.now();
+    };
+
+    refreshData(timeWindow);
 </script>
 
 <HeadIOS title="Home Tracker" description="Recording of my sensors" />
@@ -16,14 +27,30 @@
 {#await latestDataApi}
     <p>Loading data</p>
 {:then latestData}
+    <div>
+        <button on:click={() => refreshData(timeWindow)}>Refresh</button>
+        <span style={'font-weight: bolder'}>Last Refresh</span>
+        <span>{lastRefreshDate.toFormat('dd/MM HH:mm')}</span>
+    </div>
+    <br />
     <SensorsSummary recordsBySensor={latestData.recordsBySensor} />
     <br />
     <div class="time-window-select">
-        <button on:click={() => refreshData('3h')}>3 hours</button>
-        <button on:click={() => refreshData('12h')}>12 hours</button>
-        <button on:click={() => refreshData('1d')}>1 day</button>
-        <button on:click={() => refreshData('3d')}>3 days</button>
-        <button on:click={() => refreshData('7d')}>7 days</button>
+        <button class:selected={timeWindow === '3h'} on:click={() => refreshData('3h')}>
+            3 hours
+        </button>
+        <button class:selected={timeWindow === '12h'} on:click={() => refreshData('12h')}>
+            12 hours
+        </button>
+        <button class:selected={timeWindow === '1d'} on:click={() => refreshData('1d')}>
+            1 day
+        </button>
+        <button class:selected={timeWindow === '3d'} on:click={() => refreshData('3d')}>
+            3 days
+        </button>
+        <button class:selected={timeWindow === '7d'} on:click={() => refreshData('7d')}>
+            7 days
+        </button>
     </div>
     <br />
     <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="temperature" />
@@ -36,6 +63,9 @@
 {/await}
 
 <style>
+    button.selected {
+        background: var(--nc-lk-2);
+    }
     .time-window-select {
         display: flex;
         flex-wrap: wrap;

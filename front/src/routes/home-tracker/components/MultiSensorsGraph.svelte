@@ -66,7 +66,6 @@
         });
 
         const commonGraphSettings = {
-            fill: true,
             lineTension: 0.3,
             backgroundColor: 'rgba(225, 204, 230, .3)',
             borderCapStyle: 'butt' as const,
