@@ -1,6 +1,9 @@
 <script lang="ts">
     import type { RecordsBySensor, SensorRecord } from '$lib/HomeTracker/types';
-    import { DateTime } from 'luxon';
+    import {
+        formatRecordTimestampToHuman,
+        formatRecordTimestampToRelative
+    } from '$lib/HomeTracker/utils';
 
     export let recordsBySensor: RecordsBySensor;
 
@@ -9,18 +12,6 @@
     );
     const getLastRecord = (sensorRecords: SensorRecord[]) =>
         sensorRecords.sort((a, b) => a['@timestamp'] - b['@timestamp'])[sensorRecords.length - 1];
-
-    const formatTimestampToHuman = (ts: number) => {
-        const time = DateTime.fromMillis(ts);
-        if (time.diffNow('hours').hours < 12) {
-            return DateTime.fromMillis(ts).toFormat('HH:mm');
-        } else {
-            return DateTime.fromMillis(ts).toFormat('dd/MM HH:mm');
-        }
-    };
-    const formatTimestampToRelative = (ts: number) => {
-        return DateTime.fromMillis(ts).toRelative();
-    };
 </script>
 
 <div class="grid-container">
@@ -41,8 +32,8 @@
         <div class="column">
             <div class="header inline">Last update</div>
             <div class="data">
-                {formatTimestampToHuman(lastRecord['@timestamp'])}
-                ({formatTimestampToRelative(lastRecord['@timestamp'])})
+                {formatRecordTimestampToHuman(lastRecord['@timestamp'])}
+                ({formatRecordTimestampToRelative(lastRecord['@timestamp'])})
             </div>
         </div>
         <div class="column">

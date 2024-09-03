@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { DateTime } from 'luxon';
     import { Line } from 'svelte-chartjs';
     import {
         Chart as ChartJS,
@@ -12,17 +11,12 @@
         CategoryScale
     } from 'chart.js';
     import type { RecordsBySensor, SensorRecord } from '$lib/HomeTracker/types';
+    import {
+        formatRecordTimestampToHuman,
+        formatRecordTimestampToMillis
+    } from '$lib/HomeTracker/utils';
 
     ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
-
-    const formatTimestampToHuman = (ts: number) => {
-        const time = DateTime.fromMillis(ts);
-        if (time.diffNow('hours').hours < 12) {
-            return DateTime.fromMillis(ts).toFormat('HH:mm');
-        } else {
-            return DateTime.fromMillis(ts).toFormat('dd/MM HH:mm');
-        }
-    };
 
     export let recordsBySensor: RecordsBySensor;
     export let metric: 'temperature' | 'humidity' | 'pressure' | 'battery';
@@ -33,8 +27,9 @@
             const sensorTimes = sensorRecords.map((r: SensorRecord) => r['@timestamp']);
             return allTimes.concat(sensorTimes);
         }, [] as number[])
+        // Hack because some old records have a ts as iso string
+        .map((ts) => formatRecordTimestampToMillis(ts))
         .sort((a, b) => a - b);
-    // .map((ts) => formatTimestampToHuman(ts));
 
     const indexColors = [
         [205, 130, 158],
@@ -147,7 +142,7 @@
                 x: {
                     ticks: {
                         callback: (_value, index) => {
-                            return formatTimestampToHuman(allDates[index]);
+                            return formatRecordTimestampToHuman(allDates[index]);
                         }
                     }
                 }
