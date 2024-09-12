@@ -1,3 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// TODO: The code imported from the original svelte-toast errors a lot I need to fix it and
+// disable the ts-nocheck directive to check the file properly again
 import { writable } from 'svelte/store';
 
 /**
