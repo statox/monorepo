@@ -1,7 +1,7 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { getHomeTrackerLatest } from '$lib/HomeTracker/api';
-    import SensorsSummary from './components/SensorsSummary.svelte';
+    // import SensorsSummary from './components/SensorsSummary.svelte';
     import MultiSensorsGraph from './components/MultiSensorsGraph.svelte';
     import type { HomeTrackerLatestResponse } from '$lib/HomeTracker/types';
     import { DateTime } from 'luxon';
@@ -33,7 +33,7 @@
         <span>{lastRefreshDate.toFormat('dd/MM HH:mm')}</span>
     </div>
     <br />
-    <SensorsSummary recordsBySensor={latestData.recordsBySensor} />
+    <!-- <SensorsSummary recordsBySensor={latestData.recordsBySensor} /> -->
     <br />
     <div class="time-window-select">
         <button class:selected={timeWindow === '3h'} on:click={() => refreshData('3h')}>
@@ -53,10 +53,26 @@
         </button>
     </div>
     <br />
-    <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="temperature" />
-    <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="humidity" />
-    <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="pressure" />
-    <MultiSensorsGraph recordsBySensor={latestData.recordsBySensor} metric="battery" />
+    <MultiSensorsGraph
+        histogramData={latestData.histogramData}
+        sensorNames={latestData.sensorNames}
+        metric="tempCelsius"
+    />
+    <MultiSensorsGraph
+        histogramData={latestData.histogramData}
+        sensorNames={latestData.sensorNames}
+        metric="humidity"
+    />
+    <MultiSensorsGraph
+        histogramData={latestData.histogramData}
+        sensorNames={latestData.sensorNames}
+        metric="pressurehPa"
+    />
+    <MultiSensorsGraph
+        histogramData={latestData.histogramData}
+        sensorNames={latestData.sensorNames}
+        metric="batteryCharge"
+    />
 {:catch error}
     <p>Something went wrong</p>
     <p>{JSON.stringify(error)}</p>

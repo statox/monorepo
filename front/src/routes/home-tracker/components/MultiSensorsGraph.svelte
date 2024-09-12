@@ -10,26 +10,16 @@
         PointElement,
         CategoryScale
     } from 'chart.js';
-    import type { RecordsBySensor, SensorRecord } from '$lib/HomeTracker/types';
-    import {
-        formatRecordTimestampToHuman,
-        formatRecordTimestampToMillis
-    } from '$lib/HomeTracker/utils';
+    import type { HomeTrackerHistogramData, HomeTrackerTimeData } from '$lib/HomeTracker/types';
+    import { formatRecordTimestampToHuman } from '$lib/HomeTracker/utils';
 
     ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
 
-    export let recordsBySensor: RecordsBySensor;
-    export let metric: 'temperature' | 'humidity' | 'pressure' | 'battery';
+    export let sensorNames: string[];
+    export let histogramData: HomeTrackerHistogramData;
+    export let metric: keyof HomeTrackerTimeData;
 
-    const allDates = Object.keys(recordsBySensor)
-        .reduce((allTimes, sensor) => {
-            const sensorRecords = recordsBySensor[sensor];
-            const sensorTimes = sensorRecords.map((r: SensorRecord) => r['@timestamp']);
-            return allTimes.concat(sensorTimes);
-        }, [] as number[])
-        // Hack because some old records have a ts as iso string
-        .map((ts) => formatRecordTimestampToMillis(ts))
-        .sort((a, b) => a - b);
+    const allDates = Object.keys(histogramData).sort((a, b) => Number(a) - Number(b));
 
     const indexColors = [
         [205, 130, 158],
@@ -41,84 +31,78 @@
         return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${internalData ? '0.3' : '1'})`;
     };
 
-    const datasets = Object.keys(recordsBySensor).reduce((datasets, sensor, index) => {
-        const sensorRecords = recordsBySensor[sensor];
-        const data = sensorRecords.map((record: SensorRecord) => {
-            let recordMetric: number | undefined;
-            if (metric === 'temperature') {
-                recordMetric = record.document.tempCelsius;
-            } else if (metric === 'humidity') {
-                recordMetric = record.document.humidity;
-            } else if (metric === 'battery') {
-                recordMetric = record.document.batteryCharge;
-            } else {
-                recordMetric = record.document.pressurehPa;
-            }
-            return {
-                x: record['@timestamp'],
-                y: recordMetric
-            };
-        });
+    const commonGraphSettings = {
+        lineTension: 0.3,
+        backgroundColor: 'rgba(225, 204, 230, .3)',
+        borderCapStyle: 'butt' as const,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter' as const,
+        pointBackgroundColor: 'rgb(255, 255, 255)',
+        pointBorderWidth: 5,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: 'rgb(0, 0, 0)',
+        pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10
+    };
 
-        const commonGraphSettings = {
-            lineTension: 0.3,
-            backgroundColor: 'rgba(225, 204, 230, .3)',
-            borderCapStyle: 'butt' as const,
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter' as const,
-            pointBackgroundColor: 'rgb(255, 255, 255)',
-            pointBorderWidth: 5,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgb(0, 0, 0)',
-            pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10
-        };
-
-        // @ts-expect-error TODO Fix that
-        datasets.push({
-            label: sensor,
-            data,
-            borderColor: getColorString(indexColors[index], false),
-            pointBorderColor: getColorString(indexColors[index], false),
-            ...commonGraphSettings
-        });
-
-        if (metric === 'temperature' && sensorRecords[0].document.internalTempCelsius) {
-            const internalData = sensorRecords.map((record: SensorRecord) => {
+    const datasets = sensorNames.reduce((datasets, sensor, index) => {
+        const data = Object.keys(histogramData)
+            .filter((ts) => {
+                return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[metric]?.[
+                    sensor
+                ];
+            })
+            .map((ts) => {
                 return {
-                    x: record['@timestamp'],
-                    y: record.document.internalTempCelsius
+                    x: ts,
+                    y: histogramData[ts as unknown as keyof HomeTrackerHistogramData][metric]?.[
+                        sensor
+                    ]
                 };
             });
 
+        if (data.length) {
             // @ts-expect-error TODO Fix that
             datasets.push({
-                label: sensor + ' (int)',
-                data: internalData,
-                borderColor: getColorString(indexColors[index], true),
-                pointBorderColor: getColorString(indexColors[index], true),
+                label: sensor,
+                data,
+                borderColor: getColorString(indexColors[index], false),
+                pointBorderColor: getColorString(indexColors[index], false),
                 ...commonGraphSettings
             });
         }
-        if (metric === 'humidity' && sensorRecords[0].document.internalHumidity) {
-            const internalData = sensorRecords.map((record: SensorRecord) => {
-                return {
-                    x: record['@timestamp'],
-                    y: record.document.internalHumidity
-                };
-            });
 
-            // @ts-expect-error TODO Fix that
-            datasets.push({
-                label: sensor + ' (int)',
-                data: internalData,
-                borderColor: getColorString(indexColors[index], true),
-                pointBorderColor: getColorString(indexColors[index], true),
-                ...commonGraphSettings
-            });
+        if (['tempCelsius', 'humidity'].includes(metric as string)) {
+            const internalMetric =
+                metric === 'tempCelsius' ? 'internalTempCelsius' : 'internalHumidity';
+            const data = Object.keys(histogramData)
+                .filter((ts) => {
+                    return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[
+                        internalMetric
+                    ]?.[sensor];
+                })
+                .map((ts) => {
+                    return {
+                        x: ts,
+                        y: histogramData[ts as unknown as keyof HomeTrackerHistogramData][
+                            internalMetric
+                        ]?.[sensor]
+                    };
+                });
+
+            if (data.length) {
+                // @ts-expect-error TODO Fix that
+                datasets.push({
+                    label: sensor + '(int)',
+                    data,
+                    borderColor: getColorString(indexColors[index], true),
+                    pointBorderColor: getColorString(indexColors[index], true),
+                    ...commonGraphSettings
+                });
+            }
         }
 
         return datasets;
@@ -142,7 +126,7 @@
                 x: {
                     ticks: {
                         callback: (_value, index) => {
-                            return formatRecordTimestampToHuman(allDates[index]);
+                            return formatRecordTimestampToHuman(Number(allDates[index]));
                         }
                     }
                 }

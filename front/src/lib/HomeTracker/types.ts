@@ -1,5 +1,31 @@
 export interface HomeTrackerLatestResponse {
-    recordsBySensor: RecordsBySensor;
+    histogramData: HomeTrackerHistogramData;
+    sensorNames: string[];
+}
+
+export interface HomeTrackerTimeData {
+    tempCelsius?: {
+        [sensorName: string]: number;
+    };
+    internalTempCelsius?: {
+        [sensorName: string]: number;
+    };
+    batteryCharge?: {
+        [sensorName: string]: number;
+    };
+    humidity?: {
+        [sensorName: string]: number;
+    };
+    internalHumidity?: {
+        [sensorName: string]: number;
+    };
+    pressurehPa?: {
+        [sensorName: string]: number;
+    };
+}
+
+export interface HomeTrackerHistogramData {
+    [timestamp: number]: HomeTrackerTimeData;
 }
 
 export interface RecordsBySensor {

@@ -4,6 +4,9 @@ import { DateTime } from 'luxon';
 // an iso string. In the future we want to update these records or just delete them
 const parseRecordTimestamp = (ts: number | string) => {
     if (typeof ts === 'number') {
+        if (ts < 9000000000) {
+            return DateTime.fromSeconds(ts);
+        }
         return DateTime.fromMillis(ts);
     }
     if (typeof ts === 'string') {
