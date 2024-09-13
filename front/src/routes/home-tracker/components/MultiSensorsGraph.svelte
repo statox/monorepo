@@ -27,8 +27,15 @@
         [130, 158, 205]
     ];
 
-    const getColorString = (color: number[], internalData: boolean) => {
-        return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${internalData ? '0.3' : '1'})`;
+    type AlphaMode = 'dark' | 'normal' | 'light';
+    const getColorString = (color: number[], alphaMode: AlphaMode) => {
+        const alphaConfig: Record<AlphaMode, number> = {
+            dark: 0.3,
+            normal: 0.5,
+            light: 0.7
+        };
+        const alpha = alphaConfig[alphaMode];
+        return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
     };
 
     const commonGraphSettings = {
@@ -38,8 +45,7 @@
         borderDash: [],
         borderDashOffset: 0.0,
         borderJoinStyle: 'miter' as const,
-        pointBackgroundColor: 'rgb(255, 255, 255)',
-        pointBorderWidth: 5,
+        pointBorderWidth: 0,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: 'rgb(0, 0, 0)',
         pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
@@ -69,8 +75,9 @@
             datasets.push({
                 label: sensor,
                 data,
-                borderColor: getColorString(indexColors[index], false),
-                pointBorderColor: getColorString(indexColors[index], false),
+                borderColor: getColorString(indexColors[index], 'normal'),
+                pointBorderColor: getColorString(indexColors[index], 'normal'),
+                pointBackgroundColor: getColorString(indexColors[index], 'light'),
                 ...commonGraphSettings
             });
         }
@@ -96,10 +103,11 @@
             if (data.length) {
                 // @ts-expect-error TODO Fix that
                 datasets.push({
-                    label: sensor + '(int)',
+                    label: sensor + ' (int)',
                     data,
-                    borderColor: getColorString(indexColors[index], true),
-                    pointBorderColor: getColorString(indexColors[index], true),
+                    borderColor: getColorString(indexColors[index], 'dark'),
+                    pointBorderColor: getColorString(indexColors[index], 'dark'),
+                    pointBackgroundColor: getColorString(indexColors[index], 'light'),
                     ...commonGraphSettings
                 });
             }
@@ -125,9 +133,15 @@
             scales: {
                 x: {
                     ticks: {
-                        callback: (_value, index) => {
-                            return formatRecordTimestampToHuman(Number(allDates[index]));
-                        }
+                        callback: (_value, index) =>
+                            formatRecordTimestampToHuman(Number(allDates[index]))
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: (context) => formatRecordTimestampToHuman(Number(context[0].label))
                     }
                 }
             }

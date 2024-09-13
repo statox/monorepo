@@ -22,11 +22,11 @@ export const formatRecordTimestampToMillis = (ts: number) => {
 
 export const formatRecordTimestampToHuman = (ts: number) => {
     const time = parseRecordTimestamp(ts);
-    if (time.diffNow('hours').hours > -12) {
+    if (time.hasSame(DateTime.now(), 'day')) {
         return time.toFormat('HH:mm');
-    } else {
-        return time.toFormat('dd/MM HH:mm');
     }
+
+    return time.toFormat('dd/MM HH:mm');
 };
 
 export const formatRecordTimestampToRelative = (ts: number) => {
