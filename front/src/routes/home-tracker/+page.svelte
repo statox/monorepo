@@ -3,26 +3,29 @@
     import { getHomeTrackerLatest, getHomeTrackerSensors } from '$lib/HomeTracker/api';
     import SensorsSummary from './components/SensorsSummary.svelte';
     import MultiSensorsGraph from './components/MultiSensorsGraph.svelte';
-    import type {
-        HomeTrackerLatestResponse,
-        HomeTrackerSensorsResponse
-    } from '$lib/HomeTracker/types';
     import { DateTime } from 'luxon';
+    import type { HomeTrackerTimeData } from '$lib/HomeTracker/types';
 
     type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d';
-    let latestDataApi: Promise<HomeTrackerLatestResponse>;
-    let sensorsDetailsApi: Promise<HomeTrackerSensorsResponse>;
     let lastRefreshDate: DateTime;
     let timeWindow: TimeWindow = '1d';
 
-    const refreshData = (timeWindowInput: TimeWindow) => {
+    const metrics = [
+        'tempCelsius',
+        'humidity',
+        'pressurehPa',
+        'batteryCharge'
+    ] as (keyof HomeTrackerTimeData)[];
+
+    const refreshData = async (timeWindowInput: TimeWindow) => {
         timeWindow = timeWindowInput;
-        latestDataApi = getHomeTrackerLatest(timeWindow);
-        sensorsDetailsApi = getHomeTrackerSensors();
+        const histogramData = await getHomeTrackerLatest(timeWindow);
+        const sensorsDetails = await getHomeTrackerSensors();
         lastRefreshDate = DateTime.now();
+        return { histogramData, sensorsDetails };
     };
 
-    refreshData(timeWindow);
+    let apiData = refreshData(timeWindow);
 </script>
 
 <HeadIOS title="Home Tracker" description="Recording of my sensors" />
@@ -30,25 +33,17 @@
 <h2>Home Tracker</h2>
 
 <div>
-    <button on:click={() => refreshData(timeWindow)}>Refresh</button>
+    <button on:click={() => (apiData = refreshData(timeWindow))}>Refresh</button>
     <span style={'font-weight: bolder'}>Last Refresh</span>
-    <span>{lastRefreshDate.toFormat('dd/MM HH:mm')}</span>
+    <span>{lastRefreshDate?.toFormat('dd/MM HH:mm') || 'NA'}</span>
 </div>
 <br />
 
-{#await sensorsDetailsApi}
+{#await apiData}
     <p>Loading sensors data</p>
-{:then sensorsDetails}
+{:then { histogramData, sensorsDetails }}
     <SensorsSummary sensorsData={sensorsDetails.sensors} />
     <br />
-{:catch error}
-    <p>Something went wrong getting sensor data</p>
-    <p>{JSON.stringify(error)}</p>
-{/await}
-
-{#await latestDataApi}
-    <p>Loading histogram data</p>
-{:then latestData}
     <div class="time-window-select">
         <button class:selected={timeWindow === '3h'} on:click={() => refreshData('3h')}>
             3 hours
@@ -67,28 +62,15 @@
         </button>
     </div>
     <br />
-    <MultiSensorsGraph
-        histogramData={latestData.histogramData}
-        sensorNames={latestData.sensorNames}
-        metric="tempCelsius"
-    />
-    <MultiSensorsGraph
-        histogramData={latestData.histogramData}
-        sensorNames={latestData.sensorNames}
-        metric="humidity"
-    />
-    <MultiSensorsGraph
-        histogramData={latestData.histogramData}
-        sensorNames={latestData.sensorNames}
-        metric="pressurehPa"
-    />
-    <MultiSensorsGraph
-        histogramData={latestData.histogramData}
-        sensorNames={latestData.sensorNames}
-        metric="batteryCharge"
-    />
+    {#each metrics as metric}
+        <MultiSensorsGraph
+            histogramData={histogramData.histogramData}
+            sensorNames={histogramData.sensorNames}
+            {metric}
+        />
+    {/each}
 {:catch error}
-    <p>Something went wrong getting histogram data</p>
+    <p>Something went wrong getting sensor data</p>
     <p>{JSON.stringify(error)}</p>
 {/await}
 
