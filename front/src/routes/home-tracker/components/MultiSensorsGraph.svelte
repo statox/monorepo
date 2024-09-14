@@ -10,32 +10,38 @@
         PointElement,
         CategoryScale
     } from 'chart.js';
-    import type { HomeTrackerHistogramData, HomeTrackerTimeData } from '$lib/HomeTracker/types';
+    import type {
+        HomeTrackerHistogramData,
+        HomeTrackerTimeData,
+        SensorState
+    } from '$lib/HomeTracker/types';
     import { formatRecordTimestampToHuman } from '$lib/HomeTracker/utils';
 
     ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
 
+    export let sensorsData: SensorState[];
     export let sensorNames: string[];
     export let histogramData: HomeTrackerHistogramData;
     export let metric: keyof HomeTrackerTimeData;
 
     const allDates = Object.keys(histogramData).sort((a, b) => Number(a) - Number(b));
 
-    const indexColors = [
-        [205, 130, 158],
-        [130, 205, 158],
-        [130, 158, 205]
-    ];
-
     type AlphaMode = 'dark' | 'normal' | 'light';
-    const getColorString = (color: number[], alphaMode: AlphaMode) => {
+    const getColorString = (sensorName: string, alphaMode: AlphaMode) => {
         const alphaConfig: Record<AlphaMode, number> = {
             dark: 0.3,
             normal: 0.5,
             light: 0.7
         };
+
+        const color = sensorsData.find((sensor) => sensor.sensorName === sensorName)?.rgbColor || {
+            r: 20,
+            g: 20,
+            b: 20
+        };
+
         const alpha = alphaConfig[alphaMode];
-        return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
+        return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
     };
 
     const commonGraphSettings = {
@@ -75,9 +81,9 @@
             datasets.push({
                 label: sensor,
                 data,
-                borderColor: getColorString(indexColors[index], 'normal'),
-                pointBorderColor: getColorString(indexColors[index], 'normal'),
-                pointBackgroundColor: getColorString(indexColors[index], 'light'),
+                borderColor: getColorString(sensor, 'normal'),
+                pointBorderColor: getColorString(sensor, 'normal'),
+                pointBackgroundColor: getColorString(sensor, 'light'),
                 ...commonGraphSettings
             });
         }
@@ -105,9 +111,9 @@
                 datasets.push({
                     label: sensor + ' (int)',
                     data,
-                    borderColor: getColorString(indexColors[index], 'dark'),
-                    pointBorderColor: getColorString(indexColors[index], 'dark'),
-                    pointBackgroundColor: getColorString(indexColors[index], 'light'),
+                    borderColor: getColorString(sensor, 'dark'),
+                    pointBorderColor: getColorString(sensor, 'dark'),
+                    pointBackgroundColor: getColorString(sensor, 'light'),
                     ...commonGraphSettings
                 });
             }

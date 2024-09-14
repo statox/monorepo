@@ -20,7 +20,12 @@
     {#each sensorsData.sort( (a, b) => (a.sensorName.toLowerCase() < b.sensorName.toLowerCase() ? -1 : 1) ) as sensor}
         <div class="column sensor-name">
             <div class="header inline">Sensor</div>
-            <div class="data">{sensor.sensorName}</div>
+            <div
+                class="data"
+                style={`color: rgb(${sensor.rgbColor.r}, ${sensor.rgbColor.g}, ${sensor.rgbColor.b})`}
+            >
+                {sensor.sensorName}
+            </div>
         </div>
         <div class="column">
             <div class="header inline">Last update</div>

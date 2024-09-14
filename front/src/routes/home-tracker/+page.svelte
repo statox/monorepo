@@ -64,6 +64,7 @@
     <br />
     {#each metrics as metric}
         <MultiSensorsGraph
+            sensorsData={sensorsDetails.sensors}
             histogramData={histogramData.histogramData}
             sensorNames={histogramData.sensorNames}
             {metric}
