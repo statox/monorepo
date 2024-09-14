@@ -29,6 +29,13 @@
 
 <h2>Home Tracker</h2>
 
+<div>
+    <button on:click={() => refreshData(timeWindow)}>Refresh</button>
+    <span style={'font-weight: bolder'}>Last Refresh</span>
+    <span>{lastRefreshDate.toFormat('dd/MM HH:mm')}</span>
+</div>
+<br />
+
 {#await sensorsDetailsApi}
     <p>Loading sensors data</p>
 {:then sensorsDetails}
@@ -42,12 +49,6 @@
 {#await latestDataApi}
     <p>Loading histogram data</p>
 {:then latestData}
-    <div>
-        <button on:click={() => refreshData(timeWindow)}>Refresh</button>
-        <span style={'font-weight: bolder'}>Last Refresh</span>
-        <span>{lastRefreshDate.toFormat('dd/MM HH:mm')}</span>
-    </div>
-    <br />
     <div class="time-window-select">
         <button class:selected={timeWindow === '3h'} on:click={() => refreshData('3h')}>
             3 hours
