@@ -1,17 +1,11 @@
 <script lang="ts">
-    import type { RecordsBySensor, SensorRecord } from '$lib/HomeTracker/types';
+    import type { SensorState } from '$lib/HomeTracker/types';
     import {
         formatRecordTimestampToHuman,
         formatRecordTimestampToRelative
     } from '$lib/HomeTracker/utils';
 
-    export let recordsBySensor: RecordsBySensor;
-
-    const sensors = Object.keys(recordsBySensor).sort((a, b) =>
-        a.toLowerCase() < b.toLowerCase() ? -1 : 1
-    );
-    const getLastRecord = (sensorRecords: SensorRecord[]) =>
-        sensorRecords.sort((a, b) => a['@timestamp'] - b['@timestamp'])[sensorRecords.length - 1];
+    export let sensorsData: SensorState[];
 </script>
 
 <div class="grid-container">
@@ -23,47 +17,46 @@
     <div class="header top">Int. Temp (C)</div>
     <div class="header top">Int. Humidity (%)</div>
 
-    {#each sensors as sensor}
-        {@const lastRecord = getLastRecord(recordsBySensor[sensor])}
+    {#each sensorsData.sort( (a, b) => (a.sensorName.toLowerCase() < b.sensorName.toLowerCase() ? -1 : 1) ) as sensor}
         <div class="column sensor-name">
             <div class="header inline">Sensor</div>
-            <div class="data">{sensor}</div>
+            <div class="data">{sensor.sensorName}</div>
         </div>
         <div class="column">
             <div class="header inline">Last update</div>
             <div class="data">
-                {formatRecordTimestampToHuman(lastRecord['@timestamp'])}
-                ({formatRecordTimestampToRelative(lastRecord['@timestamp'])})
+                {formatRecordTimestampToHuman(sensor.lastLogTimestamp)}
+                ({formatRecordTimestampToRelative(sensor.lastLogTimestamp)})
             </div>
         </div>
         <div class="column">
             <div class="header inline">Temp (C)</div>
             <div class="data">
-                {lastRecord.document.tempCelsius?.toFixed(2) || '-'}
+                {sensor.lastLogData.tempCelsius?.toFixed(2) || '-'}
             </div>
         </div>
         <div class="column">
             <div class="header inline">Humidity (%)</div>
             <div class="data">
-                {lastRecord.document.humidity?.toFixed(2) || '-'}
+                {sensor.lastLogData.humidity?.toFixed(2) || '-'}
             </div>
         </div>
         <div class="column">
             <div class="header inline">Pressure (hPa)</div>
             <div class="data">
-                {lastRecord.document.pressurehPa?.toFixed(0) || '-'}
+                {sensor.lastLogData.pressurehPa?.toFixed(0) || '-'}
             </div>
         </div>
         <div class="column">
             <div class="header inline">Int. Temp (C)</div>
             <div class="data">
-                {lastRecord.document.internalTempCelsius?.toFixed(2) || '-'}
+                {sensor.lastLogData.internalTempCelsius?.toFixed(2) || '-'}
             </div>
         </div>
         <div class="column">
             <div class="header inline">Int. Humidity (%)</div>
             <div class="data">
-                {lastRecord.document.internalHumidity?.toFixed(2) || '-'}
+                {sensor.lastLogData.internalHumidity?.toFixed(2) || '-'}
             </div>
         </div>
     {/each}

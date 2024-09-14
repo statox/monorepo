@@ -1,19 +1,24 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { getHomeTrackerLatest } from '$lib/HomeTracker/api';
-    // import SensorsSummary from './components/SensorsSummary.svelte';
+    import { getHomeTrackerLatest, getHomeTrackerSensors } from '$lib/HomeTracker/api';
+    import SensorsSummary from './components/SensorsSummary.svelte';
     import MultiSensorsGraph from './components/MultiSensorsGraph.svelte';
-    import type { HomeTrackerLatestResponse } from '$lib/HomeTracker/types';
+    import type {
+        HomeTrackerLatestResponse,
+        HomeTrackerSensorsResponse
+    } from '$lib/HomeTracker/types';
     import { DateTime } from 'luxon';
 
     type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d';
     let latestDataApi: Promise<HomeTrackerLatestResponse>;
+    let sensorsDetailsApi: Promise<HomeTrackerSensorsResponse>;
     let lastRefreshDate: DateTime;
     let timeWindow: TimeWindow = '1d';
 
     const refreshData = (timeWindowInput: TimeWindow) => {
         timeWindow = timeWindowInput;
         latestDataApi = getHomeTrackerLatest(timeWindow);
+        sensorsDetailsApi = getHomeTrackerSensors();
         lastRefreshDate = DateTime.now();
     };
 
@@ -24,16 +29,24 @@
 
 <h2>Home Tracker</h2>
 
+{#await sensorsDetailsApi}
+    <p>Loading sensors data</p>
+{:then sensorsDetails}
+    <SensorsSummary sensorsData={sensorsDetails.sensors} />
+    <br />
+{:catch error}
+    <p>Something went wrong getting sensor data</p>
+    <p>{JSON.stringify(error)}</p>
+{/await}
+
 {#await latestDataApi}
-    <p>Loading data</p>
+    <p>Loading histogram data</p>
 {:then latestData}
     <div>
         <button on:click={() => refreshData(timeWindow)}>Refresh</button>
         <span style={'font-weight: bolder'}>Last Refresh</span>
         <span>{lastRefreshDate.toFormat('dd/MM HH:mm')}</span>
     </div>
-    <br />
-    <!-- <SensorsSummary recordsBySensor={latestData.recordsBySensor} /> -->
     <br />
     <div class="time-window-select">
         <button class:selected={timeWindow === '3h'} on:click={() => refreshData('3h')}>
@@ -74,7 +87,7 @@
         metric="batteryCharge"
     />
 {:catch error}
-    <p>Something went wrong</p>
+    <p>Something went wrong getting histogram data</p>
     <p>{JSON.stringify(error)}</p>
 {/await}
 

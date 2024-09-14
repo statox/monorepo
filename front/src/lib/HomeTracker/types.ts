@@ -1,3 +1,14 @@
+export interface SensorState {
+    sensorName: string;
+    rgbColor: { r: number; g: number; b: number };
+    lastLogTimestamp: number;
+    lastLogData: SensorLogData;
+}
+
+export interface HomeTrackerSensorsResponse {
+    sensors: SensorState[];
+}
+
 export interface HomeTrackerLatestResponse {
     histogramData: HomeTrackerHistogramData;
     sensorNames: string[];
@@ -26,15 +37,6 @@ export interface HomeTrackerTimeData {
 
 export interface HomeTrackerHistogramData {
     [timestamp: number]: HomeTrackerTimeData;
-}
-
-export interface RecordsBySensor {
-    [sensorName: string]: SensorRecord[];
-}
-
-export interface SensorRecord {
-    '@timestamp': number;
-    document: SensorLogData;
 }
 
 export interface SensorLogData {
