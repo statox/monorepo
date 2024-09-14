@@ -45,19 +45,22 @@
     <SensorsSummary sensorsData={sensorsDetails.sensors} />
     <br />
     <div class="time-window-select">
-        <button class:selected={timeWindow === '3h'} on:click={() => refreshData('3h')}>
+        <button class:selected={timeWindow === '3h'} on:click={() => (apiData = refreshData('3h'))}>
             3 hours
         </button>
-        <button class:selected={timeWindow === '12h'} on:click={() => refreshData('12h')}>
+        <button
+            class:selected={timeWindow === '12h'}
+            on:click={() => (apiData = refreshData('12h'))}
+        >
             12 hours
         </button>
-        <button class:selected={timeWindow === '1d'} on:click={() => refreshData('1d')}>
+        <button class:selected={timeWindow === '1d'} on:click={() => (apiData = refreshData('1d'))}>
             1 day
         </button>
-        <button class:selected={timeWindow === '3d'} on:click={() => refreshData('3d')}>
+        <button class:selected={timeWindow === '3d'} on:click={() => (apiData = refreshData('3d'))}>
             3 days
         </button>
-        <button class:selected={timeWindow === '7d'} on:click={() => refreshData('7d')}>
+        <button class:selected={timeWindow === '7d'} on:click={() => (apiData = refreshData('7d'))}>
             7 days
         </button>
     </div>

@@ -60,7 +60,7 @@
         pointHitRadius: 10
     };
 
-    const datasets = sensorNames.reduce((datasets, sensor, index) => {
+    const datasets = sensorNames.reduce((datasets, sensor) => {
         const data = Object.keys(histogramData)
             .filter((ts) => {
                 return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[metric]?.[
