@@ -10,6 +10,7 @@ export interface WatchedContent {
     lastContent: string;
     lastCheckDateUnix: number;
     lastUpdateDateUnix: number;
+    archivalDateUnix: number;
     checkIntervalSeconds: number;
     lastErrorDateUnix: number;
     lastErrorMessage: string;

@@ -2,11 +2,12 @@
     import { createEventDispatcher } from 'svelte';
     import { ButtonCopy } from '$lib/components/ButtonCopy';
     import { ButtonDelete } from '$lib/components/ButtonDelete';
+    import { ButtonSwitch } from '$lib/components/ButtonSwitch';
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth/service';
     import type { WatchedContent } from '$lib/WebWatcher/types';
     import { Duration } from 'luxon';
-    import { deleteWatcherAPI } from '$lib/WebWatcher/api';
+    import { deleteWatcherAPI, toggleWatcherEnabledAPI } from '$lib/WebWatcher/api';
 
     const dispatch = createEventDispatcher();
 
@@ -48,13 +49,31 @@
             });
         }
     };
+
+    const updateWatcherEnabled = async (event: CustomEvent) => {
+        await toggleWatcherEnabledAPI({
+            watcherId: watcher.id,
+            setToEnabled: event.detail === 'on'
+        });
+        dispatch('update');
+    };
+
+    let isEnabled = watcher.archivalDateUnix ? 'off' : 'on';
 </script>
 
 {#if $user}
     <div class="item">
         <h4 class="item-title">
-            {watcher.name}
-            <ButtonDelete on:delete={deleteWatcher} />
+            <div class="item-name">{watcher.name}</div>
+            <div class="item-actions">
+                <ButtonSwitch
+                    value={isEnabled}
+                    label="Enabled"
+                    on:change={updateWatcherEnabled}
+                    design="slider"
+                />
+                <ButtonDelete on:delete={deleteWatcher} />
+            </div>
         </h4>
         <div class="section">
             <p class="section-1-item">
@@ -134,6 +153,15 @@
     .item-title {
         display: flex;
         justify-content: space-between;
+    }
+
+    .item-name {
+        flex-grow: 1;
+    }
+    .item-actions {
+        display: flex;
+        justify-content: space-between;
+        column-gap: 1em;
     }
 
     .section {

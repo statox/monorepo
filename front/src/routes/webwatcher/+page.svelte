@@ -22,7 +22,7 @@
     {#await watchersApi}
         <p>Loading data</p>
     {:then watchers}
-        <WatchersView {watchers} on:delete={fetchWatchers} />
+        <WatchersView {watchers} on:delete={fetchWatchers} on:update={fetchWatchers} />
     {:catch error}
         <p>Something went wrong</p>
         <p>{JSON.stringify(error)}</p>

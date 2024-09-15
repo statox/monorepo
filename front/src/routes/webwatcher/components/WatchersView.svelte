@@ -10,7 +10,11 @@
 
 <div class="container">
     {#each watchers.sort((a, b) => b.id - a.id) as entry}
-        <WatcherComponent watcher={entry} on:delete={() => dispatch('delete')} />
+        <WatcherComponent
+            watcher={entry}
+            on:delete={() => dispatch('delete')}
+            on:update={() => dispatch('update')}
+        />
     {/each}
 </div>
 
