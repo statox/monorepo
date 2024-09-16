@@ -53,12 +53,6 @@ export const utilsSection = {
             link: '/webwatcher'
         },
         {
-            name: 'Browser home',
-            description:
-                'A page meant to be the default page of my browsers. Holding my important and often visited links',
-            link: '/browser-home'
-        },
-        {
             name: 'About',
             description: 'The about section of this website',
             link: '/about'
