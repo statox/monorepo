@@ -9,9 +9,8 @@
     import { onMount } from 'svelte';
     import { initializeAuth0 } from '$lib/auth/service';
     import { SvelteToast } from '$lib/components/Toast';
-    import HomeNavItem from '$lib/components/NavItems/HomeNavItem.svelte';
-    import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
     import { Notice } from '$lib/components/Notice';
+    import { Header } from '$lib/components/Header';
 
     let auth0Error: Error;
     onMount(async () => {
@@ -23,15 +22,7 @@
     });
 </script>
 
-<header>
-    <h1>
-        <span>My Apps</span>
-        <nav>
-            <HomeNavItem />
-            <AuthNavItem />
-        </nav>
-    </h1>
-</header>
+<Header />
 
 <Modals>
     <!-- Using a button instead of a div to avoid a11y warnings -->
@@ -59,11 +50,6 @@
 <slot />
 
 <style>
-    nav {
-        display: inline-flex;
-        flex-direction: row;
-        gap: 0.3em;
-    }
     .backdrop {
         position: fixed;
         top: 0;
