@@ -1,5 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Browser home');
 
     interface Link {
         name: string;

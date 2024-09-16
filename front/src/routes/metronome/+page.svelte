@@ -9,6 +9,9 @@
     import Tap from './components/Tap.svelte';
     import InfoModal from './components/InfoModal.svelte';
     import { HeadIOS } from '$lib/components/HeadIOS';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Metronome');
 
     let metronome = new Metronome(80);
 

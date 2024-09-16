@@ -13,6 +13,9 @@
         makeWheelTiles,
         rotateWheel
     } from '$lib/ChordWheel/wheel-service';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Chord Wheel');
 
     let _p5: p5;
     let wheelTiles: WheelTiles;
@@ -139,14 +142,14 @@
     });
 </script>
 
-<h3>
+<h2>
     Chord wheel
     <span>
         <button style:position="relative" on:click={() => openModal(InfoModal)}>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
     </span>
-</h3>
+</h2>
 
 <div class="d-flex justify-content-center">
     <P5 {sketch} />

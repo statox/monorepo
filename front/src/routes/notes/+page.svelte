@@ -1,6 +1,9 @@
 <script lang="ts">
     import NoteComponent from './components/Note.svelte';
     import type { Note } from '$lib/Notes/types';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Stuff I forget');
 
     const notesModules = import.meta.glob('$lib/Notes/data/*.md');
     let searchStr: string;
@@ -51,7 +54,6 @@
     };
 </script>
 
-<h2>Stuff I forget</h2>
 <div>
     Search by tag: <input type="text" bind:value={searchStr} />
 </div>

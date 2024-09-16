@@ -128,7 +128,7 @@
     };
 </script>
 
-<h3>{metric}</h3>
+<h2>{metric}</h2>
 <div>
     <Line
         data={dataTemp}

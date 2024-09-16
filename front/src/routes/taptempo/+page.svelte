@@ -3,6 +3,9 @@
     import Beats from './components/Beats.svelte';
     import TempoList from './components/TempoList.svelte';
     import { TapTempo } from '$lib/TapTempo';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Tap Tempo');
 
     let tapTempo = new TapTempo();
     let taped = false;
@@ -64,8 +67,6 @@
 </script>
 
 <HeadIOS title="TapTempo" description="Tap Tempo Metronome" iconPath="/tap_tempo.png" />
-
-<h3>Tap Tempo</h3>
 
 <div class="container">
     <div>Press the space bar or click/tap anywhere on the page to get a bpm.</div>

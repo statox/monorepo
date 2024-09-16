@@ -94,10 +94,10 @@
 {#if isOpen}
     <div role="dialog" class="modal">
         <div class="contents">
-            <h4 class="title-bar">
+            <h3 class="title-bar">
                 Add a new clipboard entry
                 <button on:click={closeModal}>Close</button>
-            </h4>
+            </h3>
 
             {#each noticeMessages as item}
                 <Notice {item} />

@@ -5,6 +5,9 @@
     import MultiSensorsGraph from './components/MultiSensorsGraph.svelte';
     import { DateTime } from 'luxon';
     import type { HomeTrackerTimeData } from '$lib/HomeTracker/types';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Home Tracker');
 
     type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d';
     let lastRefreshDate: DateTime;
@@ -29,8 +32,6 @@
 </script>
 
 <HeadIOS title="Home Tracker" description="Recording of my sensors" />
-
-<h2>Home Tracker</h2>
 
 <div>
     <button on:click={() => (apiData = refreshData(timeWindow))}>Refresh</button>

@@ -5,20 +5,21 @@
     import { getAllWatchers } from '$lib/WebWatcher/api';
     import WatcherForm from './components/WatcherForm.svelte';
     import WatchersView from './components/WatchersView.svelte';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Web Watchers');
 
     let watchersApi = getAllWatchers();
     const fetchWatchers = () => (watchersApi = getAllWatchers());
 </script>
 
-<h2>Web Watchers</h2>
-
 {#if $user}
-    <h3>Create a new watcher</h3>
+    <h2>Create a new watcher</h2>
     <button on:click={() => openModal(WatcherForm, { onUpload: fetchWatchers })}>
         Add an entry
     </button>
 
-    <h3>Watchers</h3>
+    <h2>Watchers</h2>
     {#await watchersApi}
         <p>Loading data</p>
     {:then watchers}

@@ -1,6 +1,9 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { onMount } from 'svelte';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Test pot');
 
     let video, photo;
     const takePicture = () => {

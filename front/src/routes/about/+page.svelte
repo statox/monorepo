@@ -1,10 +1,11 @@
 <script lang="ts">
     import type { BuildInfo } from './types';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('About this website');
     // From +page.server.ts load() function
     export let data: BuildInfo;
 </script>
-
-<h2>About this website</h2>
 
 <div class="description">
     <div>

@@ -6,6 +6,9 @@
     import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
     import ClipboardView from './components/ClipboardView.svelte';
     import ClipboardForm from './components/ClipboardForm.svelte';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Clipboard');
 
     const getClipboard = () => {
         if ($user) {
@@ -20,9 +23,7 @@
 
 <HeadIOS title="Clipboard" description="My universal clipboard app" />
 
-<h2>Clipboard</h2>
-
-<h3>Upload</h3>
+<h2>Upload</h2>
 {#if $user}
     <button on:click={() => openModal(ClipboardForm, { onUpload: fetchClipboard })}>
         Add an entry
@@ -31,7 +32,7 @@
     <Notice item={{ level: 'info', header: 'Login to add an entry' }} />
 {/if}
 
-<h3>Content</h3>
+<h2>Content</h2>
 {#await clipboardApi}
     <p>Loading data</p>
 {:then clipboard}

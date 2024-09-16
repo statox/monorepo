@@ -63,7 +63,7 @@
 
 {#if $user}
     <div class="item">
-        <h4 class="item-title">
+        <h3 class="item-title">
             <div class="item-name">{watcher.name}</div>
             <div class="item-actions">
                 <ButtonSwitch
@@ -74,7 +74,7 @@
                 />
                 <ButtonDelete on:delete={deleteWatcher} />
             </div>
-        </h4>
+        </h3>
         <div class="section">
             <p class="section-1-item">
                 <label for="check-interval">Check interval</label>

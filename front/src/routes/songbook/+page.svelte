@@ -20,6 +20,9 @@
     import { getTypeIconClass } from './utils';
     import { goto } from '$app/navigation';
     import { user } from '$lib/auth/service';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Songbook');
 
     // From +page.ts load() function
     export let data: { chords: Chord[] };
@@ -99,7 +102,6 @@
 <HeadIOS title="Song Book" description="My song book" iconPath="/songbook.png" />
 
 <h2>
-    Song book
     <span class="pull-right">
         <button style:position="relative" on:click={() => openModal(ChordsChecks)}>
             Check dead links

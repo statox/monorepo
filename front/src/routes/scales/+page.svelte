@@ -2,6 +2,9 @@
     import NotesOnInstrument from './components/NotesOnInstrument.svelte';
     import Progressions from './components/Progressions.svelte';
     import { degreeToRoman, notes } from '$lib/Scales/utils';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Scales');
 
     // https://hellomusictheory.com/learn/scale-degree-names/
     // https://ianring.com/musictheory/scales/
@@ -97,8 +100,6 @@
 
     $: getScale(tonic, scale, mode);
 </script>
-
-<h2>Scales</h2>
 
 <table>
     <tr>
