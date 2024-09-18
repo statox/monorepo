@@ -6,8 +6,8 @@
 
 <header>
     <h1>
-        <span>{$pageNameStore}</span>
         <nav>
+            <a href="/">{$pageNameStore}</a>
             <HomeNavItem />
             <AuthNavItem />
         </nav>
@@ -19,5 +19,9 @@
         display: inline-flex;
         flex-direction: row;
         gap: 0.3em;
+    }
+
+    a {
+        color: var(--nc-tx-1);
     }
 </style>
