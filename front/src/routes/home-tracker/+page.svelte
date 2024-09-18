@@ -11,7 +11,7 @@
 
     pageNameStore.set('Home Tracker');
 
-    type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d';
+    type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1m';
     let lastRefreshDate: DateTime;
     let timeWindow: TimeWindow = '1d';
 
@@ -79,6 +79,18 @@
                 on:click={() => (apiData = refreshData('7d'))}
             >
                 7 days
+            </button>
+            <button
+                class:selected={timeWindow === '2w'}
+                on:click={() => (apiData = refreshData('2w'))}
+            >
+                2 weeks
+            </button>
+            <button
+                class:selected={timeWindow === '1m'}
+                on:click={() => (apiData = refreshData('1m'))}
+            >
+                1 month
             </button>
         </div>
         <br />
