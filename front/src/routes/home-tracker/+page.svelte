@@ -61,8 +61,13 @@
             />
         {/each}
     {:catch error}
-        <p>Something went wrong getting sensor data</p>
-        <p>{error}</p>
+        <Notice
+            item={{
+                level: 'error',
+                header: 'Something went wrong getting sensor data',
+                message: error
+            }}
+        />
     {/await}
 {:else}
     <Notice item={{ level: 'info', header: 'Login to access data' }} />
