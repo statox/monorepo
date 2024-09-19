@@ -8,6 +8,7 @@
     import { pageNameStore } from '$lib/components/Header';
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
+    import TimeWindowSelection from './components/TimeWindowSelection.svelte';
 
     pageNameStore.set('Home Tracker');
 
@@ -49,50 +50,7 @@
     {:then { histogramData, sensorsDetails }}
         <SensorsSummary sensorsData={sensorsDetails.sensors} />
         <br />
-        <div class="time-window-select">
-            <button
-                class:selected={timeWindow === '3h'}
-                on:click={() => (apiData = refreshData('3h'))}
-            >
-                3 hours
-            </button>
-            <button
-                class:selected={timeWindow === '12h'}
-                on:click={() => (apiData = refreshData('12h'))}
-            >
-                12 hours
-            </button>
-            <button
-                class:selected={timeWindow === '1d'}
-                on:click={() => (apiData = refreshData('1d'))}
-            >
-                1 day
-            </button>
-            <button
-                class:selected={timeWindow === '3d'}
-                on:click={() => (apiData = refreshData('3d'))}
-            >
-                3 days
-            </button>
-            <button
-                class:selected={timeWindow === '7d'}
-                on:click={() => (apiData = refreshData('7d'))}
-            >
-                7 days
-            </button>
-            <button
-                class:selected={timeWindow === '2w'}
-                on:click={() => (apiData = refreshData('2w'))}
-            >
-                2 weeks
-            </button>
-            <button
-                class:selected={timeWindow === '1m'}
-                on:click={() => (apiData = refreshData('1m'))}
-            >
-                1 month
-            </button>
-        </div>
+        <TimeWindowSelection on:select={(event) => (apiData = refreshData(event.detail))} />
         <br />
         {#each metrics as metric}
             <MultiSensorsGraph
@@ -109,20 +67,3 @@
 {:else}
     <Notice item={{ level: 'info', header: 'Login to access data' }} />
 {/if}
-
-<style>
-    button.selected {
-        background: var(--nc-lk-2);
-    }
-    .time-window-select {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 20px;
-    }
-    @media (max-width: 768px) {
-        .time-window-select {
-            justify-content: space-between;
-        }
-    }
-</style>
