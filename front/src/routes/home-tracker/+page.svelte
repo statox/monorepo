@@ -48,18 +48,20 @@
     {#await apiData}
         <p>Loading sensors data</p>
     {:then { histogramData, sensorsDetails }}
-        <SensorsSummary sensorsData={sensorsDetails.sensors} />
-        <br />
-        <TimeWindowSelection on:select={(event) => (apiData = refreshData(event.detail))} />
-        <br />
-        {#each metrics as metric}
-            <MultiSensorsGraph
-                sensorsData={sensorsDetails.sensors}
-                histogramData={histogramData.histogramData}
-                sensorNames={histogramData.sensorNames}
-                {metric}
-            />
-        {/each}
+        <div class="content">
+            <SensorsSummary sensorsData={sensorsDetails.sensors} />
+            <TimeWindowSelection on:select={(event) => (apiData = refreshData(event.detail))} />
+            <div>
+                {#each metrics as metric}
+                    <MultiSensorsGraph
+                        sensorsData={sensorsDetails.sensors}
+                        histogramData={histogramData.histogramData}
+                        sensorNames={histogramData.sensorNames}
+                        {metric}
+                    />
+                {/each}
+            </div>
+        </div>
     {:catch error}
         <Notice
             item={{
@@ -72,3 +74,11 @@
 {:else}
     <Notice item={{ level: 'info', header: 'Login to access data' }} />
 {/if}
+
+<style>
+    .content {
+        display: flex;
+        flex-flow: column;
+        row-gap: 2em;
+    }
+</style>
