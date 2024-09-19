@@ -24,6 +24,15 @@
     export let histogramData: HomeTrackerHistogramData;
     export let metric: keyof HomeTrackerTimeData;
 
+    const metricName: {
+        [metric in keyof HomeTrackerTimeData]: string;
+    } = {
+        tempCelsius: 'Temperature (C)',
+        batteryCharge: 'Battery (V)',
+        humidity: 'Humidity (%)',
+        pressurehPa: 'Pressure (hPa)'
+    };
+
     const allDates = Object.keys(histogramData).sort((a, b) => Number(a) - Number(b));
 
     type AlphaMode = 'dark' | 'normal' | 'light';
@@ -128,7 +137,7 @@
     };
 </script>
 
-<h2>{metric}</h2>
+<h2>{metricName[metric]}</h2>
 <div>
     <Line
         data={dataTemp}
