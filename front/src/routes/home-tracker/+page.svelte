@@ -34,7 +34,7 @@
     let apiData = refreshData(timeWindow);
 </script>
 
-<HeadIOS title="Home Tracker" description="Recording of my sensors" />
+<HeadIOS title="Home Tracker" description="Recording of my sensors" iconPath="/hometracker.png" />
 
 {#if $user}
     <div>
