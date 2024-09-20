@@ -6,10 +6,21 @@
     export let watchers: WatchedContent[];
 
     const dispatch = createEventDispatcher();
+
+    const sortWatchers = (a: WatchedContent, b: WatchedContent) => {
+        if (a.archivalDateUnix === null && b.archivalDateUnix !== null) {
+            return -1;
+        }
+        if (a.archivalDateUnix !== null && b.archivalDateUnix === null) {
+            return 1;
+        }
+
+        return b.id - a.id;
+    };
 </script>
 
 <div class="container">
-    {#each watchers.sort((a, b) => b.id - a.id) as entry}
+    {#each watchers.sort(sortWatchers) as entry}
         <WatcherComponent
             watcher={entry}
             on:delete={() => dispatch('delete')}
