@@ -37,10 +37,7 @@
     <div>
         <span style={'font-weight: bolder'}>Last Refresh</span>
         <span>{formatRecordTimestampToHuman(lastRefreshDate?.toSeconds()) || 'NA'}</span>
-        <button
-            class="refresh-button"
-            on:click={() => (apiData = refreshData($selectedTimeWindow))}
-        >
+        <button on:click={() => (apiData = refreshData($selectedTimeWindow))}>
             <i class="fas fa-sync-alt"></i>
         </button>
     </div>
