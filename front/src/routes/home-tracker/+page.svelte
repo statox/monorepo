@@ -1,6 +1,7 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
     import {
+        formatRecordTimestampToHuman,
         getAllSensorsWithLatestLog,
         getHistogramData,
         type TimeWindow
@@ -34,9 +35,14 @@
 
 {#if $user}
     <div>
-        <button on:click={() => (apiData = refreshData($selectedTimeWindow))}>Refresh</button>
         <span style={'font-weight: bolder'}>Last Refresh</span>
-        <span>{lastRefreshDate?.toFormat('dd/MM HH:mm') || 'NA'}</span>
+        <span>{formatRecordTimestampToHuman(lastRefreshDate?.toSeconds()) || 'NA'}</span>
+        <button
+            class="refresh-button"
+            on:click={() => (apiData = refreshData($selectedTimeWindow))}
+        >
+            <i class="fas fa-sync-alt"></i>
+        </button>
     </div>
 
     <br />
