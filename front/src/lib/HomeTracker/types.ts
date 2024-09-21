@@ -55,3 +55,5 @@ export interface SensorLogData {
     tempCelsius?: number;
     timeToSendMs?: number;
 }
+
+export type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1m';

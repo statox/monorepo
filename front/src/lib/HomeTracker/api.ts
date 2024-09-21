@@ -1,9 +1,7 @@
 import { requestAPIGet, requestAPIPost } from '$lib/api';
-import type { HomeTrackerLatestResponse, HomeTrackerSensorsResponse } from './types';
+import type { HomeTrackerLatestResponse, HomeTrackerSensorsResponse, TimeWindow } from './types';
 
-export const getHomeTrackerLatest = async (
-    timeWindow: '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1m'
-) => {
+export const getHomeTrackerLatest = async (timeWindow: TimeWindow) => {
     return await requestAPIPost<HomeTrackerLatestResponse>({
         path: '/homeTracker/getLatest',
         data: { timeWindow }

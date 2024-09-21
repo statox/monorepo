@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1m';
+    import { type TimeWindow } from '$lib/HomeTracker';
     let timeWindow: TimeWindow = '1d';
 
     const dispatch = createEventDispatcher();

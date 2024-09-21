@@ -1,27 +1,17 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { getHomeTrackerLatest, getHomeTrackerSensors } from '$lib/HomeTracker/api';
+    import { getHomeTrackerLatest, getHomeTrackerSensors, type TimeWindow } from '$lib/HomeTracker';
     import SensorsSummary from './components/SensorsSummary.svelte';
-    import MultiSensorsGraph from './components/MultiSensorsGraph.svelte';
     import { DateTime } from 'luxon';
-    import type { HomeTrackerTimeData } from '$lib/HomeTracker/types';
     import { pageNameStore } from '$lib/components/Header';
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
-    import TimeWindowSelection from './components/TimeWindowSelection.svelte';
+    import SensorsHistogram from './components/SensorsHistogram.svelte';
 
     pageNameStore.set('Home Tracker');
 
-    type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1m';
     let lastRefreshDate: DateTime;
     let timeWindow: TimeWindow = '1d';
-
-    const metrics = [
-        'tempCelsius',
-        'humidity',
-        'pressurehPa',
-        'batteryCharge'
-    ] as (keyof HomeTrackerTimeData)[];
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         timeWindow = timeWindowInput;
@@ -50,17 +40,12 @@
     {:then { histogramData, sensorsDetails }}
         <div class="content">
             <SensorsSummary sensorsData={sensorsDetails.sensors} />
-            <TimeWindowSelection on:select={(event) => (apiData = refreshData(event.detail))} />
-            <div>
-                {#each metrics as metric}
-                    <MultiSensorsGraph
-                        sensorsData={sensorsDetails.sensors}
-                        histogramData={histogramData.histogramData}
-                        sensorNames={histogramData.sensorNames}
-                        {metric}
-                    />
-                {/each}
-            </div>
+            <SensorsHistogram
+                sensorsData={sensorsDetails.sensors}
+                histogramData={histogramData.histogramData}
+                sensorNames={histogramData.sensorNames}
+                on:select={(event) => (apiData = refreshData(event.detail))}
+            />
         </div>
     {:catch error}
         <Notice
