@@ -21,7 +21,7 @@
     const fetchClipboard = () => (clipboardApi = getClipboard());
 </script>
 
-<HeadIOS title="Clipboard" description="My universal clipboard app" />
+<HeadIOS title="Clipboard" description="My universal clipboard app" iconPath="/clipboard.png" />
 
 <h2>Upload</h2>
 {#if $user}
