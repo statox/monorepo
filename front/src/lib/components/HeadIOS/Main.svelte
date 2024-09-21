@@ -16,6 +16,6 @@
     <!-- Title used on homescreen -->
     <meta name="apple-mobile-web-app-title" content={title} />
     <!-- Hide the Safari UI and status bar -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 </svelte:head>
