@@ -1,6 +1,10 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { getHomeTrackerLatest, getHomeTrackerSensors, type TimeWindow } from '$lib/HomeTracker';
+    import {
+        getAllSensorsWithLatestLog,
+        getHistogramData,
+        type TimeWindow
+    } from '$lib/HomeTracker';
     import SensorsSummary from './components/SensorsSummary.svelte';
     import { DateTime } from 'luxon';
     import { pageNameStore } from '$lib/components/Header';
@@ -15,8 +19,8 @@
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         timeWindow = timeWindowInput;
-        const histogramData = await getHomeTrackerLatest(timeWindow);
-        const sensorsDetails = await getHomeTrackerSensors();
+        const histogramData = await getHistogramData(timeWindow);
+        const sensorsDetails = await getAllSensorsWithLatestLog();
         lastRefreshDate = DateTime.now();
         return { histogramData, sensorsDetails };
     };
