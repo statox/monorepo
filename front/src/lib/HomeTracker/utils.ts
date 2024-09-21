@@ -16,20 +16,38 @@ const parseRecordTimestamp = (ts: number | string) => {
 };
 
 export const formatRecordTimestampToMillis = (ts: number) => {
-    const time = parseRecordTimestamp(ts);
-    return time.toMillis();
+    try {
+        const time = parseRecordTimestamp(ts);
+        return time.toMillis();
+    } catch (error) {
+        console.log('Error parsing TS', ts);
+        console.error(error);
+        return;
+    }
 };
 
 export const formatRecordTimestampToHuman = (ts: number) => {
-    const time = parseRecordTimestamp(ts);
-    if (time.hasSame(DateTime.now(), 'day')) {
-        return time.toFormat('HH:mm');
-    }
+    try {
+        const time = parseRecordTimestamp(ts);
+        if (time.hasSame(DateTime.now(), 'day')) {
+            return time.toFormat('HH:mm');
+        }
 
-    return time.toFormat('dd/MM HH:mm');
+        return time.toFormat('dd/MM HH:mm');
+    } catch (error) {
+        console.log('Error parsing TS', ts);
+        console.error(error);
+        return;
+    }
 };
 
 export const formatRecordTimestampToRelative = (ts: number) => {
-    const time = parseRecordTimestamp(ts);
-    return time.toRelative();
+    try {
+        const time = parseRecordTimestamp(ts);
+        return time.toRelative();
+    } catch (error) {
+        console.log('Error parsing TS', ts);
+        console.error(error);
+        return;
+    }
 };

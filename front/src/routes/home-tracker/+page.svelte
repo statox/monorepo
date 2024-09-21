@@ -26,6 +26,8 @@
     };
 
     let apiData = refreshData(timeWindow);
+
+    setInterval(() => (apiData = refreshData(timeWindow)), 5 * 60 * 1000);
 </script>
 
 <HeadIOS title="Home Tracker" description="Recording of my sensors" iconPath="/hometracker.png" />

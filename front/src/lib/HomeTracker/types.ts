@@ -1,5 +1,6 @@
 export interface SensorState {
     sensorName: string;
+    iconPath: string;
     rgbColor: { r: number; g: number; b: number };
     lastLogTimestamp: number;
     lastLogData: SensorLogData;

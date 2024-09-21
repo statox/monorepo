@@ -1,5 +1,10 @@
 import { requestAPIGet, requestAPIPost } from '$lib/api';
-import type { HomeTrackerLatestResponse, HomeTrackerSensorsResponse, TimeWindow } from './types';
+import type {
+    HomeTrackerLatestResponse,
+    HomeTrackerSensorsResponse,
+    SensorState,
+    TimeWindow
+} from './types';
 
 export const getHistogramData = async (timeWindow: TimeWindow) => {
     return await requestAPIPost<HomeTrackerLatestResponse>({
@@ -9,7 +14,18 @@ export const getHistogramData = async (timeWindow: TimeWindow) => {
 };
 
 export const getAllSensorsWithLatestLog = async () => {
-    return await requestAPIGet<HomeTrackerSensorsResponse>({
+    const { sensors } = await requestAPIGet<HomeTrackerSensorsResponse>({
         path: '/homeTracker/allSensorsWithLatestLog'
     });
+
+    // TODO Have this info returned by the API (and probably have the API returning the images themselves too)
+    const enrichedSensors = sensors.map((sensor: SensorState) => {
+        const { sensorName } = sensor;
+        return {
+            ...sensor,
+            iconPath: `/hometracker/sensors/icon_${sensorName}.png`
+        };
+    });
+
+    return { sensors: enrichedSensors };
 };
