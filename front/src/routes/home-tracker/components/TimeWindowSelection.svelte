@@ -1,7 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { type TimeWindow } from '$lib/HomeTracker';
-    let timeWindow: TimeWindow = '1d';
+    import { selectedTimeWindow } from '../store';
 
     const dispatch = createEventDispatcher();
 
@@ -19,7 +18,7 @@
 <div class="time-window-select">
     {#each options as option}
         <button
-            class:selected={timeWindow === option.value}
+            class:selected={$selectedTimeWindow === option.value}
             on:click={() => dispatch('select', option.value)}
         >
             {option.name}

@@ -11,30 +11,30 @@
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
     import SensorsHistogram from './components/SensorsHistogram.svelte';
+    import { selectedTimeWindow } from './store';
 
     pageNameStore.set('Home Tracker');
 
     let lastRefreshDate: DateTime;
-    let timeWindow: TimeWindow = '1d';
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
-        timeWindow = timeWindowInput;
-        const histogramData = await getHistogramData(timeWindow);
+        selectedTimeWindow.set(timeWindowInput);
+        const histogramData = await getHistogramData($selectedTimeWindow);
         const sensorsDetails = await getAllSensorsWithLatestLog();
         lastRefreshDate = DateTime.now();
         return { histogramData, sensorsDetails };
     };
 
-    let apiData = refreshData(timeWindow);
+    let apiData = refreshData($selectedTimeWindow);
 
-    setInterval(() => (apiData = refreshData(timeWindow)), 5 * 60 * 1000);
+    setInterval(() => (apiData = refreshData($selectedTimeWindow)), 5 * 60 * 1000);
 </script>
 
 <HeadIOS title="Home Tracker" description="Recording of my sensors" iconPath="/hometracker.png" />
 
 {#if $user}
     <div>
-        <button on:click={() => (apiData = refreshData(timeWindow))}>Refresh</button>
+        <button on:click={() => (apiData = refreshData($selectedTimeWindow))}>Refresh</button>
         <span style={'font-weight: bolder'}>Last Refresh</span>
         <span>{lastRefreshDate?.toFormat('dd/MM HH:mm') || 'NA'}</span>
     </div>
