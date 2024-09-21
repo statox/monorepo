@@ -33,16 +33,16 @@
 
         <div class="sensor-data-records-container">
             <i class="unit-icon fas fa-thermometer-half"></i>
-            {sensor.lastLogData.tempCelsius?.toFixed(1) || '-'}
+            <span class="data-value">{sensor.lastLogData.tempCelsius?.toFixed(1) || '-'}</span>
             <span class="unit-symbol">°C</span>
 
             <i class="unit-icon fas fa-tint"></i>
-            {sensor.lastLogData.humidity?.toFixed(0) || '-'}
+            <span class="data-value">{sensor.lastLogData.humidity?.toFixed(0) || '-'}</span>
             <span class="unit-symbol">%</span>
 
             {#if sensor.lastLogData.pressurehPa}
                 <i class="unit-icon fas fa-tachometer-alt"></i>
-                {sensor.lastLogData.pressurehPa?.toFixed(0)}
+                <span class="data-value">{sensor.lastLogData.pressurehPa?.toFixed(0)}</span>
                 <span class="unit-symbol">hPa</span>
             {/if}
         </div>
@@ -51,13 +51,17 @@
             <div class="sensor-data-records-container internal-data">
                 {#if sensor.lastLogData.internalTempCelsius}
                     <i class="unit-icon fas fa-thermometer-half"></i>
-                    {sensor.lastLogData.internalTempCelsius?.toFixed(1) || '-'}
+                    <span class="data-value">
+                        {sensor.lastLogData.internalTempCelsius?.toFixed(1) || '-'}
+                    </span>
                     <span class="unit-symbol">°C</span>
                 {/if}
 
                 {#if sensor.lastLogData.internalHumidity}
                     <i class="unit-icon fas fa-tint"></i>
-                    {sensor.lastLogData.internalHumidity?.toFixed(0) || '-'}
+                    <span class="data-value">
+                        {sensor.lastLogData.internalHumidity?.toFixed(0) || '-'}
+                    </span>
                     <span class="unit-symbol">%</span>
                 {/if}
             </div>
@@ -73,11 +77,11 @@
 
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: start;
         justify-content: flex-start;
         gap: 1em;
 
-        padding: 0.3em;
+        padding: 0.5em;
     }
 
     .sensor-icon {
@@ -118,6 +122,9 @@
         color: var(--nc-tx-1);
     }
 
+    .data-value {
+        justify-self: end;
+    }
     .unit-icon {
         font-size: large;
     }
