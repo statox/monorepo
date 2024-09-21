@@ -16,22 +16,43 @@
         SensorState
     } from '$lib/HomeTracker/types';
     import { formatRecordTimestampToHuman } from '$lib/HomeTracker/utils';
+    import type { GraphType } from './types';
 
     ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
 
     export let sensorsData: SensorState[];
     export let sensorNames: string[];
     export let histogramData: HomeTrackerHistogramData;
-    export let metric: keyof HomeTrackerTimeData;
+    export let graphType: GraphType;
 
-    const metricName: {
-        [metric in keyof HomeTrackerTimeData]: string;
-    } = {
-        tempCelsius: 'Temperature (C)',
-        batteryCharge: 'Battery (V)',
-        humidity: 'Humidity (%)',
-        pressurehPa: 'Pressure (hPa)'
+    const graphsProperties: Record<
+        GraphType,
+        {
+            graphName: string;
+            metricUnitSymbol: string;
+            metricProperty: keyof HomeTrackerTimeData;
+        }
+    > = {
+        temperature: {
+            graphName: 'Temperature',
+            metricProperty: 'tempCelsius',
+            metricUnitSymbol: 'C'
+        },
+        battery: { graphName: 'Battery', metricProperty: 'batteryCharge', metricUnitSymbol: 'V' },
+        humidity: { graphName: 'Humidity', metricProperty: 'humidity', metricUnitSymbol: '%' },
+        pressure: { graphName: 'Pressure', metricProperty: 'pressurehPa', metricUnitSymbol: 'hPa' },
+        internalTemperature: {
+            graphName: 'Internal Temperature',
+            metricProperty: 'internalTempCelsius',
+            metricUnitSymbol: 'C'
+        },
+        internalHumidity: {
+            graphName: 'Internal Humidity',
+            metricProperty: 'internalHumidity',
+            metricUnitSymbol: '%'
+        }
     };
+    const { graphName, metricUnitSymbol, metricProperty } = graphsProperties[graphType];
 
     const allDates = Object.keys(histogramData).sort((a, b) => Number(a) - Number(b));
 
@@ -72,16 +93,16 @@
     const datasets = sensorNames.reduce((datasets, sensor) => {
         const data = Object.keys(histogramData)
             .filter((ts) => {
-                return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[metric]?.[
-                    sensor
-                ];
+                return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[
+                    metricProperty
+                ]?.[sensor];
             })
             .map((ts) => {
                 return {
                     x: ts,
-                    y: histogramData[ts as unknown as keyof HomeTrackerHistogramData][metric]?.[
-                        sensor
-                    ]
+                    y: histogramData[ts as unknown as keyof HomeTrackerHistogramData][
+                        metricProperty
+                    ]?.[sensor]
                 };
             });
 
@@ -97,37 +118,6 @@
             });
         }
 
-        if (['tempCelsius', 'humidity'].includes(metric as string)) {
-            const internalMetric =
-                metric === 'tempCelsius' ? 'internalTempCelsius' : 'internalHumidity';
-            const data = Object.keys(histogramData)
-                .filter((ts) => {
-                    return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[
-                        internalMetric
-                    ]?.[sensor];
-                })
-                .map((ts) => {
-                    return {
-                        x: ts,
-                        y: histogramData[ts as unknown as keyof HomeTrackerHistogramData][
-                            internalMetric
-                        ]?.[sensor]
-                    };
-                });
-
-            if (data.length) {
-                // @ts-expect-error TODO Fix that
-                datasets.push({
-                    label: sensor + ' (int)',
-                    data,
-                    borderColor: getColorString(sensor, 'dark'),
-                    pointBorderColor: getColorString(sensor, 'dark'),
-                    pointBackgroundColor: getColorString(sensor, 'light'),
-                    ...commonGraphSettings
-                });
-            }
-        }
-
         return datasets;
     }, []);
 
@@ -137,7 +127,7 @@
     };
 </script>
 
-<h2>{metricName[metric]}</h2>
+<h2>{graphName} ({metricUnitSymbol})</h2>
 <div>
     <Line
         data={dataTemp}
