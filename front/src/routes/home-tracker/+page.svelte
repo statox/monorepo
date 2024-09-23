@@ -4,6 +4,7 @@
         formatRecordTimestampToHuman,
         getAllSensorsWithLatestLog,
         getHistogramData,
+        getWeatherForecast,
         type TimeWindow
     } from '$lib/HomeTracker';
     import SensorsSummary from './components/SensorsSummary.svelte';
@@ -13,6 +14,7 @@
     import { Notice } from '$lib/components/Notice';
     import SensorsHistogram from './components/SensorsHistogram.svelte';
     import { selectedTimeWindow } from './store';
+    import WeatherForecast from './components/WeatherForecast.svelte';
 
     pageNameStore.set('Home Tracker');
 
@@ -21,9 +23,10 @@
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
         const histogramData = await getHistogramData($selectedTimeWindow);
+        const weatherForecast = await getWeatherForecast();
         const sensorsDetails = await getAllSensorsWithLatestLog();
         lastRefreshDate = DateTime.now();
-        return { histogramData, sensorsDetails };
+        return { histogramData, sensorsDetails, weatherForecast };
     };
 
     let apiData = refreshData($selectedTimeWindow);
@@ -46,9 +49,10 @@
 
     {#await apiData}
         <p>Loading sensors data</p>
-    {:then { histogramData, sensorsDetails }}
+    {:then { histogramData, sensorsDetails, weatherForecast }}
         <div class="content">
             <SensorsSummary sensorsData={sensorsDetails.sensors} />
+            <WeatherForecast forecast={weatherForecast} />
             <SensorsHistogram
                 sensorsData={sensorsDetails.sensors}
                 histogramData={histogramData.histogramData}

@@ -3,7 +3,8 @@ import type {
     HomeTrackerLatestResponse,
     HomeTrackerSensorsResponse,
     SensorState,
-    TimeWindow
+    TimeWindow,
+    WeatherForecast
 } from './types';
 
 export const getHistogramData = async (timeWindow: TimeWindow) => {
@@ -11,6 +12,13 @@ export const getHistogramData = async (timeWindow: TimeWindow) => {
         path: '/homeTracker/histogramData',
         data: { timeWindow }
     });
+};
+
+export const getWeatherForecast = async () => {
+    const { forecast } = await requestAPIGet<{ forecast: WeatherForecast }>({
+        path: '/homeTracker/getWeatherForecast'
+    });
+    return forecast;
 };
 
 export const getAllSensorsWithLatestLog = async () => {

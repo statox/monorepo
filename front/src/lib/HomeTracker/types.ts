@@ -58,3 +58,9 @@ export interface SensorLogData {
 }
 
 export type TimeWindow = '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1m';
+
+type Trend = 'falling' | 'rising' | 'steady';
+export interface WeatherForecast {
+    pressureTrend: Trend;
+    forecast: string;
+}
