@@ -4,8 +4,8 @@
     export let forecast: WeatherForecast;
 
     const trendIconClass = {
-        rising: 'fad fa-arrow-up',
-        falling: 'fad fa-arrow-down',
+        rising: 'fa fa-arrow-up',
+        falling: 'fa fa-arrow-down',
         steady: 'fas fa-equals'
     };
 </script>
