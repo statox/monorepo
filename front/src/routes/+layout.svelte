@@ -37,6 +37,9 @@
 <!-- Update 5 months later: I have never seen this notice displayed in real life yet. And I think the AuthNavItem
   -- doesn't have anymore issues where it's not updated when I'm logged out. So I might remove that in the future.
   -->
+<!-- Update 2 more months later: I actually got the error (invalid state) displayed when implementing the redirect
+  -- after login. So it's still useful to have that here.
+  -->
 {#if auth0Error}
     <Notice
         item={{

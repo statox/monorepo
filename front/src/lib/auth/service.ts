@@ -1,6 +1,8 @@
+import { page } from '$app/stores';
+import { goto } from '$app/navigation';
+import { Auth0Client, User, createAuth0Client } from '@auth0/auth0-spa-js';
 import { get, writable } from 'svelte/store';
 import config from './config';
-import { Auth0Client, User, createAuth0Client } from '@auth0/auth0-spa-js';
 import { UserLoggedOutError } from './errors';
 
 const auth0Client = writable<Auth0Client>();
@@ -30,8 +32,9 @@ export const initializeAuth0 = async () => {
     // Handle callback from Auth0
     const search = window.location.search;
     if ((search.includes('code=') || search.includes('error=')) && search.includes('state=')) {
-        await get(auth0Client).handleRedirectCallback();
+        const { appState } = await get(auth0Client).handleRedirectCallback();
         window.history.replaceState({}, document.title, window.location.pathname);
+        goto(appState.returnTo || '/');
     }
 
     const isAuthenticated = await get(auth0Client).isAuthenticated();
@@ -44,7 +47,12 @@ export const initializeAuth0 = async () => {
     refreshUserPeriodically();
 };
 
-export const login = () => get(auth0Client).loginWithRedirect();
+export const login = () => {
+    const url = get(page).url.pathname;
+    get(auth0Client).loginWithRedirect({
+        appState: { returnTo: url }
+    });
+};
 export const logout = () => get(auth0Client).logout();
 
 export const getAccessToken = async () => {
