@@ -5,13 +5,17 @@
     const dispatch = createEventDispatcher();
 
     const options = [
+        { name: '30 minutes', value: '30m' },
         { name: '3 hours', value: '3h' },
         { name: '12 hours', value: '12h' },
         { name: '1 day', value: '1d' },
         { name: '3 days', value: '3d' },
         { name: '7 days', value: '7d' },
         { name: '2 weeks', value: '2w' },
-        { name: '1 month', value: '1m' }
+        { name: '1 month', value: '1M' },
+        { name: '2 month', value: '2M' },
+        { name: '6 month', value: '6M' },
+        { name: 'All time', value: 'alltime' }
     ];
 </script>
 
