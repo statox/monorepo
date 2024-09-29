@@ -63,4 +63,14 @@ type Trend = 'falling' | 'rising' | 'steady';
 export interface WeatherForecast {
     pressureTrend: Trend;
     forecast: string;
+    dataPoints?: {
+        oldest: {
+            timestampMs: number;
+            pressurehPa: number;
+        };
+        latest: {
+            timestampMs: number;
+            pressurehPa: number;
+        };
+    };
 }
