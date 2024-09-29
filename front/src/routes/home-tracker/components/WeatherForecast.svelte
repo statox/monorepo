@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { ValueWithUnit } from '$lib/components/ValueWithUnit';
     import { formatRecordTimestampToHuman, type WeatherForecast } from '$lib/HomeTracker';
 
     export let forecast: WeatherForecast;
@@ -42,11 +43,19 @@
             <div class="section-title">Data points</div>
             <div>
                 <span class="data-header">Oldest</span>
-                {oldestDataPointTime} - {forecast.dataPoints.oldest.pressurehPa}
+                {oldestDataPointTime} - <ValueWithUnit
+                    value={forecast.dataPoints.oldest.pressurehPa}
+                    unitString={'hPa'}
+                    precision={3}
+                />
             </div>
             <div>
                 <span class="data-header">Latest</span>
-                {latestDataPointTime} - {forecast.dataPoints.latest.pressurehPa}
+                {latestDataPointTime} - <ValueWithUnit
+                    value={forecast.dataPoints.latest.pressurehPa}
+                    unitString={'hPa'}
+                    precision={3}
+                />
             </div>
             <div>
                 <span class="data-header">Diff</span>

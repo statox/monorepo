@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { ValueWithUnit } from '$lib/components/ValueWithUnit';
     import { formatRecordTimestampToRelative } from '$lib/HomeTracker';
     import type { SensorState } from '$lib/HomeTracker/types';
 
@@ -33,37 +34,36 @@
 
         <div class="sensor-data-records-container">
             <i class="unit-icon fas fa-thermometer-half"></i>
-            <span class="data-value">{sensor.lastLogData.tempCelsius?.toFixed(1) || '-'}</span>
-            <span class="unit-symbol">°C</span>
+            <ValueWithUnit value={sensor.lastLogData.tempCelsius} unitString={'°C'} precision={1} />
 
             <i class="unit-icon fas fa-tint"></i>
-            <span class="data-value">{sensor.lastLogData.humidity?.toFixed(0) || '-'}</span>
-            <span class="unit-symbol">%</span>
+            <ValueWithUnit value={sensor.lastLogData.humidity} unitString={'%'} precision={0} />
 
             {#if sensor.lastLogData.pressurehPa}
                 <i class="unit-icon fas fa-tachometer-alt"></i>
-                <span class="data-value">{sensor.lastLogData.pressurehPa?.toFixed(0)}</span>
-                <span class="unit-symbol">hPa</span>
+                <ValueWithUnit
+                    value={sensor.lastLogData.pressurehPa}
+                    unitString={'hPa'}
+                    precision={0}
+                />
             {/if}
         </div>
 
         {#if sensor.lastLogData.internalTempCelsius || sensor.lastLogData.internalHumidity}
             <div class="sensor-data-records-container internal-data">
-                {#if sensor.lastLogData.internalTempCelsius}
-                    <i class="unit-icon fas fa-thermometer-half"></i>
-                    <span class="data-value">
-                        {sensor.lastLogData.internalTempCelsius?.toFixed(1) || '-'}
-                    </span>
-                    <span class="unit-symbol">°C</span>
-                {/if}
+                <i class="unit-icon fas fa-thermometer-half"></i>
+                <ValueWithUnit
+                    value={sensor.lastLogData.internalTempCelsius}
+                    unitString={'°C'}
+                    precision={1}
+                />
 
-                {#if sensor.lastLogData.internalHumidity}
-                    <i class="unit-icon fas fa-tint"></i>
-                    <span class="data-value">
-                        {sensor.lastLogData.internalHumidity?.toFixed(0) || '-'}
-                    </span>
-                    <span class="unit-symbol">%</span>
-                {/if}
+                <i class="unit-icon fas fa-tint"></i>
+                <ValueWithUnit
+                    value={sensor.lastLogData.internalHumidity}
+                    unitString={'%'}
+                    precision={0}
+                />
             </div>
         {/if}
     </div>
@@ -122,15 +122,7 @@
         color: var(--nc-tx-1);
     }
 
-    .data-value {
-        justify-self: end;
-    }
     .unit-icon {
         font-size: large;
-    }
-    .unit-symbol {
-        padding-left: 1ch;
-        font-size: medium;
-        color: var(--nc-tx-1);
     }
 </style>
