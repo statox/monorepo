@@ -20,29 +20,32 @@
 </script>
 
 <div class="time-window-select">
-    {#each options as option}
-        <button
-            class:selected={$selectedTimeWindow === option.value}
-            on:click={() => dispatch('select', option.value)}
+    <span class="section-title">Time window</span>
+    <div>
+        <label for="time-window-select" class="far fa-calendar-alt"></label>
+        <select
+            id="time-window-select"
+            bind:value={$selectedTimeWindow}
+            on:change={() => dispatch('select', $selectedTimeWindow)}
         >
-            {option.name}
-        </button>
-    {/each}
+            {#each options as option}
+                <option value={option.value}>{option.name}</option>
+            {/each}
+        </select>
+    </div>
 </div>
 
 <style>
-    button.selected {
-        background: var(--nc-lk-2);
-    }
     .time-window-select {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
+        align-items: baseline;
         gap: 20px;
     }
-    @media (max-width: 768px) {
-        .time-window-select {
-            justify-content: space-between;
-        }
+    .section-title {
+        color: var(--nc-tx-1);
+        font-weight: bold;
+        font-size: x-large;
     }
 </style>
