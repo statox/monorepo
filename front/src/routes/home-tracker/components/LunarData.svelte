@@ -8,7 +8,9 @@
     <div class="title">{lunarData.phaseFr}</div>
     <div class="data">
         <div>
-            Moon age: {lunarData.lunarAge.toFixed(2)} days ({lunarData.lunarAgePercent.toFixed(2)}%)
+            Moon age: {lunarData.lunarAge.toFixed(1)} days ({(
+                lunarData.lunarAgePercent * 100
+            ).toFixed(0)}%)
         </div>
         <img
             class="phase-img"
