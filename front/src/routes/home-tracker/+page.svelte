@@ -3,7 +3,6 @@
     import {
         formatRecordTimestampToHuman,
         getAllSensorsWithLatestLog,
-        getWeatherForecast,
         type TimeWindow
     } from '$lib/HomeTracker';
     import SensorsSummary from './components/SensorsSummary.svelte';
@@ -22,10 +21,9 @@
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
-        const weatherForecast = await getWeatherForecast();
         const sensorsDetails = await getAllSensorsWithLatestLog();
         lastRefreshDate = DateTime.now();
-        return { sensorsDetails, weatherForecast };
+        return { sensorsDetails };
     };
 
     let apiData = refreshData($selectedTimeWindow);
@@ -48,10 +46,10 @@
 
     {#await apiData}
         <p>Loading sensors data</p>
-    {:then { sensorsDetails, weatherForecast }}
+    {:then { sensorsDetails }}
         <div class="content">
             <SensorsSummary sensorsData={sensorsDetails.sensors} />
-            <WeatherForecast forecast={weatherForecast} />
+            <WeatherForecast />
             <LunarData />
             <SensorsHistogram />
         </div>
