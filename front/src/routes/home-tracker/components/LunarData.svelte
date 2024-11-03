@@ -1,23 +1,34 @@
 <script lang="ts">
-    import { getMoonPhasePictureURL, type LunarData } from '$lib/HomeTracker';
-
-    export let lunarData: LunarData;
+    import { Notice } from '$lib/components/Notice';
+    import { getLunarData, getMoonPhasePictureURL } from '$lib/HomeTracker';
 </script>
 
 <div class="container">
-    <div class="title">{lunarData.phaseFr}</div>
-    <div class="data">
-        <div>
-            Moon age: {lunarData.lunarAge.toFixed(1)} days ({(
-                lunarData.lunarAgePercent * 100
-            ).toFixed(0)}%)
+    {#await getLunarData()}
+        <p>Loading lunar data</p>
+    {:then lunarData}
+        <div class="title">{lunarData.phaseFr}</div>
+        <div class="data">
+            <div>
+                Moon age: {lunarData.lunarAge.toFixed(1)} days ({(
+                    lunarData.lunarAgePercent * 100
+                ).toFixed(0)}%)
+            </div>
+            <img
+                class="phase-img"
+                alt={lunarData.phase}
+                src={getMoonPhasePictureURL(lunarData.phase)}
+            />
         </div>
-        <img
-            class="phase-img"
-            alt={lunarData.phase}
-            src={getMoonPhasePictureURL(lunarData.phase)}
+    {:catch error}
+        <Notice
+            item={{
+                level: 'error',
+                header: 'Something went wrong getting lunar data',
+                message: error
+            }}
         />
-    </div>
+    {/await}
 </div>
 
 <style>

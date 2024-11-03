@@ -3,7 +3,6 @@
     import {
         formatRecordTimestampToHuman,
         getAllSensorsWithLatestLog,
-        getLunarData,
         getWeatherForecast,
         type TimeWindow
     } from '$lib/HomeTracker';
@@ -25,9 +24,8 @@
         selectedTimeWindow.set(timeWindowInput);
         const weatherForecast = await getWeatherForecast();
         const sensorsDetails = await getAllSensorsWithLatestLog();
-        const lunarData = await getLunarData();
         lastRefreshDate = DateTime.now();
-        return { lunarData, sensorsDetails, weatherForecast };
+        return { sensorsDetails, weatherForecast };
     };
 
     let apiData = refreshData($selectedTimeWindow);
@@ -50,11 +48,11 @@
 
     {#await apiData}
         <p>Loading sensors data</p>
-    {:then { lunarData, sensorsDetails, weatherForecast }}
+    {:then { sensorsDetails, weatherForecast }}
         <div class="content">
             <SensorsSummary sensorsData={sensorsDetails.sensors} />
             <WeatherForecast forecast={weatherForecast} />
-            <LunarData {lunarData} />
+            <LunarData />
             <SensorsHistogram />
         </div>
     {:catch error}
