@@ -3,7 +3,6 @@
     import {
         formatRecordTimestampToHuman,
         getAllSensorsWithLatestLog,
-        getHistogramData,
         getLunarData,
         getWeatherForecast,
         type TimeWindow
@@ -24,12 +23,11 @@
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
-        const histogramData = await getHistogramData($selectedTimeWindow);
         const weatherForecast = await getWeatherForecast();
         const sensorsDetails = await getAllSensorsWithLatestLog();
         const lunarData = await getLunarData();
         lastRefreshDate = DateTime.now();
-        return { histogramData, lunarData, sensorsDetails, weatherForecast };
+        return { lunarData, sensorsDetails, weatherForecast };
     };
 
     let apiData = refreshData($selectedTimeWindow);
@@ -52,17 +50,12 @@
 
     {#await apiData}
         <p>Loading sensors data</p>
-    {:then { histogramData, lunarData, sensorsDetails, weatherForecast }}
+    {:then { lunarData, sensorsDetails, weatherForecast }}
         <div class="content">
             <SensorsSummary sensorsData={sensorsDetails.sensors} />
             <WeatherForecast forecast={weatherForecast} />
             <LunarData {lunarData} />
-            <SensorsHistogram
-                sensorsData={sensorsDetails.sensors}
-                histogramData={histogramData.histogramData}
-                sensorNames={histogramData.sensorNames}
-                on:select={(event) => (apiData = refreshData(event.detail))}
-            />
+            <SensorsHistogram />
         </div>
     {:catch error}
         <Notice
