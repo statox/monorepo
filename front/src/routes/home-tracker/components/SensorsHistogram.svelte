@@ -55,5 +55,5 @@
         />
     {/await}
 {:else}
-    <Notice item={{ level: 'info', header: 'Login to access data' }} />
+    <Notice item={{ level: 'info', header: 'Login to access historical data' }} />
 {/if}
