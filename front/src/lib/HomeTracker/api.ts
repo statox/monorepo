@@ -2,6 +2,7 @@ import { requestAPIGet, requestAPIPost } from '$lib/api';
 import type {
     HomeTrackerLatestResponse,
     HomeTrackerSensorsResponse,
+    LunarData,
     SensorState,
     TimeWindow,
     WeatherForecast
@@ -19,6 +20,13 @@ export const getWeatherForecast = async () => {
         path: '/homeTracker/getWeatherForecast'
     });
     return forecast;
+};
+
+export const getLunarData = async () => {
+    const { currentLunarState } = await requestAPIGet<{ currentLunarState: LunarData }>({
+        path: '/homeTracker/getLunarData'
+    });
+    return currentLunarState;
 };
 
 export const getAllSensorsWithLatestLog = async () => {

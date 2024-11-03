@@ -1,3 +1,5 @@
+import type { LunarPhase } from 'lunarphase-js';
+
 export interface SensorState {
     sensorName: string;
     iconPath: string;
@@ -84,4 +86,22 @@ export interface WeatherForecast {
             pressurehPa: number;
         };
     };
+}
+
+enum LunarPhaseFrench {
+    NEW = 'Nouvelle lune',
+    WAXING_CRESCENT = 'Premier croissant',
+    FIRST_QUARTER = 'Premier quartier',
+    WAXING_GIBBOUS = 'Gibeuse croissante',
+    FULL = 'Pleine lune',
+    WANING_GIBBOUS = 'Gibeuse décroissante',
+    LAST_QUARTER = 'Last Quarter',
+    WANING_CRESCENT = 'Dernier croissant'
+}
+
+export interface LunarData {
+    lunarAge: number;
+    lunarAgePercent: number;
+    phase: LunarPhase;
+    phaseFr: LunarPhaseFrench;
 }

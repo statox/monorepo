@@ -49,6 +49,7 @@
     },
     "type": "module",
     "dependencies": {
+        "lunarphase-js": "^2.0.3",
         "luxon": "^3.5.0",
         "mime": "^4.0.4",
         "superagent": "^10.1.1",
