@@ -23,7 +23,7 @@
 <style>
     .container {
         border: solid 2px;
-        border-color: var(--nc-tx-2);
+        border-color: #9edcff;
         border-radius: 5px;
 
         padding: 0.3em;
