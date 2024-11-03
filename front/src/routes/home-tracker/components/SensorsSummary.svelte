@@ -1,14 +1,53 @@
 <script lang="ts">
-    import type { SensorState } from '$lib/HomeTracker/types';
+    import { Notice } from '$lib/components/Notice';
+    import {
+        formatRecordTimestampToHuman,
+        getAllSensorsWithLatestLog,
+        type TimeWindow
+    } from '$lib/HomeTracker';
     import SensorSummary from './SensorSummary.svelte';
+    import { selectedTimeWindow } from '../store';
+    import { DateTime } from 'luxon';
 
-    export let sensorsData: SensorState[];
+    let lastRefreshDate: DateTime;
+
+    const refreshData = async (timeWindowInput: TimeWindow) => {
+        selectedTimeWindow.set(timeWindowInput);
+        const sensorsDetails = await getAllSensorsWithLatestLog();
+        lastRefreshDate = DateTime.now();
+        return sensorsDetails;
+    };
+
+    let apiData = refreshData($selectedTimeWindow);
+
+    setInterval(() => (apiData = refreshData($selectedTimeWindow)), 5 * 60 * 1000);
 </script>
 
 <div class="container">
-    {#each sensorsData as sensor}
-        <SensorSummary {sensor} />
-    {/each}
+    <div>
+        <span style={'font-weight: bolder'}>Last Refresh</span>
+        <span>{formatRecordTimestampToHuman(lastRefreshDate?.toSeconds()) || 'NA'}</span>
+        <button on:click={() => (apiData = refreshData($selectedTimeWindow))}>
+            <i class="fas fa-sync-alt"></i>
+        </button>
+    </div>
+
+    <br />
+    {#await apiData}
+        <p>Loading sensors data</p>
+    {:then sensordDetails}
+        {#each sensordDetails.sensors as sensor}
+            <SensorSummary {sensor} />
+        {/each}
+    {:catch error}
+        <Notice
+            item={{
+                level: 'error',
+                header: 'Something went wrong getting sensor data',
+                message: error
+            }}
+        />
+    {/await}
 </div>
 
 <style>
