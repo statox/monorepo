@@ -12,6 +12,14 @@
     formatedLastLogTimestamp =
         formatRecordTimestampToRelative(sensor.lastLogTimestamp) ||
         '(error getting last timestamp)';
+
+    const handleImageNotFound = (event: Event) => {
+        if (!event?.target) {
+            return;
+        }
+        // @ts-expect-error find out the proper typing for this
+        event.target.src = '/hometracker/sensors/icon_debug.png';
+    };
 </script>
 
 <div class="container" style="--sensor-color: {color}">
@@ -20,6 +28,7 @@
         src={sensor.iconPath}
         title="{sensor.sensorName} icon"
         alt="{sensor.sensorName} icon"
+        on:error={handleImageNotFound}
     />
 
     <div class="sensor-data">
