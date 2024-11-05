@@ -84,7 +84,7 @@ Create a modal component
     min-width: 240px;
     border-radius: 6px;
     padding: 16px;
-    background: white;
+    background: var(--nc-bg-1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;

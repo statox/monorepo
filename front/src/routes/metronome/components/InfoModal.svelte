@@ -77,7 +77,7 @@
         min-width: 240px;
         border-radius: 26px;
         padding: 16px;
-        background: white;
+        background: var(--nc-bg-1);
         pointer-events: auto;
 
         max-height: 90%;
