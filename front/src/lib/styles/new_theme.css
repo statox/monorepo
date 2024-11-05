@@ -1,21 +1,81 @@
 /* Override ./new.css colors */
-/* This file can be imported in components to use the variables */
+/*
+ * This file can be imported in components to use the variables.
+ * /!\ Make to use the final variables like --nc-tx-1 and not the ones
+ * with -light or -dark  in the name
+ *
+ * For dark theme the ThemeSwitcherNavItem component is reponsible for adding
+ * a data attribute to the html element. When this happens the selector
+ * `html[data-theme='dark']` is triggered and the corresponding variables are used
+ */
 :root {
-    --nc-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-        Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol';
-    --nc-font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier,
-        monospace;
+    /* statox light theme */
+    --nc-light-tx-1: #546e7a;
+    --nc-light-tx-2: #161d21;
+    --nc-light-tx-3: #6d7169;
+    --nc-light-bg-1: #f4f4f4;
+    --nc-light-bg-2: #eae8e8;
+    --nc-light-bg-3: #fafafa;
+    --nc-light-lk-1: #176166;
+    --nc-light-lk-2: #528aff;
+    --nc-light-lk-tx: #f3f4f5;
+    --nc-light-ac-1: #91b859;
+    --nc-light-ac-tx: #fafafa;
 
-    --nc-tx-1: #546e7a;
-    --nc-tx-2: #161d21;
-    --nc-tx-3: #6d7169;
-    --nc-bg-1: #f4f4f4;
-    --nc-bg-2: #eae8e8;
-    --nc-bg-3: #fafafa;
-    --nc-lk-1: #176166;
-    --nc-lk-2: #528aff;
-    --nc-lk-tx: #f3f4f5;
-    --nc-ac-1: #91b859;
-    --nc-ac-tx: #fafafa;
+    /* Theme of my blog */
+    --nc-dark-tx-1: #ffffff;
+    --nc-dark-tx-2: #b7b7b7;
+    --nc-dark-tx-3: #8a8d87;
+    --nc-dark-bg-1: #1e272c;
+    --nc-dark-bg-2: #161d21;
+    --nc-dark-bg-3: #263238;
+    --nc-dark-lk-1: #5e92ff;
+    --nc-dark-lk-2: #99b2e8;
+    --nc-dark-lk-tx: #2e3c43;
+    --nc-dark-ac-1: #c3e88d;
+    --nc-dark-ac-tx: #263238;
 }
+
+html {
+    --nc-tx-1: var(--nc-light-tx-1);
+    --nc-tx-2: var(--nc-light-tx-2);
+    --nc-tx-3: var(--nc-light-tx-3);
+    --nc-bg-1: var(--nc-light-bg-1);
+    --nc-bg-2: var(--nc-light-bg-2);
+    --nc-bg-3: var(--nc-light-bg-3);
+    --nc-lk-1: var(--nc-light-lk-1);
+    --nc-lk-2: var(--nc-light-lk-2);
+    --nc-lk-tx: var(--nc-light-lk-tx);
+    --nc-ac-1: var(--nc-light-ac-1);
+    --nc-ac-tx: var(--nc-light-ac-tx);
+}
+
+html[data-theme='dark'] {
+    --nc-tx-1: var(--nc-dark-tx-1);
+    --nc-tx-2: var(--nc-dark-tx-2);
+    --nc-tx-3: var(--nc-dark-tx-3);
+    --nc-bg-1: var(--nc-dark-bg-1);
+    --nc-bg-2: var(--nc-dark-bg-2);
+    --nc-bg-3: var(--nc-dark-bg-3);
+    --nc-lk-1: var(--nc-dark-lk-1);
+    --nc-lk-2: var(--nc-dark-lk-2);
+    --nc-lk-tx: var(--nc-dark-lk-tx);
+    --nc-ac-1: var(--nc-dark-ac-1);
+    --nc-ac-tx: var(--nc-dark-ac-tx);
+}
+
+/* TODO See if that works */
+/* @media (prefers-color-scheme: dark) { */
+/*     :root { */
+/*         --nc-tx-1: var(--nc-d-tx-1); */
+/*         --nc-tx-2: var(--nc-d-tx-2); */
+/*         --nc-bg-1: var(--nc-d-bg-1); */
+/*         --nc-bg-2: var(--nc-d-bg-2); */
+/*         --nc-bg-3: var(--nc-d-bg-3); */
+/*         --nc-lk-1: var(--nc-d-lk-1); */
+/*         --nc-lk-2: var(--nc-d-lk-2); */
+/*         --nc-lk-tx: var(--nc--dlk-tx); */
+/*         --nc-ac-1: var(--nc-d-ac-1); */
+/*         --nc-ac-tx: var(--nc--dac-tx); */
+/*     } */
+/* } */

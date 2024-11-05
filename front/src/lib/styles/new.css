@@ -1,5 +1,7 @@
 /* https://github.com/xz/new.css/blob/80e7107b49/new.css */
 
+/* Colors and themes are handled by new_theme.css */
+
 /* Font https://docs.xz.style/fonts/inter */
 @import url('https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/inter.min.css');
 
@@ -9,45 +11,6 @@
         'Segoe UI Symbol';
     --nc-font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier,
         monospace;
-
-    /* Light theme */
-    --nc-tx-1: #000000;
-    --nc-tx-2: #1a1a1a;
-    --nc-bg-1: #ffffff;
-    --nc-bg-2: #f6f8fa;
-    --nc-bg-3: #e5e7eb;
-    --nc-lk-1: #0070f3;
-    --nc-lk-2: #0366d6;
-    --nc-lk-tx: #ffffff;
-    --nc-ac-1: #79ffe1;
-    --nc-ac-tx: #0c4047;
-
-    /* Dark theme */
-    --nc-d-tx-1: #ffffff;
-    --nc-d-tx-2: #eeeeee;
-    --nc-d-bg-1: #000000;
-    --nc-d-bg-2: #111111;
-    --nc-d-bg-3: #222222;
-    --nc-d-lk-1: #3291ff;
-    --nc-d-lk-2: #0070f3;
-    --nc-d-lk-tx: #ffffff;
-    --nc-d-ac-1: #7928ca;
-    --nc-d-ac-tx: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --nc-tx-1: var(--nc-d-tx-1);
-        --nc-tx-2: var(--nc-d-tx-2);
-        --nc-bg-1: var(--nc-d-bg-1);
-        --nc-bg-2: var(--nc-d-bg-2);
-        --nc-bg-3: var(--nc-d-bg-3);
-        --nc-lk-1: var(--nc-d-lk-1);
-        --nc-lk-2: var(--nc-d-lk-2);
-        --nc-lk-tx: var(--nc--dlk-tx);
-        --nc-ac-1: var(--nc-d-ac-1);
-        --nc-ac-tx: var(--nc--dac-tx);
-    }
 }
 
 * {

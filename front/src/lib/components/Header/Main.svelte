@@ -1,6 +1,7 @@
 <script lang="ts">
     import HomeNavItem from '$lib/components/NavItems/HomeNavItem.svelte';
     import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
+    import ThemeSwitcherNavItem from '$lib/components/NavItems/ThemeSwitcherNavItem.svelte';
     import { pageNameStore } from './store';
 </script>
 
@@ -10,6 +11,7 @@
             <a href="/">{$pageNameStore}</a>
             <HomeNavItem />
             <AuthNavItem />
+            <ThemeSwitcherNavItem />
         </nav>
     </h1>
 </header>
