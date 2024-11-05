@@ -1,11 +1,11 @@
 /* Override ./new.css colors */
 /*
- * This file can be imported in components to use the variables.
+ * The variables in this file can be used in components.
  * /!\ Make to use the final variables like --nc-tx-1 and not the ones
  * with -light or -dark  in the name
  *
  * For dark theme the ThemeSwitcherNavItem component is reponsible for adding
- * a data attribute to the html element. When this happens the selector
+ * a data attribute "theme" to the html element. When this happens the selector
  * `html[data-theme='dark']` is triggered and the corresponding variables are used
  */
 :root {

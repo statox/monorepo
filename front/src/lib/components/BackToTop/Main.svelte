@@ -1,5 +1,4 @@
 <script lang="ts">
-    import '$lib/styles/new_theme.css';
     let y: number;
 
     let hide = true;

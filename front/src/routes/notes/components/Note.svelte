@@ -1,5 +1,4 @@
 <script lang="ts">
-    import '$lib/styles/new_theme.css';
     import { Markdown } from '$lib/components/Markdown';
     import type { Note } from '$lib/Notes/types';
     export let note: Note;
