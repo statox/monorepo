@@ -209,6 +209,10 @@
         color: #e82236;
     }
 
+    .fa-youtube {
+        color: #e82236;
+    }
+
     .fa-link {
         color: #727171;
     }

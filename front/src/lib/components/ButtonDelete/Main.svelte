@@ -40,7 +40,7 @@
 <style>
     .delete-button {
         font-size: 1em;
-        background: red;
-        color: white;
+        background: var(--nc-error);
+        color: var(--nc-white);
     }
 </style>

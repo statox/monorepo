@@ -19,23 +19,25 @@
         margin-bottom: 0.3em;
 
         border-radius: 5px;
+
+        border: 1px solid var(--nc-tx-1);
     }
     .container.error {
-        background-color: #ab0000;
+        background-color: var(--nc-error);
     }
     .container.info {
-        background-color: #528aff;
+        background-color: var(--nc-info);
     }
     .container.success {
-        background-color: #4e8759;
+        background-color: var(--nc-success);
     }
 
     .header {
-        color: #ffffff;
+        color: var(--nc-white);
         font-weight: bolder;
     }
 
     .message {
-        color: #ffffff;
+        color: var(--nc-white);
     }
 </style>

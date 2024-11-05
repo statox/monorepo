@@ -170,9 +170,9 @@
         flex-grow: 2;
     }
     .visibility-status {
-        background-color: #07a761;
+        background-color: var(--nc-success);
     }
     .visibility-public {
-        background-color: #ff8f00;
+        background-color: var(--nc-error);
     }
 </style>

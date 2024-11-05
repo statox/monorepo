@@ -91,4 +91,8 @@
     .fa-link {
         color: #727171;
     }
+
+    .fa-youtube {
+        color: #e82236;
+    }
 </style>

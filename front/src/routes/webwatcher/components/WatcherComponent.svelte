@@ -172,7 +172,7 @@
     .error-section {
         padding: 0.5em;
         border-radius: 5px;
-        border: 1px solid #ff0000;
+        border: 1px solid var(--nc-error);
     }
 
     .section-2-item {

@@ -34,6 +34,12 @@
     --nc-dark-lk-tx: #2e3c43;
     --nc-dark-ac-1: #c3e88d;
     --nc-dark-ac-tx: #263238;
+
+    /* Helpers working on both themes */
+    --nc-success: #4e8759;
+    --nc-info: #528aff;
+    --nc-error: #ab0000;
+    --nc-white: #ffffff;
 }
 
 html {

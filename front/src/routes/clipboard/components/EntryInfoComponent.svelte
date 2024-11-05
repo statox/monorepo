@@ -43,10 +43,10 @@
     .visibility-status {
         height: 33px;
         width: 40px;
-        background-color: #07a761;
+        background-color: var(--nc-success);
     }
     .visibility-public {
-        background-color: #ff8f00;
+        background-color: var(--nc-error);
     }
     .creation-date {
         width: max-content;
