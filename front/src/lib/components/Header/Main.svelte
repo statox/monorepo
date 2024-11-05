@@ -7,20 +7,35 @@
 
 <header>
     <h1>
-        <nav>
-            <a href="/">{$pageNameStore}</a>
-            <HomeNavItem />
-            <AuthNavItem />
-            <ThemeSwitcherNavItem />
-        </nav>
+        <a href="/">{$pageNameStore}</a>
     </h1>
+    <nav>
+        <span><HomeNavItem /></span>
+        <span class="before-last-item"><AuthNavItem /></span>
+        <span><ThemeSwitcherNavItem /></span>
+    </nav>
 </header>
 
 <style>
+    header {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5em;
+
+        align-items: center;
+    }
+
     nav {
         display: inline-flex;
         flex-direction: row;
         gap: 0.3em;
+
+        flex-grow: 1;
+    }
+
+    .before-last-item {
+        flex-grow: 1;
     }
 
     a {
