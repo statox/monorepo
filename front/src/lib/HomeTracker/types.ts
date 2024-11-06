@@ -109,4 +109,5 @@ export interface LunarData {
     lunarAgePercent: number;
     phase: LunarPhase;
     phaseFr: LunarPhaseFrench;
+    visibilityWindow: string[];
 }

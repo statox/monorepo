@@ -7,12 +7,23 @@
     {#await getLunarData()}
         <p>Loading lunar data</p>
     {:then lunarData}
-        <div class="title">{lunarData.phaseFr}</div>
-        <div class="data">
-            <div>
-                Moon age: {lunarData.lunarAge.toFixed(1)} days ({(
-                    lunarData.lunarAgePercent * 100
-                ).toFixed(0)}%)
+        <div class="title">Moon</div>
+        <div class="content">
+            <div class="data">
+                <span>Phase</span>
+                <span>{lunarData.phaseFr}</span>
+
+                <span>Age</span>
+                <span>
+                    {lunarData.lunarAge.toFixed(1)} days ({(
+                        lunarData.lunarAgePercent * 100
+                    ).toFixed(0)}%)
+                </span>
+
+                <span>Visible between</span>
+                <span>
+                    {lunarData.visibilityWindow[0]} - {lunarData.visibilityWindow[1]}
+                </span>
             </div>
             <img
                 class="phase-img"
@@ -50,12 +61,20 @@
         font-size: x-large;
     }
 
-    .data {
+    .content {
         display: flex;
-        flex-flow: row;
+        flex-direction: row;
         flex-wrap: wrap;
 
-        gap: 2em;
+        gap: 1em;
+    }
+
+    .data {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3, 2em);
+
+        /* row-gap: 1em; */
     }
 
     .phase-img {
