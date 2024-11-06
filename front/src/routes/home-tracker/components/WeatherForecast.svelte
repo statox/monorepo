@@ -2,6 +2,7 @@
     import { Notice } from '$lib/components/Notice';
     import { ValueWithUnit } from '$lib/components/ValueWithUnit';
     import { formatRecordTimestampToHuman, getWeatherForecast } from '$lib/HomeTracker';
+    import PressureHistoryGraph from './PressureHistoryGraph.svelte';
 
     const trendIconClass = {
         rising: 'fa fa-arrow-up',
@@ -10,7 +11,7 @@
     };
 
     const getForecastData = async () => {
-        const forecast = await getWeatherForecast();
+        const { forecast, pressureHistory } = await getWeatherForecast();
 
         let oldestDataPointTime: string | undefined = 'no data';
         let latestDataPointTime: string | undefined = 'no data';
@@ -32,14 +33,14 @@
             }
         }
 
-        return { forecast, oldestDataPointTime, latestDataPointTime };
+        return { forecast, oldestDataPointTime, latestDataPointTime, pressureHistory };
     };
 </script>
 
 <div class="container">
     {#await getForecastData()}
         <p>Loading weather forecast</p>
-    {:then { forecast, oldestDataPointTime, latestDataPointTime }}
+    {:then { forecast, oldestDataPointTime, latestDataPointTime, pressureHistory }}
         <div class="forecast-container">
             <div class="section-title">Forecast</div>
             <div class="forecast">{forecast.forecast}</div>
@@ -75,6 +76,7 @@
                 </div>
             </div>
         {/if}
+        <PressureHistoryGraph {pressureHistory} />
     {:catch error}
         <Notice
             item={{
@@ -128,8 +130,9 @@
         padding: 0.3em;
 
         display: flex;
-        flex-flow: column;
+        flex-flow: row;
         flex-wrap: wrap;
+        justify-content: space-between;
         align-items: baseline;
         gap: 1em;
     }

@@ -88,6 +88,11 @@ export interface WeatherForecast {
     };
 }
 
+export interface PressureHistoryItem {
+    timestamp: number;
+    averagePressurehPa: number;
+}
+
 enum LunarPhaseFrench {
     NEW = 'Nouvelle lune',
     WAXING_CRESCENT = 'Premier croissant',

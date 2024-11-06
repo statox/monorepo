@@ -3,6 +3,7 @@ import type {
     HomeTrackerLatestResponse,
     HomeTrackerSensorsResponse,
     LunarData,
+    PressureHistoryItem,
     SensorState,
     TimeWindow,
     WeatherForecast
@@ -16,10 +17,13 @@ export const getHistogramData = async (timeWindow: TimeWindow) => {
 };
 
 export const getWeatherForecast = async () => {
-    const { forecast } = await requestAPIGet<{ forecast: WeatherForecast }>({
+    const { forecast, pressureHistory } = await requestAPIGet<{
+        forecast: WeatherForecast;
+        pressureHistory: PressureHistoryItem[];
+    }>({
         path: '/homeTracker/getWeatherForecast'
     });
-    return forecast;
+    return { forecast, pressureHistory };
 };
 
 export const getLunarData = async () => {
