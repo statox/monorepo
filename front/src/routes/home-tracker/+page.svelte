@@ -1,10 +1,10 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import SensorsSummary from './components/SensorsSummary.svelte';
     import { pageNameStore } from '$lib/components/Header';
+    import Ephemerides from './components/Ephemerides.svelte';
+    import SensorsSummary from './components/SensorsSummary.svelte';
     import SensorsHistogram from './components/SensorsHistogram.svelte';
     import WeatherForecast from './components/WeatherForecast.svelte';
-    import LunarData from './components/LunarData.svelte';
 
     pageNameStore.set('Home Tracker');
 </script>
@@ -14,7 +14,7 @@
 <div class="content">
     <SensorsSummary />
     <WeatherForecast />
-    <LunarData />
+    <Ephemerides />
     <SensorsHistogram />
 </div>
 

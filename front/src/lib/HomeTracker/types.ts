@@ -104,10 +104,14 @@ enum LunarPhaseFrench {
     WANING_CRESCENT = 'Dernier croissant'
 }
 
-export interface LunarData {
+export interface Ephemerides {
+    sunrise: number;
+    sunset: number;
+    solarNoon: number;
+    goldenHour: number;
     lunarAge: number;
     lunarAgePercent: number;
-    phase: LunarPhase;
-    phaseFr: LunarPhaseFrench;
-    visibilityWindow: string[];
+    moonPhase: LunarPhase;
+    moonPhaseFr: LunarPhaseFrench;
+    moonVisibilityWindow: string[];
 }

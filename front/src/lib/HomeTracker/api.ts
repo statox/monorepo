@@ -1,8 +1,8 @@
 import { requestAPIGet, requestAPIPost } from '$lib/api';
 import type {
+    Ephemerides,
     HomeTrackerLatestResponse,
     HomeTrackerSensorsResponse,
-    LunarData,
     PressureHistoryItem,
     SensorState,
     TimeWindow,
@@ -26,11 +26,11 @@ export const getWeatherForecast = async () => {
     return { forecast, pressureHistory };
 };
 
-export const getLunarData = async () => {
-    const { currentLunarState } = await requestAPIGet<{ currentLunarState: LunarData }>({
-        path: '/homeTracker/getLunarData'
+export const getEphemeridesAPI = async () => {
+    const { ephemerides } = await requestAPIGet<{ ephemerides: Ephemerides }>({
+        path: '/homeTracker/getEphemerides'
     });
-    return currentLunarState;
+    return ephemerides;
 };
 
 export const getAllSensorsWithLatestLog = async () => {

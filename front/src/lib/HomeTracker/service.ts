@@ -1,4 +1,6 @@
 import { LunarPhase } from 'lunarphase-js';
+import { getEphemeridesAPI } from './api';
+import { DateTime } from 'luxon';
 
 export const getMoonPhasePictureURL = (phase: LunarPhase) => {
     if (phase === LunarPhase.NEW) {
@@ -27,4 +29,20 @@ export const getMoonPhasePictureURL = (phase: LunarPhase) => {
     }
 
     throw new Error('UNKOWN_LUNAR_PHASE');
+};
+
+export const getEphemerides = async () => {
+    const data = await getEphemeridesAPI();
+
+    return {
+        lunarAge: data.lunarAge,
+        lunarAgePercent: data.lunarAgePercent,
+        moonPhase: data.moonPhase,
+        moonPhaseFr: data.moonPhaseFr,
+        moonVisibilityWindow: data.moonVisibilityWindow,
+        goldenHour: DateTime.fromMillis(data.goldenHour),
+        solarNoon: DateTime.fromMillis(data.solarNoon),
+        sunrise: DateTime.fromMillis(data.sunrise),
+        sunset: DateTime.fromMillis(data.sunset)
+    };
 };

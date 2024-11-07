@@ -1,34 +1,49 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
-    import { getLunarData, getMoonPhasePictureURL } from '$lib/HomeTracker';
+    import { getEphemerides, getMoonPhasePictureURL } from '$lib/HomeTracker';
 </script>
 
 <div class="container">
-    {#await getLunarData()}
-        <p>Loading lunar data</p>
-    {:then lunarData}
-        <div class="title">Moon</div>
+    {#await getEphemerides()}
+        <p>Loading ephemerides data</p>
+    {:then ephemerides}
+        <div class="title">Ephemerides</div>
         <div class="content">
             <div class="data">
-                <span>Phase</span>
-                <span>{lunarData.phaseFr}</span>
+                <span>Moon phase</span>
+                <span>{ephemerides.moonPhaseFr}</span>
 
-                <span>Age</span>
+                <span>Moon age</span>
                 <span>
-                    {lunarData.lunarAge.toFixed(1)} days ({(
-                        lunarData.lunarAgePercent * 100
+                    {ephemerides.lunarAge.toFixed(1)} days ({(
+                        ephemerides.lunarAgePercent * 100
                     ).toFixed(0)}%)
                 </span>
 
-                <span>Visible between</span>
+                <span>Moon visible</span>
                 <span>
-                    {lunarData.visibilityWindow[0]} - {lunarData.visibilityWindow[1]}
+                    {ephemerides.moonVisibilityWindow[0]} - {ephemerides.moonVisibilityWindow[1]}
+                </span>
+
+                <span>Sun rise/set</span>
+                <span>
+                    {ephemerides.sunrise.toFormat('HH:mm')} - {ephemerides.sunset.toFormat('HH:mm')}
+                </span>
+
+                <span>Solar noon</span>
+                <span>
+                    {ephemerides.solarNoon.toFormat('HH:mm')}
+                </span>
+
+                <span>Golden hour</span>
+                <span>
+                    {ephemerides.goldenHour.toFormat('HH:mm')}
                 </span>
             </div>
             <img
                 class="phase-img"
-                alt={lunarData.phase}
-                src={getMoonPhasePictureURL(lunarData.phase)}
+                alt={ephemerides.moonPhase}
+                src={getMoonPhasePictureURL(ephemerides.moonPhase)}
             />
         </div>
     {:catch error}
@@ -72,7 +87,7 @@
     .data {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: repeat(3, 2em);
+        grid-template-rows: repeat(6, 2em);
 
         /* row-gap: 1em; */
     }
