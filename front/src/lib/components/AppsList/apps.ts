@@ -73,6 +73,11 @@ export const personalSection = {
             name: 'Home tracker',
             description: 'My homemade home monitoring system',
             link: '/home-tracker'
+        },
+        {
+            name: 'Personal tracker',
+            description: 'Tracking me data',
+            link: '/personal-tracker'
         }
     ]
 };
