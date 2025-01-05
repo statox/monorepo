@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'weekly'
+      interval: 'daily'
     #Temporarily disabled groups because https://github.com/statox/apps.statox.fr/pull/200 keeps
     #failing on eslint check
     #groups:
