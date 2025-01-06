@@ -3,3 +3,9 @@ export interface NewEventParams {
     type: string;
     value: number;
 }
+
+export interface PersonalEvent {
+    eventDateUnix: number;
+    type: string;
+    value: number;
+}
