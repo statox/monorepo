@@ -1,4 +1,5 @@
 export interface NewEventParams {
-    eventType: string;
-    eventValue: number;
+    timestampUTC: number;
+    type: string;
+    value: number;
 }

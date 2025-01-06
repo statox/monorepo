@@ -6,6 +6,7 @@
     import { toast } from '$lib/components/Toast';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { createEvent } from '$lib/PersonalTracker/api';
+    import { DateTime } from 'luxon';
 
     export let isOpen: boolean;
     export let onUpload: () => void;
@@ -26,8 +27,9 @@
             return;
         }
 
+        const timestampUTC = DateTime.now().toUTC().toUnixInteger();
         try {
-            await createEvent({ eventType: 'weight', eventValue: value * 100 });
+            await createEvent({ timestampUTC, type: 'weight', value: value * 100 });
             onUpload();
             closeModal();
         } catch (error) {
