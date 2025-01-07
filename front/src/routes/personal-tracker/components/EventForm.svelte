@@ -16,8 +16,11 @@
 
     const upload = async () => {
         noticeMessages = [];
-        if (value !== Math.floor(value)) {
-            noticeMessages.push({ level: 'error', header: 'Value must not have a decimal part' });
+        if (value !== Number(value.toFixed(1))) {
+            noticeMessages.push({
+                level: 'error',
+                header: 'Value have at most 1 number after the comma'
+            });
         }
         if (value < 80 || value > 110) {
             noticeMessages.push({ level: 'error', header: 'Value must be in kg' });
@@ -29,7 +32,11 @@
 
         const timestampUTC = DateTime.now().toUTC().toUnixInteger();
         try {
-            await createEvent({ timestampUTC, type: 'weight', value: value * 100 });
+            await createEvent({
+                timestampUTC,
+                type: 'weight',
+                value: Math.floor(value * 100)
+            });
             onUpload();
             closeModal();
         } catch (error) {
@@ -63,7 +70,7 @@
 
             <form class="form-content">
                 <label for="weight">Weight</label>
-                <input type="number" bind:value />
+                <input type="number" step="0.1" bind:value />
 
                 <br />
                 {#if $user}
