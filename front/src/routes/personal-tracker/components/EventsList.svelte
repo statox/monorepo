@@ -1,14 +1,16 @@
 <script lang="ts">
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
-    import { getAllEvents } from '$lib/PersonalTracker/api';
+    import type { PersonalEvent } from '$lib/PersonalTracker/types';
     import { DateTime } from 'luxon';
+
+    export let events: Promise<PersonalEvent[]> | undefined;
 </script>
 
-{#if $user}
-    {#await getAllEvents()}
+{#if $user && events}
+    {#await events}
         <p>Loading events</p>
-    {:then { events }}
+    {:then events}
         <div class="event">
             <div>Date</div>
             <div>Type</div>

@@ -9,8 +9,9 @@ export const createEvent = async (event: NewEventParams) => {
 };
 
 export const getAllEvents = async () => {
-    return await requestAPIGet<PersonalEvent[]>({
+    const { events } = await requestAPIGet<{ events: PersonalEvent[] }>({
         path: '/personalTracker/getAll',
         authorize: true
     });
+    return events;
 };
