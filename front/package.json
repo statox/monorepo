@@ -28,6 +28,7 @@
         "@sveltejs/vite-plugin-svelte": "^4.0.4",
         "@types/luxon": "^3.4.2",
         "@types/p5": "^1.7.6",
+        "@types/superagent": "^8.1.9",
         "@typescript-eslint/eslint-plugin": "^8.20.0",
         "@typescript-eslint/parser": "^8.20.0",
         "chart.js": "^4.4.7",
@@ -36,24 +37,21 @@
         "eslint-plugin-svelte": "^2.46.1",
         "globals": "^15.14.0",
         "highlight.js": "^11.11.1",
+        "lunarphase-js": "^2.0.3",
+        "luxon": "^3.5.0",
+        "mime": "^4.0.6",
         "p5": "^1.11.2",
         "p5-svelte": "^3.1.2",
         "prettier": "^3.4.2",
         "prettier-plugin-svelte": "^3.3.3",
+        "superagent": "^10.1.1",
         "svelte": "^5.17.5",
         "svelte-check": "^4.1.4",
+        "svelte-jsoneditor": "^2.3.3",
         "svelte-markdown": "^0.4.1",
         "typescript": "^5.7.3",
         "vite": "^5.4.11",
         "vite-plugin-plain-text": "^1.4.2"
     },
-    "type": "module",
-    "dependencies": {
-        "@types/superagent": "^8.1.9",
-        "lunarphase-js": "^2.0.3",
-        "luxon": "^3.5.0",
-        "mime": "^4.0.6",
-        "superagent": "^10.1.1",
-        "svelte-jsoneditor": "^2.3.3"
-    }
+    "type": "module"
 }
