@@ -1,14 +1,15 @@
 <script lang="ts">
-    import { Line } from 'svelte-chartjs';
     import {
-        Chart as ChartJS,
-        Title,
-        Tooltip,
+        CategoryScale,
+        Chart,
         Legend,
+        LineController,
         LineElement,
         LinearScale,
         PointElement,
-        CategoryScale
+        Title,
+        Tooltip,
+        type ChartConfiguration
     } from 'chart.js';
     import type {
         HomeTrackerHistogramData,
@@ -17,8 +18,18 @@
     } from '$lib/HomeTracker/types';
     import { formatRecordTimestampToHuman } from '$lib/HomeTracker/utils';
     import type { GraphType } from './types';
+    import { onMount } from 'svelte';
 
-    ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
+    Chart.register(
+        CategoryScale,
+        Legend,
+        LineController,
+        LineElement,
+        LinearScale,
+        PointElement,
+        Title,
+        Tooltip
+    );
 
     export let sensorsData: SensorState[];
     export let sensorNames: string[];
@@ -125,14 +136,11 @@
         labels: allDates,
         datasets
     };
-</script>
 
-<h2>{graphName} ({metricUnitSymbol})</h2>
-<div>
-    <Line
-        data={dataTemp}
-        height={300}
-        options={{
+    const config: ChartConfiguration = {
+        type: 'line',
+        data: dataTemp,
+        options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
@@ -150,6 +158,22 @@
                     }
                 }
             }
-        }}
-    />
-</div>
+        }
+    };
+
+    let chartElement: HTMLCanvasElement;
+    onMount(() => {
+        const ctx = chartElement.getContext('2d')!;
+        new Chart(ctx, config);
+    });
+</script>
+
+<h2>{graphName} ({metricUnitSymbol})</h2>
+
+<canvas class="graph-canvas" bind:this={chartElement}></canvas>
+
+<style>
+    .graph-canvas {
+        max-height: 300px;
+    }
+</style>

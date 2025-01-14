@@ -1,20 +1,23 @@
 <script lang="ts">
-    import { Bar } from 'svelte-chartjs';
+    import type { PressureHistoryItem } from '$lib/HomeTracker';
     import {
+        BarElement,
+        BarController,
+        CategoryScale,
         Chart,
+        Legend,
+        LinearScale,
         Title,
         Tooltip,
-        Legend,
-        BarElement,
-        CategoryScale,
-        LinearScale
+        type ChartConfiguration
     } from 'chart.js';
-    import type { PressureHistoryItem } from '$lib/HomeTracker';
+
     import { DateTime } from 'luxon';
+    import { onMount } from 'svelte';
 
     export let pressureHistory: PressureHistoryItem[];
 
-    Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+    Chart.register(BarController, BarElement, CategoryScale, Legend, LinearScale, Title, Tooltip);
 
     const sortedPressureHistory = pressureHistory.sort((a, b) => a.timestamp - b.timestamp);
     const labels = sortedPressureHistory.map((i) => i.timestamp);
@@ -33,12 +36,11 @@
             }
         ]
     };
-</script>
 
-<div>
-    <Bar
-        {data}
-        options={{
+    const config: ChartConfiguration = {
+        type: 'bar',
+        data,
+        options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
@@ -55,12 +57,20 @@
                     beginAtZero: false
                 }
             }
-        }}
-    />
-</div>
+        }
+    };
+
+    let chartElement: HTMLCanvasElement;
+    onMount(() => {
+        const ctx = chartElement.getContext('2d')!;
+        new Chart(ctx, config);
+    });
+</script>
+
+<canvas class="graph-canvas" bind:this={chartElement} width={400} height={400}></canvas>
 
 <style>
-    div {
-        max-height: 300px;
+    .graph-canvas {
+        max-height: 150px;
     }
 </style>
