@@ -35,7 +35,7 @@
         "highlight.js": "^11.11.1",
         "p5": "^1.11.2",
         "p5-svelte": "^3.1.2",
-        "prettier": "^3.3.3",
+        "prettier": "^3.4.2",
         "prettier-plugin-svelte": "^3.3.2",
         "svelte": "^4.2.19",
         "svelte-chartjs": "^3.1.5",

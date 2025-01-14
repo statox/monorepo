@@ -23,8 +23,8 @@ map d removeTab
 
 To use search engines `site:` filter automatically:
 
--   Create a bookmark with the the url and `%s` for the query string like this:
-    `https://www.google.com/search?q=site%3Avi.stackexchange.com%20%s`
-    `https://duckduckgo.com/?t=canonical&q=site%3Avi.stackexchange.com%20%s`
--   Add a keyword to the bookmark e.g. `v`
--   In the address bar search with `v my query`
+- Create a bookmark with the the url and `%s` for the query string like this:
+  `https://www.google.com/search?q=site%3Avi.stackexchange.com%20%s`
+  `https://duckduckgo.com/?t=canonical&q=site%3Avi.stackexchange.com%20%s`
+- Add a keyword to the bookmark e.g. `v`
+- In the address bar search with `v my query`

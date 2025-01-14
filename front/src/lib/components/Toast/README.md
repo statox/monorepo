@@ -30,8 +30,8 @@ $ npm i -D @zerodevx/svelte-toast
 
 The following are exported:
 
--   `SvelteToast` as the toast container;
--   `toast` as the toast controller.
+- `SvelteToast` as the toast container;
+- `toast` as the toast controller.
 
 ### Svelte
 

@@ -6,5 +6,5 @@ For now the component doesn't support lifecycle like the ability to dismiss it a
 
 TODO:
 
--   Make it use the newcss theme colors?
--   Probably allow to tweak the style of the component, for now it is a simple `div` and it is always used in the whole width of the screen, there will certainly be some cases where I need to tweak that.
+- Make it use the newcss theme colors?
+- Probably allow to tweak the style of the component, for now it is a simple `div` and it is always used in the whole width of the screen, there will certainly be some cases where I need to tweak that.
