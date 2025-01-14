@@ -102,64 +102,70 @@
 </script>
 
 <table>
-    <tr>
-        <th>
-            <label for="tonicInput">Tonic</label>
-        </th>
-        <th>
-            <label for="scaleInput">Scale</label>
-        </th>
-        <th>
-            <label for="modeInput">mode</label>
-        </th>
-    </tr>
-    <tr>
-        <td>
-            <select id="tonicInput" bind:value={tonic}>
-                {#each notes as note}
-                    <option value={note}>
-                        {note}
-                    </option>
-                {/each}
-            </select>
-        </td>
+    <thead>
+        <tr>
+            <th>
+                <label for="tonicInput">Tonic</label>
+            </th>
+            <th>
+                <label for="scaleInput">Scale</label>
+            </th>
+            <th>
+                <label for="modeInput">mode</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <select id="tonicInput" bind:value={tonic}>
+                    {#each notes as note}
+                        <option value={note}>
+                            {note}
+                        </option>
+                    {/each}
+                </select>
+            </td>
 
-        <td>
-            <select id="scaleInput" bind:value={scale}>
-                {#each scales as scale}
-                    <option value={scale}>
-                        {scale.name}
-                    </option>
-                {/each}
-            </select>
-        </td>
+            <td>
+                <select id="scaleInput" bind:value={scale}>
+                    {#each scales as scale}
+                        <option value={scale}>
+                            {scale.name}
+                        </option>
+                    {/each}
+                </select>
+            </td>
 
-        <td>
-            <select id="modeInput" bind:value={mode}>
-                {#each modes as mode}
-                    <option value={mode}>
-                        {mode.name}
-                    </option>
-                {/each}
-            </select>
-        </td>
-    </tr>
+            <td>
+                <select id="modeInput" bind:value={mode}>
+                    {#each modes as mode}
+                        <option value={mode}>
+                            {mode.name}
+                        </option>
+                    {/each}
+                </select>
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 <br />
 
 <table>
-    <tr>
-        {#each scale.chords as chord, index}
-            <th>{formatDegreeName(index + 1, chord)}</th>
-        {/each}
-    </tr>
-    <tr>
-        {#each scaleNotes as note, index}
-            {@const type = scale.chords[index]}
-            <td>{formatDegreeNote(note, type)}</td>
-        {/each}
-    </tr>
+    <tbody>
+        <tr>
+            {#each scale.chords as chord, index}
+                <th>{formatDegreeName(index + 1, chord)}</th>
+            {/each}
+        </tr>
+        <tr>
+            {#each scaleNotes as note, index}
+                {@const type = scale.chords[index]}
+                <td>{formatDegreeNote(note, type)}</td>
+            {/each}
+        </tr>
+    </tbody>
 </table>
 
 <NotesOnInstrument notesToDisplay={scaleNotes} />
