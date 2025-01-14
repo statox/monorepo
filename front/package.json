@@ -14,17 +14,22 @@
         "prettier:fix": "prettier --write .",
         "setup-githooks": "./githooks/setup.sh"
     },
+    "overrides": {
+        "svelte-markdown": {
+            "svelte": "^5.17.5"
+        }
+    },
     "devDependencies": {
         "@auth0/auth0-spa-js": "^2.1.3",
         "@eslint/eslintrc": "^3.2.0",
         "@eslint/js": "^9.18.0",
         "@sveltejs/adapter-static": "^3.0.8",
         "@sveltejs/kit": "^2.15.2",
-        "@sveltejs/vite-plugin-svelte": "^3.1.2",
+        "@sveltejs/vite-plugin-svelte": "^4.0.4",
         "@types/luxon": "^3.4.2",
         "@types/p5": "^1.7.6",
         "@typescript-eslint/eslint-plugin": "^8.20.0",
-        "@typescript-eslint/parser": "^8.15.0",
+        "@typescript-eslint/parser": "^8.20.0",
         "chart.js": "^4.4.7",
         "eslint": "^9.18.0",
         "eslint-config-prettier": "^10.0.1",
@@ -34,9 +39,9 @@
         "p5": "^1.11.2",
         "p5-svelte": "^3.1.2",
         "prettier": "^3.4.2",
-        "prettier-plugin-svelte": "^3.3.2",
-        "svelte": "^4.2.19",
-        "svelte-check": "^4.1.1",
+        "prettier-plugin-svelte": "^3.3.3",
+        "svelte": "^5.17.5",
+        "svelte-check": "^4.1.4",
         "svelte-markdown": "^0.4.1",
         "typescript": "^5.7.3",
         "vite": "^5.4.11",
