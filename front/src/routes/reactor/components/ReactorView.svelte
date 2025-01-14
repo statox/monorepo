@@ -87,7 +87,7 @@
                         style="max-width: 100%"
                         controls
                         src={PUBLIC_API_URL + entry.uri}
-                    />
+                    ></video>
                 {:else}
                     <img class="medium-margin" src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
                 {/if}

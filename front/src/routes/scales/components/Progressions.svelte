@@ -39,7 +39,7 @@
 <h3>
     Chord Progressions
     <span>
-        <button style:position="relative" on:click={() => openModal(InfoModal)}>
+        <button aria-label="info" style:position="relative" on:click={() => openModal(InfoModal)}>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
     </span>

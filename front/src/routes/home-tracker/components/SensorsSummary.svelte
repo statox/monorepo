@@ -27,7 +27,10 @@
     <div>
         <span style={'font-weight: bolder'}>Last Refresh</span>
         <span>{formatRecordTimestampToHuman(lastRefreshDate?.toSeconds()) || 'NA'}</span>
-        <button on:click={() => (apiData = refreshData($selectedTimeWindow))}>
+        <button
+            aria-label="update data"
+            on:click={() => (apiData = refreshData($selectedTimeWindow))}
+        >
             <i class="fas fa-sync-alt"></i>
         </button>
     </div>

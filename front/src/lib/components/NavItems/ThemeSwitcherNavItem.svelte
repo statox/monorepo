@@ -40,7 +40,7 @@
     });
 </script>
 
-<button on:click={toggle}>
+<button aria-label="switch theme" on:click={toggle}>
     <i class={buttonClass} aria-hidden="true"></i>
 </button>
 

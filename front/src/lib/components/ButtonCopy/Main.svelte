@@ -4,7 +4,7 @@
     export let content: string;
 </script>
 
-<button class="copy-button" on:click={() => copyToClipboard(content)}>
+<button aria-label="copy" class="copy-button" on:click={() => copyToClipboard(content)}>
     <i class="fas fa-copy"></i>
 </button>
 

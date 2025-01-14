@@ -22,16 +22,21 @@
 </script>
 
 {#if state === 'initial'}
-    <button class="delete-button" on:click={trigger} title="Delete?">
+    <button aria-label="delete" class="delete-button" on:click={trigger} title="Delete?">
         <i class="fas fa-trash-alt"></i>
     </button>
 {:else if state === 'triggered'}
-    <button class="delete-button" on:click={confirmDelete} title="Confirm deletion">
+    <button
+        aria-label="confirm delete"
+        class="delete-button"
+        on:click={confirmDelete}
+        title="Confirm deletion"
+    >
         <i class="fas fa-trash-alt"></i>
         <i class="fas fa-question"></i>
     </button>
 {:else if state === 'confirmed'}
-    <button class="delete-button" title="Deleted" disabled>
+    <button aria-label="delete success" class="delete-button" title="Deleted" disabled>
         <i class="fas fa-trash-alt"></i>
         <i class="fas fa-check"></i>
     </button>

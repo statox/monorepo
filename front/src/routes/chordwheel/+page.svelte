@@ -145,7 +145,7 @@
 <h2>
     Chord wheel
     <span>
-        <button style:position="relative" on:click={() => openModal(InfoModal)}>
+        <button aria-label="info" style:position="relative" on:click={() => openModal(InfoModal)}>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
     </span>
@@ -157,14 +157,30 @@
 
 <div class="justify-content-center">
     <p>
-        <button class="fa fa-undo" on:click={() => (shapePosition -= 1)}></button>
+        <button
+            aria-label="rotate shape counter clockwise"
+            class="fa fa-undo"
+            on:click={() => (shapePosition -= 1)}
+        ></button>
         Shape rotation
-        <button class="fa fa-repeat" on:click={() => (shapePosition += 1)}></button>
+        <button
+            aria-label="rotate shape clockwise"
+            class="fa fa-repeat"
+            on:click={() => (shapePosition += 1)}
+        ></button>
     </p>
     <p>
-        <button class="fa fa-undo" on:click={rotateWheelCounterClockwise}></button>
+        <button
+            aria-label="rotate wheel counter clockwise"
+            class="fa fa-undo"
+            on:click={rotateWheelCounterClockwise}
+        ></button>
         Wheel rotation
-        <button class="fa fa-repeat" on:click={rotateWheelClockwise}></button>
+        <button
+            aria-label="rotate wheel clockwise"
+            class="fa fa-repeat"
+            on:click={rotateWheelClockwise}
+        ></button>
     </p>
     <p>
         On mobile you can also swipe left/right to rotate the shape and up/down to rotate the wheel

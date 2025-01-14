@@ -87,30 +87,36 @@
 </ol>
 
 <table bind:this={tableElement} id="artistTable">
-    {#each artistsList as artist}
-        {@const artistFilteredChords = getArtistFilteredChords(artist.name, searchString, filters)}
-        {@const artistNameMatches = artistNameMatchesSearch(artist.name, searchString)}
+    <tbody>
+        {#each artistsList as artist}
+            {@const artistFilteredChords = getArtistFilteredChords(
+                artist.name,
+                searchString,
+                filters
+            )}
+            {@const artistNameMatches = artistNameMatchesSearch(artist.name, searchString)}
 
-        {#if artistNameMatches || artistFilteredChords.length > 0}
-            {@const chordsToDisplay = artistNameMatches
-                ? chordsByArtist[artist.name]
-                : artistFilteredChords}
-            <tr>
-                <td id={artist.tag}>
-                    {artist.name}
-                    {#key searchString}
-                        <ul class="ul2col-container">
-                            {#each chordsToDisplay as chord}
-                                <li class="ul2col-item">
-                                    <ChordLink {chord} />
-                                </li>
-                            {/each}
-                        </ul>
-                    {/key}
-                </td>
-            </tr>
-        {/if}
-    {/each}
+            {#if artistNameMatches || artistFilteredChords.length > 0}
+                {@const chordsToDisplay = artistNameMatches
+                    ? chordsByArtist[artist.name]
+                    : artistFilteredChords}
+                <tr>
+                    <td id={artist.tag}>
+                        {artist.name}
+                        {#key searchString}
+                            <ul class="ul2col-container">
+                                {#each chordsToDisplay as chord}
+                                    <li class="ul2col-item">
+                                        <ChordLink {chord} />
+                                    </li>
+                                {/each}
+                            </ul>
+                        {/key}
+                    </td>
+                </tr>
+            {/if}
+        {/each}
+    </tbody>
 </table>
 
 <style>

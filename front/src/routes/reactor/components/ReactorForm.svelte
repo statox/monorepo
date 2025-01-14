@@ -78,6 +78,7 @@
                 <span>
                     <input class="file-input" type="file" bind:files bind:this={fileInput} />
                     <button
+                        aria-label="delete file"
                         on:click={() => {
                             fileInput.value = '';
                         }}

@@ -26,7 +26,7 @@
 
 <Modals>
     <!-- Using a button instead of a div to avoid a11y warnings -->
-    <button slot="backdrop" class="backdrop" on:click={closeModal} />
+    <button aria-label="backdrop" slot="backdrop" class="backdrop" on:click={closeModal}></button>
 </Modals>
 
 <SvelteToast />

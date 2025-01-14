@@ -109,9 +109,9 @@
             on:keydown={(e) => {
                 if (e instanceof KeyboardEvent && ['Enter', ' '].includes(e.key)) close();
             }}
-        />
+        ></div>
     {/if}
-    <progress class="_toastBar" value={$progress} />
+    <progress class="_toastBar" value={$progress}></progress>
 </div>
 
 <style>

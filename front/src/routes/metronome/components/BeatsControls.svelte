@@ -30,6 +30,7 @@
 
         <div class="subdivisions-container">
             <button
+                aria-label="1 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 1}
                 on:click={() => (metronome.subdivisionsInBeat = 1)}
             >
@@ -45,6 +46,7 @@
                 >
             </button>
             <button
+                aria-label="2 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 2}
                 on:click={() => (metronome.subdivisionsInBeat = 2)}
             >
@@ -60,6 +62,7 @@
                 >
             </button>
             <button
+                aria-label="3 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 3}
                 on:click={() => (metronome.subdivisionsInBeat = 3)}
             >
@@ -78,6 +81,7 @@
                 >
             </button>
             <button
+                aria-label="4 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 4}
                 on:click={() => (metronome.subdivisionsInBeat = 4)}
             >

@@ -8,7 +8,7 @@
             <img class="user-profile" alt="user profile" src={$user.picture} />
         </button>
     {:else}
-        <button title="Log in" type="button" on:click={() => login()}>
+        <button aria-label="log in" title="Log in" type="button" on:click={() => login()}>
             <i class="fa fa-sign-in" aria-hidden="true"></i>
         </button>
     {/if}

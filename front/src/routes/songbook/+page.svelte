@@ -128,7 +128,7 @@
 <div>
     <h3>All songs</h3>
     Search an artist, a title or a tag:<input type="text" bind:value={searchString} />
-    <button on:click={() => (searchString = '')}>
+    <button aria-label="delete search" on:click={() => (searchString = '')}>
         <i class="fas fa-times-circle"></i>
     </button>
 
@@ -136,6 +136,7 @@
         <h4>Filters</h4>
         {#each filtersKey as filter}
             <button
+                aria-label="filter for {filter}"
                 class="filter-control"
                 on:click={() => {
                     filters[filter] = !filters[filter];
