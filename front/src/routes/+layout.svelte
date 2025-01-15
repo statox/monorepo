@@ -25,8 +25,10 @@
 <Header />
 
 <Modals>
-    <!-- Using a button instead of a div to avoid a11y warnings -->
-    <button aria-label="backdrop" slot="backdrop" class="backdrop" on:click={closeModal}></button>
+    {#snippet backdrop()}
+        <!-- Using a button instead of a div to avoid a11y warnings -->
+        <button aria-label="backdrop" class="backdrop" onclick={closeModal}></button>
+    {/snippet}
 </Modals>
 
 <SvelteToast />

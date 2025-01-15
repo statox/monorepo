@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { Snippet } from 'svelte';
     import {
         modals,
         closeModals,
@@ -7,6 +8,14 @@
         type SvelteModalComponent,
         type LazySvelteModalComponent
     } from './store';
+
+    interface Props {
+        backdrop?: Snippet;
+        children?: Snippet;
+        loading?: Snippet;
+    }
+
+    let { backdrop, children, loading }: Props = $props();
 
     function isLazyModal(
         component: SvelteModalComponent<any> | LazySvelteModalComponent<any>
@@ -42,18 +51,20 @@
 </script>
 
 {#if $modals.length > 0}
-    <slot name="backdrop" />
+    {@render backdrop?.()}
 {/if}
 
-<slot>
+{#if children}
+    {@render children()}
+{:else}
     {#each $modals as modal, i (i)}
         <!-- lazy modal -->
         {#if isLazyModal(modal.component)}
             {#await getComponent(modal.component)}
-                <slot name="loading" />
+                {@render loading?.()}
             {:then component}
-                <svelte:component
-                    this={component}
+                {@const SvelteComponent = component}
+                <SvelteComponent
                     isOpen={i === $modals.length - 1 && !$transitioning}
                     {...modal.props}
                     on:introstart={() => {
@@ -66,8 +77,7 @@
             {/await}
         {:else}
             <!-- normal modal -->
-            <svelte:component
-                this={modal.component}
+            <modal.component
                 isOpen={i === $modals.length - 1 && !$transitioning}
                 {...modal.props}
                 on:introstart={() => {
@@ -79,6 +89,6 @@
             />
         {/if}
     {/each}
-</slot>
+{/if}
 
-<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
+<svelte:window onkeydown={onKeyDown} onkeyup={onKeyUp} />
