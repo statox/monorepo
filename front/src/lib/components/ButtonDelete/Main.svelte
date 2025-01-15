@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
-
     type ButtonState = 'initial' | 'triggered' | 'confirmed';
     const RESET_TIMEOUT_SECONDS = 5;
-    let buttonState: ButtonState = 'initial';
+    let buttonState: ButtonState = $state('initial');
     let resetButtonStateTimeout: ReturnType<typeof setTimeout>;
 
-    const dispatch = createEventDispatcher();
+    interface Props {
+        deleteAction: () => void;
+    }
+    let { deleteAction }: Props = $props();
+
     const trigger = () => {
         buttonState = 'triggered';
         resetButtonStateTimeout = setTimeout(reset, RESET_TIMEOUT_SECONDS * 1000);
@@ -14,7 +16,7 @@
     const confirmDelete = () => {
         clearTimeout(resetButtonStateTimeout);
         buttonState = 'confirmed';
-        dispatch('delete');
+        deleteAction();
     };
     const reset = () => {
         buttonState = 'initial';
@@ -22,14 +24,14 @@
 </script>
 
 {#if buttonState === 'initial'}
-    <button aria-label="delete" class="delete-button" on:click={trigger} title="Delete?">
+    <button aria-label="delete" class="delete-button" onclick={trigger} title="Delete?">
         <i class="fas fa-trash-alt"></i>
     </button>
 {:else if buttonState === 'triggered'}
     <button
         aria-label="confirm delete"
         class="delete-button"
-        on:click={confirmDelete}
+        onclick={confirmDelete}
         title="Confirm deletion"
     >
         <i class="fas fa-trash-alt"></i>

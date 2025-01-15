@@ -72,7 +72,7 @@
                     on:change={updateWatcherEnabled}
                     design="slider"
                 />
-                <ButtonDelete on:delete={deleteWatcher} />
+                <ButtonDelete deleteAction={deleteWatcher} />
             </div>
         </h3>
         <div class="section">

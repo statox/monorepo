@@ -26,7 +26,7 @@
             {/if}
         </button>
 
-        <ButtonDelete on:delete={() => deleteEntry(entry.name)} />
+        <ButtonDelete deleteAction={() => deleteEntry(entry.name)} />
         <div class="creation-date">{entry.formatedCreationDate}</div>
     {/if}
 </div>
