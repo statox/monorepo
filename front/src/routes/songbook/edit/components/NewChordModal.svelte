@@ -1,19 +1,22 @@
 <script lang="ts">
-    import { closeModal } from '$lib/components/Modal';
+    import type { ModalProps } from 'svelte-modals';
     import { user } from '$lib/auth/service';
-    export let isOpen: boolean;
 
-    export let onNewSongSubmit: (params: {
-        title: string;
-        artist: string;
-        url: string;
-        tags: string[];
-    }) => Promise<void>;
+    interface Props extends ModalProps {
+        onNewSongSubmit: (params: {
+            title: string;
+            artist: string;
+            url: string;
+            tags: string[];
+        }) => Promise<void>;
+    }
 
-    let title: string;
-    let artist: string;
-    let url: string;
-    let tagsStr: string;
+    let { isOpen, close, onNewSongSubmit }: Props = $props();
+
+    let title: string = $state('');
+    let artist: string = $state('');
+    let url: string = $state('');
+    let tagsStr: string = $state('');
 
     const submit = () => {
         const tags = [];
@@ -29,7 +32,7 @@
         <div class="contents">
             <h4 class="title-bar">
                 Add a new song
-                <button on:click={closeModal}>Close</button>
+                <button onclick={close}>Close</button>
             </h4>
 
             <form class="form-content">
@@ -46,7 +49,7 @@
                 <input type="text" bind:value={tagsStr} />
 
                 {#if $user}
-                    <button class="form-action" on:click={submit}>Submit</button>
+                    <button class="form-action" onclick={submit}>Submit</button>
                 {:else}
                     <span class="form-action">Login to update a new song</span>
                 {/if}

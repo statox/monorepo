@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { openModal } from '$lib/components/Modal';
+    import { modals } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
     import { HeadIOS } from '$lib/components/HeadIOS';
@@ -16,7 +16,7 @@
         }
         return getPublicClipboard();
     };
-    let clipboardApi = getClipboard();
+    let clipboardApi = $state(getClipboard());
 
     const fetchClipboard = () => (clipboardApi = getClipboard());
 </script>
@@ -25,7 +25,7 @@
 
 <h2>Upload</h2>
 {#if $user}
-    <button on:click={() => openModal(ClipboardForm, { onUpload: fetchClipboard })}>
+    <button onclick={() => modals.open(ClipboardForm, { onUpload: fetchClipboard })}>
         Add an entry
     </button>
 {:else}

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { openModal } from '$lib/components/Modal';
+    import { modals } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
     import { getAllWatchers } from '$lib/WebWatcher/api';
@@ -15,7 +15,7 @@
 
 {#if $user}
     <h2>Create a new watcher</h2>
-    <button on:click={() => openModal(WatcherForm, { onUpload: fetchWatchers })}>
+    <button on:click={() => modals.open(WatcherForm, { onUpload: fetchWatchers })}>
         Add an entry
     </button>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { openModal } from '$lib/components/Modal';
+    import { modals } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
     import EventForm from './components/EventForm.svelte';
@@ -9,7 +9,7 @@
     import type { PersonalEvent } from '$lib/PersonalTracker/types';
     import { onMount } from 'svelte';
 
-    let events: Promise<PersonalEvent[]>;
+    let events: Promise<PersonalEvent[]> | undefined = $state();
 
     const refreshData = () => (events = getAllEvents());
     onMount(() => (events = getAllEvents()));
@@ -17,7 +17,7 @@
 
 {#if $user}
     <div>
-        <button on:click={() => openModal(EventForm, { onUpload: refreshData })}>
+        <button onclick={() => modals.open(EventForm, { onUpload: refreshData })}>
             Add an entry
         </button>
     </div>

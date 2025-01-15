@@ -5,7 +5,7 @@
     import '$lib/styles/highlightjs_gruvbox_dark.css';
     import '$lib/styles/highlightjs_override.css';
     import '$lib/styles/helpers.css';
-    import { Modals, closeModal } from '$lib/components/Modal';
+    import { Modals } from 'svelte-modals';
     import { onMount } from 'svelte';
     import { initializeAuth0 } from '$lib/auth/service';
     import { SvelteToast } from '$lib/components/Toast';
@@ -25,9 +25,9 @@
 <Header />
 
 <Modals>
-    {#snippet backdrop()}
+    {#snippet backdrop({ closeAll })}
         <!-- Using a button instead of a div to avoid a11y warnings -->
-        <button aria-label="backdrop" class="backdrop" onclick={closeModal}></button>
+        <button aria-label="backdrop" class="backdrop" onclick={closeAll}></button>
     {/snippet}
 </Modals>
 

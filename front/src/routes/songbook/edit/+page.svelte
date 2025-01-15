@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { JSONEditor, Mode, createAjvValidator } from 'svelte-jsoneditor';
+    import type { JSONContent } from 'svelte-jsoneditor';
+    import { modals } from 'svelte-modals';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { user } from '$lib/auth/service';
@@ -7,10 +10,7 @@
     import type { RawChord } from '$lib/Songbook/types';
     import { uploadChords } from '$lib/Songbook/api';
 
-    import { JSONEditor, Mode, createAjvValidator } from 'svelte-jsoneditor';
-    import type { JSONContent } from 'svelte-jsoneditor';
     import { goto } from '$app/navigation';
-    import { closeModal, openModal } from '$lib/components/Modal';
     import { Notice } from '$lib/components/Notice';
 
     // From +page.ts load() function
@@ -97,7 +97,7 @@
 
         try {
             await uploadChords(chords);
-            closeModal();
+            modals.close();
             content = { json: chords };
             toast.push('<i class="fas fa-check"></i> Uploaded');
         } catch (error) {
@@ -125,7 +125,7 @@
 {#if $user}
     <button
         style:position="relative"
-        on:click={() => openModal(NewChordModal, { onNewSongSubmit })}
+        on:click={() => modals.open(NewChordModal, { onNewSongSubmit })}
     >
         Add a song
     </button>

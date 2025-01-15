@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Metronome } from '$lib/Metronome';
     import { onDestroy } from 'svelte';
-    import { openModal } from '$lib/components/Modal';
+    import { modals } from 'svelte-modals';
     import BeatsControls from './components/BeatsControls.svelte';
     import TempoControls from './components/TempoControls.svelte';
     import PlayPause from './components/PlayPause.svelte';
@@ -29,7 +29,7 @@
             <button
                 aria-label="info"
                 style:position="relative"
-                on:click={() => openModal(InfoModal)}
+                on:click={() => modals.open(InfoModal)}
             >
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </button>

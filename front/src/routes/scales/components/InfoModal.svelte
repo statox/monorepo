@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { closeModal } from '$lib/components/Modal';
-    export let isOpen: boolean;
+    import type { ModalProps } from 'svelte-modals';
+
+    const { isOpen, close }: ModalProps<undefined> = $props();
 </script>
 
 {#if isOpen}
@@ -8,7 +9,7 @@
         <div class="contents">
             <h4 class="title-bar">
                 Chord Progressions
-                <button on:click={closeModal}>Close</button>
+                <button onclick={close}>Close</button>
             </h4>
 
             <div>

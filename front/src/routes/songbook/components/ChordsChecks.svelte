@@ -1,8 +1,9 @@
 <script lang="ts">
     import { getLinksChecks } from '$lib/Songbook/api';
     import type { LinksChecks } from '$lib/Songbook/types';
-    import { closeModal } from '$lib/components/Modal';
-    export let isOpen: boolean;
+    import type { ModalProps } from 'svelte-modals';
+
+    let { isOpen, close }: ModalProps = $props();
 
     const formatTimestamp = (checks: LinksChecks) => {
         const lastCheckDate = new Date(checks.timestamp);
@@ -18,7 +19,7 @@
         <div class="contents">
             <h3 class="title-bar">
                 Urls checks
-                <button on:click={closeModal}>Close</button>
+                <button onclick={close}>Close</button>
             </h3>
 
             {#await getLinksChecks()}

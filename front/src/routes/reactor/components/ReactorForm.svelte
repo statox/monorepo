@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { closeModal } from '$lib/components/Modal';
+    import type { ModalProps } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
@@ -7,14 +7,17 @@
     import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { uploadToReactor } from '$lib/Reactor/api';
 
-    export let isOpen: boolean;
-    export let onUpload: () => void;
-    let noticeMessages: NoticeItem[] = [];
+    interface Props extends ModalProps {
+        onUpload: () => void;
+    }
 
-    let name: string;
-    let commaSeparatedTags = '';
-    let fileInput: HTMLInputElement;
-    let files: FileList | null;
+    let { isOpen, close, onUpload }: Props = $props();
+    let noticeMessages: NoticeItem[] = $state([]);
+
+    let name: string = $state('');
+    let commaSeparatedTags = $state('');
+    let fileInput: HTMLInputElement | undefined = $state();
+    let files: FileList | undefined = $state();
 
     const upload = async () => {
         noticeMessages = [];
@@ -37,7 +40,7 @@
         try {
             await uploadToReactor({ name, commaSeparatedTags, file });
             onUpload();
-            closeModal();
+            close();
         } catch (error) {
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
@@ -60,7 +63,7 @@
         <div class="contents">
             <h4 class="title-bar">
                 Add a new file
-                <button on:click={closeModal}>Close</button>
+                <button onclick={close}>Close</button>
             </h4>
 
             {#each noticeMessages as item}
@@ -79,8 +82,10 @@
                     <input class="file-input" type="file" bind:files bind:this={fileInput} />
                     <button
                         aria-label="delete file"
-                        on:click={() => {
-                            fileInput.value = '';
+                        onclick={() => {
+                            if (fileInput !== undefined) {
+                                fileInput.value = '';
+                            }
                         }}
                     >
                         <i class="fas fa-times-circle"></i>
@@ -89,7 +94,7 @@
 
                 <br />
                 {#if $user}
-                    <button class="form-action" on:click={upload}>Submit</button>
+                    <button class="form-action" onclick={upload}>Submit</button>
                 {:else}
                     <span class="form-action">Login to upload an entry</span>
                 {/if}

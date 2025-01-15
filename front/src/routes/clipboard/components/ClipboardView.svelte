@@ -6,7 +6,11 @@
     import EntryInfoComponent from './EntryInfoComponent.svelte';
 
     const dispatch = createEventDispatcher();
-    export let clipboard: ClipboardEntryEnriched[];
+    interface Props {
+        clipboard: ClipboardEntryEnriched[];
+    }
+
+    let { clipboard }: Props = $props();
 </script>
 
 <div class="container">

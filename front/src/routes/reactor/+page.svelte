@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { openModal } from '$lib/components/Modal';
+    import { modals } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
     import { HeadIOS } from '$lib/components/HeadIOS';
@@ -10,7 +10,7 @@
 
     pageNameStore.set('Reactor');
 
-    let reactionsApi = getReactionsForPublic();
+    let reactionsApi = $state(getReactionsForPublic());
 
     const onUpload = () => (reactionsApi = getReactionsForPublic());
 </script>
@@ -19,7 +19,7 @@
 
 <h2>Upload</h2>
 {#if $user}
-    <button on:click={() => openModal(ReactorForm, { onUpload })}> Add an entry </button>
+    <button onclick={() => modals.open(ReactorForm, { onUpload })}> Add an entry </button>
 {:else}
     <Notice item={{ level: 'info', header: 'Login to add an entry' }} />
 {/if}

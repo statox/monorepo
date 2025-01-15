@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getLinksVisitsCount, uploadLinkVisit } from '$lib/Songbook/api';
-    import { openModal } from '$lib/components/Modal';
+    import { modals } from 'svelte-modals';
     import { BackToTop } from '$lib/components/BackToTop';
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { Notice } from '$lib/components/Notice';
@@ -103,7 +103,7 @@
 
 <h2>
     <span class="pull-right">
-        <button style:position="relative" on:click={() => openModal(ChordsChecks)}>
+        <button style:position="relative" on:click={() => modals.open(ChordsChecks)}>
             Check dead links
         </button>
 

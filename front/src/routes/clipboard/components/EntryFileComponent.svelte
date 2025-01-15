@@ -2,10 +2,14 @@
     import mime from 'mime';
     import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
 
-    export let entry: ClipboardEntryEnriched;
+    interface Props {
+        entry: ClipboardEntryEnriched;
+    }
+
+    let { entry }: Props = $props();
 
     type DisplayType = 'none' | 'image' | 'other';
-    let type: DisplayType = 'none';
+    let type: DisplayType = $state('none');
 
     if (entry.s3PresignedUrl) {
         type = 'other';

@@ -4,7 +4,11 @@
     import type { PersonalEvent } from '$lib/PersonalTracker/types';
     import { DateTime } from 'luxon';
 
-    export let events: Promise<PersonalEvent[]> | undefined;
+    interface Props {
+        events: Promise<PersonalEvent[]> | undefined;
+    }
+
+    let { events }: Props = $props();
 </script>
 
 {#if $user && events}

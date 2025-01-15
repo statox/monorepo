@@ -1,8 +1,8 @@
 <script lang="ts">
+    import { modals } from 'svelte-modals';
     import InfoModal from './InfoModal.svelte';
     import { progressions, type Chord } from '$lib/Scales/progressions';
     import { degreeToRoman, notes } from '$lib/Scales/utils';
-    import { openModal } from '$lib/components/Modal';
 
     export let scaleNotes: string[] = [];
 
@@ -39,7 +39,7 @@
 <h3>
     Chord Progressions
     <span>
-        <button aria-label="info" style:position="relative" on:click={() => openModal(InfoModal)}>
+        <button aria-label="info" style:position="relative" on:click={() => modals.open(InfoModal)}>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
     </span>

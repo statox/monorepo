@@ -1,9 +1,13 @@
 <script lang="ts">
     import { ButtonCopy, copyToClipboard } from '$lib/components/ButtonCopy';
     import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
-    export let entry: ClipboardEntryEnriched;
+    interface Props {
+        entry: ClipboardEntryEnriched;
+    }
 
-    let contentUrl: URL | undefined;
+    let { entry }: Props = $props();
+
+    let contentUrl: URL | undefined = $state();
     try {
         contentUrl = new URL(entry.content);
     } catch (error) {
@@ -20,9 +24,9 @@
         <a href={entry.content} target="_blank" rel="noopener noreferrer">{contentUrl.hostname}</a>
     </div>
 {:else}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="entry-content" on:click={() => copyToClipboard(entry.content)}>{entry.content}</div>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="entry-content" onclick={() => copyToClipboard(entry.content)}>{entry.content}</div>
 {/if}
 
 <style>

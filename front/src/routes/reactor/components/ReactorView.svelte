@@ -1,14 +1,20 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { toast } from '$lib/components/Toast';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { type ReactorEntryForPublic } from '$lib/Reactor/types';
 
-    export let reactions: ReactorEntryForPublic[];
-    const pageSize = 10;
-    let page = 1;
-    let displayedReactions: ReactorEntryForPublic[] = [];
+    interface Props {
+        reactions: ReactorEntryForPublic[];
+    }
 
-    let searchString = '';
+    let { reactions }: Props = $props();
+    const pageSize = 10;
+    let page = $state(1);
+    let displayedReactions: ReactorEntryForPublic[] = $state([]);
+
+    let searchString = $state('');
 
     const matchSearch = (entry: ReactorEntryForPublic, searchString: string) => {
         if (!searchString.length) {
@@ -44,10 +50,12 @@
         return entry.s3PresignedUrl.includes('.mp4');
     };
 
-    $: displayedReactions = reactions
-        .filter((entry) => matchSearch(entry, searchString))
-        .sort((a, b) => b.creationDateUnix - a.creationDateUnix)
-        .slice(0, searchString.length ? undefined : page * pageSize);
+    run(() => {
+        displayedReactions = reactions
+            .filter((entry) => matchSearch(entry, searchString))
+            .sort((a, b) => b.creationDateUnix - a.creationDateUnix)
+            .slice(0, searchString.length ? undefined : page * pageSize);
+    });
 </script>
 
 <input
@@ -67,7 +75,7 @@
                 {/each}
             </div>
             <div>
-                <button class="full-width" on:click={() => copyEntryUrlToClipboard(entry)}>
+                <button class="full-width" onclick={() => copyEntryUrlToClipboard(entry)}>
                     <i class="fas fa-copy"></i>
                     Copy link
                 </button>
@@ -81,7 +89,7 @@
                 target="blank"
             >
                 {#if isVideoEntry(entry)}
-                    <!-- svelte-ignore a11y-media-has-caption -->
+                    <!-- svelte-ignore a11y_media_has_caption -->
                     <video
                         class="medium-margin"
                         style="max-width: 100%"
@@ -97,7 +105,7 @@
 </div>
 
 {#if searchString.length === 0 && page * pageSize < reactions.length}
-    <button class="full-width medium-margin" on:click={() => page++}>More...</button>
+    <button class="full-width medium-margin" onclick={() => page++}>More...</button>
 {/if}
 
 <style>

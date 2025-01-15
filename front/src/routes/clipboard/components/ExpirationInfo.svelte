@@ -1,7 +1,11 @@
 <script lang="ts">
     import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
 
-    export let entry: ClipboardEntryEnriched;
+    interface Props {
+        entry: ClipboardEntryEnriched;
+    }
+
+    let { entry }: Props = $props();
 </script>
 
 <div class={entry.expirationStatus} title={entry.formatedExpirationDate}>

@@ -2,7 +2,7 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
-    import { openModal } from '$lib/components/Modal';
+    import { modals } from 'svelte-modals';
     import InfoModal from './components/InfoModal.svelte';
     import { wheel } from '$lib/ChordWheel/wheel-config';
     import type { WheelTiles } from '$lib/ChordWheel/types';
@@ -145,7 +145,7 @@
 <h2>
     Chord wheel
     <span>
-        <button aria-label="info" style:position="relative" on:click={() => openModal(InfoModal)}>
+        <button aria-label="info" style:position="relative" on:click={() => modals.open(InfoModal)}>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
     </span>

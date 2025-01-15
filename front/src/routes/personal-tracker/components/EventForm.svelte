@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { closeModal } from '$lib/components/Modal';
+    import type { ModalProps } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
@@ -8,11 +8,14 @@
     import { createEvent } from '$lib/PersonalTracker/api';
     import { DateTime } from 'luxon';
 
-    export let isOpen: boolean;
-    export let onUpload: () => void;
-    let noticeMessages: NoticeItem[] = [];
+    interface Props extends ModalProps {
+        onUpload: () => void;
+    }
 
-    let value: number;
+    let { isOpen, close, onUpload }: Props = $props();
+    let noticeMessages: NoticeItem[] = $state([]);
+
+    let value: number = $state(0);
 
     const upload = async () => {
         noticeMessages = [];
@@ -38,7 +41,7 @@
                 value: Math.floor(value * 100)
             });
             onUpload();
-            closeModal();
+            close();
         } catch (error) {
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
@@ -61,7 +64,7 @@
         <div class="contents">
             <h4 class="title-bar">
                 Add a new event
-                <button on:click={closeModal}>Close</button>
+                <button onclick={close}>Close</button>
             </h4>
 
             {#each noticeMessages as item}
@@ -74,7 +77,7 @@
 
                 <br />
                 {#if $user}
-                    <button class="form-action" on:click={upload}>Submit</button>
+                    <button class="form-action" onclick={upload}>Submit</button>
                 {:else}
                     <span class="form-action">Login to upload an entry</span>
                 {/if}

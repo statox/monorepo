@@ -3,7 +3,11 @@
     import type { WatchedContent } from '$lib/WebWatcher/types';
     import WatcherComponent from './WatcherComponent.svelte';
 
-    export let watchers: WatchedContent[];
+    interface Props {
+        watchers: WatchedContent[];
+    }
+
+    let { watchers }: Props = $props();
 
     const dispatch = createEventDispatcher();
 

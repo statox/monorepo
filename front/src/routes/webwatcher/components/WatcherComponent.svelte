@@ -11,7 +11,11 @@
 
     const dispatch = createEventDispatcher();
 
-    export let watcher: WatchedContent;
+    interface Props {
+        watcher: WatchedContent;
+    }
+
+    let { watcher }: Props = $props();
 
     const formatTimestamp = (timestamp: number) => {
         const date = new Date(timestamp * 1000);

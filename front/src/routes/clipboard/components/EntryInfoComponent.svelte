@@ -6,7 +6,11 @@
     import { ButtonDelete } from '$lib/components/ButtonDelete';
     import ExpirationInfo from './ExpirationInfo.svelte';
 
-    export let entry: ClipboardEntryEnriched;
+    interface Props {
+        entry: ClipboardEntryEnriched;
+    }
+
+    let { entry }: Props = $props();
     const dispatch = createEventDispatcher();
 
     const deleteEntry = (name: string) => {

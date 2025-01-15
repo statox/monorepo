@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { closeModal } from '$lib/components/Modal';
+    import type { ModalProps } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
@@ -9,16 +9,19 @@
     import { createWatcher } from '$lib/WebWatcher/api';
     import type { WatchType } from '$lib/WebWatcher/types';
 
-    export let isOpen: boolean;
-    export let onUpload: () => void;
-    let noticeMessages: NoticeItem[] = [];
+    interface Props extends ModalProps {
+        onUpload: () => void;
+    }
 
-    let name: string;
-    let notificationMessage: string;
-    let url: string;
-    let cssSelector: string;
-    let checkIntervalSeconds: number;
-    let watchType: WatchType;
+    let { isOpen, close, onUpload }: Props = $props();
+    let noticeMessages: NoticeItem[] = $state([]);
+
+    let name: string = $state('');
+    let notificationMessage: string = $state('');
+    let url: string = $state('');
+    let cssSelector: string = $state('');
+    let checkIntervalSeconds: number = $state(0);
+    let watchType: WatchType = $state('CSS');
 
     const upload = async () => {
         noticeMessages = [];
@@ -45,7 +48,7 @@
 
         try {
             new URL(url);
-        } catch (error) {
+        } catch (_error) {
             noticeMessages.push({ level: 'error', header: 'The URL is invalid' });
         }
 
@@ -73,7 +76,7 @@
                 });
             }
             onUpload();
-            closeModal();
+            close();
         } catch (error) {
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
@@ -96,7 +99,7 @@
         <div class="contents">
             <h3 class="title-bar">
                 Add a new clipboard entry
-                <button on:click={closeModal}>Close</button>
+                <button onclick={close}>Close</button>
             </h3>
 
             {#each noticeMessages as item}
@@ -135,7 +138,7 @@
 
                 <br />
                 {#if $user}
-                    <button class="form-action" on:click={upload}>Submit</button>
+                    <button class="form-action" onclick={upload}>Submit</button>
                 {:else}
                     <span class="form-action">Login to upload an entry</span>
                 {/if}
