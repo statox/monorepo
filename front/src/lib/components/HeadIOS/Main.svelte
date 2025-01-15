@@ -3,9 +3,13 @@
     // In Safari one can use "save to homescreen" to have a standalone app
     // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
 
-    export let title: string;
-    export let description: string;
-    export let iconPath = '/favicon.png';
+    interface Props {
+        title: string;
+        description: string;
+        iconPath?: string;
+    }
+
+    let { title, description, iconPath = '/favicon.png' }: Props = $props();
 </script>
 
 <svelte:head>

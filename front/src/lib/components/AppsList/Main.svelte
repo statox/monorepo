@@ -11,7 +11,11 @@
         apps: App[];
     };
 
-    export let sections: Section[];
+    interface Props {
+        sections: Section[];
+    }
+
+    let { sections }: Props = $props();
 </script>
 
 {#each sections as section}
@@ -19,7 +23,7 @@
 
     <div class="container">
         {#each section.apps as app}
-            <button class="app" on:click={() => goto(app.link)}>
+            <button class="app" onclick={() => goto(app.link)}>
                 <h3>{app.name}</h3>
                 <div class="description">{app.description}</div>
             </button>

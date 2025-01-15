@@ -1,10 +1,14 @@
 <script lang="ts">
-    export let value: number | undefined;
-    export let unitString: string;
-    export let precision = 1;
+    interface Props {
+        value: number | undefined;
+        unitString: string;
+        precision?: number;
+    }
 
-    let intPart = '-';
-    let floatPart = '';
+    let { value, unitString, precision = 1 }: Props = $props();
+
+    let intPart = $state('-');
+    let floatPart = $state('');
 
     if (value !== undefined) {
         const valueAsString = value?.toFixed(precision);

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Duration, type DurationLikeObject, type DurationUnit } from 'luxon';
 
-    const units: DurationUnit[] = [
+    const defaultAllowedUnits: DurationUnit[] = [
         'seconds',
         'minutes',
         'hours',
@@ -11,22 +11,30 @@
         'years'
     ];
 
-    export let allowedUnits: DurationUnit[] = units;
-    export let defaultDuration: { value: number; unit: DurationUnit } = {
-        value: 10,
-        unit: allowedUnits[0]
-    };
-    export let valueInSeconds: number;
+    interface Props {
+        allowedUnits?: DurationUnit[];
+        defaultDuration?: { value: number; unit: DurationUnit };
+        valueInSeconds: number;
+    }
 
-    let inputUnit = defaultDuration.unit;
-    let inputValue = defaultDuration.value;
+    let {
+        allowedUnits = defaultAllowedUnits,
+        defaultDuration = {
+            value: 10,
+            unit: allowedUnits[0]
+        },
+        valueInSeconds = $bindable()
+    }: Props = $props();
 
-    $: {
+    let inputUnit = $state(defaultDuration.unit);
+    let inputValue = $state(defaultDuration.value);
+
+    $effect(() => {
         const durationLikeObj: DurationLikeObject = {};
         durationLikeObj[inputUnit as DurationUnit] = inputValue;
         const ttlDuration = Duration.fromObject(durationLikeObj);
         valueInSeconds = ttlDuration.as('seconds');
-    }
+    });
 </script>
 
 <div>

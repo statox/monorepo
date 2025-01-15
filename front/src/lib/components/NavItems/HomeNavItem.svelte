@@ -2,7 +2,7 @@
     import { goto } from '$app/navigation';
 </script>
 
-<button aria-label="home" title="Home" type="button" on:click={() => goto('/')}>
+<button aria-label="home" title="Home" type="button" onclick={() => goto('/')}>
     <i class="fa fa-home" aria-hidden="true"></i>
 </button>
 

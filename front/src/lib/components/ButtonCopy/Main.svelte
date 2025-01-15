@@ -1,10 +1,14 @@
 <script lang="ts">
     import { copyToClipboard } from './clipboard';
 
-    export let content: string;
+    interface Props {
+        content: string;
+    }
+
+    let { content }: Props = $props();
 </script>
 
-<button aria-label="copy" class="copy-button" on:click={() => copyToClipboard(content)}>
+<button aria-label="copy" class="copy-button" onclick={() => copyToClipboard(content)}>
     <i class="fas fa-copy"></i>
 </button>
 

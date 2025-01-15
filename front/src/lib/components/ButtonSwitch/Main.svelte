@@ -28,13 +28,23 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from 'svelte';
 
-    export let label;
-    export let design = 'inner label';
-    export let options: string[] = []; // Two options to display around the switch
-    export let fontSize = 16;
-    export let value = 'on';
+  interface Props {
+    label: any;
+    design?: string;
+    options?: string[]; // Two options to display around the switch
+    fontSize?: number;
+    value?: string;
+  }
 
-    let checked = true;
+  let {
+    label,
+    design = 'inner label',
+    options = [],
+    fontSize = 16,
+    value = $bindable('on')
+  }: Props = $props();
+
+    let checked = $state(true);
 
     const uniqueID = Math.floor(Math.random() * 100);
     const dispatch = createEventDispatcher();
@@ -63,7 +73,7 @@
             role="switch"
             aria-checked={checked}
             aria-labelledby={`switch-${uniqueID}`}
-            on:click={handleClick}
+            onclick={handleClick}
         >
             <span>on</span>
             <span>off</span>
@@ -76,7 +86,7 @@
             role="switch"
             aria-checked={checked}
             aria-labelledby={`switch-${uniqueID}`}
-            on:click={handleClick}
+            onclick={handleClick}
         >
         </button>
     </div>

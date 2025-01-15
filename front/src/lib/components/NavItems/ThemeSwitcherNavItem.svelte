@@ -6,7 +6,7 @@
     const buttonClassLight = 'fas fa-moon';
     const buttonClassDark = 'fas fa-sun';
 
-    let buttonClass = buttonClassLight;
+    let buttonClass = $state(buttonClassLight);
     let htmlElement: HTMLElement;
 
     const toggle = () => {
@@ -40,7 +40,7 @@
     });
 </script>
 
-<button aria-label="switch theme" on:click={toggle}>
+<button aria-label="switch theme" onclick={toggle}>
     <i class={buttonClass} aria-hidden="true"></i>
 </button>
 

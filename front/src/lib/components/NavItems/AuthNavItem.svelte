@@ -4,11 +4,11 @@
 
 {#key $user}
     {#if $user}
-        <button title="Log out" on:click={() => logout()}>
+        <button title="Log out" onclick={() => logout()}>
             <img class="user-profile" alt="user profile" src={$user.picture} />
         </button>
     {:else}
-        <button aria-label="log in" title="Log in" type="button" on:click={() => login()}>
+        <button aria-label="log in" title="Log in" type="button" onclick={() => login()}>
             <i class="fa fa-sign-in" aria-hidden="true"></i>
         </button>
     {/if}

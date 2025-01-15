@@ -1,7 +1,6 @@
 <script lang="ts">
-    let y: number;
-
-    let hide = true;
+    let y = $state(0);
+    let hide = $state(true);
     let scrollTimer: ReturnType<typeof setTimeout>;
     const onScroll = (y: number) => {
         // If the scroll value is greater than the window height, let's add a class to the scroll-to-top button to show it!
@@ -34,12 +33,12 @@
         }
     };
 
-    $: onScroll(y);
+    $effect(() => onScroll(y));
 </script>
 
 <svelte:window bind:scrollY={y} />
 
-<button class="top-link" class:hide on:click={scrollToTop}>
+<button class="top-link" class:hide onclick={scrollToTop}>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6"><path d="M12 6H0l6-6z" /></svg>
     <span class="screen-reader-text">Back to top</span>
 </button>

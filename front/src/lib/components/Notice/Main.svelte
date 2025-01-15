@@ -1,6 +1,10 @@
 <script lang="ts">
     import type { NoticeItem } from './types';
-    export let item: NoticeItem;
+    interface Props {
+        item: NoticeItem;
+    }
+
+    let { item }: Props = $props();
 </script>
 
 <div class={'container ' + item.level}>
