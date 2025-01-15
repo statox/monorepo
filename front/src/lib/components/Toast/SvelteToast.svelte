@@ -5,18 +5,26 @@
     import ToastItem from './ToastItem.svelte';
     import type { SvelteToastOptions } from './stores';
 
-    export let options: Partial<SvelteToastOptions> = {};
-    export let target = 'default';
+    interface Props {
+        options?: Partial<SvelteToastOptions>;
+        target?: string;
+    }
 
-    let items: (Partial<SvelteToastOptions> & { id: number })[] = [];
+    let { options = {}, target = 'default' }: Props = $props();
+
+    let items: (Partial<SvelteToastOptions> & { id: number })[] = $state([]);
 
     function getCss(theme?: Record<string, string | number>) {
         return theme ? Object.keys(theme).reduce((a, c) => `${a}${c}:${theme[c]};`, '') : undefined;
     }
 
-    $: toast._init(target, options);
+    $effect(() => {
+        toast._init(target, options);
+    });
 
-    $: items = $toast.filter((i) => i.target === target);
+    $effect(() => {
+        items = $toast.filter((i) => i.target === target);
+    });
 </script>
 
 <ul class="_toastContainer">

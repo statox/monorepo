@@ -5,11 +5,15 @@
     import { toast } from './stores.js';
     import type { SvelteToastOptions } from './stores';
 
-    export let item: Partial<SvelteToastOptions> & { id: number };
+    interface Props {
+        item: Partial<SvelteToastOptions> & { id: number };
+    }
 
-    let next = item.initial;
-    let prev = next;
-    let paused = false;
+    let { item }: Props = $props();
+
+    let next = $state(item.initial);
+    let prev = $state(item.initial);
+    let paused = $state(false);
     let unlisten: () => void;
 
     const progress = tweened(item.initial, { duration: item.duration, easing: linear });
@@ -52,15 +56,17 @@
         handler();
     }
 
-    $: if (next !== item.next) {
-        next = item.next;
-        prev = $progress;
-        paused = false;
-        if (next === undefined) {
-            throw Error('Toast with undefined next');
+    $effect(() => {
+        if (next !== item.next) {
+            next = item.next;
+            prev = $progress;
+            paused = false;
+            if (next === undefined) {
+                throw Error('Toast with undefined next');
+            }
+            progress.set(next).then(autoclose);
         }
-        progress.set(next).then(autoclose);
-    }
+    });
 
     onMount(listen);
 
@@ -76,10 +82,10 @@
     role="status"
     class="_toastItem"
     class:pe={item.pausable}
-    on:mouseenter={() => {
+    onmouseenter={() => {
         if (item.pausable) pause();
     }}
-    on:mouseleave={resume}
+    onmouseleave={resume}
 >
     <div class="_toastMsg">
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -90,8 +96,8 @@
             class="_toastBtn pe"
             role="button"
             tabindex="0"
-            on:click={close}
-            on:keydown={(e) => {
+            onclick={close}
+            onkeydown={(e) => {
                 if (e instanceof KeyboardEvent && ['Enter', ' '].includes(e.key)) close();
             }}
         ></div>
