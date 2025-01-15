@@ -3,8 +3,13 @@
     import { pageNameStore } from '$lib/components/Header';
 
     pageNameStore.set('About this website');
-    // From +page.server.ts load() function
-    export let data: BuildInfo;
+
+    interface Props {
+        // From +page.server.ts load() function
+        data: BuildInfo;
+    }
+
+    let { data }: Props = $props();
 </script>
 
 <div class="description">
