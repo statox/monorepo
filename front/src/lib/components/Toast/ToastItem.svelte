@@ -1,19 +1,16 @@
-<script>
+<script lang="ts">
     import { onMount, onDestroy } from 'svelte';
     import { tweened } from 'svelte/motion';
     import { linear } from 'svelte/easing';
     import { toast } from './stores.js';
+    import type { SvelteToastOptions } from './stores';
 
-    /** @type {import('./stores.js').SvelteToastOptions} */
-    export let item;
+    export let item: Partial<SvelteToastOptions> & { id: number };
 
-    /** @type {any} */
     let next = item.initial;
     let prev = next;
     let paused = false;
-    let cprops = {};
-    /** @type {any} */
-    let unlisten;
+    let unlisten: () => void;
 
     const progress = tweened(item.initial, { duration: item.duration, easing: linear });
 
@@ -34,20 +31,20 @@
 
     function resume() {
         if (paused) {
-            const d = /** @type {any} */ (item.duration);
-            const duration = d - d * (($progress - prev) / (next - prev));
-            progress.set(next, { duration }).then(autoclose);
+            const d = item.duration;
+            if (d !== undefined && prev !== undefined && next !== undefined) {
+                const duration = d - d * (($progress - prev) / (next - prev));
+                progress.set(next, { duration }).then(autoclose);
+            }
             paused = false;
         }
     }
 
-    /** @param {any} prop */
-    function check(prop, kind = 'undefined') {
-        return typeof prop === kind;
-    }
-
     function listen(d = document) {
-        if (check(d.hidden)) return;
+        if (d.hidden === undefined) {
+            return;
+        }
+
         const handler = () => (d.hidden ? pause() : resume());
         const name = 'visibilitychange';
         d.addEventListener(name, handler);
@@ -59,24 +56,16 @@
         next = item.next;
         prev = $progress;
         paused = false;
+        if (next === undefined) {
+            throw Error('Toast with undefined next');
+        }
         progress.set(next).then(autoclose);
-    }
-
-    $: if (item.component) {
-        const { props = {}, sendIdTo } = item.component;
-        cprops = { ...props, ...(sendIdTo && { [sendIdTo]: item.id }) };
-    }
-
-    // `progress` has been renamed to `next`; shim included for backward compatibility, to remove in next major
-    $: if (!check(item.progress)) {
-        item.next = item.progress;
     }
 
     onMount(listen);
 
     onDestroy(() => {
-        if (item && check(item.onpop, 'function')) {
-            // @ts-expect-error TODO find out the actual issue and fix
+        if (item?.onpop) {
             item.onpop(item.id);
         }
         unlisten?.();
@@ -92,13 +81,9 @@
     }}
     on:mouseleave={resume}
 >
-    <div class="_toastMsg" class:pe={item.component}>
-        {#if item.component}
-            <svelte:component this={item.component.src} {...cprops} />
-        {:else}
-            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html item.msg}
-        {/if}
+    <div class="_toastMsg">
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html item.msg}
     </div>
     {#if item.dismissable}
         <div
@@ -161,10 +146,7 @@
     }
     ._toastBar {
         /* top: var(--toastBarTop, auto); */
-        top: var(
-            --toastBarTop,
-            -5px
-        ); /* AFA: Trying -5px to fix a bug where the gets on the text */
+        top: var(--toastBarTop, 0px); /* AFA: Trying 0px to fix a bug where the gets on the text */
         right: var(--toastBarRight, auto);
         bottom: var(--toastBarBottom, 0);
         left: var(--toastBarLeft, 0);

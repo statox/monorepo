@@ -6,6 +6,16 @@ At one point I decided it would be a good idea to import this code directly inst
 
 Am I right? Future will say, sorry future me if you read that while trying to fix after a version upgrade :)
 
+**Update 01/2025** While migrating the whole code base to svelte 5 this component was an issue. So I took the opportunity to
+
+- Use typescript in the components `SvelteToast.svelte` and `ToastItem.svelte` and rewrite the old `./stores.js` file to typescript
+    - There is still some improvements to do: I overuse `Partial<>`, the goal was just to get rid of errors
+- Remove the possibility to pass a svelte component as the message of a toast because I don't use this feature and it created noise in the code.
+- Remove the `toast.set()` function which I never used
+- Remove some hacks the original code had to be retro compatible with its own previous versions
+- Changed the interface of `toast.push()` which accepted either a message or some options as the first argument.
+- Potentially introduced a bug: passing `duration: 0` close the toast immediately maybe before it allowed a never closing toast. TODO Fix that
+
 # svelte-toast
 
 > Simple elegant toast notifications.

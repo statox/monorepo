@@ -1,19 +1,16 @@
-<script>
+<script lang="ts">
     import { fade, fly } from 'svelte/transition';
     import { flip } from 'svelte/animate';
-    import { toast } from './stores.js';
+    import { toast } from './stores';
     import ToastItem from './ToastItem.svelte';
+    import type { SvelteToastOptions } from './stores';
 
-    /** @type {import('./stores.js').SvelteToastOptions} */
-    export let options = {};
-    /** @type {(string|'default')} */
+    export let options: Partial<SvelteToastOptions> = {};
     export let target = 'default';
 
-    /** @type {import('./stores.js').SvelteToastOptions[]} */
-    let items = [];
+    let items: (Partial<SvelteToastOptions> & { id: number })[] = [];
 
-    /** @param {Object<string,string|number>} [theme] */
-    function getCss(theme) {
+    function getCss(theme?: Record<string, string | number>) {
         return theme ? Object.keys(theme).reduce((a, c) => `${a}${c}:${theme[c]};`, '') : undefined;
     }
 
