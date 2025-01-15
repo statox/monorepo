@@ -77,11 +77,11 @@ export default [
         rules: {
             // TODO Fix code to re-enable this rule
             '@typescript-eslint/no-explicit-any': 'off',
-            // Allow try...catch blocks to not use the caught error
+            // Avoid error if the error of try...catch blocks are used but are named _something
             '@typescript-eslint/no-unused-vars': [
                 'error',
                 {
-                    caughtErrors: 'none'
+                    caughtErrorsIgnorePattern: '^_'
                 }
             ]
         }
