@@ -1,31 +1,31 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
 
-    type State = 'initial' | 'triggered' | 'confirmed';
-    let state: State = 'initial';
-    let resetStateTimeout: ReturnType<typeof setTimeout>;
+    type ButtonState = 'initial' | 'triggered' | 'confirmed';
     const RESET_TIMEOUT_SECONDS = 5;
+    let buttonState: ButtonState = 'initial';
+    let resetButtonStateTimeout: ReturnType<typeof setTimeout>;
 
     const dispatch = createEventDispatcher();
     const trigger = () => {
-        state = 'triggered';
-        resetStateTimeout = setTimeout(reset, RESET_TIMEOUT_SECONDS * 1000);
+        buttonState = 'triggered';
+        resetButtonStateTimeout = setTimeout(reset, RESET_TIMEOUT_SECONDS * 1000);
     };
     const confirmDelete = () => {
-        clearTimeout(resetStateTimeout);
-        state = 'confirmed';
+        clearTimeout(resetButtonStateTimeout);
+        buttonState = 'confirmed';
         dispatch('delete');
     };
     const reset = () => {
-        state = 'initial';
+        buttonState = 'initial';
     };
 </script>
 
-{#if state === 'initial'}
+{#if buttonState === 'initial'}
     <button aria-label="delete" class="delete-button" on:click={trigger} title="Delete?">
         <i class="fas fa-trash-alt"></i>
     </button>
-{:else if state === 'triggered'}
+{:else if buttonState === 'triggered'}
     <button
         aria-label="confirm delete"
         class="delete-button"
@@ -35,7 +35,7 @@
         <i class="fas fa-trash-alt"></i>
         <i class="fas fa-question"></i>
     </button>
-{:else if state === 'confirmed'}
+{:else if buttonState === 'confirmed'}
     <button aria-label="delete success" class="delete-button" title="Deleted" disabled>
         <i class="fas fa-trash-alt"></i>
         <i class="fas fa-check"></i>
