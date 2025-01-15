@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
     import { pageNameStore } from '$lib/components/Header';
 
     pageNameStore.set('Browser home');
@@ -102,12 +101,6 @@
             }
         ]
     };
-
-    let isMobile = false;
-
-    onMount(() => {
-        isMobile = window ? window.matchMedia('(max-width: 600px)').matches : false;
-    });
 </script>
 
 {#each Object.keys(sections) as sectionName}
@@ -115,9 +108,7 @@
     <div class="container">
         {#each sections[sectionName] as link}
             <a class="app" href={link.url}>
-                {#if !isMobile}
-                    <span class="link-name">{link.name}</span>
-                {/if}
+                <span class="link-name">{link.name}</span>
                 <img class="link-favicon" alt={link.name} src={link.icon} />
             </a>
         {/each}
@@ -126,9 +117,16 @@
 
 <style>
     .container {
+        min-width: 300px;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+        .container {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
 
     .app {
