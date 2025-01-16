@@ -2,20 +2,24 @@
     import NotesOnKeyboard from './NotesOnKeyboard.svelte';
     import NotesOnNeck from './NotesOnNeck.svelte';
 
-    export let notesToDisplay: string[];
+    interface Props {
+        notesToDisplay: string[];
+    }
+
+    let { notesToDisplay }: Props = $props();
 
     type LabelMode = 'name' | 'degree';
-    let labelMode: LabelMode = 'name';
+    let labelMode: LabelMode = $state('name');
 
     const displayModes = ['neck', 'keyboard', 'both'];
-    let displayMode = 0;
+    let displayMode = $state(0);
 </script>
 
 <h3>Instrument</h3>
 
 <div>
-    <button on:click={() => (labelMode = labelMode === 'name' ? 'degree' : 'name')}>C / IV</button>
-    <button on:click={() => (displayMode = (displayMode + 1) % displayModes.length)}
+    <button onclick={() => (labelMode = labelMode === 'name' ? 'degree' : 'name')}>C / IV</button>
+    <button onclick={() => (displayMode = (displayMode + 1) % displayModes.length)}
         ><i class="fas fa-guitar"></i> / <i class="fas fa-keyboard"></i></button
     >
 </div>

@@ -1,8 +1,9 @@
 <script lang="ts">
-    import NotesOnInstrument from './components/NotesOnInstrument.svelte';
-    import Progressions from './components/Progressions.svelte';
+    import { onMount } from 'svelte';
     import { degreeToRoman, notes } from '$lib/Scales/utils';
     import { pageNameStore } from '$lib/components/Header';
+    import NotesOnInstrument from './components/NotesOnInstrument.svelte';
+    import Progressions from './components/Progressions.svelte';
 
     pageNameStore.set('Scales');
 
@@ -48,10 +49,10 @@
         { name: 'Locrian', degree: 7 }
     ];
 
-    let tonic = 'C';
-    let scale = scales[0];
-    let mode = modes[0];
-    let scaleNotes: string[] = [];
+    let tonic = $state('C');
+    let scale = $state(scales[0]);
+    let mode = $state(modes[0]);
+    let scaleNotes: string[] = $state([]);
 
     const getScale = (tonic: string, scale: Scale, mode: Mode) => {
         const { intervals } = scale;
@@ -98,7 +99,7 @@
         return label;
     };
 
-    $: getScale(tonic, scale, mode);
+    onMount(() => getScale(tonic, scale, mode));
 </script>
 
 <table>
@@ -118,7 +119,11 @@
     <tbody>
         <tr>
             <td>
-                <select id="tonicInput" bind:value={tonic}>
+                <select
+                    id="tonicInput"
+                    bind:value={tonic}
+                    onchange={() => getScale(tonic, scale, mode)}
+                >
                     {#each notes as note}
                         <option value={note}>
                             {note}
@@ -128,7 +133,11 @@
             </td>
 
             <td>
-                <select id="scaleInput" bind:value={scale}>
+                <select
+                    id="scaleInput"
+                    bind:value={scale}
+                    onchange={() => getScale(tonic, scale, mode)}
+                >
                     {#each scales as scale}
                         <option value={scale}>
                             {scale.name}
@@ -138,7 +147,11 @@
             </td>
 
             <td>
-                <select id="modeInput" bind:value={mode}>
+                <select
+                    id="modeInput"
+                    bind:value={mode}
+                    onchange={() => getScale(tonic, scale, mode)}
+                >
                     {#each modes as mode}
                         <option value={mode}>
                             {mode.name}

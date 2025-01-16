@@ -4,11 +4,15 @@
     import { onDestroy } from 'svelte';
     import { degreeToRoman } from '$lib/Scales/utils';
 
-    let _p5: p5;
+    let _p5: p5 | undefined = $state();
     type LabelMode = 'name' | 'degree';
-    export let labelMode: LabelMode = 'name';
 
-    export let notesToDisplay: string[];
+    interface Props {
+        labelMode?: LabelMode;
+        notesToDisplay: string[];
+    }
+
+    let { labelMode = 'name', notesToDisplay }: Props = $props();
 
     const fullKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
     const halfKeys = ['C#', 'D#', 'F#', 'G#', 'A#'];
@@ -107,7 +111,9 @@
     };
 
     // Re run draw() when notesToDisplay change
-    $: if (notesToDisplay || labelMode) _p5?.draw();
+    $effect(() => {
+        if (notesToDisplay || labelMode) _p5?.draw();
+    });
 
     onDestroy(() => {
         _p5?.remove();

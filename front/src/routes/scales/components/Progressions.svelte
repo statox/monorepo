@@ -4,7 +4,11 @@
     import { progressions, type Chord } from '$lib/Scales/progressions';
     import { degreeToRoman, notes } from '$lib/Scales/utils';
 
-    export let scaleNotes: string[] = [];
+    interface Props {
+        scaleNotes?: string[];
+    }
+
+    let { scaleNotes = [] }: Props = $props();
 
     const formatChord = (chord: Chord) => {
         let roman = degreeToRoman(chord.degree);
@@ -39,7 +43,7 @@
 <h3>
     Chord Progressions
     <span>
-        <button aria-label="info" style:position="relative" on:click={() => modals.open(InfoModal)}>
+        <button aria-label="info" style:position="relative" onclick={() => modals.open(InfoModal)}>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
     </span>

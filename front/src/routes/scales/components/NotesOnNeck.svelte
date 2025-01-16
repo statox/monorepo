@@ -4,11 +4,15 @@
     import { onDestroy } from 'svelte';
     import { degreeToRoman, notes } from '$lib/Scales/utils';
 
-    let _p5: p5;
+    let _p5: p5 | undefined = $state();
     type LabelMode = 'name' | 'degree';
-    export let labelMode: LabelMode = 'name';
 
-    export let notesToDisplay: string[];
+    interface Props {
+        labelMode?: LabelMode;
+        notesToDisplay: string[];
+    }
+
+    let { labelMode = 'name', notesToDisplay }: Props = $props();
 
     const stringsBase = ['E', 'A', 'D', 'G', 'B', 'E'];
     const NB_FRETS = 15;
@@ -123,6 +127,9 @@
         fret: number; // 0: open string, 1: 1st case, ...
     };
     const freetAreaScreenCoords = (freatArea: FretArea): { x: number; y: number } => {
+        if (_p5 === undefined) {
+            throw new Error('P5 instance is undefined');
+        }
         const { string, fret } = freatArea;
         const stringH = _p5.height / 6;
         const y = stringH * (5 - string) + stringH / 2;
@@ -155,7 +162,9 @@
     };
 
     // Re run draw() when notesToDisplay change
-    $: if (notesToDisplay || labelMode) _p5?.draw();
+    $effect(() => {
+        if (notesToDisplay || labelMode) _p5?.draw();
+    });
 
     onDestroy(() => {
         _p5?.remove();
