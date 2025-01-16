@@ -9,13 +9,13 @@
 
     pageNameStore.set('Web Watchers');
 
-    let watchersApi = getAllWatchers();
+    let watchersApi = $state(getAllWatchers());
     const fetchWatchers = () => (watchersApi = getAllWatchers());
 </script>
 
 {#if $user}
     <h2>Create a new watcher</h2>
-    <button on:click={() => modals.open(WatcherForm, { onUpload: fetchWatchers })}>
+    <button onclick={() => modals.open(WatcherForm, { onUpload: fetchWatchers })}>
         Add an entry
     </button>
 
