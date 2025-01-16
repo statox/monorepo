@@ -3,11 +3,15 @@
     import { formatRecordTimestampToRelative } from '$lib/HomeTracker';
     import type { SensorState } from '$lib/HomeTracker/types';
 
-    export let sensor: SensorState;
+    interface Props {
+        sensor: SensorState;
+    }
+
+    let { sensor }: Props = $props();
 
     const color = `rgb(${sensor.rgbColor.r}, ${sensor.rgbColor.g}, ${sensor.rgbColor.b})`;
 
-    let formatedLastLogTimestamp: string | null = 'NA';
+    let formatedLastLogTimestamp: string | null = $state('NA');
 
     formatedLastLogTimestamp =
         formatRecordTimestampToRelative(sensor.lastLogTimestamp) ||
@@ -28,7 +32,7 @@
         src={sensor.iconPath}
         title="{sensor.sensorName} icon"
         alt="{sensor.sensorName} icon"
-        on:error={handleImageNotFound}
+        onerror={handleImageNotFound}
     />
 
     <div class="sensor-data">

@@ -26,7 +26,7 @@
         return { histogramData, sensorsDetails };
     };
 
-    let apiData = refreshData($selectedTimeWindow);
+    let apiData = $state(refreshData($selectedTimeWindow));
 </script>
 
 <h1>History</h1>

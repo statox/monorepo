@@ -31,10 +31,14 @@
         Tooltip
     );
 
-    export let sensorsData: SensorState[];
-    export let sensorNames: string[];
-    export let histogramData: HomeTrackerHistogramData;
-    export let graphType: GraphType;
+    interface Props {
+        sensorsData: SensorState[];
+        sensorNames: string[];
+        histogramData: HomeTrackerHistogramData;
+        graphType: GraphType;
+    }
+
+    let { sensorsData, sensorNames, histogramData, graphType }: Props = $props();
 
     const graphsProperties: Record<
         GraphType,
@@ -161,9 +165,15 @@
         }
     };
 
-    let chartElement: HTMLCanvasElement;
+    let chartElement: HTMLCanvasElement | undefined = $state();
     onMount(() => {
-        const ctx = chartElement.getContext('2d')!;
+        if (chartElement === undefined) {
+            throw new Error('Missing canvas element to draw in');
+        }
+        const ctx = chartElement.getContext('2d');
+        if (ctx === null) {
+            throw new Error('Missing ctx element to draw in');
+        }
         new Chart(ctx, config);
     });
 </script>

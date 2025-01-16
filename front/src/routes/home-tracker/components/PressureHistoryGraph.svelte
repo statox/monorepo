@@ -15,7 +15,11 @@
     import { DateTime } from 'luxon';
     import { onMount } from 'svelte';
 
-    export let pressureHistory: PressureHistoryItem[];
+    interface Props {
+        pressureHistory: PressureHistoryItem[];
+    }
+
+    let { pressureHistory }: Props = $props();
 
     Chart.register(BarController, BarElement, CategoryScale, Legend, LinearScale, Title, Tooltip);
 
@@ -60,9 +64,15 @@
         }
     };
 
-    let chartElement: HTMLCanvasElement;
+    let chartElement: HTMLCanvasElement | undefined = $state();
     onMount(() => {
-        const ctx = chartElement.getContext('2d')!;
+        if (chartElement === undefined) {
+            throw new Error('Missing canvas element to draw in');
+        }
+        const ctx = chartElement.getContext('2d');
+        if (ctx === null) {
+            throw new Error('Missing ctx element to draw in');
+        }
         new Chart(ctx, config);
     });
 </script>

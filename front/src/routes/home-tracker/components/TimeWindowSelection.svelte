@@ -26,7 +26,7 @@
         <select
             id="time-window-select"
             bind:value={$selectedTimeWindow}
-            on:change={() => dispatch('select', $selectedTimeWindow)}
+            onchange={() => dispatch('select', $selectedTimeWindow)}
         >
             {#each options as option}
                 <option value={option.value}>{option.name}</option>
