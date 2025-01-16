@@ -19,7 +19,7 @@
 
     let _p5: p5;
     let wheelTiles: WheelTiles;
-    let shapePosition = 0;
+    let shapePosition = $state(0);
 
     const rotateWheelClockwise = () => {
         rotateWheel(wheel, true);
@@ -145,7 +145,7 @@
 <h2>
     Chord wheel
     <span>
-        <button aria-label="info" style:position="relative" on:click={() => modals.open(InfoModal)}>
+        <button aria-label="info" style:position="relative" onclick={() => modals.open(InfoModal)}>
             <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
     </span>
@@ -160,26 +160,26 @@
         <button
             aria-label="rotate shape counter clockwise"
             class="fa fa-undo"
-            on:click={() => (shapePosition -= 1)}
+            onclick={() => (shapePosition -= 1)}
         ></button>
         Shape rotation
         <button
             aria-label="rotate shape clockwise"
             class="fa fa-repeat"
-            on:click={() => (shapePosition += 1)}
+            onclick={() => (shapePosition += 1)}
         ></button>
     </p>
     <p>
         <button
             aria-label="rotate wheel counter clockwise"
             class="fa fa-undo"
-            on:click={rotateWheelCounterClockwise}
+            onclick={rotateWheelCounterClockwise}
         ></button>
         Wheel rotation
         <button
             aria-label="rotate wheel clockwise"
             class="fa fa-repeat"
-            on:click={rotateWheelClockwise}
+            onclick={rotateWheelClockwise}
         ></button>
     </p>
     <p>
