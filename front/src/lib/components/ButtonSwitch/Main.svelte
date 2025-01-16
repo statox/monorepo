@@ -28,21 +28,21 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from 'svelte';
 
-  interface Props {
-    label: any;
-    design?: string;
-    options?: string[]; // Two options to display around the switch
-    fontSize?: number;
-    value?: string;
-  }
+    interface Props {
+        label: any;
+        design?: string;
+        options?: string[]; // Two options to display around the switch
+        fontSize?: number;
+        value?: string;
+    }
 
-  let {
-    label,
-    design = 'inner label',
-    options = [],
-    fontSize = 16,
-    value = $bindable('on')
-  }: Props = $props();
+    let {
+        label,
+        design = 'inner label',
+        options = [],
+        fontSize = 16,
+        value = $bindable('on')
+    }: Props = $props();
 
     let checked = $state(true);
 
