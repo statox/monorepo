@@ -12,22 +12,19 @@
 
 ### Improvements
 
-- [ ] Add checks to allow dependabots MRs to be merged automatically
+- [ ] Svelte 5:
+    - [ ] Most components are migrated but [svelte-markdown](https://github.com/pablo-abc/svelte-markdown) and [svelte-jsoneditor](https://github.com/josdejong/svelte-jsoneditor) still cause some issues, so a couple are not migrated because of that.
+    - [ ] A couple of components still use `run` from `svelte-legacy` instead of `$effect` because the migration break them and I have to look into it.
+    - [ ] Replace `createEventDispatcher` by callback props
+- [x] Add checks to allow dependabots MRs to be merged automatically
 - [x] Add link to the last GitHub Pages deployment
 - [x] Rework `fetch` calls into a framework for unified access to api.statox.fr
-- [ ] Rework CSS. Default should be dark theme. Add a button to switch themes
-    - [ ] Extend colors to get warning red, info blue, success green, ...
+- [x] Rework CSS. Default should be dark theme. Add a button to switch themes
+    - [x] Extend colors to get warning red, info blue, success green, ...
 - [ ] Recreate mechanism to open note in its own page
 - [x] Rework home page to be more descriptive and useful
 - [x] Get toast library from https://github.com/zerodevx/svelte-toast/blob/master/src/lib/ToastItem.svelte
-- [ ] Clean up the `getAccessToken()` function so that it doesn't return `string | undefined` and handle errors properly.
-
-### Features
-
-- [ ] Create Tuner app in the music section
-- [ ] See how to integrate [statox setup](https://github.com/statox/setup) maybe with some notes or guidance
-- [ ] Integrate [my color picker](https://statox.github.io/color-picker/)?
-- [ ] Imagine a CMS-like system to add data to a todo list
+- [x] Clean up the `getAccessToken()` function so that it doesn't return `string | undefined` and handle errors properly.
 
 ## Environement variable
 
