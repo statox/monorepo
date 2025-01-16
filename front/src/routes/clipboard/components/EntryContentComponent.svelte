@@ -10,7 +10,7 @@
     let contentUrl: URL | undefined = $state();
     try {
         contentUrl = new URL(entry.content);
-    } catch (error) {
+    } catch (_error) {
         console.log(
             '(Not an issue) Content of the following clipboard entry is not an URL',
             entry.id

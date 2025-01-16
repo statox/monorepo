@@ -58,7 +58,7 @@
                 });
                 $failedVisitCounts = [];
             }
-        } catch (error) {
+        } catch (_error) {
             enqueueNoticeMessage({ level: 'error', header: 'Couldnt upload failed visit counts' });
         }
 
@@ -75,7 +75,7 @@
             );
 
             visitCountsStore.set(counts);
-        } catch (error) {
+        } catch (_error) {
             enqueueNoticeMessage({ level: 'error', header: 'Couldnt upload failed visit counts' });
         }
     });
