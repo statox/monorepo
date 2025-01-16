@@ -68,18 +68,13 @@
                 icon: 'https://www.elastic.co/favicon.ico'
             },
             {
-                name: 'Raccoon - Portainer',
-                url: 'https://raccoon.statox.fr:9443/',
-                icon: 'https://www.portainer.io/favicon.ico'
-            },
-            {
                 name: 'Panda - Portainer',
-                url: 'https://panda.statox.fr:9443/',
+                url: 'https://panda-portainer.statox.fr/',
                 icon: 'https://www.portainer.io/favicon.ico'
             },
             {
                 name: 'Panda - Transmission',
-                url: 'http://panda.statox.fr:9091/',
+                url: 'http://transmission.statox.fr',
                 icon: 'https://transmissionbt.com/favicon.ico'
             }
         ],
