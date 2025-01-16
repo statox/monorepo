@@ -5,12 +5,12 @@
     // currently used by the Song Book app to display .doc and .docx songs
     // See https://www.microsoft.com/en-us/microsoft-365/blog/2013/04/10/office-web-viewer-view-office-documents-in-a-browser/
 
-    let innerWidth: number;
+    let innerWidth: number = $state(0);
 
     const { path } = $page.params;
     const src = `https://view.officeapps.live.com/op/embed.aspx?src=${path}`;
 
-    $: viewWidth = Math.min(innerWidth, 700);
+    let viewWidth = $derived(Math.min(innerWidth, 700));
 </script>
 
 <div id="viewer">
