@@ -7,8 +7,8 @@
 
     pageNameStore.set('Tap Tempo');
 
-    let tapTempo = new TapTempo();
-    let taped = false;
+    let tapTempo = $state(new TapTempo());
+    let taped = $state(false);
 
     const addBeat = () => {
         if (pause) {
@@ -26,7 +26,7 @@
         tapTempo = tapTempo;
     };
 
-    let pause = false;
+    let pause = $state(false);
 
     let keyReleased = true;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -74,8 +74,8 @@
     <div class="bpm" class:tapped={taped}>{tapTempo.bpm}<br />BPM</div>
 
     <div class="controls">
-        <button class="control-button" on:click={reset}>Reset (c)</button>
-        <button class="control-button" on:click={() => (pause = !pause)}>
+        <button class="control-button" onclick={reset}>Reset (c)</button>
+        <button class="control-button" onclick={() => (pause = !pause)}>
             {pause ? 'Play' : 'Pause'} (Enter)
         </button>
     </div>
@@ -85,7 +85,7 @@
     <TempoList currentBpm={tapTempo.bpm} />
 </div>
 
-<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} on:pointerdown={addBeat} />
+<svelte:window onkeydown={onKeyDown} onkeyup={onKeyUp} onpointerdown={addBeat} />
 
 <style>
     .container {

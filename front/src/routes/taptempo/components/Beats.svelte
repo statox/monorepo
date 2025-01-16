@@ -1,13 +1,19 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
 
-    let _p5: p5;
+    let _p5: p5 | undefined = $state();
 
-    export let keptDuration: number;
-    export let taps: number[];
-    export let pause: boolean;
+    interface Props {
+        keptDuration: number;
+        taps: number[];
+        pause: boolean;
+    }
+
+    let { keptDuration, taps, pause }: Props = $props();
 
     const sketch: Sketch = (p5) => {
         p5.setup = () => {
@@ -39,11 +45,13 @@
         };
     };
 
-    $: if (pause) {
-        _p5?.noLoop();
-    } else {
-        _p5?.loop();
-    }
+    run(() => {
+        if (pause) {
+            _p5?.noLoop();
+        } else {
+            _p5?.loop();
+        }
+    });
 
     onDestroy(() => {
         _p5?.remove();

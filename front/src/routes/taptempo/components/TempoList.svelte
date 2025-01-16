@@ -1,5 +1,9 @@
 <script lang="ts">
-    export let currentBpm: number;
+    interface Props {
+        currentBpm: number;
+    }
+
+    let { currentBpm }: Props = $props();
     type Tempo = {
         name: string;
         description: string;
