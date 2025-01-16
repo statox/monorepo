@@ -8,10 +8,14 @@
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { uploadLinkVisit } from '$lib/Songbook/api';
-    export let chord: Chord;
-    export let showArtist = false;
+    interface Props {
+        chord: Chord;
+        showArtist?: boolean;
+    }
 
-    let toolTipContent: string;
+    let { chord, showArtist = false }: Props = $props();
+
+    let toolTipContent: string | undefined = $state();
     visitCountsStore.subscribe((visitCountsMap) => {
         if (!visitCountsMap) {
             return;
@@ -75,7 +79,7 @@
         target="_blank"
         rel="noopener noreferrer"
         title={toolTipContent}
-        on:click={addVisit}>{text}</a
+        onclick={addVisit}>{text}</a
     >
 </span>
 

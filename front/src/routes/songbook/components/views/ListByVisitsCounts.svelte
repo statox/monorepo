@@ -3,11 +3,15 @@
     import type { Chord, ChordData, Filters } from '$lib/Songbook/types';
     import ChordLink from '../ChordLink.svelte';
 
-    export let searchString: string;
-    export let chords: Chord[];
-    export let filters: Filters;
+    interface Props {
+        searchString: string;
+        chords: Chord[];
+        filters: Filters;
+    }
 
-    let chordsData: Map<string, ChordData>;
+    let { searchString, chords = $bindable(), filters }: Props = $props();
+
+    let chordsData: Map<string, ChordData> | undefined = $state();
     visitCountsStore.subscribe((visitCountsMap) => {
         if (!visitCountsMap) {
             return;
@@ -53,7 +57,7 @@
 {#key chords}
     <ul class="ul2col-container">
         {#each chords as chord}
-            {@const data = chordsData.get(chord.url)}
+            {@const data = chordsData?.get(chord.url)}
             {#if shouldDisplayChord(chord, searchString, filters)}
                 <li class="ul2col-item">
                     {#if data}({data.count}){/if}

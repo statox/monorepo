@@ -13,6 +13,8 @@
     import { goto } from '$app/navigation';
     import { Notice } from '$lib/components/Notice';
 
+    // TODO Migrate this component to svelte 5
+
     // From +page.ts load() function
     export let data: { chords: RawChord[] };
     let { chords } = data;

@@ -3,9 +3,13 @@
     import type { Chord, Filters } from '$lib/Songbook/types';
     import ChordLink from '.././ChordLink.svelte';
 
-    export let searchString: string;
-    export let chords: Chord[];
-    export let filters: Filters;
+    interface Props {
+        searchString: string;
+        chords: Chord[];
+        filters: Filters;
+    }
+
+    let { searchString, chords, filters }: Props = $props();
 
     const formatTag = (t: string) => {
         return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
@@ -13,7 +17,7 @@
 
     const chordsByTags: {
         [tag: string]: Chord[];
-    } = {};
+    } = $state({});
 
     for (const chord of chords) {
         const tags = chord.tags;

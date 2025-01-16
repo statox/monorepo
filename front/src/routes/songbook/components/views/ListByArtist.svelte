@@ -3,9 +3,13 @@
     import ChordLink from '../ChordLink.svelte';
     import type { Chord, Filters } from '$lib/Songbook/types';
 
-    export let searchString: string = '';
-    export let chords: Chord[];
-    export let filters: Filters;
+    interface Props {
+        searchString?: string;
+        chords: Chord[];
+        filters: Filters;
+    }
+
+    let { searchString = '', chords, filters }: Props = $props();
 
     type ChordsByArtist = {
         [artist: string]: Chord[];
@@ -32,9 +36,9 @@
             return { name: artist };
         });
 
-    let y: number;
-    let barTop: number = 0;
-    let tableElement: HTMLElement;
+    let y: number = $state(0);
+    let barTop: number = $state(0);
+    let tableElement: HTMLElement | undefined = $state();
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const onScroll = (_y: number) => {
@@ -51,7 +55,7 @@
         barTop = rect.top;
     };
 
-    $: onScroll(y);
+    $effect(() => onScroll(y));
 
     const getArtistFilteredChords = (artist: string, searchString: string, filters: Filters) => {
         const chords = chordsByArtist[artist]

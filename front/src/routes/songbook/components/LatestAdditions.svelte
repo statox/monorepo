@@ -3,7 +3,11 @@
     import ChordLink from './ChordLink.svelte';
     import type { Chord } from '$lib/Songbook/types';
 
-    export let chords: Chord[];
+    interface Props {
+        chords: Chord[];
+    }
+
+    let { chords }: Props = $props();
 
     interface ChordWithTags extends Chord {
         dateTag?: string;
@@ -16,8 +20,8 @@
     const timeSteps = [
         { label: 'last week', time: now - oneweek },
         { label: 'one month ago', time: now - onemonth },
-        { label: 'two monthes ago', time: now - 2 * onemonth },
-        { label: 'six monthes ago', time: now - 6 * onemonth },
+        { label: 'two months ago', time: now - 2 * onemonth },
+        { label: 'six months ago', time: now - 6 * onemonth },
         { label: 'one year ago', time: now - 12 * onemonth }
     ];
 
@@ -42,7 +46,7 @@
         });
 
     let nbLatestChords = 6;
-    let latestChords: ChordWithTags[] = [];
+    let latestChords: ChordWithTags[] = $state([]);
     const getMoreLatestSongs = () => {
         nbLatestChords += 4;
         latestChords = chordsWithTags.slice(0, nbLatestChords);
@@ -56,7 +60,7 @@
 <div>
     <h3>
         Latest additions
-        <button class="pull-right" on:click={() => getMoreLatestSongs()}>More...</button>
+        <button class="pull-right" onclick={() => getMoreLatestSongs()}>More...</button>
     </h3>
     <ul class="ul2col-container">
         {#each latestChords as chord}

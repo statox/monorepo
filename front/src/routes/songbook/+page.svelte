@@ -24,10 +24,14 @@
 
     pageNameStore.set('Songbook');
 
-    // From +page.ts load() function
-    export let data: { chords: Chord[] };
+    interface Props {
+        // From +page.ts load() function
+        data: { chords: Chord[] };
+    }
+
+    let { data }: Props = $props();
     const { chords } = data;
-    let noticeMessages: NoticeItem[] = [];
+    let noticeMessages: NoticeItem[] = $state([]);
 
     const enqueueNoticeMessage = (item: NoticeItem) => {
         // Note there is a built-in way to have page errors with svelte
@@ -80,7 +84,7 @@
         }
     });
 
-    let searchString = '';
+    let searchString = $state('');
 
     const views = [
         { label: 'By artist', component: ListByArtist },
@@ -88,26 +92,28 @@
         { label: 'By frequency', component: ListByVisitsCounts },
         { label: 'By access date', component: ListByAccessDate }
     ];
-    let currentView = views[0];
+    let currentView = $state(views[0]);
 
-    let filters: Filters = {
+    // TODO: Fix filters which were broken even before svelte 5 migration
+    const defaultFilters = {
         pdf: true,
         doc: true,
         youtube: true,
         link: true
     };
-    const filtersKey: FilterType[] = Object.keys(filters) as FilterType[];
+    let filters: Filters = $state({ ...defaultFilters });
+    const filtersKey: FilterType[] = Object.keys(defaultFilters) as FilterType[];
 </script>
 
 <HeadIOS title="Song Book" description="My song book" iconPath="/songbook.png" />
 
 <h2>
     <span class="pull-right">
-        <button style:position="relative" on:click={() => modals.open(ChordsChecks)}>
+        <button style:position="relative" onclick={() => modals.open(ChordsChecks)}>
             Check dead links
         </button>
 
-        <button style:position="relative" on:click={() => goto('/songbook/edit')}> Edit </button>
+        <button style:position="relative" onclick={() => goto('/songbook/edit')}> Edit </button>
     </span>
 </h2>
 
@@ -128,7 +134,7 @@
 <div>
     <h3>All songs</h3>
     Search an artist, a title or a tag:<input type="text" bind:value={searchString} />
-    <button aria-label="delete search" on:click={() => (searchString = '')}>
+    <button aria-label="delete search" onclick={() => (searchString = '')}>
         <i class="fas fa-times-circle"></i>
     </button>
 
@@ -138,7 +144,7 @@
             <button
                 aria-label="filter for {filter}"
                 class="filter-control"
-                on:click={() => {
+                onclick={() => {
                     filters[filter] = !filters[filter];
                     filters = filters;
                 }}
@@ -155,7 +161,7 @@
             <button
                 class="control"
                 class:selected={currentView === option}
-                on:click={() => (currentView = option)}
+                onclick={() => (currentView = option)}
             >
                 {option.label}
             </button>
@@ -163,7 +169,7 @@
     </div>
 </div>
 
-<svelte:component this={currentView.component} {chords} {searchString} {filters} />
+<currentView.component {chords} {searchString} {filters} />
 
 <style>
     .view-controls-container {

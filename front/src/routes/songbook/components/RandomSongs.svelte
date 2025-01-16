@@ -3,11 +3,15 @@
     import ChordLink from './ChordLink.svelte';
     import type { Chord } from '$lib/Songbook/types';
 
-    export let chords: Chord[];
+    interface Props {
+        chords: Chord[];
+    }
+
+    let { chords }: Props = $props();
 
     const nbRandomChords = 6;
-    let randomChordIndexes: number[] = [];
-    let randomChords: Chord[] = [];
+    let randomChordIndexes: number[] = $state([]);
+    let randomChords: Chord[] = $state([]);
     const getRandomSongs = () => {
         if (randomChordIndexes.length >= chords.length - nbRandomChords) {
             randomChordIndexes = [];
@@ -46,9 +50,9 @@
         Random song
         <span class="pull-right">
             {#if randomChordIndexes.length > nbRandomChords}
-                <button on:click={getPreviousRandomSongs}>&nbsp↶&nbsp</button>
+                <button onclick={getPreviousRandomSongs}>&nbsp↶&nbsp</button>
             {/if}
-            <button on:click={getRandomSongs}>Get more random songs</button>
+            <button onclick={getRandomSongs}>Get more random songs</button>
         </span>
     </h3>
     <br />
