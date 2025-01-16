@@ -6,13 +6,19 @@
     import '$lib/styles/highlightjs_override.css';
     import '$lib/styles/helpers.css';
     import { Modals } from 'svelte-modals';
-    import { onMount } from 'svelte';
+    import { onMount, type Snippet } from 'svelte';
     import { initializeAuth0 } from '$lib/auth/service';
     import { SvelteToast } from '$lib/components/Toast';
     import { Notice } from '$lib/components/Notice';
     import { Header } from '$lib/components/Header';
 
-    let auth0Error: Error;
+    interface Props {
+        children?: Snippet;
+    }
+
+    let { children }: Props = $props();
+
+    let auth0Error: Error | undefined = $state();
     onMount(async () => {
         try {
             await initializeAuth0();
@@ -52,7 +58,7 @@
     />
 {/if}
 
-<slot />
+{@render children?.()}
 
 <style>
     .backdrop {
