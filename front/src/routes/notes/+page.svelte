@@ -6,8 +6,8 @@
     pageNameStore.set('Stuff I forget');
 
     const notesModules = import.meta.glob('$lib/Notes/data/*.md');
-    let searchStr: string;
-    let notes: Note[] = [];
+    let searchStr: string = $state('');
+    let notes: Note[] = $state([]);
 
     const extractDataFromSource = (source: string) => {
         const titleMatch = source.match(/\[title]: # '(.*)'\n/);

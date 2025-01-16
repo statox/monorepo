@@ -1,7 +1,11 @@
 <script lang="ts">
     import { Markdown } from '$lib/components/Markdown';
     import type { Note } from '$lib/Notes/types';
-    export let note: Note;
+    interface Props {
+        note: Note;
+    }
+
+    let { note }: Props = $props();
 
     const formattedTags = note.tags.map((t) => `[${t}]`).join('');
 </script>
