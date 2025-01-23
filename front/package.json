@@ -40,7 +40,7 @@
         "lunarphase-js": "^2.0.3",
         "luxon": "^3.5.0",
         "mime": "^4.0.6",
-        "p5": "^1.11.2",
+        "p5": "^1.11.3",
         "p5-svelte": "^3.1.2",
         "prettier": "^3.4.2",
         "prettier-plugin-svelte": "^3.3.3",
