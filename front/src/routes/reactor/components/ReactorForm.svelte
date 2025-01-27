@@ -6,6 +6,7 @@
     import { toast } from '$lib/components/Toast';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { uploadToReactor } from '$lib/Reactor/api';
+    import { Spinner } from '$lib/components/Spinner';
 
     interface Props extends ModalProps {
         onUpload: () => void;
@@ -18,6 +19,7 @@
     let commaSeparatedTags = $state('');
     let fileInput: HTMLInputElement | undefined = $state();
     let files: FileList | undefined = $state();
+    let uploading = $state(false);
 
     const upload = async () => {
         noticeMessages = [];
@@ -38,10 +40,13 @@
         }
 
         try {
+            uploading = true;
             await uploadToReactor({ name, commaSeparatedTags, file });
+            uploading = false;
             onUpload();
             close();
         } catch (error) {
+            uploading = false;
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
                 errorMessage = 'Invalid logged in user';
@@ -94,7 +99,13 @@
 
                 <br />
                 {#if $user}
-                    <button class="form-action" onclick={upload}>Submit</button>
+                    <button class="form-action" onclick={upload} disabled={uploading}>
+                        {#if uploading}
+                            <Spinner size={0.5} unit="em" durationSeconds={0.5} />
+                        {:else}
+                            Submit
+                        {/if}
+                    </button>
                 {:else}
                     <span class="form-action">Login to upload an entry</span>
                 {/if}

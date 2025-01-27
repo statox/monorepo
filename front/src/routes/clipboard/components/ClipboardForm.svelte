@@ -4,6 +4,7 @@
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
+    import { Spinner } from '$lib/components/Spinner';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { DurationPicker } from '$lib/components/DurationPicker';
     import { uploadToClipboard } from '$lib/Clipboard/api';
@@ -21,6 +22,7 @@
     let files: FileList | undefined = $state();
     let isPublic = $state(false);
     let ttlSeconds: number = $state(0);
+    let uploading = $state(false);
 
     const upload = async () => {
         noticeMessages = [];
@@ -45,10 +47,13 @@
         }
 
         try {
+            uploading = true;
             await uploadToClipboard({ name, content, ttlSeconds, isPublic, file });
+            uploading = false;
             onUpload();
             close();
         } catch (error) {
+            uploading = false;
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
                 errorMessage = 'Invalid logged in user';
@@ -123,7 +128,13 @@
 
                 <br />
                 {#if $user}
-                    <button class="form-action" onclick={upload}>Submit</button>
+                    <button class="form-action" onclick={upload} disabled={uploading}>
+                        {#if uploading}
+                            <Spinner size={0.5} unit="em" durationSeconds={0.5} />
+                        {:else}
+                            Submit
+                        {/if}
+                    </button>
                 {:else}
                     <span class="form-action">Login to upload an entry</span>
                 {/if}
