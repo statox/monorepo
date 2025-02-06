@@ -53,6 +53,11 @@ export const utilsSection = {
             link: '/webwatcher'
         },
         {
+            name: 'Cookbook',
+            description: 'Food recipes',
+            link: '/cookbook'
+        },
+        {
             name: 'About',
             description: 'The about section of this website',
             link: '/about'
