@@ -1,5 +1,5 @@
 import { requestAPIGet, requestAPIPost } from '$lib/api';
-import type { RecipeFull, RecipeMeta, RecipeToCreate } from './types';
+import type { IngredientMeta, RecipeFull, RecipeMeta, RecipeToCreate } from './types';
 
 export const addRecipe = async (recipe: RecipeToCreate) => {
     return await requestAPIPost({
@@ -12,6 +12,13 @@ export const listRecipes = async () => {
     return await requestAPIGet<{ recipes: RecipeMeta[] }>({
         authorize: true,
         path: '/cookbook/listRecipes'
+    });
+};
+
+export const listIngedients = async () => {
+    return await requestAPIGet<{ ingredients: IngredientMeta[] }>({
+        authorize: true,
+        path: '/cookbook/listIngredients'
     });
 };
 

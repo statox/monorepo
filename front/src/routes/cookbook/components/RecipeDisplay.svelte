@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Markdown } from '$lib/components/Markdown';
     import type { RecipeFull } from '$lib/Cookbook';
+    import IngredientsList from './IngredientsList.svelte';
 
     interface Props {
         recipe: RecipeFull;
@@ -13,9 +14,7 @@
 
 <h3>Ingredients</h3>
 {#if recipe.ingredients.length}
-    {#each recipe.ingredients as ingredient}
-        <p>{JSON.stringify(ingredient)}</p>
-    {/each}
+    <IngredientsList ingredients={recipe.ingredients} />
 {:else}
     <p>No ingredients specified in this recipe</p>
 {/if}

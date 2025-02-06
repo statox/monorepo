@@ -7,6 +7,8 @@
     import { toast } from '$lib/components/Toast';
     import { addRecipe } from '$lib/Cookbook';
     import { goto } from '$app/navigation';
+    import IngredientsList from './IngredientsList.svelte';
+    import IngredientInput from './IngredientInput.svelte';
 
     interface Props {
         onUpload: () => void;
@@ -25,6 +27,12 @@
     let name: string = $state('');
     let content: string = $state('');
     let ingredients: IngredientForApi[] = $state([]);
+
+    const addIngredient = (params: { name: string; quantity?: number; unit?: string }) => {
+        ingredients.push(params);
+        console.log('Added ingredient');
+        console.log(ingredients);
+    };
 
     const upload = async () => {
         noticeMessages = [];
@@ -68,34 +76,42 @@
 </script>
 
 <div class="contents">
-    <h4 class="title-bar">Add a new recipe</h4>
+    <h2 class="title-bar">Add a new recipe</h2>
     <button onclick={() => goto('/cookbook')}>Back to list</button>
 
     {#each noticeMessages as item}
         <Notice {item} />
     {/each}
 
-    <form class="form-content">
+    <div class="form-content">
         <label for="name">Name</label>
         <input type="text" bind:value={name} />
 
-        <label for="content">Content</label>
+        <label for="ingredients">New ingredient</label>
+        <div>
+            <IngredientInput onAdd={addIngredient} />
+        </div>
+
+        <label for="ingredients">List of ingredients</label>
+        <div>
+            <IngredientsList {ingredients} editable={true} />
+        </div>
+
+        <label for="content">Instructions</label>
         <textarea bind:value={content} rows="10" cols="50"></textarea>
+    </div>
 
-        <br />
-
-        {#if $user}
-            <button class="form-action" onclick={upload} disabled={uploading}>
-                {#if uploading}
-                    <Spinner size={0.5} unit="em" durationSeconds={0.5} />
-                {:else}
-                    Submit
-                {/if}
-            </button>
-        {:else}
-            <span class="form-action">Login to upload an entry</span>
-        {/if}
-    </form>
+    {#if $user}
+        <button class="form-action" onclick={upload} disabled={uploading}>
+            {#if uploading}
+                <Spinner size={0.5} unit="em" durationSeconds={0.5} />
+            {:else}
+                Submit
+            {/if}
+        </button>
+    {:else}
+        <span class="form-action">Login to upload an entry</span>
+    {/if}
 </div>
 
 <style>
@@ -105,7 +121,8 @@
 
     .form-content {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: 15% auto;
+        grid-row-gap: 1em;
     }
 
     .contents {

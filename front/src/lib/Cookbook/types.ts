@@ -5,6 +5,11 @@ export type RecipeMeta = {
     updateDateUnix: number;
 };
 
+export type IngredientMeta = {
+    id: number;
+    name: string;
+};
+
 export type RecipeToCreate = {
     name: string;
     content: string;
