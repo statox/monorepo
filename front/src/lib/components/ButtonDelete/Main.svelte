@@ -5,7 +5,7 @@
     let resetButtonStateTimeout: ReturnType<typeof setTimeout>;
 
     interface Props {
-        deleteAction: () => void;
+        deleteAction: () => void | Promise<void>;
     }
     let { deleteAction }: Props = $props();
 
@@ -13,10 +13,11 @@
         buttonState = 'triggered';
         resetButtonStateTimeout = setTimeout(reset, RESET_TIMEOUT_SECONDS * 1000);
     };
-    const confirmDelete = () => {
+    const confirmDelete = async () => {
         clearTimeout(resetButtonStateTimeout);
         buttonState = 'confirmed';
-        deleteAction();
+        await deleteAction();
+        buttonState = 'initial';
     };
     const reset = () => {
         buttonState = 'initial';
