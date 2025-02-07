@@ -29,6 +29,15 @@
     let ingredients: IngredientForApi[] = $state([]);
 
     const addIngredient = (params: { name: string; quantity?: number; unit?: string }) => {
+        if (ingredients.find((i) => i.name === params.name)) {
+            const message = params.name + ' already added';
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
+            return;
+        }
         ingredients.push(params);
     };
 
