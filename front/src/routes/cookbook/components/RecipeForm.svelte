@@ -144,5 +144,9 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: baseline;
+    }
+    .title-bar > button {
+        max-height: 2em;
     }
 </style>
