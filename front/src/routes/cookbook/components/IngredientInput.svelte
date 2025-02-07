@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { type IngredientMeta, listIngedients } from '$lib/Cookbook';
+    import { FilteredSelect } from '$lib/components/FilteredSelect';
+    import { listIngedients } from '$lib/Cookbook';
     import { onMount } from 'svelte';
 
     interface Props {
@@ -7,9 +8,7 @@
     }
     const { onAdd }: Props = $props();
 
-    let ingredientsMeta: IngredientMeta[] = $state([]);
-
-    let newIngredient = $state(false);
+    let ingredientsNames: string[] = $state([]);
 
     let name: string = $state('');
     let quantity: number | undefined = $state();
@@ -23,29 +22,16 @@
         onAdd({ name, quantity, unit });
     };
 
-    const toggleIngredientMode = () => {
-        name = '';
-        newIngredient = !newIngredient;
-    };
-
     onMount(async () => {
-        ingredientsMeta = (await listIngedients()).ingredients;
+        ingredientsNames = (await listIngedients()).ingredients
+            .sort((a, b) => (a < b ? 1 : 0))
+            .map((i) => i.name);
     });
 </script>
 
 <div class="input-container">
-    <button onclick={toggleIngredientMode}>
-        {newIngredient ? 'New' : 'Existing'}
-    </button>
-    {#if newIngredient}
-        <input bind:value={name} type="text" />
-    {:else}
-        <select bind:value={name} onchange={() => console.log('select', name)}>
-            {#each ingredientsMeta as option}
-                <option value={option.name}>{option.name}</option>
-            {/each}
-        </select>
-    {/if}
+    <label for="name">Ingredient</label>
+    <FilteredSelect bind:value={name} options={ingredientsNames} />
 
     <label for="quantity">Quantity</label>
     <input bind:value={quantity} type="number" />
