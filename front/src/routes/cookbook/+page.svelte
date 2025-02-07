@@ -43,5 +43,5 @@
         {/await}
     </div>
 {:else}
-    <Notice item={{ level: 'info', header: 'Login to add an entry' }} />
+    <Notice item={{ level: 'info', header: 'Login to access the recipes' }} />
 {/if}

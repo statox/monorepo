@@ -30,8 +30,6 @@
 
     const addIngredient = (params: { name: string; quantity?: number; unit?: string }) => {
         ingredients.push(params);
-        console.log('Added ingredient');
-        console.log(ingredients);
     };
 
     const upload = async () => {
@@ -76,8 +74,10 @@
 </script>
 
 <div class="contents">
-    <h2 class="title-bar">Add a new recipe</h2>
-    <button onclick={() => goto('/cookbook')}>Back to list</button>
+    <span class="title-bar">
+        <h2>Add a new recipe</h2>
+        <button onclick={() => goto('/cookbook')}>Back to list</button>
+    </span>
 
     {#each noticeMessages as item}
         <Notice {item} />
@@ -125,16 +125,20 @@
         grid-row-gap: 1em;
     }
 
+    @media screen and (max-width: 600px) {
+        .form-content {
+            grid-template-columns: 100%;
+        }
+    }
+
     .contents {
-        min-width: 240px;
-        border-radius: 26px;
-        padding: 16px;
         background: var(--nc-bg-1);
         pointer-events: auto;
 
         max-height: 90%;
         overflow: auto;
     }
+
     .title-bar {
         margin-bottom: 1em;
         display: flex;

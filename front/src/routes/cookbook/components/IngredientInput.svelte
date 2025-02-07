@@ -49,4 +49,10 @@
         grid-template-columns: auto auto;
         grid-column-gap: 1em;
     }
+
+    @media screen and (max-width: 600px) {
+        .input-container {
+            grid-template-columns: 100%;
+        }
+    }
 </style>
