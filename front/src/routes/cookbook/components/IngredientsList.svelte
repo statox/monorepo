@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { ButtonDelete } from '$lib/components/ButtonDelete';
+
     interface Ingredient {
         name: string;
         quantity?: number;
@@ -10,26 +12,42 @@
         editable?: true;
     }
 
-    const { ingredients = $bindable(), editable }: Props = $props();
+    let { ingredients = $bindable(), editable }: Props = $props();
+    const deleteIngredientByName = (name: string) => {
+        ingredients = ingredients.filter((i) => i.name !== name);
+    };
 </script>
 
-{#each ingredients as ingredient, index}
-    <div class="ingredient-container">
-        <div>{ingredient.name}</div>
-        <div>{ingredient.quantity}</div>
-        <div>{ingredient.unit}</div>
+<div class="list-container">
+    {#each ingredients.toSorted((a, b) => (a.name < b.name ? -1 : 1)) as ingredient}
+        <div class="ingredient-container">
+            {#if editable}
+                <span class="delete-button">
+                    <ButtonDelete deleteAction={() => deleteIngredientByName(ingredient.name)} />
+                </span>
+            {/if}
 
-        {#if editable}
-            <!-- svelte-ignore a11y_consider_explicit_label -->
-            <button onclick={() => ingredients.splice(index, 1)}>
-                <i class="fa fa-solid fa-minus"></i>
-            </button>
-        {/if}
-    </div>
-{/each}
+            <div>{ingredient.name}</div>
+            {#if ingredient.quantity || ingredient.unit}
+                <div class="unit">({ingredient.quantity}{ingredient.unit})</div>
+            {/if}
+        </div>
+    {/each}
+</div>
 
 <style>
+    .list-container {
+        display: grid;
+        flex-direction: column;
+        gap: 0.2em;
+    }
+
     .ingredient-container {
         display: flex;
+        flex-direction: row;
+    }
+
+    .delete-button {
+        margin-right: 1em;
     }
 </style>
