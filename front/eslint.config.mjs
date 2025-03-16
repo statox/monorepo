@@ -1,89 +1,74 @@
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import eslint from '@eslint/js';
+import pluginImport from 'eslint-plugin-import';
+import svelteEslint from 'eslint-plugin-svelte';
 import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import parser from 'svelte-eslint-parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import svelteParser from 'svelte-eslint-parser';
+import tsEslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
+const commonRules = {
+    // TODO Fix code to re-enable this rule
+    '@typescript-eslint/no-explicit-any': 'off',
+    // Allow try...catch blocks to not use the caught error
+    '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+            caughtErrors: 'none'
+        }
+    ]
+};
 
+/** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
-    ...compat.extends(
-        'eslint:recommended',
-        'plugin:svelte/recommended',
-        'plugin:svelte/prettier',
-        'plugin:@typescript-eslint/recommended',
-        'prettier'
-    ),
     {
-        files: ['src/**/*.ts'],
-        plugins: {
-            '@typescript-eslint': typescriptEslint
-        },
-
+        ignores: ['**/*.d.ts']
+    },
+    eslint.configs.recommended,
+    ...tsEslint.configs.recommended,
+    // ...svelteEslint.configs['flat/recommended'], // Check if it's worth enabling
+    ...svelteEslint.configs['flat/prettier'],
+    {
+        files: ['**/*.svelte'],
         languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.node
-            },
-
-            parser: tsParser,
-            ecmaVersion: 2020,
-            sourceType: 'module',
-
+            parser: svelteParser,
             parserOptions: {
-                project: './tsconfig.json',
-                extraFileExtensions: ['.svelte']
+                parser: tsEslint.parser
+            },
+            globals: {
+                ...globals.browser
             }
         },
-
         rules: {
-            // TODO Fix code to re-enable this rule
-            '@typescript-eslint/no-explicit-any': 'off',
-            // Allow try...catch blocks to not use the caught error
-            '@typescript-eslint/no-unused-vars': [
-                'error',
-                {
-                    caughtErrors: 'none'
-                }
-            ]
+            ...commonRules
         }
     },
     {
-        // Parse the `<script>` in `.svelte` as TypeScript
-        files: ['src/**/*.svelte'],
+        files: ['**/*.ts'],
         languageOptions: {
+            parser: tsEslint.parser
+        },
+        rules: {
+            ...commonRules
+        }
+    },
+    {
+        files: ['**/*server.ts'],
+        languageOptions: {
+            parser: tsEslint.parser,
             globals: {
-                ...globals.browser,
                 ...globals.node
-            },
-
-            parser: parser,
-            ecmaVersion: 5,
-            sourceType: 'script',
-
-            parserOptions: {
-                parser: '@typescript-eslint/parser'
             }
         },
         rules: {
-            // TODO Fix code to re-enable this rule
-            '@typescript-eslint/no-explicit-any': 'off',
-            // Avoid error if the error of try...catch blocks are used but are named _something
-            '@typescript-eslint/no-unused-vars': [
-                'error',
-                {
-                    caughtErrorsIgnorePattern: '^_'
-                }
-            ]
+            ...commonRules
+        }
+    },
+    {
+        plugins: {
+            '@typescript-eslint': tsEslint.plugin,
+            import: pluginImport
+        },
+        rules: {
+            // 'svelte/sort-attributes': 'warn' // Check if it's worth enabling
         }
     }
 ];
