@@ -47,7 +47,7 @@
         "superagent": "^10.1.1",
         "svelte": "^5.19.2",
         "svelte-check": "^4.1.4",
-        "svelte-jsoneditor": "^2.3.3",
+        "svelte-jsoneditor": "^3.1.0",
         "svelte-markdown": "^0.4.1",
         "svelte-modals": "^2.0.0",
         "typescript": "^5.7.3",
