@@ -25,7 +25,7 @@
 
 <div class="container">
     <div>
-        <span style={'font-weight: bolder'}>Last Refresh</span>
+        <span style="font-weight: bolder">Last Refresh</span>
         <span>{formatRecordTimestampToHuman(lastRefreshDate?.toSeconds()) || 'NA'}</span>
         <button
             aria-label="update data"

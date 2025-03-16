@@ -54,7 +54,7 @@
                     <span class="data-header">Oldest</span>
                     {oldestDataPointTime} - <ValueWithUnit
                         value={forecast.dataPoints.oldest.pressurehPa}
-                        unitString={'hPa'}
+                        unitString="hPa"
                         precision={3}
                     />
                 </div>
@@ -62,7 +62,7 @@
                     <span class="data-header">Latest</span>
                     {latestDataPointTime} - <ValueWithUnit
                         value={forecast.dataPoints.latest.pressurehPa}
-                        unitString={'hPa'}
+                        unitString="hPa"
                         precision={3}
                     />
                 </div>

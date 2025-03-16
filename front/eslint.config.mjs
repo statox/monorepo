@@ -24,7 +24,7 @@ export default [
     },
     eslint.configs.recommended,
     ...tsEslint.configs.recommended,
-    // ...svelteEslint.configs['flat/recommended'], // Check if it's worth enabling
+    ...svelteEslint.configs['flat/recommended'],
     ...svelteEslint.configs['flat/prettier'],
     {
         files: ['**/*.svelte'],
@@ -38,7 +38,8 @@ export default [
             }
         },
         rules: {
-            ...commonRules
+            ...commonRules,
+            'svelte/require-each-key': 'off' // TODO Check if it's worth fixing and re-enabling
         }
     },
     {

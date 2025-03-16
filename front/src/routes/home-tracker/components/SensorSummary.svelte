@@ -47,16 +47,16 @@
 
         <div class="sensor-data-records-container">
             <i class="unit-icon fas fa-thermometer-half"></i>
-            <ValueWithUnit value={sensor.lastLogData.tempCelsius} unitString={'°C'} precision={1} />
+            <ValueWithUnit value={sensor.lastLogData.tempCelsius} unitString="°C" precision={1} />
 
             <i class="unit-icon fas fa-tint"></i>
-            <ValueWithUnit value={sensor.lastLogData.humidity} unitString={'%'} precision={0} />
+            <ValueWithUnit value={sensor.lastLogData.humidity} unitString="%" precision={0} />
 
             {#if sensor.lastLogData.pressurehPa}
                 <i class="unit-icon fas fa-tachometer-alt"></i>
                 <ValueWithUnit
                     value={sensor.lastLogData.pressurehPa}
-                    unitString={'hPa'}
+                    unitString="hPa"
                     precision={0}
                 />
             {/if}
@@ -67,14 +67,14 @@
                 <i class="unit-icon fas fa-thermometer-half"></i>
                 <ValueWithUnit
                     value={sensor.lastLogData.internalTempCelsius}
-                    unitString={'°C'}
+                    unitString="°C"
                     precision={1}
                 />
 
                 <i class="unit-icon fas fa-tint"></i>
                 <ValueWithUnit
                     value={sensor.lastLogData.internalHumidity}
-                    unitString={'%'}
+                    unitString="%"
                     precision={0}
                 />
             </div>
