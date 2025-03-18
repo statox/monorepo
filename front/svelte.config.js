@@ -24,7 +24,6 @@ const config = {
         adapter: adapter({
             pages: 'docs',
             assets: 'docs',
-            fallback: null,
             precompress: false,
             fallback: '404.html',
             domain: '',
