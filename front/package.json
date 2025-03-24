@@ -49,7 +49,7 @@
         "svelte-modals": "^2.0.1",
         "typescript": "^5.8.2",
         "typescript-eslint": "^8.26.1",
-        "vite": "^6.2.2",
+        "vite": "^6.2.3",
         "vite-plugin-plain-text": "^1.4.2"
     },
     "type": "module"
