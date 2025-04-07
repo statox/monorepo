@@ -8,6 +8,15 @@ export interface SensorState {
     lastLogData: SensorLogData;
 }
 
+// This should replace SensorState once calls to getAllSensorsWithLatestLog are completley removed
+export interface DashboardSensorState {
+    sensorName: string;
+    iconPath: string;
+    hexColor: string;
+    lastSyncDateUnix: number;
+    lastLogData: SensorLogData;
+}
+
 export interface HomeTrackerSensorsResponse {
     sensors: SensorState[];
 }

@@ -2,7 +2,7 @@
     import { Notice } from '$lib/components/Notice';
     import {
         formatRecordTimestampToHuman,
-        getAllSensorsWithLatestLog,
+        getSensorsDataForDashboard,
         type TimeWindow
     } from '$lib/HomeTracker';
     import SensorSummary from './SensorSummary.svelte';
@@ -13,7 +13,7 @@
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
-        const sensorsDetails = await getAllSensorsWithLatestLog();
+        const sensorsDetails = await getSensorsDataForDashboard();
         lastRefreshDate = DateTime.now();
         return sensorsDetails;
     };

@@ -1,20 +1,18 @@
 <script lang="ts">
     import { ValueWithUnit } from '$lib/components/ValueWithUnit';
     import { formatRecordTimestampToRelative } from '$lib/HomeTracker';
-    import type { SensorState } from '$lib/HomeTracker/types';
+    import type { DashboardSensorState } from '$lib/HomeTracker/types';
 
     interface Props {
-        sensor: SensorState;
+        sensor: DashboardSensorState;
     }
 
     let { sensor }: Props = $props();
 
-    const color = `rgb(${sensor.rgbColor.r}, ${sensor.rgbColor.g}, ${sensor.rgbColor.b})`;
-
     let formatedLastLogTimestamp: string | null = $state('NA');
 
     formatedLastLogTimestamp =
-        formatRecordTimestampToRelative(sensor.lastLogTimestamp) ||
+        formatRecordTimestampToRelative(sensor.lastSyncDateUnix) ||
         '(error getting last timestamp)';
 
     const handleImageNotFound = (event: Event) => {
@@ -26,7 +24,7 @@
     };
 </script>
 
-<div class="container" style="--sensor-color: {color}">
+<div class="container" style="--sensor-color: {sensor.hexColor}">
     <img
         class="sensor-icon"
         src={sensor.iconPath}

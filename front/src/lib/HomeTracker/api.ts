@@ -1,5 +1,6 @@
 import { requestAPIGet, requestAPIPost } from '$lib/api';
 import type {
+    DashboardSensorState,
     Ephemerides,
     HomeTrackerLatestResponse,
     HomeTrackerSensorsResponse,
@@ -40,6 +41,26 @@ export const getAllSensorsWithLatestLog = async () => {
 
     // TODO Have this info returned by the API (and probably have the API returning the images themselves too)
     const enrichedSensors = sensors.map((sensor: SensorState) => {
+        const { sensorName } = sensor;
+        return {
+            ...sensor,
+            iconPath: `/hometracker/sensors/icon_${sensorName}.png`
+        };
+    });
+
+    return { sensors: enrichedSensors };
+};
+
+// This call should replace getAllSensorsWithLatestLog once everything is migrated
+export const getSensorsDataForDashboard = async () => {
+    const { sensors } = await requestAPIGet<{
+        sensors: DashboardSensorState[];
+    }>({
+        path: '/homeTracker/getSensorsDataForDashboard'
+    });
+
+    // TODO Have this info returned by the API (and probably have the API returning the images themselves too)
+    const enrichedSensors = sensors.map((sensor: DashboardSensorState) => {
         const { sensorName } = sensor;
         return {
             ...sensor,
