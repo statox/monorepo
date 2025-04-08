@@ -36,7 +36,7 @@
         "highlight.js": "^11.11.1",
         "lunarphase-js": "^2.0.3",
         "luxon": "^3.6.1",
-        "mime": "^4.0.6",
+        "mime": "^4.0.7",
         "p5": "^1.11.3",
         "p5-svelte": "^3.1.2",
         "prettier": "^3.5.3",
