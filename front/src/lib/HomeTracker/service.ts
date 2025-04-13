@@ -32,17 +32,17 @@ export const getMoonPhasePictureURL = (phase: LunarPhase) => {
 };
 
 export const getEphemerides = async () => {
-    const data = await getEphemeridesAPI();
+    const ephemerides = await getEphemeridesAPI();
+    const {moonState, sunState} = ephemerides;
+
 
     return {
-        lunarAge: data.lunarAge,
-        lunarAgePercent: data.lunarAgePercent,
-        moonPhase: data.moonPhase,
-        moonPhaseFr: data.moonPhaseFr,
-        moonVisibilityWindow: data.moonVisibilityWindow,
-        goldenHour: DateTime.fromMillis(data.goldenHour),
-        solarNoon: DateTime.fromMillis(data.solarNoon),
-        sunrise: DateTime.fromMillis(data.sunrise),
-        sunset: DateTime.fromMillis(data.sunset)
+        moonState,
+        sunState: {
+            goldenHour: DateTime.fromMillis(sunState.goldenHour),
+            solarNoon: DateTime.fromMillis(sunState.solarNoon),
+            sunrise: DateTime.fromMillis(sunState.sunrise),
+            sunset: DateTime.fromMillis(sunState.sunset)
+        }
     };
 };

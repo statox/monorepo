@@ -114,13 +114,17 @@ enum LunarPhaseFrench {
 }
 
 export interface Ephemerides {
-    sunrise: number;
-    sunset: number;
-    solarNoon: number;
-    goldenHour: number;
-    lunarAge: number;
-    lunarAgePercent: number;
-    moonPhase: LunarPhase;
-    moonPhaseFr: LunarPhaseFrench;
-    moonVisibilityWindow: string[];
+    sunState: {
+        sunrise: number;
+        sunset: number;
+        solarNoon: number;
+        goldenHour: number;
+    },
+    moonState: {
+        lunarAge: number;
+        lunarAgePercent: number;
+        moonPhase: LunarPhase;
+        moonPhaseFr: LunarPhaseFrench;
+        moonVisibilityWindow: string[];
+    }
 }

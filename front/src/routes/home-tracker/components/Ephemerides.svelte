@@ -6,44 +6,44 @@
 <div class="container">
     {#await getEphemerides()}
         <p>Loading ephemerides data</p>
-    {:then ephemerides}
+    {:then { moonState, sunState }}
         <div class="title">Ephemerides</div>
         <div class="content">
             <div class="data">
                 <span>Moon phase</span>
-                <span>{ephemerides.moonPhaseFr}</span>
+                <span>{moonState.moonPhaseFr}</span>
 
                 <span>Moon age</span>
                 <span>
-                    {ephemerides.lunarAge.toFixed(1)} days ({(
-                        ephemerides.lunarAgePercent * 100
+                    {moonState.lunarAge.toFixed(1)} days ({(
+                        moonState.lunarAgePercent * 100
                     ).toFixed(0)}%)
                 </span>
 
                 <span>Moon visible</span>
                 <span>
-                    {ephemerides.moonVisibilityWindow[0]} - {ephemerides.moonVisibilityWindow[1]}
+                    {moonState.moonVisibilityWindow[0]} - {moonState.moonVisibilityWindow[1]}
                 </span>
 
                 <span>Sun rise/set</span>
                 <span>
-                    {ephemerides.sunrise.toFormat('HH:mm')} - {ephemerides.sunset.toFormat('HH:mm')}
+                    {sunState.sunrise.toFormat('HH:mm')} - {sunState.sunset.toFormat('HH:mm')}
                 </span>
 
                 <span>Solar noon</span>
                 <span>
-                    {ephemerides.solarNoon.toFormat('HH:mm')}
+                    {sunState.solarNoon.toFormat('HH:mm')}
                 </span>
 
                 <span>Golden hour</span>
                 <span>
-                    {ephemerides.goldenHour.toFormat('HH:mm')}
+                    {sunState.goldenHour.toFormat('HH:mm')}
                 </span>
             </div>
             <img
                 class="phase-img"
-                alt={ephemerides.moonPhase}
-                src={getMoonPhasePictureURL(ephemerides.moonPhase)}
+                alt={moonState.moonPhase}
+                src={getMoonPhasePictureURL(moonState.moonPhase)}
             />
         </div>
     {:catch error}
