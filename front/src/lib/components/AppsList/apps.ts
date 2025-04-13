@@ -80,6 +80,11 @@ export const personalSection = {
             link: '/home-tracker'
         },
         {
+            name: 'Ephemerides',
+            description: 'Get data about the sun and moon visibility in Paris',
+            link: '/ephemerides'
+        },
+        {
             name: 'Personal tracker',
             description: 'Tracking me data',
             link: '/personal-tracker'
