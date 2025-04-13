@@ -1,12 +1,13 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
     import { getEphemerides, getMoonPhasePictureURL } from '$lib/HomeTracker';
+    import LunarCycle from './LunarCycle.svelte';
 </script>
 
 <div class="container">
     {#await getEphemerides()}
         <p>Loading ephemerides data</p>
-    {:then { moonState, sunState }}
+    {:then { moonState, sunState, upcomingLunarStates }}
         <div class="title">Ephemerides</div>
         <div class="content">
             <div class="data">
@@ -46,6 +47,7 @@
                 src={getMoonPhasePictureURL(moonState.moonPhase)}
             />
         </div>
+        <LunarCycle {upcomingLunarStates} />
     {:catch error}
         <Notice
             item={{

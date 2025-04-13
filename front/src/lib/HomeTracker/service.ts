@@ -33,8 +33,7 @@ export const getMoonPhasePictureURL = (phase: LunarPhase) => {
 
 export const getEphemerides = async () => {
     const ephemerides = await getEphemeridesAPI();
-    const {moonState, sunState} = ephemerides;
-
+    const { moonState, sunState, upcomingLunarStates } = ephemerides;
 
     return {
         moonState,
@@ -43,6 +42,15 @@ export const getEphemerides = async () => {
             solarNoon: DateTime.fromMillis(sunState.solarNoon),
             sunrise: DateTime.fromMillis(sunState.sunrise),
             sunset: DateTime.fromMillis(sunState.sunset)
-        }
+        },
+        upcomingLunarStates: upcomingLunarStates.map((entry) => {
+            return {
+                date: DateTime.fromMillis(entry.tsMillis),
+                lunarState: {
+                    ...entry.lunarState,
+                    phasePictureUrl: getMoonPhasePictureURL(entry.lunarState.moonPhase)
+                }
+            };
+        })
     };
 };

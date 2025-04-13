@@ -113,18 +113,28 @@ enum LunarPhaseFrench {
     WANING_CRESCENT = 'Dernier croissant'
 }
 
+interface MoonState {
+    lunarAge: number;
+    lunarAgePercent: number;
+    moonPhase: LunarPhase;
+    moonPhaseFr: LunarPhaseFrench;
+    moonVisibilityWindow: string[];
+}
+
+export type EnrichedMoonState = MoonState & {
+    phasePictureUrl: string;
+};
+
 export interface Ephemerides {
     sunState: {
         sunrise: number;
         sunset: number;
         solarNoon: number;
         goldenHour: number;
-    },
-    moonState: {
-        lunarAge: number;
-        lunarAgePercent: number;
-        moonPhase: LunarPhase;
-        moonPhaseFr: LunarPhaseFrench;
-        moonVisibilityWindow: string[];
-    }
+    };
+    moonState: MoonState;
+    upcomingLunarStates: {
+        tsMillis: number;
+        lunarState: MoonState;
+    }[];
 }
