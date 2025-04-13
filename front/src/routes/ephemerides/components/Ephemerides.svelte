@@ -1,62 +1,49 @@
 <script lang="ts">
-    import { Notice } from '$lib/components/Notice';
-    import { getEphemerides, getMoonPhasePictureURL } from '$lib/HomeTracker';
-    import LunarCycle from './LunarCycle.svelte';
+    import { getMoonPhasePictureURL } from '$lib/HomeTracker';
+
+    export let moonState;
+    export let sunState;
 </script>
 
 <div class="container">
-    {#await getEphemerides()}
-        <p>Loading ephemerides data</p>
-    {:then { moonState, sunState, upcomingLunarStates }}
-        <div class="title">Ephemerides</div>
-        <div class="content">
-            <div class="data">
-                <span>Moon phase</span>
-                <span>{moonState.moonPhaseFr}</span>
+    <div class="content">
+        <div class="data">
+            <span>Moon phase</span>
+            <span>{moonState.moonPhaseFr}</span>
 
-                <span>Moon age</span>
-                <span>
-                    {moonState.lunarAge.toFixed(1)} days ({(
-                        moonState.lunarAgePercent * 100
-                    ).toFixed(0)}%)
-                </span>
+            <span>Moon age</span>
+            <span>
+                {moonState.lunarAge.toFixed(1)} days ({(moonState.lunarAgePercent * 100).toFixed(
+                    0
+                )}%)
+            </span>
 
-                <span>Moon visible</span>
-                <span>
-                    {moonState.moonVisibilityWindow[0]} - {moonState.moonVisibilityWindow[1]}
-                </span>
+            <span>Moon visible</span>
+            <span>
+                {moonState.moonVisibilityWindow[0]} - {moonState.moonVisibilityWindow[1]}
+            </span>
 
-                <span>Sun rise/set</span>
-                <span>
-                    {sunState.sunrise.toFormat('HH:mm')} - {sunState.sunset.toFormat('HH:mm')}
-                </span>
+            <span>Sun rise/set</span>
+            <span>
+                {sunState.sunrise.toFormat('HH:mm')} - {sunState.sunset.toFormat('HH:mm')}
+            </span>
 
-                <span>Solar noon</span>
-                <span>
-                    {sunState.solarNoon.toFormat('HH:mm')}
-                </span>
+            <span>Solar noon</span>
+            <span>
+                {sunState.solarNoon.toFormat('HH:mm')}
+            </span>
 
-                <span>Golden hour</span>
-                <span>
-                    {sunState.goldenHour.toFormat('HH:mm')}
-                </span>
-            </div>
-            <img
-                class="phase-img"
-                alt={moonState.moonPhase}
-                src={getMoonPhasePictureURL(moonState.moonPhase)}
-            />
+            <span>Golden hour</span>
+            <span>
+                {sunState.goldenHour.toFormat('HH:mm')}
+            </span>
         </div>
-        <LunarCycle {upcomingLunarStates} />
-    {:catch error}
-        <Notice
-            item={{
-                level: 'error',
-                header: 'Something went wrong getting lunar data',
-                message: error
-            }}
+        <img
+            class="phase-img"
+            alt={moonState.moonPhase}
+            src={getMoonPhasePictureURL(moonState.moonPhase)}
         />
-    {/await}
+    </div>
 </div>
 
 <style>
@@ -70,12 +57,6 @@
         display: flex;
         flex-flow: column;
         gap: 1em;
-    }
-
-    .title {
-        color: var(--nc-tx-1);
-        font-weight: bold;
-        font-size: x-large;
     }
 
     .content {
