@@ -31,6 +31,35 @@ export const getMoonPhasePictureURL = (phase: LunarPhase) => {
     throw new Error('UNKOWN_LUNAR_PHASE');
 };
 
+export const getMoonPhaseIconURL = (phase: LunarPhase) => {
+    if (phase === LunarPhase.NEW) {
+        return 'moon_phase_icons/1_new_moon.png';
+    }
+    if (phase === LunarPhase.WAXING_CRESCENT) {
+        return 'moon_phase_icons/2_waxing_crescent.png';
+    }
+    if (phase === LunarPhase.FIRST_QUARTER) {
+        return 'moon_phase_icons/3_first_quarter.png';
+    }
+    if (phase === LunarPhase.WAXING_GIBBOUS) {
+        return 'moon_phase_icons/4_waxing_gibbous.png';
+    }
+    if (phase === LunarPhase.FULL) {
+        return 'moon_phase_icons/5_full_moon.png';
+    }
+    if (phase === LunarPhase.WANING_GIBBOUS) {
+        return 'moon_phase_icons/6_waning_gibbous.png';
+    }
+    if (phase === LunarPhase.LAST_QUARTER) {
+        return 'moon_phase_icons/7_last_quarter.png';
+    }
+    if (phase === LunarPhase.WANING_CRESCENT) {
+        return 'moon_phase_icons/8_waning_crescent.png';
+    }
+
+    throw new Error('UNKOWN_LUNAR_PHASE');
+};
+
 export const getEphemerides = async () => {
     const ephemerides = await getEphemeridesAPI();
     const { moonState, sunState, upcomingLunarStates } = ephemerides;

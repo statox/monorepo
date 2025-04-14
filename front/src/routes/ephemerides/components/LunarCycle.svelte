@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { DateTime } from 'luxon';
-    import { getMoonPhasePictureURL, type EnrichedMoonState } from '$lib/HomeTracker';
+    import { getMoonPhaseIconURL, type EnrichedMoonState } from '$lib/HomeTracker';
 
     export let upcomingLunarStates: {
         date: DateTime;
@@ -19,7 +19,7 @@
             <img
                 class="phase-img"
                 alt={lunarState.moonPhase}
-                src={getMoonPhasePictureURL(lunarState.moonPhase)}
+                src={getMoonPhaseIconURL(lunarState.moonPhase)}
             />
             {#if index === 0 || index === 29 || upcomingLunarStates[index - 1].lunarState.moonPhaseFr !== lunarState.moonPhaseFr}
                 <div>
@@ -53,7 +53,7 @@
         padding-bottom: 5px;
     }
     .phase-img {
-        max-height: 200px;
+        max-height: 50px;
         border-radius: 10px;
     }
 </style>
