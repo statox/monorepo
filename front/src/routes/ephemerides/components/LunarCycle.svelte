@@ -16,11 +16,13 @@
     {/each}
     {#each upcomingLunarStates as { date, lunarState }, index}
         <div class="entry">
-            <img
-                class="phase-img"
-                alt={lunarState.moonPhase}
-                src={getMoonPhaseIconURL(lunarState.moonPhase)}
-            />
+            <div>
+                <img
+                    class="phase-img"
+                    alt={lunarState.moonPhase}
+                    src={getMoonPhaseIconURL(lunarState.moonPhase)}
+                />
+            </div>
             {#if index === 0 || index === 29 || upcomingLunarStates[index - 1].lunarState.moonPhaseFr !== lunarState.moonPhaseFr}
                 <div>
                     {date.setLocale('fr').toLocaleString({ day: '2-digit', month: '2-digit' })}
@@ -35,10 +37,7 @@
     .container {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-
-        max-width: 100%;
     }
-
     .day-header {
         background-color: var(--nc-bg-2);
         font-weight: bold;
@@ -55,5 +54,20 @@
     .phase-img {
         max-height: 50px;
         border-radius: 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+        .container {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .day-header {
+            display: none;
+        }
+
+        .entry {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 </style>
