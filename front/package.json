@@ -28,7 +28,7 @@
         "@types/luxon": "^3.6.2",
         "@types/p5": "^1.7.6",
         "@types/superagent": "^8.1.9",
-        "chart.js": "^4.4.8",
+        "chart.js": "^4.4.9",
         "eslint": "^9.24.0",
         "eslint-plugin-import": "^2.31.0",
         "eslint-plugin-svelte": "^3.5.1",
