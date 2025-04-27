@@ -15,7 +15,11 @@
         </div>
     {/each}
     {#each upcomingLunarStates as { date, lunarState }, index}
-        <div class="entry">
+        {@const isImportantDay =
+            index === 0 ||
+            index === 29 ||
+            upcomingLunarStates[index - 1].lunarState.moonPhaseFr !== lunarState.moonPhaseFr}
+        <div class="entry {isImportantDay ? 'important-day' : 'other-day'}">
             <div>
                 <img
                     class="phase-img"
@@ -23,7 +27,7 @@
                     src={getMoonPhaseIconURL(lunarState.moonPhase)}
                 />
             </div>
-            {#if index === 0 || index === 29 || upcomingLunarStates[index - 1].lunarState.moonPhaseFr !== lunarState.moonPhaseFr}
+            {#if isImportantDay}
                 <div>
                     {date.setLocale('fr').toLocaleString({ day: '2-digit', month: '2-digit' })}
                 </div>
@@ -68,6 +72,10 @@
         .entry {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+        }
+
+        .other-day {
+            display: none;
         }
     }
 </style>
