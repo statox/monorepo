@@ -48,7 +48,7 @@
 
 <style>
     .container {
-        border: solid 2px;
+        border-bottom: solid 2px;
         border-color: #9edcff;
         border-radius: 5px;
 
