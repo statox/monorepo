@@ -1,6 +1,6 @@
 import { LunarPhase } from 'lunarphase-js';
 import { getEphemeridesAPI } from './api';
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 
 export const getMoonPhasePictureURL = (phase: LunarPhase) => {
     if (phase === LunarPhase.NEW) {
@@ -70,7 +70,9 @@ export const getEphemerides = async () => {
             goldenHour: DateTime.fromMillis(sunState.goldenHour),
             solarNoon: DateTime.fromMillis(sunState.solarNoon),
             sunrise: DateTime.fromMillis(sunState.sunrise),
-            sunset: DateTime.fromMillis(sunState.sunset)
+            sunset: DateTime.fromMillis(sunState.sunset),
+            dayLength: Duration.fromMillis(sunState.dayLengthMs),
+            dayLengthDiff: Duration.fromMillis(sunState.dayLengthDiffMs)
         },
         upcomingLunarStates: upcomingLunarStates.map((entry) => {
             return {

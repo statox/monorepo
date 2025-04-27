@@ -131,6 +131,8 @@ export interface Ephemerides {
         sunset: number;
         solarNoon: number;
         goldenHour: number;
+        dayLengthMs: number;
+        dayLengthDiffMs: number;
     };
     moonState: MoonState;
     upcomingLunarStates: {
