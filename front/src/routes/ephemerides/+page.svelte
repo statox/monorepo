@@ -9,7 +9,7 @@
     pageNameStore.set('Ephemerides');
 </script>
 
-<HeadIOS title="Ephemerides" description="Get the ephemerides" />
+<HeadIOS title="Ephemerides" description="Get the ephemerides" iconPath="/ephemerides.png" />
 
 <div class="content">
     {#await getEphemerides()}
