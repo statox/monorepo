@@ -141,6 +141,32 @@
         datasets
     };
 
+    const hoverLinePlugin = {
+        // LLM Generated. ChartJS plugin to display a white vertical line over the mouse position
+        // (Draw the line only when hovering a data point)
+        id: 'hoverLine',
+        afterDraw(chart: Chart) {
+            // @ts-expect-error TODO Check typing error
+            if (chart.tooltip?._active && chart.tooltip._active.length > 0) {
+                const ctx = chart.ctx;
+                // @ts-expect-error TODO Check typing error
+                const activePoint = chart.tooltip._active[0];
+                const x = activePoint.element.x;
+                const topY = chart.chartArea.top;
+                const bottomY = chart.chartArea.bottom;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, topY);
+                ctx.lineTo(x, bottomY);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'white';
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+    };
+
     const config: ChartConfiguration = {
         type: 'line',
         data: dataTemp,
@@ -162,7 +188,8 @@
                     }
                 }
             }
-        }
+        },
+        plugins: [hoverLinePlugin]
     };
 
     let chartElement: HTMLCanvasElement | undefined = $state();
