@@ -19,19 +19,20 @@
 </script>
 
 <div class="info-container">
-    <ExpirationInfo {entry} />
-
     {#if $user}
         <button class="visibility-status" class:visibility-public={entry.isPublic} disabled>
             {#if entry.isPublic}
                 <i class="fas fa-lock-open"></i>
             {:else}
-                <i class="fas fa-lock"></i>
+                <i>&nbsp</i>
             {/if}
         </button>
 
+        <ExpirationInfo {entry} />
         <ButtonDelete deleteAction={() => deleteEntry(entry.name)} />
         <div class="creation-date">{entry.formatedCreationDate}</div>
+    {:else}
+        <ExpirationInfo {entry} />
     {/if}
 </div>
 
@@ -47,7 +48,7 @@
     .visibility-status {
         height: 33px;
         width: 40px;
-        background-color: var(--nc-success);
+        background-color: rgba(0, 0, 0, 0);
     }
     .visibility-public {
         background-color: var(--nc-error);
