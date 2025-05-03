@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { ModalProps } from 'svelte-modals';
     import { user } from '$lib/auth/service';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
@@ -8,12 +7,13 @@
     import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { DurationPicker } from '$lib/components/DurationPicker';
     import { uploadToClipboard } from '$lib/Clipboard/api';
+    import { goto } from '$app/navigation';
 
-    interface Props extends ModalProps {
+    interface Props {
         onUpload: () => void;
     }
 
-    let { isOpen, close, onUpload }: Props = $props();
+    let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
 
     let name: string = $state('');
@@ -51,7 +51,6 @@
             await uploadToClipboard({ name, content, ttlSeconds, isPublic, file });
             uploading = false;
             onUpload();
-            close();
         } catch (error) {
             uploading = false;
             let errorMessage = (error as Error).message;
@@ -68,104 +67,86 @@
             });
         }
     };
+
+    const onClose = () => {
+        goto('/clipboard/');
+    };
 </script>
 
-{#if isOpen}
-    <div role="dialog" class="modal">
-        <div class="contents">
-            <h4 class="title-bar">
-                Add a new clipboard entry
-                <button onclick={close}>Close</button>
-            </h4>
+<div class="contents">
+    <h4 class="title-bar">
+        Add a new clipboard entry
+        <button onclick={onClose}>Close</button>
+    </h4>
 
-            {#each noticeMessages as item}
-                <Notice {item} />
-            {/each}
+    {#each noticeMessages as item}
+        <Notice {item} />
+    {/each}
 
-            <form class="form-content">
-                <label for="name">Name</label>
-                <input type="text" bind:value={name} />
+    <form class="form-content">
+        <label for="name">Name</label>
+        <input type="text" bind:value={name} />
 
-                <label for="content">Content</label>
-                <input type="textarea" bind:value={content} />
+        <label for="content">Content</label>
+        <input type="textarea" bind:value={content} />
 
-                <label for="file">File</label>
-                <span>
-                    <input class="file-input" type="file" bind:files bind:this={fileInput} />
-                    <button
-                        aria-label="delete file"
-                        onclick={() => {
-                            if (fileInput !== undefined) {
-                                fileInput.value = '';
-                            }
-                        }}
-                    >
-                        <i class="fas fa-times-circle"></i>
-                    </button>
-                </span>
+        <label for="file">File</label>
+        <span>
+            <input class="file-input" type="file" bind:files bind:this={fileInput} />
+            <button
+                aria-label="delete file"
+                onclick={() => {
+                    if (fileInput !== undefined) {
+                        fileInput.value = '';
+                    }
+                }}
+            >
+                <i class="fas fa-times-circle"></i>
+            </button>
+        </span>
 
-                <label for="ttlSeconds">TTL</label>
-                <DurationPicker
-                    bind:valueInSeconds={ttlSeconds}
-                    allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
-                    defaultDuration={{ value: 10, unit: 'minutes' }}
-                />
+        <label for="ttlSeconds">TTL</label>
+        <DurationPicker
+            bind:valueInSeconds={ttlSeconds}
+            allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
+            defaultDuration={{ value: 10, unit: 'minutes' }}
+        />
 
-                <label for="isPublic">Access</label>
-                <button
-                    class="visibility-status"
-                    class:visibility-public={isPublic}
-                    onclick={() => (isPublic = !isPublic)}
-                >
-                    {#if isPublic}
-                        Public
-                        <i class="fas fa-lock-open"></i>
-                    {:else}
-                        Private
-                        <i class="fas fa-lock"></i>
-                    {/if}
-                </button>
+        <label for="isPublic">Access</label>
+        <button
+            class="visibility-status"
+            class:visibility-public={isPublic}
+            onclick={() => (isPublic = !isPublic)}
+        >
+            {#if isPublic}
+                Public
+                <i class="fas fa-lock-open"></i>
+            {:else}
+                Private
+                <i class="fas fa-lock"></i>
+            {/if}
+        </button>
+    </form>
 
-                <br />
-                {#if $user}
-                    <button class="form-action" onclick={upload} disabled={uploading}>
-                        {#if uploading}
-                            <Spinner size={0.5} unit="em" durationSeconds={0.5} />
-                        {:else}
-                            Submit
-                        {/if}
-                    </button>
-                {:else}
-                    <span class="form-action">Login to upload an entry</span>
-                {/if}
-            </form>
-        </div>
-    </div>
-{/if}
+    {#if $user}
+        <button class="form-action" onclick={upload} disabled={uploading}>
+            {#if uploading}
+                <Spinner size={0.5} unit="em" durationSeconds={0.5} />
+            {:else}
+                Submit
+            {/if}
+        </button>
+    {:else}
+        <span class="form-action">Login to upload an entry</span>
+    {/if}
+</div>
 
 <style>
-    .form-action {
-        grid-column: span 2;
-    }
-
     .form-content {
         display: grid;
         grid-template-columns: auto auto;
     }
 
-    .modal {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        margin: 3em;
-        z-index: 9999;
-        max-width: 900px;
-
-        /* allow click-through to backdrop */
-        pointer-events: none;
-    }
     .contents {
         min-width: 240px;
         border-radius: 26px;
