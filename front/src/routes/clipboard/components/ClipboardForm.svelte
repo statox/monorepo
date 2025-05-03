@@ -23,6 +23,7 @@
     let isPublic = $state(false);
     let ttlSeconds: number = $state(0);
     let uploading = $state(false);
+    let uploadSucess = $state(false);
 
     const upload = async () => {
         noticeMessages = [];
@@ -48,9 +49,11 @@
 
         try {
             uploading = true;
+            uploadSucess = false;
             await uploadToClipboard({ name, content, ttlSeconds, isPublic, file });
             uploading = false;
             onUpload();
+            uploadSucess = true;
         } catch (error) {
             uploading = false;
             let errorMessage = (error as Error).message;
@@ -136,6 +139,9 @@
                 Submit
             {/if}
         </button>
+        {#if uploadSucess}
+            <i class="sucess-indicator fas fa-check"></i>
+        {/if}
     {:else}
         <span class="form-action">Login to upload an entry</span>
     {/if}
@@ -179,5 +185,9 @@
     }
     .visibility-public {
         background-color: var(--nc-error);
+    }
+
+    .sucess-indicator {
+        color: var(--nc-success);
     }
 </style>
