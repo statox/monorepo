@@ -98,7 +98,7 @@
     <div role="dialog" class="modal">
         <div class="contents">
             <h3 class="title-bar">
-                Add a new clipboard entry
+                Add a new watcher
                 <button onclick={close}>Close</button>
             </h3>
 
