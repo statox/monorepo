@@ -76,7 +76,7 @@
 <div class="contents">
     <h4 class="title-bar">
         Add a new clipboard entry
-        <button onclick={onClose}>Close</button>
+        <button onclick={onClose}>Back</button>
     </h4>
 
     {#each noticeMessages as item}
@@ -147,6 +147,12 @@
         grid-template-columns: auto auto;
     }
 
+    @media screen and (max-width: 600px) {
+        .form-content {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
     .contents {
         min-width: 240px;
         border-radius: 26px;
@@ -169,6 +175,7 @@
     }
     .visibility-status {
         background-color: var(--nc-success);
+        max-width: 150px;
     }
     .visibility-public {
         background-color: var(--nc-error);
