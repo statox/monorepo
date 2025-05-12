@@ -92,4 +92,46 @@ export const personalSection = {
     ]
 };
 
-export const allApps = [personalSection, utilsSection, musicSection];
+export const gameSection = {
+    name: 'Games',
+    apps: [
+        {
+            name: 'Sudoku',
+            description: 'A classic Sudoku game. Grids are generated automatically.',
+            link: 'https://statox.github.io/sudoku/game'
+        },
+        {
+            name: 'Tic Tac Wow',
+            description: 'Tic Tac Toe and different variants with AI opponents.',
+            link: 'https://statox.github.io/tic-tac-wow/'
+        },
+        {
+            name: '2048',
+            description: 'The famous puzzle game from 2014.',
+            link: 'https://statox.github.io/2048/'
+        },
+        {
+            name: 'Reversi',
+            description: 'A two players strategy board game with an AI opponent.',
+            link: 'https://statox.github.io/reversi/'
+        },
+        {
+            name: 'Triomaster',
+            description:
+                'My implementation of a famous 3-sided dominoes game, with an AI opponent.',
+            link: 'https://statox.github.io/triomaster/'
+        },
+        {
+            name: 'Asteroides',
+            description: 'The old arcade game with a spaceship destroyins space rocks.',
+            link: 'https://asteroides.statox.fr/'
+        },
+        {
+            name: 'Minesweeper',
+            description: 'The classical minesweeper game.',
+            link: 'https://www.statox.fr/posts/2020/07/minesweeper/'
+        }
+    ]
+};
+
+export const allApps = [personalSection, utilsSection, musicSection, gameSection];

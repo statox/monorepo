@@ -23,7 +23,11 @@
 
     <div class="container">
         {#each section.apps as app}
-            <button class="app" onclick={() => goto(app.link)}>
+            <button
+                class="app"
+                onclick={() =>
+                    app.link.startsWith('/') ? goto(app.link) : window.open(app.link, '_blank')}
+            >
                 <h3>{app.name}</h3>
                 <div class="description">{app.description}</div>
             </button>
