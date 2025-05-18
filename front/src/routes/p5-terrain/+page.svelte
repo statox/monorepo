@@ -7,7 +7,7 @@
 
     let _p5: p5 | undefined = $state();
 
-    const screenSize = 1000;
+    let screenSize = 1000;
     let t = 0;
     let lastTs = 0;
     let framesSinceLastTs = 0;
@@ -70,6 +70,17 @@
         };
 
         p5.draw = () => {
+            const containerElement = document.getElementById('canvas-container');
+            if (containerElement) {
+                const containerHeight = Math.floor(window.innerHeight * 0.8) || 600;
+                const containerWidth = Math.floor(window.innerWidth * 0.8) || 600;
+                screenSize = Math.min(containerWidth, containerHeight);
+                if (p5.width !== screenSize) {
+                    p5.resizeCanvas(screenSize, screenSize);
+                    cellSize = screenSize / gridSize.value;
+                }
+            }
+
             p5.background(0);
 
             const now = Date.now();
@@ -126,7 +137,10 @@
 </script>
 
 <div class="container">
-    <P5 {sketch} />
+    <div id="canvas-container">
+        <P5 {sketch} />
+    </div>
+
     <div class="controls">
         <label for="fps">FPS</label>
         <span>{fps}</span>
@@ -191,9 +205,18 @@
     .container {
         display: flex;
         flex-direction: row;
+        gap: 1em;
     }
+    @media screen and (max-width: 1200px) {
+        .container {
+            flex-direction: column;
+        }
+    }
+
     .controls {
         display: grid;
+        min-width: 340px;
+        max-width: 600px;
         grid-template-columns: auto auto;
         grid-auto-rows: 2rem;
         align-items: start;
