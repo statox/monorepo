@@ -34,7 +34,7 @@
     let levelsStep = localStore('p5-terrain-levelsStep', 0.05);
     let levelsMargin = localStore('p5-terrain-margin', 0.005);
 
-    type ColorMode = 'white' | 'gradient';
+    type ColorMode = 'white' | 'gradient' | 'quantized-gradient';
     let colorMode = localStore<ColorMode>('p5-terrain-colorMode', 'gradient');
 
     const resetAllControls = () => {
@@ -110,11 +110,15 @@
                         if (!equalWithMargin(v, threshold, levelsMargin.value)) {
                             continue;
                         }
+
                         let color = 255;
                         if (colorMode.value === 'white') {
                             color = 255;
                         } else if (colorMode.value === 'gradient') {
                             color = p5.map(threshold, levelsStart.value, levelsEnd.value, 100, 255);
+                        } else if (colorMode.value === 'quantized-gradient') {
+                            const level = Math.trunc(v * 10) / 10;
+                            color = p5.map(level, levelsStart.value, levelsEnd.value, 100, 255);
                         }
 
                         p5.fill(color);
@@ -195,6 +199,7 @@
         <select id="colorMode-select" bind:value={colorMode.value}>
             <option value="white">White</option>
             <option value="gradient">Gradient</option>
+            <option value="quantized-gradient">Quantized Gradient</option>
         </select>
 
         <label for="resetAll">Reset all</label><button onclick={resetAllControls}>Reset</button>
