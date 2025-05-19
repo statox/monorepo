@@ -61,6 +61,12 @@
         controls.forEach((c) => c.reset());
     };
 
+    const collapsedControls = $state({
+        grid: false,
+        noise: false,
+        lines: false
+    });
+
     const sketch: Sketch = (p5) => {
         function customResizeCanvas() {
             const minDimension = Math.min(p5.windowWidth, p5.windowHeight);
@@ -130,63 +136,111 @@
         <P5 {sketch} />
     </div>
 
-    <div class="controls">
-        <span class="control-header">Grid controls</span><span></span>
-        <label for="gridSize">gridSize</label>
-        <input type="number" step="1" bind:value={gridSize.value} />
+    <div class="controls-container">
+        <span class="control-header">
+            <button
+                class="collapse-button {collapsedControls.grid
+                    ? 'fas fa-chevron-right'
+                    : 'fas fa-chevron-down'}"
+                onclick={() => (collapsedControls.grid = !collapsedControls.grid)}
+            >
+                &nbsp;Grid controls
+            </button>
+        </span>
+        {#if collapsedControls.grid}
+            <br />
+        {:else}
+            <div class="control-section">
+                <label for="gridSize">Grid size</label>
+                <input type="number" step="1" bind:value={gridSize.value} />
 
-        <label for="blurEnabled">Enable blur</label>
-        <ButtonSwitch
-            value={enableBlur}
-            label=""
-            on:change={() => {
-                blurEnabled.value = !blurEnabled.value;
-                enableBlur = blurEnabled.value ? 'on' : 'off';
-            }}
-            design="slider"
-        />
+                <label for="blurEnabled">Enable blur</label>
+                <ButtonSwitch
+                    value={enableBlur}
+                    label=""
+                    on:change={() => {
+                        blurEnabled.value = !blurEnabled.value;
+                        enableBlur = blurEnabled.value ? 'on' : 'off';
+                    }}
+                    design="slider"
+                />
 
-        {#if blurEnabled.value}
-            <label for="blurValue">Blur value (default 4)</label>
-            <input type="number" step="1" bind:value={blurValue.value} />
+                {#if blurEnabled.value}
+                    <label for="blurValue">Blur value (default 4)</label>
+                    <input type="number" step="1" bind:value={blurValue.value} />
+                {/if}
+            </div>
         {/if}
 
-        <span class="control-header">Noise controls</span><span></span>
-        <label for="displacementX">displacementX</label>
-        <input type="number" step="0.01" bind:value={displacementX.value} />
+        <span class="control-header">
+            <button
+                class="collapse-button {collapsedControls.noise
+                    ? 'fas fa-chevron-right'
+                    : 'fas fa-chevron-down'}"
+                onclick={() => (collapsedControls.noise = !collapsedControls.noise)}
+            >
+                &nbsp;Noise controls
+            </button>
+        </span>
 
-        <label for="displacementY">displacementY</label>
-        <input type="number" step="0.01" bind:value={displacementY.value} />
+        {#if collapsedControls.noise}
+            <br />
+        {:else}
+            <div class="control-section">
+                <label for="displacementX">displacementX</label>
+                <input type="number" step="0.01" bind:value={displacementX.value} />
 
-        <label for="displacementZ">displacementZ</label>
-        <input type="number" step="0.01" bind:value={displacementZ.value} />
+                <label for="displacementY">displacementY</label>
+                <input type="number" step="0.01" bind:value={displacementY.value} />
 
-        <label for="noiseFactor">noiseFactor</label>
-        <input type="number" step="0.01" bind:value={noiseFactor.value} />
+                <label for="displacementZ">displacementZ</label>
+                <input type="number" step="0.01" bind:value={displacementZ.value} />
 
-        <span class="control-header">Lines controls</span><span></span>
-        <label for="levelsStart">levelsStart</label>
-        <input type="number" step="0.1" bind:value={levelsStart.value} />
+                <label for="noiseFactor">noiseFactor</label>
+                <input type="number" step="0.01" bind:value={noiseFactor.value} />
+            </div>
+        {/if}
 
-        <label for="levelsEnd">levelsEnd</label>
-        <input type="number" step="0.1" bind:value={levelsEnd.value} />
+        <span class="control-header">
+            <button
+                class="collapse-button {collapsedControls.lines
+                    ? 'fas fa-chevron-right'
+                    : 'fas fa-chevron-down'}"
+                onclick={() => (collapsedControls.lines = !collapsedControls.lines)}
+            >
+                &nbsp;Lines controls
+            </button>
+        </span>
+        {#if collapsedControls.lines}
+            <br />
+        {:else}
+            <div class="control-section">
+                <label for="levelsStart">levelsStart</label>
+                <input type="number" step="0.1" bind:value={levelsStart.value} />
 
-        <label for="levelsStep">levelsStep</label>
-        <input type="number" step="0.001" bind:value={levelsStep.value} />
+                <label for="levelsEnd">levelsEnd</label>
+                <input type="number" step="0.1" bind:value={levelsEnd.value} />
 
-        <label for="levelsMargin">levelsMargin</label>
-        <input type="number" step="0.001" bind:value={levelsMargin.value} />
+                <label for="levelsStep">levelsStep</label>
+                <input type="number" step="0.001" bind:value={levelsStep.value} />
 
-        <label for="colorMode">colorMode</label>
-        <select id="colorMode-select" bind:value={colorMode.value}>
-            <option value="white">White</option>
-            <option value="gradient">Gradient</option>
-            <option value="quantized-gradient">Quantized Gradient</option>
-            <option value="color-gradient">Color Gradient</option>
-            <option value="color-scaled-gradient">Color scaled Gradient</option>
-        </select>
+                <label for="levelsMargin">levelsMargin</label>
+                <input type="number" step="0.001" bind:value={levelsMargin.value} />
 
-        <label for="resetAll">Reset all</label><button onclick={resetAllControls}>Reset</button>
+                <label for="colorMode">colorMode</label>
+                <select id="colorMode-select" bind:value={colorMode.value}>
+                    <option value="white">White</option>
+                    <option value="gradient">Gradient</option>
+                    <option value="quantized-gradient">Quantized Gradient</option>
+                    <option value="color-gradient">Color Gradient</option>
+                    <option value="color-scaled-gradient">Color scaled Gradient</option>
+                </select>
+            </div>
+        {/if}
+
+        <div class="control-section">
+            <label for="resetAll">Reset all</label><button onclick={resetAllControls}>Reset</button>
+        </div>
     </div>
 </div>
 
@@ -202,10 +256,13 @@
         }
     }
 
-    .controls {
-        display: grid;
+    .controls-container {
         min-width: 340px;
         max-width: 600px;
+    }
+
+    .control-section {
+        display: grid;
         grid-template-columns: auto auto;
         grid-auto-rows: 2rem;
         align-items: start;
@@ -213,5 +270,11 @@
 
     .control-header {
         font-weight: bold;
+    }
+
+    .collapse-button {
+        background-color: var(--nc-bg-1);
+        color: var(--nc-tx-1);
+        /* background-color: red; */
     }
 </style>
