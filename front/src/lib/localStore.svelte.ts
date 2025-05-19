@@ -39,7 +39,7 @@ export class LocalStore<T> {
 
     reset() {
         localStorage.removeItem(this.key);
-        this.value = this.default
+        this.value = this.default;
     }
 
     serialize(value: T): string {
