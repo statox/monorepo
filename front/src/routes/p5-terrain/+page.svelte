@@ -142,6 +142,10 @@
 
 <div class="container">
     <div id="canvas-container">
+        <div class="stats">
+            <label for="fps">FPS</label>
+            <span>{fps}</span>
+        </div>
         <P5 {sketch} />
     </div>
 
