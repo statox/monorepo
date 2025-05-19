@@ -72,7 +72,7 @@
     const sketch: Sketch = (p5) => {
         function customResizeCanvas() {
             const minDimension = Math.min(p5.windowWidth, p5.windowHeight);
-            screenSize = Math.floor(minDimension * 0.8);
+            screenSize = Math.floor(minDimension * 0.9);
             p5.resizeCanvas(screenSize, screenSize);
             cellSize = screenSize / gridSize.value;
         }
@@ -283,6 +283,5 @@
     .collapse-button {
         background-color: var(--nc-bg-1);
         color: var(--nc-tx-1);
-        /* background-color: red; */
     }
 </style>
