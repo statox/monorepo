@@ -131,7 +131,7 @@
     </div>
 
     <div class="controls">
-        <span>Grid controls</span><span></span>
+        <span class="control-header">Grid controls</span><span></span>
         <label for="gridSize">gridSize</label>
         <input type="number" step="1" bind:value={gridSize.value} />
 
@@ -151,7 +151,7 @@
             <input type="number" step="1" bind:value={blurValue.value} />
         {/if}
 
-        <span>Noise controls</span><span></span>
+        <span class="control-header">Noise controls</span><span></span>
         <label for="displacementX">displacementX</label>
         <input type="number" step="0.01" bind:value={displacementX.value} />
 
@@ -164,7 +164,7 @@
         <label for="noiseFactor">noiseFactor</label>
         <input type="number" step="0.01" bind:value={noiseFactor.value} />
 
-        <span>Lines controls</span><span></span>
+        <span class="control-header">Lines controls</span><span></span>
         <label for="levelsStart">levelsStart</label>
         <input type="number" step="0.1" bind:value={levelsStart.value} />
 
@@ -207,5 +207,9 @@
         grid-template-columns: auto auto;
         grid-auto-rows: 2rem;
         align-items: start;
+    }
+
+    .control-header {
+        font-weight: bold;
     }
 </style>
