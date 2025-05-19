@@ -4,7 +4,7 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
-    import { drawSimulation, type ColorMode } from './simulation';
+    import { drawSimulation, type ColorMode, type NoiseMode } from './simulation';
 
     let _p5: p5 | undefined = $state();
 
@@ -36,6 +36,7 @@
     let levelsMargin = localStore('p5-terrain-margin', 0.005);
 
     let colorMode = localStore<ColorMode>('p5-terrain-colorMode', 'gradient');
+    let noiseMode = localStore<NoiseMode>('p5-terrain-nodeMode', 'carthesian');
 
     // Used only for the UI slider, not used in the controls
     let enableBlur = $state(blurEnabled.value ? 'on' : 'off');
@@ -46,6 +47,7 @@
             blurEnabled,
             blurValue,
 
+            noiseMode,
             displacementX,
             displacementY,
             displacementZ,
@@ -104,6 +106,7 @@
             drawSimulation(p5, {
                 gridSize: gridSize.value,
                 colorMode: colorMode.value,
+                noiseMode: noiseMode.value,
                 t: t,
                 cellSize,
                 noiseFactor: noiseFactor.value,
@@ -187,6 +190,11 @@
             <br />
         {:else}
             <div class="control-section">
+                <label for="noiseMode">Noise Mode</label>
+                <select id="noiseMode-select" bind:value={noiseMode.value}>
+                    <option value="carthesian">Carthesian</option>
+                    <option value="polar">Polar</option>
+                </select>
                 <label for="displacementX">displacementX</label>
                 <input type="number" step="0.01" bind:value={displacementX.value} />
 
