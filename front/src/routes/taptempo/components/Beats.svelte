@@ -21,6 +21,7 @@
             p5.createCanvas(600, 100);
         };
         p5.draw = () => {
+            // For a better example of custom resize see chordwheel/+page.svelte
             const containerElement = document.getElementById('canvas-container');
             if (containerElement) {
                 const containerWidth = containerElement?.clientWidth || 600;

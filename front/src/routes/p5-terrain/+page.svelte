@@ -4,6 +4,7 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
+    import { drawSimulation, type ColorMode } from './simulation';
 
     let _p5: p5 | undefined = $state();
 
@@ -34,8 +35,10 @@
     let levelsStep = localStore('p5-terrain-levelsStep', 0.05);
     let levelsMargin = localStore('p5-terrain-margin', 0.005);
 
-    type ColorMode = 'white' | 'gradient' | 'quantized-gradient';
     let colorMode = localStore<ColorMode>('p5-terrain-colorMode', 'gradient');
+
+    // Used only for the UI slider, not used in the controls
+    let enableBlur = $state(blurEnabled.value ? 'on' : 'off');
 
     const resetAllControls = () => {
         const controls = [
@@ -58,31 +61,15 @@
         controls.forEach((c) => c.reset());
     };
 
-    const equalWithMargin = (value: number, target: number, margin: number) => {
-        return target - margin <= value && value <= target + margin;
-    };
-
     const sketch: Sketch = (p5) => {
-        p5.setup = () => {
-            _p5 = p5;
-            p5.createCanvas(screenSize, screenSize);
-            p5.noStroke();
-        };
+        function customResizeCanvas() {
+            const minDimension = Math.min(p5.windowWidth, p5.windowHeight);
+            screenSize = Math.floor(minDimension * 0.8);
+            p5.resizeCanvas(screenSize, screenSize);
+            cellSize = screenSize / gridSize.value;
+        }
 
-        p5.draw = () => {
-            const containerElement = document.getElementById('canvas-container');
-            if (containerElement) {
-                const containerHeight = Math.floor(window.innerHeight * 0.8) || 600;
-                const containerWidth = Math.floor(window.innerWidth * 0.8) || 600;
-                screenSize = Math.min(containerWidth, containerHeight);
-                if (p5.width !== screenSize) {
-                    p5.resizeCanvas(screenSize, screenSize);
-                    cellSize = screenSize / gridSize.value;
-                }
-            }
-
-            p5.background(0);
-
+        function updateFPS() {
             const now = Date.now();
             const diff = now - lastTs;
             if (diff > 1000) {
@@ -91,41 +78,37 @@
                 framesSinceLastTs = 0;
             }
             framesSinceLastTs++;
+        }
 
+        p5.windowResized = () => {
+            customResizeCanvas();
+        };
+
+        p5.setup = () => {
+            _p5 = p5;
+            p5.createCanvas(screenSize, screenSize);
+            customResizeCanvas();
+            p5.noStroke();
+        };
+
+        p5.draw = () => {
+            updateFPS();
             t++;
 
-            for (let y = 0; y < gridSize.value; y++) {
-                for (let x = 0; x < gridSize.value; x++) {
-                    const v = p5.noise(
-                        x * noiseFactor.value + t * displacementX.value,
-                        y * noiseFactor.value + t * displacementY.value,
-                        t * displacementZ.value
-                    );
-
-                    for (
-                        let threshold = levelsStart.value;
-                        threshold <= levelsEnd.value;
-                        threshold += levelsStep.value
-                    ) {
-                        if (!equalWithMargin(v, threshold, levelsMargin.value)) {
-                            continue;
-                        }
-
-                        let color = 255;
-                        if (colorMode.value === 'white') {
-                            color = 255;
-                        } else if (colorMode.value === 'gradient') {
-                            color = p5.map(threshold, levelsStart.value, levelsEnd.value, 100, 255);
-                        } else if (colorMode.value === 'quantized-gradient') {
-                            const level = Math.trunc(v * 10) / 10;
-                            color = p5.map(level, levelsStart.value, levelsEnd.value, 100, 255);
-                        }
-
-                        p5.fill(color);
-                        p5.circle(x * cellSize, y * cellSize, cellSize);
-                    }
-                }
-            }
+            drawSimulation(p5, {
+                gridSize: gridSize.value,
+                colorMode: colorMode.value,
+                t: t,
+                cellSize,
+                noiseFactor: noiseFactor.value,
+                displacementX: displacementX.value,
+                displacementY: displacementY.value,
+                displacementZ: displacementZ.value,
+                levelsStart: levelsStart.value,
+                levelsEnd: levelsEnd.value,
+                levelsMargin: levelsMargin.value,
+                levelsStep: levelsStep.value
+            });
 
             if (blurEnabled.value) {
                 p5.filter(p5.BLUR, blurValue.value);
@@ -136,8 +119,6 @@
     onDestroy(() => {
         _p5?.remove();
     });
-
-    let enableBlur = $state(blurEnabled.value ? 'on' : 'off');
 </script>
 
 <div class="container">
@@ -150,9 +131,6 @@
     </div>
 
     <div class="controls">
-        <label for="fps">FPS</label>
-        <span>{fps}</span>
-
         <span>Grid controls</span><span></span>
         <label for="gridSize">gridSize</label>
         <input type="number" step="1" bind:value={gridSize.value} />
