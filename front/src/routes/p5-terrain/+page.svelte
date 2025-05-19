@@ -182,6 +182,8 @@
             <option value="white">White</option>
             <option value="gradient">Gradient</option>
             <option value="quantized-gradient">Quantized Gradient</option>
+            <option value="color-gradient">Color Gradient</option>
+            <option value="color-scaled-gradient">Color scaled Gradient</option>
         </select>
 
         <label for="resetAll">Reset all</label><button onclick={resetAllControls}>Reset</button>

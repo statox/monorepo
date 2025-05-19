@@ -1,6 +1,11 @@
 import type p5 from 'p5';
 
-export type ColorMode = 'white' | 'gradient' | 'quantized-gradient';
+export type ColorMode =
+    | 'white'
+    | 'gradient'
+    | 'quantized-gradient'
+    | 'color-gradient'
+    | 'color-scaled-gradient';
 
 export type SimulationParams = {
     gridSize: number;
@@ -38,6 +43,9 @@ export const drawSimulation = (p5: p5, params: SimulationParams) => {
     } = params;
     p5.background(0);
 
+    const colorHigh = p5.color(255, 0, 0);
+    const colorLow = p5.color(0, 255, 0);
+
     for (let y = 0; y < gridSize; y++) {
         for (let x = 0; x < gridSize; x++) {
             const v = p5.noise(
@@ -51,7 +59,7 @@ export const drawSimulation = (p5: p5, params: SimulationParams) => {
                     continue;
                 }
 
-                let color = 255;
+                let color: p5.Color | number = 255;
                 if (colorMode === 'white') {
                     color = 255;
                 } else if (colorMode === 'gradient') {
@@ -59,9 +67,14 @@ export const drawSimulation = (p5: p5, params: SimulationParams) => {
                 } else if (colorMode === 'quantized-gradient') {
                     const level = Math.trunc(v * 10) / 10;
                     color = p5.map(level, levelsStart, levelsEnd, 100, 255);
+                } else if (colorMode === 'color-gradient') {
+                    color = p5.lerpColor(colorHigh, colorLow, v);
+                } else if (colorMode === 'color-scaled-gradient') {
+                    const scaledLevel = p5.map(v, levelsStart, levelsEnd, 0, 1);
+                    color = p5.lerpColor(colorHigh, colorLow, scaledLevel);
                 }
 
-                p5.fill(color);
+                p5.fill(color as p5.Color);
                 p5.circle(x * cellSize, y * cellSize, cellSize);
             }
         }
