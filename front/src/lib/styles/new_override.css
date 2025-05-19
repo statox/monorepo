@@ -3,6 +3,16 @@ body {
     max-width: 2000px;
 }
 
+@media screen and (max-width: 600px) {
+    /* Experiment started when working on p5-terrain
+     * TODO: Make sure it doesn't break anything
+     */
+    body {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+}
+
 /* Remove underline added by newcss under links */
 a {
     text-decoration: none;
