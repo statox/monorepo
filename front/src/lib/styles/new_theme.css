@@ -38,6 +38,8 @@
     /* Helpers working on both themes */
     --nc-success: #4e8759;
     --nc-info: #528aff;
+    --nc-error-rgb:
+        171, 0, 0; /* Used when I need to add transparency with rgba(var(--nc-error-rgb), 0.1) */
     --nc-error: #ab0000;
     --nc-white: #ffffff;
 }

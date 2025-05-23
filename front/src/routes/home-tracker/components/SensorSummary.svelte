@@ -9,10 +9,17 @@
 
     let { sensor }: Props = $props();
 
+    const isInAlert = sensor.lastAlertDateUnix != null;
+
     let formatedLastLogTimestamp: string | null = $state('NA');
+    let formatedLastAlertTimestamp: string | null = $state('NA');
 
     formatedLastLogTimestamp =
         formatRecordTimestampToRelative(sensor.lastSyncDateUnix) ||
+        '(error getting last timestamp)';
+
+    formatedLastAlertTimestamp =
+        formatRecordTimestampToRelative(sensor.lastAlertDateUnix) ||
         '(error getting last timestamp)';
 
     const handleImageNotFound = (event: Event) => {
@@ -24,7 +31,7 @@
     };
 </script>
 
-<div class="container" style="--sensor-color: {sensor.hexColor}">
+<div class="container" class:is-in-alert={isInAlert} style="--sensor-color: {sensor.hexColor}">
     <img
         class="sensor-icon"
         src={sensor.iconPath}
@@ -42,6 +49,13 @@
                 {formatedLastLogTimestamp}
             </div>
         </div>
+
+        {#if isInAlert}
+            <div class="sensor-alert-notice">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Alert {formatedLastAlertTimestamp}</span>
+            </div>
+        {/if}
 
         <div class="sensor-data-records-container">
             <i class="unit-icon fas fa-thermometer-half"></i>
@@ -77,6 +91,20 @@
                 />
             </div>
         {/if}
+
+        {#if sensor.lastLogData.batteryPercent}
+            <div class="sensor-data-records-container internal-data">
+                <i
+                    class="power-icon fas fa-bolt"
+                    class:low-power-icon={sensor.lastLogData.batteryPercent < 10}
+                ></i>
+                <ValueWithUnit
+                    value={sensor.lastLogData.batteryPercent}
+                    unitString="%"
+                    precision={0}
+                />
+            </div>
+        {/if}
     </div>
 </div>
 
@@ -93,6 +121,14 @@
         gap: 1em;
 
         padding: 0.5em;
+    }
+
+    .is-in-alert {
+        background-color: rgba(var(--nc-error-rgb), 0.1);
+    }
+
+    .sensor-alert-notice {
+        color: var(--nc-error);
     }
 
     .sensor-icon {
@@ -135,5 +171,13 @@
 
     .unit-icon {
         font-size: large;
+    }
+
+    .power-icon {
+        color: #cecb18;
+    }
+
+    .low-power-icon {
+        color: var(--nc-error);
     }
 </style>

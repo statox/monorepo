@@ -14,6 +14,7 @@ export interface DashboardSensorState {
     iconPath: string;
     hexColor: string;
     lastSyncDateUnix: number;
+    lastAlertDateUnix: number;
     lastLogData: SensorLogData;
 }
 
