@@ -42,7 +42,7 @@
         "prettier": "^3.5.3",
         "prettier-plugin-svelte": "^3.4.0",
         "superagent": "^10.2.1",
-        "svelte": "^5.33.13",
+        "svelte": "^5.33.18",
         "svelte-check": "^4.2.1",
         "svelte-jsoneditor": "^3.5.0",
         "svelte-markdown": "^0.4.1",
