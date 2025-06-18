@@ -4,7 +4,6 @@ export interface SensorState {
     sensorName: string;
     iconPath: string;
     rgbColor: { r: number; g: number; b: number };
-    lastLogTimestamp: number;
     lastLogData: SensorLogData;
 }
 
@@ -16,6 +15,7 @@ export interface DashboardSensorState {
     lastSyncDateUnix: number;
     lastAlertDateUnix: number;
     lastLogData: SensorLogData;
+    oneHourAgoLogData: SensorLogData;
 }
 
 export interface HomeTrackerSensorsResponse {
@@ -53,6 +53,7 @@ export interface HomeTrackerHistogramData {
 }
 
 export interface SensorLogData {
+    timestamp: number;
     sensorName: string;
 
     batteryCharge?: number;

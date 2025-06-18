@@ -2,6 +2,7 @@
     import { ValueWithUnit } from '$lib/components/ValueWithUnit';
     import { formatRecordTimestampToRelative } from '$lib/HomeTracker';
     import type { DashboardSensorState } from '$lib/HomeTracker/types';
+    import DataTrend from './DataTrend.svelte';
 
     interface Props {
         sensor: DashboardSensorState;
@@ -57,12 +58,24 @@
             </div>
         {/if}
 
-        <div class="sensor-data-records-container">
+        <div class="sensor-data-records-container-with-trend">
             <i class="unit-icon fas fa-thermometer-half"></i>
             <ValueWithUnit value={sensor.lastLogData.tempCelsius} unitString="°C" precision={1} />
+            <DataTrend
+                oldValue={sensor.oneHourAgoLogData.tempCelsius || 0}
+                newValue={sensor.lastLogData.tempCelsius || 0}
+                oldTimestamp={sensor.oneHourAgoLogData.timestamp}
+                newTimestamp={sensor.lastLogData.timestamp}
+            />
 
             <i class="unit-icon fas fa-tint"></i>
             <ValueWithUnit value={sensor.lastLogData.humidity} unitString="%" precision={0} />
+            <DataTrend
+                oldValue={sensor.oneHourAgoLogData.humidity || 0}
+                newValue={sensor.lastLogData.humidity || 0}
+                oldTimestamp={sensor.oneHourAgoLogData.timestamp}
+                newTimestamp={sensor.lastLogData.timestamp}
+            />
 
             {#if sensor.lastLogData.pressurehPa}
                 <i class="unit-icon fas fa-tachometer-alt"></i>
@@ -71,6 +84,7 @@
                     unitString="hPa"
                     precision={0}
                 />
+                <i></i>
             {/if}
         </div>
 
@@ -162,6 +176,13 @@
         font-size: x-large;
 
         grid-template-columns: 2ch repeat(2, minmax(min-content, max-content));
+        align-items: baseline;
+    }
+    .sensor-data-records-container-with-trend {
+        display: grid;
+        font-size: x-large;
+
+        grid-template-columns: 2ch repeat(2, minmax(min-content, max-content)) 1fr;
         align-items: baseline;
     }
     .internal-data {
