@@ -30,7 +30,7 @@
         "@types/superagent": "^8.1.9",
         "chart.js": "^4.5.0",
         "eslint": "^9.29.0",
-        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-svelte": "^3.9.2",
         "globals": "^16.2.0",
         "highlight.js": "^11.11.1",
