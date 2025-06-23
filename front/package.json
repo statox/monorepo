@@ -43,7 +43,7 @@
         "prettier-plugin-svelte": "^3.4.0",
         "superagent": "^10.2.1",
         "svelte": "^5.34.7",
-        "svelte-check": "^4.2.1",
+        "svelte-check": "^4.2.2",
         "svelte-jsoneditor": "^3.5.0",
         "svelte-markdown": "^0.4.1",
         "svelte-modals": "^2.0.1",
