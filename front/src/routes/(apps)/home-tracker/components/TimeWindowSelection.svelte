@@ -1,10 +1,12 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
+    import { user } from '$lib/auth/service';
     import { selectedTimeWindow } from '../store';
+    import type { TimeWindow } from '$lib/HomeTracker';
 
     const dispatch = createEventDispatcher();
 
-    const options = [
+    const authenticatedOptions = [
         { name: '30 minutes', value: '30m' },
         { name: '3 hours', value: '3h' },
         { name: '12 hours', value: '12h' },
@@ -17,6 +19,18 @@
         { name: '6 month', value: '6M' },
         { name: 'All time', value: 'alltime' }
     ];
+
+    const unauthenticatedOptions = [
+        { name: '30 minutes', value: '30m' },
+        { name: '3 hours', value: '3h' },
+        { name: '12 hours', value: '12h' },
+        { name: '1 day', value: '1d' },
+        { name: '3 days', value: '3d' },
+        { name: '7 days', value: '7d' },
+        { name: '2 weeks', value: '2w' }
+    ];
+
+    const options = $user ? authenticatedOptions : unauthenticatedOptions;
 </script>
 
 <div class="time-window-select">

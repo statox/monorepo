@@ -52,15 +52,17 @@ export class ApiError extends Error {
 interface PostOptions {
     path: string;
     data: unknown;
+    isUnauthenticatedCall?: true;
 }
 export const requestAPIPost = async <ResponseType>(options: PostOptions): Promise<ResponseType> => {
-    const { path, data } = options;
+    const { path, data, isUnauthenticatedCall } = options;
 
     if (!path.length || path[0] !== '/') {
         throw new Error('Malformed path');
     }
 
-    const token = await getAccessToken();
+
+    const token = isUnauthenticatedCall ? '' : await getAccessToken();
 
     const body = JSON.stringify(data);
 
@@ -69,7 +71,7 @@ export const requestAPIPost = async <ResponseType>(options: PostOptions): Promis
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: isUnauthenticatedCall ? '' : `Bearer ${token}`
         },
         body
     });

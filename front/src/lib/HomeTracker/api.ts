@@ -7,6 +7,7 @@ import type {
     PressureHistoryItem,
     SensorState,
     TimeWindow,
+    TimeWindowPublic,
     WeatherForecast
 } from './types';
 
@@ -14,6 +15,14 @@ export const getHistogramData = async (timeWindow: TimeWindow) => {
     return await requestAPIPost<HomeTrackerLatestResponse>({
         path: '/homeTracker/histogramData',
         data: { timeWindow }
+    });
+};
+
+export const getHistogramDataPublic = async (timeWindow: TimeWindowPublic) => {
+    return await requestAPIPost<HomeTrackerLatestResponse>({
+        path: '/homeTracker/histogramDataPublic',
+        data: { timeWindow },
+        isUnauthenticatedCall: true
     });
 };
 

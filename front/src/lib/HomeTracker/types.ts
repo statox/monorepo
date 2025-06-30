@@ -83,6 +83,15 @@ export type TimeWindow =
     | '6M'
     | 'alltime';
 
+export type TimeWindowPublic =
+    | '30m'
+    | '3h'
+    | '12h'
+    | '1d'
+    | '3d'
+    | '7d'
+    | '2w';
+
 type Trend = 'falling' | 'rising' | 'steady';
 export interface WeatherForecast {
     pressureTrend: Trend;
