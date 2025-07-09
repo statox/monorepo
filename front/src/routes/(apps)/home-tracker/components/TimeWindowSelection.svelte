@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import { user } from '$lib/auth/service';
     import { selectedTimeWindow } from '../store';
-    import type { TimeWindow } from '$lib/HomeTracker';
 
     const dispatch = createEventDispatcher();
 

@@ -61,7 +61,6 @@ export const requestAPIPost = async <ResponseType>(options: PostOptions): Promis
         throw new Error('Malformed path');
     }
 
-
     const token = isUnauthenticatedCall ? '' : await getAccessToken();
 
     const body = JSON.stringify(data);
