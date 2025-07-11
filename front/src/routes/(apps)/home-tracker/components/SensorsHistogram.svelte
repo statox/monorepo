@@ -3,7 +3,8 @@
         getAllSensorsWithLatestLog,
         getHistogramData,
         getHistogramDataPublic,
-        type TimeWindow
+        type TimeWindow,
+        type TimeWindowPublic
     } from '$lib/HomeTracker';
     import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
@@ -22,8 +23,10 @@
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
-        const histogramDataGetter = $user ? getHistogramData : getHistogramDataPublic;
-        const histogramData = await histogramDataGetter($selectedTimeWindow);
+        const histogramDataGetter = $user
+            ? () => getHistogramData($selectedTimeWindow)
+            : () => getHistogramDataPublic($selectedTimeWindow as TimeWindowPublic);
+        const histogramData = await histogramDataGetter();
         const sensorsDetails = await getAllSensorsWithLatestLog();
         return { histogramData, sensorsDetails };
     };
