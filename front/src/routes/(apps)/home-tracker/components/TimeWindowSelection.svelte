@@ -33,32 +33,24 @@
 </script>
 
 <div class="time-window-select">
-    <span class="section-title">Time window</span>
-    <div>
-        <label for="time-window-select" class="far fa-calendar-alt"></label>
-        <select
-            id="time-window-select"
-            bind:value={$selectedTimeWindow}
-            onchange={() => dispatch('select', $selectedTimeWindow)}
-        >
-            {#each options as option}
-                <option value={option.value}>{option.name}</option>
-            {/each}
-        </select>
-    </div>
+    <label for="time-window-select" class="far fa-calendar-alt"></label>
+    <select
+        id="time-window-select"
+        bind:value={$selectedTimeWindow}
+        onchange={() => dispatch('select', $selectedTimeWindow)}
+    >
+        {#each options as option}
+            <option value={option.value}>{option.name}</option>
+        {/each}
+    </select>
 </div>
 
 <style>
     .time-window-select {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: baseline;
-        gap: 20px;
-    }
-    .section-title {
-        color: var(--nc-tx-1);
-        font-weight: bold;
-        font-size: x-large;
+        justify-content: stretch;
+        align-items: end;
+        gap: 5px;
     }
 </style>

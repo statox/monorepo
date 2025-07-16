@@ -38,8 +38,11 @@
     });
 </script>
 
-<h1>History</h1>
-<TimeWindowSelection on:select={(event) => (apiData = refreshData(event.detail))} />
+<h1 class="title">
+    <span>History</span>
+    <TimeWindowSelection on:select={(event) => (apiData = refreshData(event.detail))} />
+</h1>
+
 {#await apiData}
     <p>Loading history</p>
 {:then { histogramData, sensorsDetails }}
@@ -62,3 +65,11 @@
         }}
     />
 {/await}
+
+<style>
+    .title {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+</style>
