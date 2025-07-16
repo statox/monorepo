@@ -4,11 +4,11 @@
         formatRecordTimestampToHumanWithSeconds,
         formatRecordTimestampToRelative
     } from '$lib/HomeTracker';
-    import type { DashboardSensorState } from '$lib/HomeTracker/types';
+    import type { SensorMetadata } from '$lib/HomeTracker/types';
     import DataTrend from './DataTrend.svelte';
 
     interface Props {
-        sensor: DashboardSensorState;
+        sensor: SensorMetadata;
     }
 
     let { sensor }: Props = $props();

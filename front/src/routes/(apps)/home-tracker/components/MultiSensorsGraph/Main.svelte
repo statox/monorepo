@@ -14,7 +14,7 @@
     import type {
         HomeTrackerHistogramData,
         HomeTrackerTimeData,
-        DashboardSensorState
+        SensorMetadata
     } from '$lib/HomeTracker/types';
     import { formatRecordTimestampToHuman } from '$lib/HomeTracker/utils';
     import type { GraphType } from './types';
@@ -32,7 +32,7 @@
     );
 
     interface Props {
-        sensorsData: DashboardSensorState[];
+        sensorsData: SensorMetadata[];
         sensorNames: string[];
         histogramData: HomeTrackerHistogramData;
         graphType: GraphType;

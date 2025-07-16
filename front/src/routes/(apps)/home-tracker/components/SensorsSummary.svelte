@@ -1,12 +1,12 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
-    import { getSensorsDataForDashboard, type TimeWindow } from '$lib/HomeTracker';
+    import { getSensorsMetadata, type TimeWindow } from '$lib/HomeTracker';
     import SensorSummary from './SensorSummary.svelte';
     import { selectedTimeWindow } from '../store';
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
-        const sensorsDetails = await getSensorsDataForDashboard();
+        const sensorsDetails = await getSensorsMetadata();
         return sensorsDetails;
     };
 

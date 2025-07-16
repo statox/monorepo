@@ -1,6 +1,6 @@
 import { requestAPIGet, requestAPIPost } from '$lib/api';
 import type {
-    DashboardSensorState,
+    SensorMetadata,
     Ephemerides,
     HomeTrackerLatestResponse,
     PressureHistoryItem,
@@ -41,15 +41,15 @@ export const getEphemeridesAPI = async () => {
     return ephemerides;
 };
 
-export const getSensorsDataForDashboard = async () => {
+export const getSensorsMetadata = async () => {
     const { sensors } = await requestAPIGet<{
-        sensors: DashboardSensorState[];
+        sensors: SensorMetadata[];
     }>({
         path: '/homeTracker/getSensorsDataForDashboard'
     });
 
     // TODO Have this info returned by the API (and probably have the API returning the images themselves too)
-    const enrichedSensors = sensors.map((sensor: DashboardSensorState) => {
+    const enrichedSensors = sensors.map((sensor: SensorMetadata) => {
         const { sensorName } = sensor;
         return {
             ...sensor,

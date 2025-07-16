@@ -1,6 +1,6 @@
 import type { LunarPhase } from 'lunarphase-js';
 
-export interface DashboardSensorState {
+export interface SensorMetadata {
     sensorName: string;
     iconPath: string;
     hexColor: string;

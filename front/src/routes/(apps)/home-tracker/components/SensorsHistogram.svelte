@@ -1,6 +1,6 @@
 <script lang="ts">
     import {
-        getSensorsDataForDashboard,
+        getSensorsMetadata,
         getHistogramData,
         getHistogramDataPublic,
         type TimeWindow,
@@ -27,7 +27,7 @@
             ? () => getHistogramData($selectedTimeWindow)
             : () => getHistogramDataPublic($selectedTimeWindow as TimeWindowPublic);
         const histogramData = await histogramDataGetter();
-        const sensorsDetails = await getSensorsDataForDashboard();
+        const sensorsDetails = await getSensorsMetadata();
         return { histogramData, sensorsDetails };
     };
 
