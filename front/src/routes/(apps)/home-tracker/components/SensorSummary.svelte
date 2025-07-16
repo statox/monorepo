@@ -1,6 +1,9 @@
 <script lang="ts">
     import { ValueWithUnit } from '$lib/components/ValueWithUnit';
-    import { formatRecordTimestampToRelative } from '$lib/HomeTracker';
+    import {
+        formatRecordTimestampToHumanWithSeconds,
+        formatRecordTimestampToRelative
+    } from '$lib/HomeTracker';
     import type { DashboardSensorState } from '$lib/HomeTracker/types';
     import DataTrend from './DataTrend.svelte';
 
@@ -12,16 +15,21 @@
 
     const isInAlert = sensor.lastAlertDateUnix != null;
 
-    let formatedLastLogTimestamp: string | null = $state('NA');
-    let formatedLastAlertTimestamp: string | null = $state('NA');
+    let timestampDisplayFormatRelative = $state(true);
+    let formatedLastLogTimestamp = $state('NA');
+    let formatedLastAlertTimestamp = $state('NA');
 
-    formatedLastLogTimestamp =
-        formatRecordTimestampToRelative(sensor.lastSyncDateUnix) ||
-        '(error getting last timestamp)';
+    $effect(() => {
+        const formatFunction = timestampDisplayFormatRelative
+            ? formatRecordTimestampToRelative
+            : formatRecordTimestampToHumanWithSeconds;
 
-    formatedLastAlertTimestamp =
-        formatRecordTimestampToRelative(sensor.lastAlertDateUnix) ||
-        '(error getting last timestamp)';
+        formatedLastLogTimestamp =
+            formatFunction(sensor.lastSyncDateUnix) || '(error getting last timestamp)';
+
+        formatedLastAlertTimestamp =
+            formatFunction(sensor.lastAlertDateUnix) || '(error getting last timestamp)';
+    });
 
     const handleImageNotFound = (event: Event) => {
         if (!event?.target) {
@@ -46,9 +54,12 @@
             <div class="sensor-name">
                 {sensor.sensorName}
             </div>
-            <div>
+            <button
+                class="sensor-last-sync-timestamp"
+                onclick={() => (timestampDisplayFormatRelative = !timestampDisplayFormatRelative)}
+            >
                 {formatedLastLogTimestamp}
-            </div>
+            </button>
         </div>
 
         {#if isInAlert}
@@ -169,6 +180,16 @@
     .sensor-name {
         color: var(--sensor-color);
         font-size: xx-large;
+    }
+
+    .sensor-last-sync-timestamp,
+    .sensor-last-sync-timestamp:hover {
+        background-color: transparent;
+        color: var(--nc-tx-2);
+
+        display: flex;
+        justify-content: end;
+        flex-grow: 1;
     }
 
     .sensor-data-records-container {

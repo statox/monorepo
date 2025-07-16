@@ -41,6 +41,21 @@ export const formatRecordTimestampToHuman = (ts: number) => {
     }
 };
 
+export const formatRecordTimestampToHumanWithSeconds = (ts: number) => {
+    try {
+        const time = parseRecordTimestamp(ts);
+        if (time.hasSame(DateTime.now(), 'day')) {
+            return time.toFormat('HH:mm:ss');
+        }
+
+        return time.toFormat('dd/MM HH:mm:ss');
+    } catch (error) {
+        console.log('Error parsing TS', ts);
+        console.error(error);
+        return;
+    }
+};
+
 export const formatRecordTimestampToRelative = (ts: number) => {
     try {
         const time = parseRecordTimestamp(ts);
