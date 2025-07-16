@@ -103,6 +103,11 @@
     };
 
     const datasets = sensorNames.reduce((datasets, sensor) => {
+        const offset =
+            metricProperty === 'tempCelsius'
+                ? sensorsData.find((sensorData) => sensorData.sensorName === sensor)?.tempOffset
+                : 0;
+
         const data = Object.keys(histogramData)
             .filter((ts) => {
                 return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[
@@ -112,9 +117,10 @@
             .map((ts) => {
                 return {
                     x: ts,
-                    y: histogramData[ts as unknown as keyof HomeTrackerHistogramData][
-                        metricProperty
-                    ]?.[sensor]
+                    y:
+                        histogramData[ts as unknown as keyof HomeTrackerHistogramData][
+                            metricProperty
+                        ]?.[sensor] + offset
                 };
             });
 

@@ -4,6 +4,7 @@ export interface SensorMetadata {
     sensorName: string;
     iconPath: string;
     hexColor: string;
+    tempOffset: number;
     lastSyncDateUnix: number;
     lastAlertDateUnix: number;
     lastLogData: SensorLogData;
