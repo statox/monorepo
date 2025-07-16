@@ -3,9 +3,7 @@ import type {
     DashboardSensorState,
     Ephemerides,
     HomeTrackerLatestResponse,
-    HomeTrackerSensorsResponse,
     PressureHistoryItem,
-    SensorState,
     TimeWindow,
     TimeWindowPublic,
     WeatherForecast
@@ -43,24 +41,6 @@ export const getEphemeridesAPI = async () => {
     return ephemerides;
 };
 
-export const getAllSensorsWithLatestLog = async () => {
-    const { sensors } = await requestAPIGet<HomeTrackerSensorsResponse>({
-        path: '/homeTracker/allSensorsWithLatestLog'
-    });
-
-    // TODO Have this info returned by the API (and probably have the API returning the images themselves too)
-    const enrichedSensors = sensors.map((sensor: SensorState) => {
-        const { sensorName } = sensor;
-        return {
-            ...sensor,
-            iconPath: `/hometracker/sensors/icon_${sensorName}.png`
-        };
-    });
-
-    return { sensors: enrichedSensors };
-};
-
-// This call should replace getAllSensorsWithLatestLog once everything is migrated
 export const getSensorsDataForDashboard = async () => {
     const { sensors } = await requestAPIGet<{
         sensors: DashboardSensorState[];

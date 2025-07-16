@@ -1,13 +1,5 @@
 import type { LunarPhase } from 'lunarphase-js';
 
-export interface SensorState {
-    sensorName: string;
-    iconPath: string;
-    rgbColor: { r: number; g: number; b: number };
-    lastLogData: SensorLogData;
-}
-
-// This should replace SensorState once calls to getAllSensorsWithLatestLog are completley removed
 export interface DashboardSensorState {
     sensorName: string;
     iconPath: string;
@@ -16,10 +8,6 @@ export interface DashboardSensorState {
     lastAlertDateUnix: number;
     lastLogData: SensorLogData;
     oneHourAgoLogData: SensorLogData;
-}
-
-export interface HomeTrackerSensorsResponse {
-    sensors: SensorState[];
 }
 
 export interface HomeTrackerLatestResponse {

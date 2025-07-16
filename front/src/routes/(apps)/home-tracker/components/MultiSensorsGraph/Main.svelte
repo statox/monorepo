@@ -14,7 +14,7 @@
     import type {
         HomeTrackerHistogramData,
         HomeTrackerTimeData,
-        SensorState
+        DashboardSensorState
     } from '$lib/HomeTracker/types';
     import { formatRecordTimestampToHuman } from '$lib/HomeTracker/utils';
     import type { GraphType } from './types';
@@ -32,7 +32,7 @@
     );
 
     interface Props {
-        sensorsData: SensorState[];
+        sensorsData: DashboardSensorState[];
         sensorNames: string[];
         histogramData: HomeTrackerHistogramData;
         graphType: GraphType;
@@ -73,20 +73,17 @@
 
     type AlphaMode = 'dark' | 'normal' | 'light';
     const getColorString = (sensorName: string, alphaMode: AlphaMode) => {
-        const alphaConfig: Record<AlphaMode, number> = {
-            dark: 0.3,
-            normal: 0.5,
-            light: 0.7
+        const alphaConfig: Record<AlphaMode, string> = {
+            dark: '4D',
+            normal: '80',
+            light: 'B3'
         };
 
-        const color = sensorsData.find((sensor) => sensor.sensorName === sensorName)?.rgbColor || {
-            r: 20,
-            g: 20,
-            b: 20
-        };
+        const color =
+            sensorsData.find((sensor) => sensor.sensorName === sensorName)?.hexColor || '#141414';
 
         const alpha = alphaConfig[alphaMode];
-        return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
+        return color + alpha;
     };
 
     const commonGraphSettings = {
