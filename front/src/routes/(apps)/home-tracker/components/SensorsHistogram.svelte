@@ -32,6 +32,10 @@
     };
 
     let apiData = $state(refreshData($selectedTimeWindow));
+
+    document.addEventListener('HomeTracker-RefreshData', () => {
+        apiData = refreshData($selectedTimeWindow);
+    });
 </script>
 
 <h1>History</h1>
