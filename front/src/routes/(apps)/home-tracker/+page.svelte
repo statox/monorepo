@@ -29,8 +29,8 @@
     </div>
 
     <SensorsSummary />
-    <WeatherForecast />
     <SensorsHistogram />
+    <WeatherForecast />
 </div>
 
 <style>
