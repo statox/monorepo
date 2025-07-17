@@ -7,32 +7,56 @@
     import WeatherForecast from './components/WeatherForecast.svelte';
     import { formatRecordTimestampToHuman } from '$lib/HomeTracker';
     import { ButtonSwitch } from '$lib/components/ButtonSwitch';
+    import { ProgressIndicatorCircular } from '$lib/components/ProgressIndicatorCircular';
+    import { onDestroy } from 'svelte';
 
     pageNameStore.set('Home Tracker');
 
     let enableAutoRefresh = $state(false);
+    let refreshProgress = $state(0);
     // TODO find way to properly type interval
     let autoRefreshInterval: any | null = null;
     let lastRefreshDate: DateTime = $state(DateTime.now());
+    let nextRefreshDate: DateTime | null = $state(null);
+
+    const AUTO_REFRESH_INTERVAL = 1000 * 60 * 1;
 
     const triggerRefreshInChildren = () => {
         const event = new CustomEvent('HomeTracker-RefreshData');
         document.dispatchEvent(event);
         lastRefreshDate = DateTime.now();
+        nextRefreshDate = lastRefreshDate.plus({ milliseconds: AUTO_REFRESH_INTERVAL });
     };
+
     const toggleAutoRefresh = () => {
         enableAutoRefresh = !enableAutoRefresh;
-
-        if (enableAutoRefresh) {
-            const AUTO_REFRESH_INTERVAL = 1000 * 60 * 5;
-            autoRefreshInterval = setInterval(triggerRefreshInChildren, AUTO_REFRESH_INTERVAL);
-            return;
-        }
 
         if (autoRefreshInterval !== null) {
             clearInterval(autoRefreshInterval);
         }
+
+        if (enableAutoRefresh) {
+            triggerRefreshInChildren();
+
+            autoRefreshInterval = setInterval(() => {
+                const nowMillis = DateTime.now().toMillis();
+                const nextRefreshMillis = nextRefreshDate?.toMillis() || 0;
+
+                if (nextRefreshMillis < nowMillis) {
+                    triggerRefreshInChildren();
+                }
+
+                refreshProgress = (nextRefreshMillis - nowMillis) / AUTO_REFRESH_INTERVAL;
+            }, 700);
+            return;
+        }
     };
+
+    onDestroy(() => {
+        if (autoRefreshInterval !== null) {
+            clearInterval(autoRefreshInterval);
+        }
+    });
 </script>
 
 <HeadIOS title="Home Tracker" description="Recording of my sensors" iconPath="/hometracker.png" />
@@ -46,12 +70,17 @@
                 <i class="fas fa-sync-alt"></i>
             </button>
         </div>
-        <ButtonSwitch
-            value={enableAutoRefresh.toString()}
-            label="Auto refresh"
-            on:change={toggleAutoRefresh}
-            design="slider"
-        />
+        <div class="auto-refresh-controls">
+            <ButtonSwitch
+                value={enableAutoRefresh.toString()}
+                label="Auto refresh"
+                on:change={toggleAutoRefresh}
+                design="slider"
+            />
+            {#if enableAutoRefresh}
+                <ProgressIndicatorCircular progress={refreshProgress} />
+            {/if}
+        </div>
     </div>
 
     <SensorsSummary />
@@ -69,5 +98,10 @@
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
+    }
+    .auto-refresh-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
     }
 </style>
