@@ -6,6 +6,8 @@
     import type { SensorMetadata } from '$lib/HomeTracker/types';
     import Metadata from './Metadata.svelte';
     import Readings from './Readings.svelte';
+    import { DateTime } from 'luxon';
+    import { ProgressIndicatorCircular } from '$lib/components/ProgressIndicatorCircular';
 
     interface Props {
         sensor: SensorMetadata;
@@ -40,6 +42,10 @@
             formatFunction(sensor.lastAlertDateUnix) || '(error getting last timestamp)';
     });
 
+    const expectedNextLogTimestamp = sensor.lastSyncDateUnix + sensor.sleepTimeSec;
+    const nowSec = DateTime.now().toSeconds();
+    const nextLogProgress = (expectedNextLogTimestamp - nowSec) / sensor.sleepTimeSec;
+
     const handleImageNotFound = (event: Event) => {
         if (!event?.target) {
             return;
@@ -71,6 +77,8 @@
                 onclick={() => (timestampDisplayFormatRelative = !timestampDisplayFormatRelative)}
             >
                 {formatedLastLogTimestamp}
+                &nbsp;
+                <ProgressIndicatorCircular progress={nextLogProgress} />
             </button>
         </div>
 
