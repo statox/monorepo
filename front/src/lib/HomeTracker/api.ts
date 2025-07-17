@@ -59,3 +59,12 @@ export const getSensorsMetadata = async () => {
 
     return { sensors: enrichedSensors };
 };
+
+export const updateSensorMetadata = (params: {
+    sensorName: string;
+    hexColor: string;
+    tempOffset: number;
+    sleepTimeSec: number;
+}) => {
+    return requestAPIPost<void>({ path: '/homeTracker/updateSensorMetadata', data: params });
+};

@@ -1,6 +1,8 @@
 <script lang="ts">
     import { user } from '$lib/auth/service';
+    import { toast } from '$lib/components/Toast';
     import type { SensorMetadata } from '$lib/HomeTracker';
+    import { updateSensorMetadata } from '$lib/HomeTracker';
 
     interface Props {
         sensor: SensorMetadata;
@@ -10,6 +12,27 @@
     let hexColor = $state(sensor.hexColor);
     let tempOffset = $state(sensor.tempOffset);
     let sleepTimeSec = $state(sensor.sleepTimeSec);
+
+    const updateMetadata = async () => {
+        try {
+            await updateSensorMetadata({
+                sensorName: sensor.sensorName,
+                hexColor,
+                tempOffset,
+                sleepTimeSec
+            });
+
+            toast.push('<i class="fas fa-check"></i> Updated');
+        } catch (error) {
+            let errorMessage = (error as Error).message;
+            const message = `<strong>Update failed</strong><br/> ${errorMessage}`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
+        }
+    };
 </script>
 
 <div class="container">
@@ -27,7 +50,7 @@
 </div>
 
 {#if $user}
-    <button class="update-button">Update</button>
+    <button class="update-button" onclick={updateMetadata}>Update</button>
 {/if}
 
 <style>
