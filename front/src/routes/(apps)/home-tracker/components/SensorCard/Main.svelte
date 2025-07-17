@@ -7,7 +7,8 @@
     import Metadata from './Metadata.svelte';
     import Readings from './Readings.svelte';
     import { DateTime } from 'luxon';
-    import { ProgressIndicatorCircular } from '$lib/components/ProgressIndicatorCircular';
+    import { onDestroy } from 'svelte';
+    import { ProgressIndicatorDisk } from '$lib/components/ProgressIndicatorDisk';
 
     interface Props {
         sensor: SensorMetadata;
@@ -30,7 +31,14 @@
     let formatedLastLogTimestamp = $state('NA');
     let formatedLastAlertTimestamp = $state('NA');
 
-    $effect(() => {
+    const expectedNextLogTimestamp = sensor.lastSyncDateUnix + sensor.sleepTimeSec;
+    let nowSec = DateTime.now().toSeconds();
+    let nextLogProgress = $state(1 - (expectedNextLogTimestamp - nowSec) / sensor.sleepTimeSec);
+
+    let nextLogProgressInterval = setInterval(() => {
+        nowSec = DateTime.now().toSeconds();
+        nextLogProgress = 1 - (expectedNextLogTimestamp - nowSec) / sensor.sleepTimeSec;
+
         const formatFunction = timestampDisplayFormatRelative
             ? formatRecordTimestampToRelative
             : formatRecordTimestampToHumanWithSeconds;
@@ -40,11 +48,13 @@
 
         formatedLastAlertTimestamp =
             formatFunction(sensor.lastAlertDateUnix) || '(error getting last timestamp)';
-    });
+    }, 500);
 
-    const expectedNextLogTimestamp = sensor.lastSyncDateUnix + sensor.sleepTimeSec;
-    const nowSec = DateTime.now().toSeconds();
-    const nextLogProgress = (expectedNextLogTimestamp - nowSec) / sensor.sleepTimeSec;
+    onDestroy(() => {
+        if (nextLogProgressInterval !== null) {
+            clearInterval(nextLogProgressInterval);
+        }
+    });
 
     const handleImageNotFound = (event: Event) => {
         if (!event?.target) {
@@ -78,7 +88,7 @@
             >
                 {formatedLastLogTimestamp}
                 &nbsp;
-                <ProgressIndicatorCircular progress={nextLogProgress} />
+                <ProgressIndicatorDisk progress={nextLogProgress} />
             </button>
         </div>
 
