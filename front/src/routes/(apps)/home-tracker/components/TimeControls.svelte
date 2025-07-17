@@ -39,7 +39,7 @@
                     triggerRefreshInChildren();
                 }
 
-                refreshProgress = (nextRefreshMillis - nowMillis) / AUTO_REFRESH_INTERVAL;
+                refreshProgress = 1 - (nextRefreshMillis - nowMillis) / AUTO_REFRESH_INTERVAL;
             }, 700);
             return;
         }
