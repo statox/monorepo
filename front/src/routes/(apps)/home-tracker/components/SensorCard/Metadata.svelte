@@ -24,6 +24,9 @@
             });
 
             toast.push('<i class="fas fa-check"></i> Updated');
+
+            const event = new CustomEvent('HomeTracker-RefreshData');
+            document.dispatchEvent(event);
         } catch (error) {
             let errorMessage = (error as Error).message;
             const message = `<strong>Update failed</strong><br/> ${errorMessage}`;
