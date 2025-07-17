@@ -21,3 +21,14 @@
     }
 </style>
 ```
+
+When a variable is defined in a CSS file and needs to be accessed in a svelte component:
+
+```
+let textColor = $state("#000000"); // Default in case we can't get it from the CSS
+
+onMount(() => {
+    const bodyStyle = getComputedStyle(document.body);
+    textColor = bodyStyle.getPropertyValue('--nc-tx-1');
+});
+```
