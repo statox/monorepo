@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     /* This is a simple circular progress indicator meant to be used next to
      * some text. The size of the component is customized with the font-size
      * of its parent.
@@ -16,7 +16,14 @@
      *   in markup:
      *   <ProgressIndicatorCircular {progress} />
      */
-    let { progress } = $props(); // progress value [0-1]
+    interface Props {
+        progress: number; // progress value [0-1]
+        displayValue?: boolean; // Display the progress as a number
+    }
+    let { progress, displayValue }: Props = $props();
+
+    progress = Math.min(progress, 1);
+    progress = Math.max(0, progress);
 
     const radius = 14;
     const circumference = 2 * Math.PI * radius;
@@ -43,3 +50,7 @@
         stroke-dashoffset={offset}
     />
 </svg>
+
+{#if displayValue}
+    {progress.toFixed(2)}
+{/if}
