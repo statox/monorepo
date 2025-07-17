@@ -54,8 +54,8 @@
         <img
             class="sensor-icon-img"
             src={sensor.iconPath}
-            title="{sensor.sensorName} icon"
-            alt="{sensor.sensorName} icon"
+            title="Edit settings for {sensor.sensorName}"
+            alt="Edit settings for {sensor.sensorName}"
             onerror={handleImageNotFound}
         />
     </button>
@@ -67,6 +67,7 @@
             </div>
             <button
                 class="sensor-last-sync-timestamp"
+                title="Change date format"
                 onclick={() => (timestampDisplayFormatRelative = !timestampDisplayFormatRelative)}
             >
                 {formatedLastLogTimestamp}

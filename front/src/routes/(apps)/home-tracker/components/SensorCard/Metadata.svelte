@@ -3,6 +3,7 @@
     import { toast } from '$lib/components/Toast';
     import type { SensorMetadata } from '$lib/HomeTracker';
     import { updateSensorMetadata } from '$lib/HomeTracker';
+    import { Duration } from 'luxon';
 
     interface Props {
         sensor: SensorMetadata;
@@ -46,7 +47,10 @@
     <input disabled={!$user} bind:value={tempOffset} type="number" />
 
     <div>Sleep time (s)</div>
-    <input disabled={!$user} bind:value={sleepTimeSec} type="number" />
+    <span>
+        <input disabled={!$user} bind:value={sleepTimeSec} type="number" />
+        {Duration.fromMillis(sleepTimeSec * 1000).toFormat("mm'm'ss's'")}
+    </span>
 </div>
 
 {#if $user}
