@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
     import { getSensorsMetadata, type TimeWindow } from '$lib/HomeTracker';
-    import SensorSummary from './SensorSummary.svelte';
+    import SensorCard from './SensorCard/Main.svelte';
     import { selectedTimeWindow } from '../store';
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
@@ -22,7 +22,7 @@
         <p>Loading sensors data</p>
     {:then sensordDetails}
         {#each sensordDetails.sensors as sensor}
-            <SensorSummary {sensor} />
+            <SensorCard {sensor} />
         {/each}
     {:catch error}
         <Notice
