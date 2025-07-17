@@ -20,8 +20,8 @@ export const formatRecordTimestampToMillis = (ts: number) => {
         const time = parseRecordTimestamp(ts);
         return time.toMillis();
     } catch (error) {
-        console.log('Error parsing TS', ts);
-        console.error(error);
+        // console.log('Error parsing TS', ts);
+        // console.error(error);
         return;
     }
 };
@@ -35,8 +35,8 @@ export const formatRecordTimestampToHuman = (ts: number) => {
 
         return time.toFormat('dd/MM HH:mm');
     } catch (error) {
-        console.log('Error parsing TS', ts);
-        console.error(error);
+        // console.log('Error parsing TS', ts);
+        // console.error(error);
         return;
     }
 };
@@ -50,8 +50,8 @@ export const formatRecordTimestampToHumanWithSeconds = (ts: number) => {
 
         return time.toFormat('dd/MM HH:mm:ss');
     } catch (error) {
-        console.log('Error parsing TS', ts);
-        console.error(error);
+        // console.log('Error parsing TS', ts);
+        // console.error(error);
         return;
     }
 };
@@ -61,8 +61,8 @@ export const formatRecordTimestampToRelative = (ts: number) => {
         const time = parseRecordTimestamp(ts);
         return time.toRelative();
     } catch (error) {
-        console.log('Error parsing TS', ts);
-        console.error(error);
+        // console.log('Error parsing TS', ts);
+        // console.error(error);
         return;
     }
 };
