@@ -1,12 +1,14 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+
     /* This is a simple circular progress indicator meant to be used next to
      * some text. The size of the component is customized with the font-size
      * of its parent.
      *
-     * TODO: Allow customizing the colors and maybe the direction of the
-     * progress (filling the circle vs. emptying the circle is a matter
-     * of using circumference * (1 - progress) or circumference * progress
-     * in offset
+     * By default the colors of the css theme are used but it's possible to
+     * change that by passing the props backgroundColor and progressColor
+     *
+     * The progressColor will progress counter clockwise as progress increase
      *
      * Usage in parent:
      *   in script:
@@ -14,13 +16,16 @@
      *   setInterval(() => progress = (progress + 0.1) % 1, 500);
      *
      *   in markup:
-     *   <ProgressIndicatorCircular {progress} />
+     *   <ProgressIndicatorDisk {progress} />
      */
+
     interface Props {
         progress: number; // progress value [0-1]
+        backgroundColor?: string;
+        progressColor?: string;
         displayValue?: boolean; // Display the progress as a number
     }
-    let { progress, displayValue }: Props = $props();
+    let { progress, backgroundColor, displayValue, progressColor }: Props = $props();
 
     const boundedProgress = $derived(Math.max(0, Math.min(progress, 1)));
 
@@ -30,11 +35,11 @@
     const cy = 60;
     const r = 50;
 
-    let largeArc;
-    let theta;
+    let largeArc: number;
+    let theta: number;
 
-    let x;
-    let y;
+    let x: number;
+    let y: number;
 
     let path = $state('');
     $effect(() => {
@@ -49,14 +54,22 @@
                 ? ''
                 : `M${cx},${cy} L${cx},${cy - r} A${r},${r} 0 ${largeArc},1 ${x},${y} Z`;
     });
+
+    let defaultBackgroundColor = $state('black');
+    let defaultProgressColor = $state('white');
+    onMount(() => {
+        const bodyStyle = getComputedStyle(document.body);
+        defaultBackgroundColor = bodyStyle.getPropertyValue('--nc-bg-1');
+        defaultProgressColor = bodyStyle.getPropertyValue('--nc-tx-1');
+    });
 </script>
 
 <svg viewBox="0 0 120 120" style="width: 1em; height: 1em; vertical-align: middle;">
-    <circle {cx} {cy} {r} fill="black" />
+    <circle {cx} {cy} {r} fill={progressColor || defaultProgressColor} />
     {#if progress === 0}
-        <circle {cx} {cy} {r} fill="#eee" />
+        <circle {cx} {cy} {r} fill={backgroundColor || defaultBackgroundColor} />
     {:else}
-        <path d={path} fill="#eee" />
+        <path d={path} fill={backgroundColor || defaultBackgroundColor} />
     {/if}
 </svg>
 
