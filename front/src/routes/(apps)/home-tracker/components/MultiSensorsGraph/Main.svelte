@@ -103,24 +103,19 @@
     };
 
     const datasets = sensorNames.reduce((datasets, sensor) => {
-        const offset =
-            metricProperty === 'tempCelsius'
-                ? sensorsData.find((sensorData) => sensorData.sensorName === sensor)?.tempOffset
-                : 0;
+        const sensorMetadata = sensorsData.find((sensorData) => sensorData.sensorName === sensor);
+        const offset = metricProperty === 'tempCelsius' ? (sensorMetadata?.tempOffset ?? 0) : 0;
 
         const data = Object.keys(histogramData)
             .filter((ts) => {
-                return histogramData[ts as unknown as keyof HomeTrackerHistogramData]?.[
-                    metricProperty
-                ]?.[sensor];
+                const key = ts as unknown as keyof HomeTrackerHistogramData;
+                return histogramData[key]?.[metricProperty]?.[sensor];
             })
             .map((ts) => {
+                const key = ts as unknown as keyof HomeTrackerHistogramData;
                 return {
                     x: ts,
-                    y:
-                        histogramData[ts as unknown as keyof HomeTrackerHistogramData][
-                            metricProperty
-                        ]?.[sensor] + offset
+                    y: (histogramData[key]?.[metricProperty]?.[sensor] || 0) + offset
                 };
             });
 
