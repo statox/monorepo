@@ -3,7 +3,7 @@
     import { onDestroy } from 'svelte';
     import { formatRecordTimestampToHuman } from '$lib/HomeTracker';
     import { ButtonSwitch } from '$lib/components/ButtonSwitch';
-    import { ProgressIndicatorCircular } from '$lib/components/ProgressIndicatorCircular';
+    import { ProgressIndicatorCircle } from '$lib/components/ProgressIndicatorCircle';
 
     let enableAutoRefresh = $state(false);
     let refreshProgress = $state(0);
@@ -68,7 +68,7 @@
             design="slider"
         />
         {#if enableAutoRefresh}
-            <ProgressIndicatorCircular progress={refreshProgress} />
+            <ProgressIndicatorCircle progress={refreshProgress} />
         {/if}
     </div>
 </div>

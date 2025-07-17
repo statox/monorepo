@@ -22,29 +22,28 @@
     }
     let { progress, displayValue }: Props = $props();
 
-    progress = Math.min(progress, 1);
-    progress = Math.max(0, progress);
+    const boundedProgress = $derived(Math.max(0, Math.min(progress, 1)));
 
     const radius = 14;
     const circumference = 2 * Math.PI * radius;
 
-    let offset = $derived(circumference * progress);
+    const offset = $derived(circumference * boundedProgress);
 </script>
 
 <svg
     viewBox="0 0 32 32"
     style="width:1em; height:1em; vertical-align:middle; transform: rotate(-90deg);"
 >
-    <!-- Background track circle (light gray) -->
-    <circle cx="16" cy="16" r={radius} fill="none" stroke="#ddd" stroke-width="4" />
+    <!-- Background track circle -->
+    <circle cx="16" cy="16" r={radius} fill="none" stroke="black" stroke-width="4" />
 
-    <!-- Foreground progress circle (black) -->
+    <!-- Foreground progress circle -->
     <circle
         cx="16"
         cy="16"
         r={radius}
         fill="none"
-        stroke="black"
+        stroke="#eee"
         stroke-width="4"
         stroke-dasharray={circumference}
         stroke-dashoffset={offset}
