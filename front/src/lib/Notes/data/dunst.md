@@ -10,6 +10,7 @@ With `notify-send` (works with all notification daemons):
 ```bash
 notify-send 'Test notification'
 notify-send -u low|normal|critical 'Notification with urgency'
+notify-send 'Test notification 1 second' -t 1000
 ```
 
 With `dunstify` (dunst tool working only with dunst):
