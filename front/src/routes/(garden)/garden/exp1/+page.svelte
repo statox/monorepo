@@ -120,8 +120,8 @@
 {:else}
     <div class="genes-container-2">
         <div>Level</div>
-        {#each genesInput as _, index}
-            <div style="color: {genesInput[index].color}">{index}</div>
+        {#each genesInput as gene, index}
+            <div style="color: {gene.color}">{index}</div>
         {/each}
 
         <div>cellSizeVariationInSegment</div>
@@ -205,6 +205,6 @@
     }
     .genes-container-2 {
         display: grid;
-        grid-template-columns: repeat(8, 1fr);
+        grid-template-columns: repeat(7, 1fr);
     }
 </style>
