@@ -30,7 +30,8 @@ const config = {
             jekyll: false
         }),
         alias: {
-            $config: 'src/config'
+            $config: 'src/config',
+            $packages: 'src/packages'
         },
         paths: {
             relative: false,
