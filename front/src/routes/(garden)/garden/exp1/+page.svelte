@@ -64,7 +64,8 @@
         <div>nbCellsInSegment</div>
         <div>cellSpacingVariationInSegment</div>
         <div>nextSegmentBaseCellSize</div>
-        <div>angleAmplitudeGene</div>
+        <div>branchesMaxAngle</div>
+        <div>nbBranches</div>
         {#each genesInput as gene, index}
             <div style="color: {gene.color}">{index}</div>
             <div>
@@ -102,9 +103,17 @@
             <div>
                 <input
                     type="number"
-                    step="0.1"
+                    step="1"
                     onchange={updatePlante}
-                    bind:value={gene.angleAmplitudeGene}
+                    bind:value={gene.branchesMaxAngle}
+                />
+            </div>
+            <div>
+                <input
+                    type="number"
+                    step="1"
+                    onchange={updatePlante}
+                    bind:value={gene.nbBranches}
                 />
             </div>
         {/each}
@@ -164,14 +173,26 @@
             </div>
         {/each}
 
-        <div>angleAmplitudeGene</div>
+        <div>branchesMaxAngle</div>
         {#each genesInput as gene}
             <div>
                 <input
                     type="number"
-                    step="0.1"
+                    step="1"
                     onchange={updatePlante}
-                    bind:value={gene.angleAmplitudeGene}
+                    bind:value={gene.branchesMaxAngle}
+                />
+            </div>
+        {/each}
+
+        <div>nbBranches</div>
+        {#each genesInput as gene}
+            <div>
+                <input
+                    type="number"
+                    step="1"
+                    onchange={updatePlante}
+                    bind:value={gene.nbBranches}
                 />
             </div>
         {/each}
@@ -181,10 +202,10 @@
 <style>
     .genes-container {
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(7, 1fr);
     }
     .genes-container-2 {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(8, 1fr);
     }
 </style>

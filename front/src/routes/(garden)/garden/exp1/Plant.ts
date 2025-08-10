@@ -1,4 +1,5 @@
 import { Victor } from '$packages/Victor';
+import { map } from './utils';
 
 interface PlantCell {
     position: Victor;
@@ -18,7 +19,8 @@ export class Plant {
         cellSizeVariationInSegment: number;
         nbCellsInSegment: number;
         nextSegmentBaseCellSize: number;
-        angleAmplitudeGene: number;
+        branchesMaxAngle: number;
+        nbBranches: number;
         color: string;
     }[];
     structure: PlantCell[];
@@ -27,10 +29,11 @@ export class Plant {
         this.genes = [
             {
                 cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.9,
-                nbCellsInSegment: 4,
+                cellSpacingVariationInSegment: 0.6,
+                nbCellsInSegment: 9,
                 nextSegmentBaseCellSize: 1.0,
-                angleAmplitudeGene: 1.0,
+                branchesMaxAngle: 110,
+                nbBranches: 3,
                 color: 'white'
             },
             {
@@ -38,7 +41,8 @@ export class Plant {
                 cellSpacingVariationInSegment: 0.8,
                 nbCellsInSegment: 4,
                 nextSegmentBaseCellSize: 1.0,
-                angleAmplitudeGene: 1.0,
+                branchesMaxAngle: 45,
+                nbBranches: 2,
                 color: 'red'
             },
             {
@@ -46,15 +50,17 @@ export class Plant {
                 cellSpacingVariationInSegment: 0.7,
                 nbCellsInSegment: 4,
                 nextSegmentBaseCellSize: 1.0,
-                angleAmplitudeGene: 1.0,
+                branchesMaxAngle: 45,
+                nbBranches: 2,
                 color: 'orange'
             },
             {
                 cellSizeVariationInSegment: 0.95,
                 cellSpacingVariationInSegment: 0.6,
-                nbCellsInSegment: 4,
+                nbCellsInSegment: 1,
                 nextSegmentBaseCellSize: 1.0,
-                angleAmplitudeGene: 1.0,
+                branchesMaxAngle: 45,
+                nbBranches: 2,
                 color: 'green'
             },
             {
@@ -62,7 +68,8 @@ export class Plant {
                 cellSpacingVariationInSegment: 0.5,
                 nbCellsInSegment: 4,
                 nextSegmentBaseCellSize: 1.0,
-                angleAmplitudeGene: 1.0,
+                branchesMaxAngle: 120,
+                nbBranches: 7,
                 color: 'yellow'
             },
             {
@@ -70,8 +77,9 @@ export class Plant {
                 cellSpacingVariationInSegment: 0.4,
                 nbCellsInSegment: 4,
                 nextSegmentBaseCellSize: 1.0,
-                angleAmplitudeGene: 1.0,
-                color: 'blue'
+                branchesMaxAngle: 45,
+                nbBranches: 2,
+                color: 'lightblue'
             }
         ];
 
@@ -101,40 +109,32 @@ export class Plant {
                 color,
                 cellSizeVariationInSegment,
                 nextSegmentBaseCellSize,
-                angleAmplitudeGene
+                branchesMaxAngle,
+                nbBranches
             } = this.genes[agent.level];
 
             if (agent.levelStep >= nbCellsInSegment) {
-                const angle = 45 * angleAmplitudeGene;
-                const leftCell = {
-                    position: cell.position.clone(),
-                    size: cell.size * nextSegmentBaseCellSize,
-                    color: 'white'
-                };
-                const leftAgent = {
-                    level: agent.level + 1,
-                    levelStep: 0,
-                    direction: agent.direction.clone().rotateDeg(-angle / 2)
-                };
-                stack.push({
-                    cell: leftCell,
-                    agent: leftAgent
-                });
+                const minAngle = -branchesMaxAngle / 2;
+                const maxAngle = branchesMaxAngle / 2;
 
-                const rightCell = {
-                    position: cell.position.clone(),
-                    size: cell.size * nextSegmentBaseCellSize,
-                    color: 'white'
-                };
-                const rightAgent = {
-                    level: agent.level + 1,
-                    levelStep: 0,
-                    direction: agent.direction.clone().rotateDeg(angle / 2)
-                };
-                stack.push({
-                    cell: rightCell,
-                    agent: rightAgent
-                });
+                for (let i = 0; i < nbBranches; i++) {
+                    const angle = map(i, 0, nbBranches - 1, minAngle, maxAngle);
+
+                    const nextCell = {
+                        position: cell.position.clone(),
+                        size: cell.size * nextSegmentBaseCellSize,
+                        color: 'white'
+                    };
+                    const nextAgent = {
+                        level: agent.level + 1,
+                        levelStep: 0,
+                        direction: agent.direction.clone().rotateDeg(angle)
+                    };
+                    stack.push({
+                        cell: nextCell,
+                        agent: nextAgent
+                    });
+                }
 
                 continue;
             }
