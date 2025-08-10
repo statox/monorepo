@@ -3,17 +3,20 @@
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
     import { Plant } from './Plant';
-    import { get } from 'svelte/store';
 
     let _p5: p5;
 
     const plant = new Plant();
     const genesInput = $state([...plant.genes]);
     plant.grow();
+    let nbCellsInPlant = $state(plant.structure.length);
+    let genesViewHorizontal = $state(true);
 
     const updatePlante = () => {
         plant.genes = genesInput;
         plant.grow();
+        nbCellsInPlant = plant.structure.length;
+        console.log('done growing', nbCellsInPlant);
     };
 
     const sketch1: Sketch = (p5) => {
@@ -32,8 +35,6 @@
                 p5.fill(segment.color);
                 p5.circle(x, y, size);
             }
-
-            // p5.noLoop();
         };
     };
 
@@ -49,47 +50,141 @@
 
 <div>
     <h2>Plant info</h2>
-    <div>Nb segments: {plant.structure.length}</div>
+    <div>Nb segments: {nbCellsInPlant}</div>
 </div>
 
-<h2>Genes</h2>
-<div class="genes-container">
-    <div>Level</div>
-    <div>length</div>
-    <div>Cell size</div>
-    <div>angle amplitude</div>
-    {#each genesInput as gene, index}
-        <div>{index}</div>
-        <div>
-            <input
-                type="number"
-                step="0.1"
-                onchange={updatePlante}
-                bind:value={genesInput[index].lengthGene}
-            />
-        </div>
-        <div>
-            <input
-                type="number"
-                step="0.1"
-                onchange={updatePlante}
-                bind:value={genesInput[index].cellSize}
-            />
-        </div>
-        <div>
-            <input
-                type="number"
-                step="0.1"
-                onchange={updatePlante}
-                bind:value={genesInput[index].angleAmplitudeGene}
-            />
-        </div>
-    {/each}
-</div>
+<span
+    ><h2>Genes</h2>
+    <button onclick={() => (genesViewHorizontal = !genesViewHorizontal)}>Change view</button></span
+>
+{#if genesViewHorizontal}
+    <div class="genes-container">
+        <div>Level</div>
+        <div>cellSizeVariationInSegment</div>
+        <div>nbCellsInSegment</div>
+        <div>cellSpacingVariationInSegment</div>
+        <div>nextSegmentBaseCellSize</div>
+        <div>angleAmplitudeGene</div>
+        {#each genesInput as gene, index}
+            <div style="color: {gene.color}">{index}</div>
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.cellSizeVariationInSegment}
+                />
+            </div>
+            <div>
+                <input
+                    type="number"
+                    step="1"
+                    onchange={updatePlante}
+                    bind:value={gene.nbCellsInSegment}
+                />
+            </div>
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.cellSpacingVariationInSegment}
+                />
+            </div>
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.nextSegmentBaseCellSize}
+                />
+            </div>
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.angleAmplitudeGene}
+                />
+            </div>
+        {/each}
+    </div>
+{:else}
+    <div class="genes-container-2">
+        <div>Level</div>
+        {#each genesInput as gene, index}
+            <div style="color: {genesInput[index].color}">{index}</div>
+        {/each}
+
+        <div>cellSizeVariationInSegment</div>
+        {#each genesInput as gene}
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.cellSizeVariationInSegment}
+                />
+            </div>
+        {/each}
+
+        <div>nbCellsInSegment</div>
+        {#each genesInput as gene}
+            <div>
+                <input
+                    type="number"
+                    step="1"
+                    onchange={updatePlante}
+                    bind:value={gene.nbCellsInSegment}
+                />
+            </div>
+        {/each}
+
+        <div>cellSpacingVariationInSegment</div>
+        {#each genesInput as gene}
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.cellSpacingVariationInSegment}
+                />
+            </div>
+        {/each}
+
+        <div>nextSegmentBaseCellSize</div>
+        {#each genesInput as gene}
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.nextSegmentBaseCellSize}
+                />
+            </div>
+        {/each}
+
+        <div>angleAmplitudeGene</div>
+        {#each genesInput as gene}
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlante}
+                    bind:value={gene.angleAmplitudeGene}
+                />
+            </div>
+        {/each}
+    </div>
+{/if}
 
 <style>
     .genes-container {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(6, 1fr);
+    }
+    .genes-container-2 {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
     }
 </style>
