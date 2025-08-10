@@ -16,7 +16,6 @@
         plant.genes = genesInput;
         plant.grow();
         nbCellsInPlant = plant.structure.length;
-        console.log('done growing', nbCellsInPlant);
     };
 
     const sketch1: Sketch = (p5) => {
@@ -28,11 +27,11 @@
 
         p5.draw = () => {
             p5.background('black');
-            for (const segment of plant.structure) {
-                const x = segment.position.x + p5.width / 2;
-                const y = p5.height - segment.position.y;
-                const size = segment.size;
-                p5.fill(segment.color);
+            for (const cell of plant.structure) {
+                const x = cell.position.x + p5.width / 2;
+                const y = p5.height - cell.position.y;
+                const size = cell.size;
+                p5.fill(cell.color);
                 p5.circle(x, y, size);
             }
         };
@@ -121,7 +120,7 @@
 {:else}
     <div class="genes-container-2">
         <div>Level</div>
-        {#each genesInput as gene, index}
+        {#each genesInput as _, index}
             <div style="color: {genesInput[index].color}">{index}</div>
         {/each}
 
