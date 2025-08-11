@@ -1,4 +1,4 @@
-import { Victor } from '$packages/Victor';
+import { Victor } from '@statox/vector';
 import { map } from './utils';
 
 interface PlantCell {
