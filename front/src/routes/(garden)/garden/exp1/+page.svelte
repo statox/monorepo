@@ -21,7 +21,7 @@
     const sketch1: Sketch = (p5) => {
         p5.setup = () => {
             _p5 = p5;
-            p5.createCanvas(500, 500);
+            p5.createCanvas(1000, 1000);
             p5.background('black');
         };
 

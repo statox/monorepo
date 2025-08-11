@@ -28,18 +28,18 @@ export class Plant {
     constructor() {
         this.genes = [
             {
-                cellSizeVariationInSegment: 0.95,
+                cellSizeVariationInSegment: 0.997,
                 cellSpacingVariationInSegment: 0.6,
-                nbCellsInSegment: 9,
+                nbCellsInSegment: 25,
                 nextSegmentBaseCellSize: 1.0,
                 branchesMaxAngle: 110,
-                nbBranches: 3,
+                nbBranches: 2,
                 color: 'white'
             },
             {
-                cellSizeVariationInSegment: 0.95,
+                cellSizeVariationInSegment: 0.985,
                 cellSpacingVariationInSegment: 0.8,
-                nbCellsInSegment: 4,
+                nbCellsInSegment: 10,
                 nextSegmentBaseCellSize: 1.0,
                 branchesMaxAngle: 45,
                 nbBranches: 2,
@@ -69,7 +69,7 @@ export class Plant {
                 nbCellsInSegment: 4,
                 nextSegmentBaseCellSize: 1.0,
                 branchesMaxAngle: 120,
-                nbBranches: 7,
+                nbBranches: 2,
                 color: 'yellow'
             },
             {
@@ -80,6 +80,33 @@ export class Plant {
                 branchesMaxAngle: 45,
                 nbBranches: 2,
                 color: 'lightblue'
+            },
+            {
+                cellSizeVariationInSegment: 0.95,
+                cellSpacingVariationInSegment: 0.6,
+                nbCellsInSegment: 9,
+                nextSegmentBaseCellSize: 1.0,
+                branchesMaxAngle: 110,
+                nbBranches: 2,
+                color: 'lightgreen'
+            },
+            {
+                cellSizeVariationInSegment: 0.95,
+                cellSpacingVariationInSegment: 0.8,
+                nbCellsInSegment: 4,
+                nextSegmentBaseCellSize: 1.0,
+                branchesMaxAngle: 45,
+                nbBranches: 2,
+                color: 'lightred'
+            },
+            {
+                cellSizeVariationInSegment: 0.95,
+                cellSpacingVariationInSegment: 0.7,
+                nbCellsInSegment: 4,
+                nextSegmentBaseCellSize: 1.0,
+                branchesMaxAngle: 45,
+                nbBranches: 2,
+                color: 'purple'
             }
         ];
 
