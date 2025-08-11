@@ -124,7 +124,7 @@ export class Plant {
         ];
 
         while (stack.length) {
-            const { cell, agent } = stack.pop()!;
+            const { cell, agent } = stack.shift()!;
 
             if (agent.level === this.genes.length) {
                 continue;

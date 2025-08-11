@@ -11,6 +11,7 @@
     plant.grow();
     let nbCellsInPlant = $state(plant.structure.length);
     let genesViewHorizontal = $state(true);
+    let nbCellsToDraw = $state(0);
 
     function random(min: number, max: number) {
         return Math.random() * (max - min) + min;
@@ -51,6 +52,7 @@
         plant.genes = genesInput;
         plant.grow();
         nbCellsInPlant = plant.structure.length;
+        nbCellsToDraw = 0;
     };
 
     const sketch1: Sketch = (p5) => {
@@ -58,16 +60,21 @@
             _p5 = p5;
             p5.createCanvas(1000, 1000);
             p5.background('black');
+            p5.noStroke();
         };
 
         p5.draw = () => {
             p5.background('black');
-            for (const cell of plant.structure) {
+            for (let i = 0; i < nbCellsToDraw; i++) {
+                const cell = plant.structure[i];
                 const x = cell.position.x + p5.width / 2;
                 const y = p5.height - cell.position.y;
                 const size = cell.size;
                 p5.fill(cell.color);
                 p5.circle(x, y, size);
+            }
+            if (nbCellsToDraw < nbCellsInPlant) {
+                nbCellsToDraw = Math.min(nbCellsToDraw + 50, nbCellsInPlant);
             }
         };
     };
