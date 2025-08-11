@@ -12,7 +12,7 @@
     let nbCellsInPlant = $state(plant.structure.length);
     let genesViewHorizontal = $state(true);
 
-    const updatePlante = () => {
+    const updatePlant = () => {
         plant.genes = genesInput;
         plant.grow();
         nbCellsInPlant = plant.structure.length;
@@ -71,7 +71,7 @@
                 <input
                     type="number"
                     step="0.1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.cellSizeVariationInSegment}
                 />
             </div>
@@ -79,7 +79,7 @@
                 <input
                     type="number"
                     step="1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.nbCellsInSegment}
                 />
             </div>
@@ -87,7 +87,7 @@
                 <input
                     type="number"
                     step="0.1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.cellSpacingVariationInSegment}
                 />
             </div>
@@ -95,7 +95,7 @@
                 <input
                     type="number"
                     step="0.1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.nextSegmentBaseCellSize}
                 />
             </div>
@@ -103,17 +103,12 @@
                 <input
                     type="number"
                     step="1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.branchesMaxAngle}
                 />
             </div>
             <div>
-                <input
-                    type="number"
-                    step="1"
-                    onchange={updatePlante}
-                    bind:value={gene.nbBranches}
-                />
+                <input type="number" step="1" onchange={updatePlant} bind:value={gene.nbBranches} />
             </div>
         {/each}
     </div>
@@ -130,7 +125,7 @@
                 <input
                     type="number"
                     step="0.1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.cellSizeVariationInSegment}
                 />
             </div>
@@ -142,7 +137,7 @@
                 <input
                     type="number"
                     step="1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.nbCellsInSegment}
                 />
             </div>
@@ -154,7 +149,7 @@
                 <input
                     type="number"
                     step="0.1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.cellSpacingVariationInSegment}
                 />
             </div>
@@ -166,7 +161,7 @@
                 <input
                     type="number"
                     step="0.1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.nextSegmentBaseCellSize}
                 />
             </div>
@@ -178,7 +173,7 @@
                 <input
                     type="number"
                     step="1"
-                    onchange={updatePlante}
+                    onchange={updatePlant}
                     bind:value={gene.branchesMaxAngle}
                 />
             </div>
@@ -187,12 +182,7 @@
         <div>nbBranches</div>
         {#each genesInput as gene}
             <div>
-                <input
-                    type="number"
-                    step="1"
-                    onchange={updatePlante}
-                    bind:value={gene.nbBranches}
-                />
+                <input type="number" step="1" onchange={updatePlant} bind:value={gene.nbBranches} />
             </div>
         {/each}
     </div>
