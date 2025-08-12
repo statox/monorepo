@@ -1,5 +1,6 @@
 import { Victor } from '@statox/vector';
 import { map } from './utils';
+import { defaultGenes, type PlantGene } from './Genes';
 
 interface PlantCell {
     position: Victor;
@@ -14,101 +15,11 @@ interface Agent {
 }
 
 export class Plant {
-    genes: {
-        cellSpacingVariationInSegment: number;
-        cellSizeVariationInSegment: number;
-        nbCellsInSegment: number;
-        nextSegmentBaseCellSize: number;
-        branchesMaxAngle: number;
-        nbBranches: number;
-        color: string;
-    }[];
+    genes: PlantGene[];
     structure: PlantCell[];
 
     constructor() {
-        this.genes = [
-            {
-                cellSizeVariationInSegment: 0.997,
-                cellSpacingVariationInSegment: 0.6,
-                nbCellsInSegment: 25,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 110,
-                nbBranches: 2,
-                color: 'white'
-            },
-            {
-                cellSizeVariationInSegment: 0.985,
-                cellSpacingVariationInSegment: 0.8,
-                nbCellsInSegment: 10,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 45,
-                nbBranches: 2,
-                color: 'red'
-            },
-            {
-                cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.7,
-                nbCellsInSegment: 4,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 45,
-                nbBranches: 2,
-                color: 'orange'
-            },
-            {
-                cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.6,
-                nbCellsInSegment: 1,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 45,
-                nbBranches: 2,
-                color: 'green'
-            },
-            {
-                cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.5,
-                nbCellsInSegment: 4,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 120,
-                nbBranches: 2,
-                color: 'yellow'
-            },
-            {
-                cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.4,
-                nbCellsInSegment: 4,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 45,
-                nbBranches: 2,
-                color: 'lightblue'
-            },
-            {
-                cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.6,
-                nbCellsInSegment: 9,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 110,
-                nbBranches: 2,
-                color: 'lightgreen'
-            },
-            {
-                cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.8,
-                nbCellsInSegment: 4,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 45,
-                nbBranches: 2,
-                color: 'lightred'
-            },
-            {
-                cellSizeVariationInSegment: 0.95,
-                cellSpacingVariationInSegment: 0.7,
-                nbCellsInSegment: 4,
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: 45,
-                nbBranches: 2,
-                color: 'purple'
-            }
-        ];
+        this.genes = defaultGenes;
 
         this.structure = [];
     }

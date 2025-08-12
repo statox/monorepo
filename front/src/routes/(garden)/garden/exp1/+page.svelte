@@ -3,48 +3,19 @@
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
     import { Plant } from './Plant';
+    import { getRandomGenes } from './Genes';
 
     let _p5: p5;
 
     const plant = new Plant();
-    const genesInput = $state([...plant.genes]);
+    let genesInput = $state([...plant.genes]);
     plant.grow();
     let nbCellsInPlant = $state(plant.structure.length);
     let genesViewHorizontal = $state(true);
     let nbCellsToDraw = $state(0);
 
-    function random(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-    }
-
     const randomizePlantGenes = () => {
-        while (genesInput.length) {
-            genesInput.pop();
-        }
-
-        genesInput.push({
-            cellSizeVariationInSegment: 0.997,
-            cellSpacingVariationInSegment: 0.6,
-            nbCellsInSegment: 25,
-            nextSegmentBaseCellSize: 1.0,
-            branchesMaxAngle: 110,
-            nbBranches: Math.floor(random(2, 4)),
-            color: 'white'
-        });
-
-        for (let i = 0; i < random(5, 8); i++) {
-            genesInput.push({
-                cellSizeVariationInSegment: random(0.93, 0.99),
-                cellSpacingVariationInSegment: random(0.4, 0.6),
-                nbCellsInSegment: Math.floor(random(2, 6)),
-                nextSegmentBaseCellSize: 1.0,
-                branchesMaxAngle: Math.floor(random(40, 180)),
-                nbBranches: Math.floor(random(2, 4)),
-                color: 'white'
-            });
-        }
-        genesInput[1].nbCellsInSegment = 10;
-
+        genesInput = getRandomGenes();
         updatePlant();
     };
 
