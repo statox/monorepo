@@ -1,5 +1,5 @@
 import { Victor } from '@statox/vector';
-import { map } from './utils';
+import { map, random } from './utils';
 import { defaultGenes, type PlantGene } from './Genes';
 
 interface PlantCell {
@@ -29,7 +29,7 @@ export class Plant {
 
         const stack: { cell: PlantCell; agent: Agent }[] = [
             {
-                cell: { position: new Victor(), size: 20, color: [200, 200, 200, 200]},
+                cell: { position: new Victor(), size: 20, color: [200, 200, 200, 200] },
                 agent: { level: 0, levelStep: 0, direction: new Victor(0, 20) }
             }
         ];
@@ -42,6 +42,7 @@ export class Plant {
             }
 
             const {
+                cellDeviationFactor,
                 cellSpacingVariationInSegment,
                 nbCellsInSegment,
                 color,
@@ -79,9 +80,12 @@ export class Plant {
 
             const nextCell = {
                 ...cell,
-                position: cell.position
-                    .clone()
-                    .add(agent.direction.clone().multiplyScalar(cellSpacingVariationInSegment)),
+                position: cell.position.clone().add(
+                    agent.direction
+                        .clone()
+                        .rotateDeg(random(-45, 45) * cellDeviationFactor)
+                        .multiplyScalar(cellSpacingVariationInSegment)
+                ),
                 size: cell.size * cellSizeVariationInSegment,
                 color
             };

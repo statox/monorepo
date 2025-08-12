@@ -1,4 +1,7 @@
+import { random } from './utils';
+
 export interface PlantGene {
+    cellDeviationFactor: number;
     cellSpacingVariationInSegment: number;
     cellSizeVariationInSegment: number;
     nbCellsInSegment: number;
@@ -6,10 +9,6 @@ export interface PlantGene {
     branchesMaxAngle: number;
     nbBranches: number;
     color: number[];
-}
-
-function random(min: number, max: number) {
-    return Math.random() * (max - min) + min;
 }
 
 const colorByIndex = [
@@ -28,9 +27,10 @@ export const getRandomGenes = (): PlantGene[] => {
     const genes: PlantGene[] = [];
 
     genes.push({
+        cellDeviationFactor: random(0.2, 1),
         cellSizeVariationInSegment: 0.997,
         cellSpacingVariationInSegment: 0.6,
-        nbCellsInSegment: 25,
+        nbCellsInSegment: 15,
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 110,
         nbBranches: Math.floor(random(2, 4)),
@@ -39,6 +39,7 @@ export const getRandomGenes = (): PlantGene[] => {
 
     for (let i = 0; i < random(5, 8); i++) {
         genes.push({
+            cellDeviationFactor: random(0.2, 1),
             cellSizeVariationInSegment: random(0.93, 0.99),
             cellSpacingVariationInSegment: random(0.4, 0.6),
             nbCellsInSegment: Math.floor(random(2, 6)),
@@ -55,6 +56,7 @@ export const getRandomGenes = (): PlantGene[] => {
 
 export const defaultGenes: PlantGene[] = [
     {
+        cellDeviationFactor: 0.9,
         cellSizeVariationInSegment: 0.997,
         cellSpacingVariationInSegment: 0.6,
         nbCellsInSegment: 25,
@@ -64,6 +66,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[0]
     },
     {
+        cellDeviationFactor: 0.9,
         cellSizeVariationInSegment: 0.985,
         cellSpacingVariationInSegment: 0.8,
         nbCellsInSegment: 10,
@@ -73,6 +76,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[1]
     },
     {
+        cellDeviationFactor: 0.8,
         cellSizeVariationInSegment: 0.95,
         cellSpacingVariationInSegment: 0.7,
         nbCellsInSegment: 4,
@@ -82,6 +86,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[2]
     },
     {
+        cellDeviationFactor: 0.8,
         cellSizeVariationInSegment: 0.95,
         cellSpacingVariationInSegment: 0.6,
         nbCellsInSegment: 1,
@@ -91,6 +96,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[3]
     },
     {
+        cellDeviationFactor: 0.8,
         cellSizeVariationInSegment: 0.95,
         cellSpacingVariationInSegment: 0.5,
         nbCellsInSegment: 4,
@@ -100,6 +106,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[4]
     },
     {
+        cellDeviationFactor: 0.7,
         cellSizeVariationInSegment: 0.95,
         cellSpacingVariationInSegment: 0.4,
         nbCellsInSegment: 4,
@@ -109,6 +116,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[5]
     },
     {
+        cellDeviationFactor: 0.7,
         cellSizeVariationInSegment: 0.95,
         cellSpacingVariationInSegment: 0.6,
         nbCellsInSegment: 9,
@@ -118,6 +126,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[6]
     },
     {
+        cellDeviationFactor: 0.7,
         cellSizeVariationInSegment: 0.95,
         cellSpacingVariationInSegment: 0.8,
         nbCellsInSegment: 4,
@@ -127,6 +136,7 @@ export const defaultGenes: PlantGene[] = [
         color: colorByIndex[7]
     },
     {
+        cellDeviationFactor: 0.6,
         cellSizeVariationInSegment: 0.95,
         cellSpacingVariationInSegment: 0.7,
         nbCellsInSegment: 4,
