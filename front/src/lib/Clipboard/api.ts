@@ -12,9 +12,10 @@ import { requestAPIGet, requestAPIPost } from '$lib/api';
 
 const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
     const now = DateTime.now();
-    const formatedCreationDate = DateTime.fromSeconds(entry.creationDateUnix).toRelative({
-        style: 'short'
-    });
+    const formatedCreationDate =
+        DateTime.fromSeconds(entry.creationDateUnix).toRelative({
+            style: 'short'
+        }) || 'N/A';
 
     const expirationTs = entry.creationDateUnix + entry.ttl;
     const expirationDate = DateTime.fromSeconds(expirationTs);
