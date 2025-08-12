@@ -5,7 +5,7 @@ import { defaultGenes, type PlantGene } from './Genes';
 interface PlantCell {
     position: Victor;
     size: number;
-    color: string;
+    color: number[];
 }
 
 interface Agent {
@@ -29,7 +29,7 @@ export class Plant {
 
         const stack: { cell: PlantCell; agent: Agent }[] = [
             {
-                cell: { position: new Victor(), size: 20, color: 'white' },
+                cell: { position: new Victor(), size: 20, color: [200, 200, 200, 200]},
                 agent: { level: 0, levelStep: 0, direction: new Victor(0, 20) }
             }
         ];
@@ -61,7 +61,7 @@ export class Plant {
                     const nextCell = {
                         position: cell.position.clone(),
                         size: cell.size * nextSegmentBaseCellSize,
-                        color: 'white'
+                        color: [200, 200, 200, 200]
                     };
                     const nextAgent = {
                         level: agent.level + 1,

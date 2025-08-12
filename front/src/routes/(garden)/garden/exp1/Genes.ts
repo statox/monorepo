@@ -5,12 +5,24 @@ export interface PlantGene {
     nextSegmentBaseCellSize: number;
     branchesMaxAngle: number;
     nbBranches: number;
-    color: string;
+    color: number[];
 }
 
 function random(min: number, max: number) {
     return Math.random() * (max - min) + min;
 }
+
+const colorByIndex = [
+    [10, 110, 30, 250], // darkgreen,
+    [255, 0, 0, 220], // 'red',
+    [255, 200, 0, 190], // 'orange',
+    [0, 255, 0, 160], // 'green',
+    [255, 255, 0, 130], // 'yellow',
+    [0, 200, 255, 100], // 'lightblue',
+    [200, 255, 0, 70], // 'lightgreen',
+    [255, 0, 200, 40], // 'pink',
+    [255, 0, 255, 10] // 'purple'
+];
 
 export const getRandomGenes = (): PlantGene[] => {
     const genes: PlantGene[] = [];
@@ -22,7 +34,7 @@ export const getRandomGenes = (): PlantGene[] => {
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 110,
         nbBranches: Math.floor(random(2, 4)),
-        color: 'white'
+        color: colorByIndex[0]
     });
 
     for (let i = 0; i < random(5, 8); i++) {
@@ -33,7 +45,7 @@ export const getRandomGenes = (): PlantGene[] => {
             nextSegmentBaseCellSize: 1.0,
             branchesMaxAngle: Math.floor(random(40, 180)),
             nbBranches: Math.floor(random(2, 4)),
-            color: 'white'
+            color: colorByIndex[i + 1]
         });
     }
     genes[1].nbCellsInSegment = 10;
@@ -49,7 +61,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 110,
         nbBranches: 2,
-        color: 'white'
+        color: colorByIndex[0]
     },
     {
         cellSizeVariationInSegment: 0.985,
@@ -58,7 +70,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 45,
         nbBranches: 2,
-        color: 'red'
+        color: colorByIndex[1]
     },
     {
         cellSizeVariationInSegment: 0.95,
@@ -67,7 +79,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 45,
         nbBranches: 2,
-        color: 'orange'
+        color: colorByIndex[2]
     },
     {
         cellSizeVariationInSegment: 0.95,
@@ -76,7 +88,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 45,
         nbBranches: 2,
-        color: 'green'
+        color: colorByIndex[3]
     },
     {
         cellSizeVariationInSegment: 0.95,
@@ -85,7 +97,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 120,
         nbBranches: 2,
-        color: 'yellow'
+        color: colorByIndex[4]
     },
     {
         cellSizeVariationInSegment: 0.95,
@@ -94,7 +106,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 45,
         nbBranches: 2,
-        color: 'lightblue'
+        color: colorByIndex[5]
     },
     {
         cellSizeVariationInSegment: 0.95,
@@ -103,7 +115,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 110,
         nbBranches: 2,
-        color: 'lightgreen'
+        color: colorByIndex[6]
     },
     {
         cellSizeVariationInSegment: 0.95,
@@ -112,7 +124,7 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 45,
         nbBranches: 2,
-        color: 'lightred'
+        color: colorByIndex[7]
     },
     {
         cellSizeVariationInSegment: 0.95,
@@ -121,6 +133,6 @@ export const defaultGenes: PlantGene[] = [
         nextSegmentBaseCellSize: 1.0,
         branchesMaxAngle: 45,
         nbBranches: 2,
-        color: 'purple'
+        color: colorByIndex[8]
     }
 ];

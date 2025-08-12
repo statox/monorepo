@@ -30,12 +30,11 @@
         p5.setup = () => {
             _p5 = p5;
             p5.createCanvas(1000, 1000);
-            p5.background('black');
             p5.noStroke();
         };
 
         p5.draw = () => {
-            p5.background('black');
+            p5.background(240, 240, 240);
             for (let i = 0; i < nbCellsToDraw; i++) {
                 const cell = plant.structure[i];
                 const x = cell.position.x + p5.width / 2;
