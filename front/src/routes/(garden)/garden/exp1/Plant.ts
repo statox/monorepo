@@ -42,6 +42,7 @@ export class Plant {
             }
 
             const {
+                allowOffspringBirthFactor,
                 cellDeviationFactor,
                 cellSpacingVariationInSegment,
                 nbCellsInSegment,
@@ -69,10 +70,13 @@ export class Plant {
                         levelStep: 0,
                         direction: agent.direction.clone().rotateDeg(angle)
                     };
-                    stack.push({
-                        cell: nextCell,
-                        agent: nextAgent
-                    });
+
+                    if (Math.random() < allowOffspringBirthFactor) {
+                        stack.push({
+                            cell: nextCell,
+                            agent: nextAgent
+                        });
+                    }
                 }
 
                 continue;
