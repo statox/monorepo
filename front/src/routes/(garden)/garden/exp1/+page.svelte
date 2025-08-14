@@ -145,7 +145,7 @@
         {/each}
     </div>
 {:else}
-    <div class="genes-container-2">
+    <div class="genes-container-2" style="--nb-columns: {1 + genesInput.length}">
         <div>Level</div>
         {#each genesInput as gene, index}
             <div style="color: {gene.color}">{index}</div>
@@ -251,6 +251,6 @@
     }
     .genes-container-2 {
         display: grid;
-        grid-template-columns: repeat(8, 1fr);
+        grid-template-columns: repeat(var(--nb-columns), 1fr);
     }
 </style>
