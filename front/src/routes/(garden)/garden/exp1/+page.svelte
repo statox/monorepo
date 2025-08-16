@@ -29,7 +29,7 @@
     const sketch1: Sketch = (p5) => {
         p5.setup = () => {
             _p5 = p5;
-            p5.createCanvas(1000, 1000);
+            p5.createCanvas(1000, 600);
             p5.noStroke();
         };
 
@@ -54,8 +54,6 @@
         _p5?.remove();
     });
 </script>
-
-<h1>Here be flowers</h1>
 
 <P5 sketch={sketch1} />
 
