@@ -71,6 +71,7 @@
 {#if genesViewHorizontal}
     <div class="genes-container">
         <div>Level</div>
+        <div>upwardForce</div>
         <div>allowOffspringBirthFactor</div>
         <div>cellDeviationFactor</div>
         <div>cellSizeVariationInSegment</div>
@@ -81,6 +82,14 @@
         <div>nbBranches</div>
         {#each genesInput as gene, index}
             <div style="color: {gene.color}">{index}</div>
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlant}
+                    bind:value={gene.upwardForce}
+                />
+            </div>
             <div>
                 <input
                     type="number"
@@ -147,6 +156,18 @@
         <div>Level</div>
         {#each genesInput as gene, index}
             <div style="color: {gene.color}">{index}</div>
+        {/each}
+
+        <div>upwardForce</div>
+        {#each genesInput as gene}
+            <div>
+                <input
+                    type="number"
+                    step="0.1"
+                    onchange={updatePlant}
+                    bind:value={gene.upwardForce}
+                />
+            </div>
         {/each}
 
         <div>allowOffspringBirthFactor</div>
@@ -245,7 +266,7 @@
 <style>
     .genes-container {
         display: grid;
-        grid-template-columns: repeat(9, 1fr);
+        grid-template-columns: repeat(10, 1fr);
     }
     .genes-container-2 {
         display: grid;
