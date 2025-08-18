@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Duration } from 'luxon';
+
     interface Props {
         oldValue: number;
         newValue: number;
@@ -10,7 +12,11 @@
 
     const trendValue = newValue - oldValue;
     const trendValueStr = trendValue.toFixed(1);
-    const trendDuration = ((newTimestamp - oldTimestamp) / 1000 / 60).toFixed(0);
+    const trendDuration = Duration.fromMillis(newTimestamp - oldTimestamp);
+    const trendDurationStr =
+        trendDuration.as('hours') < 2
+            ? trendDuration.toFormat("m'm'")
+            : trendDuration.toFormat("hh'h'mm'm'");
 
     const getTrendIconClass = () => {
         if (Math.abs(trendValue) < 0.2) {
@@ -26,7 +32,7 @@
 
 <span class="container">
     <i class={getTrendIconClass()}></i>
-    {trendValueStr} / {trendDuration}m
+    {trendValueStr} / {trendDurationStr}
 </span>
 
 <style>

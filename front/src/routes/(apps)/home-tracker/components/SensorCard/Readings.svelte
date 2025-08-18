@@ -19,6 +19,12 @@
         oldTimestamp={sensor.oneHourAgoLogData.timestamp}
         newTimestamp={sensor.lastLogData.timestamp}
     />
+    <DataTrend
+        oldValue={sensor.oneDayAgoLogData.tempCelsius || 0}
+        newValue={sensor.lastLogData.tempCelsius || 0}
+        oldTimestamp={sensor.oneDayAgoLogData.timestamp}
+        newTimestamp={sensor.lastLogData.timestamp}
+    />
 
     <i class="unit-icon fas fa-tint"></i>
     <ValueWithUnit value={sensor.lastLogData.humidity} unitString="%" precision={0} />
@@ -26,6 +32,12 @@
         oldValue={sensor.oneHourAgoLogData.humidity || 0}
         newValue={sensor.lastLogData.humidity || 0}
         oldTimestamp={sensor.oneHourAgoLogData.timestamp}
+        newTimestamp={sensor.lastLogData.timestamp}
+    />
+    <DataTrend
+        oldValue={sensor.oneDayAgoLogData.humidity || 0}
+        newValue={sensor.lastLogData.humidity || 0}
+        oldTimestamp={sensor.oneDayAgoLogData.timestamp}
         newTimestamp={sensor.lastLogData.timestamp}
     />
 
@@ -72,7 +84,7 @@
         display: grid;
         font-size: x-large;
 
-        grid-template-columns: 2ch repeat(2, minmax(min-content, max-content)) 1fr;
+        grid-template-columns: 2ch repeat(2, minmax(min-content, max-content)) 1fr 1fr;
         align-items: baseline;
     }
     .internal-data {

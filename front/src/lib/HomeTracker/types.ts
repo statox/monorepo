@@ -10,6 +10,7 @@ export interface SensorMetadata {
     lastAlertDateUnix: number;
     lastLogData: SensorLogData;
     oneHourAgoLogData: SensorLogData;
+    oneDayAgoLogData: SensorLogData;
 }
 
 export interface HomeTrackerLatestResponse {
