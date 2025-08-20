@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Victor } from '@statox/vector/dist';
+    import { Vector } from '@statox/vector';
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
@@ -94,10 +94,10 @@
         p5.draw = () => {
             p5.background(240, 240, 240);
 
-            const center = new Victor(p5.width / 2, p5.height / 3);
+            const center = new Vector(p5.width / 2, p5.height / 3);
             let position = center.clone();
-            const branchDirection = new Victor(branchDirectionX, branchDirectionY);
-            const upwardForce = new Victor(upwardForceX, upwardForceY);
+            const branchDirection = new Vector(branchDirectionX, branchDirectionY);
+            const upwardForce = new Vector(upwardForceX, upwardForceY);
 
             p5.strokeWeight(2);
 

@@ -1,9 +1,9 @@
-import { Victor } from '@statox/vector';
+import { Vector } from '@statox/vector';
 import { map, random } from './utils';
 import { defaultGenes, type PlantGene } from './Genes';
 
 interface PlantCell {
-    position: Victor;
+    position: Vector;
     size: number;
     color: number[];
 }
@@ -11,7 +11,7 @@ interface PlantCell {
 interface Agent {
     level: number;
     levelStep: number;
-    direction: Victor;
+    direction: Vector;
 }
 
 export class Plant {
@@ -29,8 +29,8 @@ export class Plant {
 
         const stack: { cell: PlantCell; agent: Agent }[] = [
             {
-                cell: { position: new Victor(), size: 20, color: [200, 200, 200, 200] },
-                agent: { level: 0, levelStep: 0, direction: new Victor(0, 20) }
+                cell: { position: new Vector(), size: 20, color: [200, 200, 200, 200] },
+                agent: { level: 0, levelStep: 0, direction: new Vector(0, 20) }
             }
         ];
 
