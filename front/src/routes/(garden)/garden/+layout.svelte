@@ -10,7 +10,7 @@
 
 <header>
     <h1>
-        <a href="/">Flowers</a>
+        <a href="/garden">Garden</a>
     </h1>
     <nav>
         <span><ThemeSwitcher /></span>

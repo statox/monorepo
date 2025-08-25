@@ -68,7 +68,7 @@ export class Plant {
                     const nextAgent = {
                         level: agent.level + 1,
                         levelStep: 0,
-                        direction: agent.direction.clone().rotateDeg(angle)
+                        direction: agent.direction.clone().rotateByDeg(angle)
                     };
 
                     if (Math.random() < allowOffspringBirthFactor) {
@@ -87,7 +87,7 @@ export class Plant {
                 position: cell.position.clone().add(
                     agent.direction
                         .clone()
-                        .rotateDeg(random(-45, 45) * cellDeviationFactor)
+                        .rotateByDeg(random(-45, 45) * cellDeviationFactor)
                         .multiplyScalar(cellSpacingVariationInSegment)
                 ),
                 size: cell.size * cellSizeVariationInSegment,
