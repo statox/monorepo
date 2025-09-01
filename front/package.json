@@ -25,7 +25,7 @@
         "@statox/vector": "^0.0.9",
         "@sveltejs/adapter-static": "^3.0.9",
         "@sveltejs/kit": "^2.36.2",
-        "@sveltejs/vite-plugin-svelte": "^6.1.1",
+        "@sveltejs/vite-plugin-svelte": "^6.1.3",
         "@types/luxon": "^3.7.1",
         "@types/p5": "^1.7.6",
         "@types/superagent": "^8.1.9",
