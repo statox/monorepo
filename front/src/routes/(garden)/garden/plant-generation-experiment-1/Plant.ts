@@ -1,4 +1,4 @@
-import { Vector } from '@statox/vector';
+import { Vector } from 'simple-vector';
 import { map, random } from './utils';
 import { defaultGenes, type PlantGene } from './Genes';
 

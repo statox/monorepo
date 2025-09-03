@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Vector } from '@statox/vector';
+    import { Vector } from 'simple-vector';
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
