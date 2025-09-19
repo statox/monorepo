@@ -96,6 +96,11 @@ export const gameSection = {
     name: 'Games',
     apps: [
         {
+            name: 'Gravitrip',
+            description: 'Connect four pieces to wi',
+            link: '/gravitrip'
+        },
+        {
             name: 'Sudoku',
             description: 'A classic Sudoku game. Grids are generated automatically.',
             link: 'https://statox.github.io/sudoku/game'
