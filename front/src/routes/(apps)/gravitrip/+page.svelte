@@ -16,6 +16,7 @@
     let board: Board = $state(Array.from({ length: 7 }, () => []));
     let boardState: BoardState = $derived(getBoardState(board));
     let winningCells: number[][] | null = $derived(getWinningCells(board));
+    let selectedColumn: number | null = $state(null);
 
     let mctsIterations = $state(1000);
     let mctsC = $state(Number(Math.sqrt(2).toFixed(3)));
@@ -76,6 +77,13 @@
     <h3>Gravitrip</h3>
 </div>
 
+<div>
+    See <a
+        href="https://www.quora.com/What-is-the-winning-strategy-for-the-first-player-in-Connect-Four-games"
+        >this quora thread</a
+    > for some tips on the winning strategy
+</div>
+
 <span>
     <button onclick={resetBoard}>Restart game</button>
 
@@ -95,8 +103,11 @@
                 <button
                     aria-label={'col-' + col}
                     class="outer-cell"
+                    class:selected={selectedColumn === col}
                     class:winning-cell={isWinningCell(row, col)}
                     onclick={() => tryMove(col, currentPlayer)}
+                    onmouseenter={() => (selectedColumn = col)}
+                    onmouseleave={() => (selectedColumn = null)}
                 >
                     <div
                         class="cell"
@@ -139,11 +150,13 @@
         height: min(80vh, calc(100vw * (var(--nb-row) / var(--nb-col)))); /* match aspect ratio */
         margin: auto; /* center horizontally */
     }
-    .outer-cell {
+    .outer-cell,
+    .outer-cell:hover {
         aspect-ratio: 1 / 1; /* keep each cell square */
         background-color: #1920fc;
         width: 100%;
         height: 100%;
+        border-radius: 0;
         .cell {
             width: 100%;
             height: 100%;
@@ -157,7 +170,12 @@
             background-color: #ed1207;
         }
     }
-    .winning-cell {
+    .selected,
+    .selected:hover {
+        background-color: #3239fc;
+    }
+    .winning-cell,
+    .winning-cell:hover {
         background-color: #21e07a;
     }
 </style>
