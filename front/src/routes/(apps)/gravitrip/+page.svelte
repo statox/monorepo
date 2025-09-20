@@ -126,18 +126,6 @@
     > for some tips on the winning strategy
 </div>
 
-<span>
-    <button onclick={resetBoard}>Restart game</button>
-
-    <span style="font-weight: bold">
-        {#if boardState === BoardState.draw}
-            Game Over
-        {:else if boardState === BoardState.winPlayer1 || boardState === BoardState.winPlayer2}
-            Player {boardState} wins
-        {/if}
-    </span>
-</span>
-
 <div>
     Computer stategy:
     <select bind:value={computerStategy}>
@@ -204,6 +192,18 @@
         </small>
     </div>
 {/if}
+
+<span>
+    <button onclick={resetBoard}>Restart game</button>
+
+    <span style="font-weight: bold">
+        {#if boardState === BoardState.draw}
+            Game Over
+        {:else if boardState === BoardState.winPlayer1 || boardState === BoardState.winPlayer2}
+            Player {boardState} wins
+        {/if}
+    </span>
+</span>
 
 <div class="board" style="--nb-col: {nbColumns}; --nb-row: {nbRows}">
     {#each rowsIndices.reverse() as row}
