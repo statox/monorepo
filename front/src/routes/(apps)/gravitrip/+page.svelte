@@ -12,6 +12,7 @@
         isValidMove
     } from './gravitrip';
     import { makeMonteCarloMove, makeRandomMove, type MoveResult } from './ai';
+    import BoardComp from './components/Board.svelte';
 
     let board: Board = $state(Array.from({ length: 7 }, () => []));
     let boardState: BoardState = $derived(getBoardState(board));
@@ -46,9 +47,6 @@
 
     type ComputerStategy = 'mcts' | 'random';
     let computerStategy = $state('mcts' as ComputerStategy);
-
-    const rowsIndices = Array.from({ length: nbRows }, (_, i) => i);
-    const colsIndices = Array.from({ length: nbColumns }, (_, i) => i);
 
     let currentPlayer: Cell = $state(1);
 
@@ -99,17 +97,6 @@
         board = newBoard;
         selectedColumn = move;
         currentPlayer = 1;
-    };
-
-    const isWinningCell = (row: number, col: number) => {
-        if (winningCells === null) {
-            return false;
-        }
-        return (
-            winningCells.filter((winningcell) => {
-                return winningcell[0] === row && winningcell[1] === col;
-            }).length > 0
-        );
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -233,88 +220,12 @@
     </span>
 </span>
 
-<div class="board" style="--nb-col: {nbColumns}; --nb-row: {nbRows}">
-    {#each rowsIndices.reverse() as row}
-        {#each colsIndices as col}
-            <div>
-                <button
-                    aria-label={'col-' + col}
-                    class="outer-cell"
-                    class:selected={selectedColumn === col}
-                    class:winning-cell={isWinningCell(row, col)}
-                    onclick={() => tryMove(col, currentPlayer)}
-                    onmouseenter={() => (selectedColumn = col)}
-                    onmouseleave={() => (selectedColumn = null)}
-                >
-                    <div
-                        class="cell"
-                        class:player1={board[col][row] === 1}
-                        class:player2={board[col][row] === 2}
-                        class:drop={board[col][row] && row === board[col].length - 1}
-                        style="--drop-distance: {nbRows - row};"
-                    ></div>
-                </button>
-            </div>
-        {/each}
-    {/each}
-</div>
+<BoardComp
+    {nbColumns}
+    {nbRows}
+    {board}
+    {winningCells}
+    onMove={(col: number) => tryMove(col, currentPlayer)}
+/>
 
 <svelte:window on:keydown={onKeyDown} />
-
-<style>
-    .board {
-        display: grid;
-        grid-template-columns: repeat(var(--nb-col), 1fr);
-
-        width: min(100vw, calc(80vh * (var(--nb-col) / var(--nb-row)))); /* match aspect ratio */
-        height: min(80vh, calc(100vw * (var(--nb-row) / var(--nb-col)))); /* match aspect ratio */
-        margin: auto; /* center horizontally */
-    }
-    .outer-cell,
-    .outer-cell:hover {
-        aspect-ratio: 1 / 1; /* keep each cell square */
-        background-color: #1920fc;
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-        .cell {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-color: #7075f9;
-        }
-        .drop {
-            animation: drop 500ms ease-in-out forwards;
-        }
-        .player1 {
-            background-color: #d9ed07;
-        }
-        .player2 {
-            background-color: #ed1207;
-        }
-    }
-    .selected,
-    .selected:hover {
-        background-color: #3239fc;
-    }
-    .winning-cell,
-    .winning-cell:hover {
-        background-color: #21e07a;
-    }
-
-    @keyframes drop {
-        0% {
-            transform: translateY(calc(var(--drop-distance) * -100%));
-        }
-        80% {
-            transform: translateY(0);
-        }
-        /* small bounce */
-        90% {
-            transform: translateY(-6%);
-        }
-        100% {
-            transform: translateY(0);
-        }
-    }
-</style>
