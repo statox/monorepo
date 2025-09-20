@@ -17,6 +17,9 @@
     let boardState: BoardState = $derived(getBoardState(board));
     let winningCells: number[][] | null = $derived(getWinningCells(board));
 
+    let mctsIterations = $state(1000);
+    let mctsC = $state(Number(Math.sqrt(2).toFixed(3)));
+
     const rowsIndices = Array.from({ length: nbRows }, (_, i) => i);
     const colsIndices = Array.from({ length: nbColumns }, (_, i) => i);
 
@@ -51,7 +54,7 @@
             return;
         }
         // board = makeRandomMove(board, currentPlayer);
-        board = makeMonteCarloMove(board, currentPlayer);
+        board = makeMonteCarloMove(board, currentPlayer, { iterations: mctsIterations, c: mctsC });
         currentPlayer = currentPlayer === 1 ? 2 : 1;
     };
 
@@ -104,6 +107,27 @@
             </div>
         {/each}
     {/each}
+</div>
+
+<div>
+    <h4>Monte Carlo Tree Search parameters</h4>
+
+    <label for="mcts-iterations">Iterations:</label>
+    <input id="mcts-iterations" bind:value={mctsIterations} type="number" min="0" />
+    <small>
+        Number of simulations MCTS will run before choosing a move. Higher values usually mean
+        stronger play but slower decisions.
+    </small>
+
+    <br /><br />
+
+    <label for="mcts-c">C (exploration constant):</label>
+    <input id="mcts-c" bind:value={mctsC} type="number" min="0" step="0.1" />
+    <small>
+        Controls the balance between exploration and exploitation. Lower values (e.g. 0.5, 0.7)
+        favor tested moves, higher values (e.g. 2.0, 5.0) explore more. A typical default is √2 ≈
+        1.41.
+    </small>
 </div>
 
 <style>

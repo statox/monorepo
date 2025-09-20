@@ -20,8 +20,12 @@ export const makeRandomMove = (board: Board, cell: Cell) => {
     return makeMove(board, cell, move);
 };
 
-export const makeMonteCarloMove = (board: Board, cell: Cell) => {
-    const move = mcts(board, cell);
+export const makeMonteCarloMove = (
+    board: Board,
+    cell: Cell,
+    config?: { iterations?: number; c?: number }
+) => {
+    const move = mcts(board, cell, config?.iterations, config?.c);
     return makeMove(board, cell, move);
 };
 
@@ -78,10 +82,10 @@ function uctValue(
     return nodeWins / nodeVisits + c * Math.sqrt(Math.log(totalVisits) / nodeVisits);
 }
 
-function select(node: MCTSNode): MCTSNode {
+function select(node: MCTSNode, c: number): MCTSNode {
     while (!node.isTerminal()) {
         if (!node.isFullyExpanded()) return expand(node);
-        else node = bestUCTChild(node);
+        else node = bestUCTChild(node, c);
     }
     return node;
 }
@@ -101,10 +105,10 @@ function expand(node: MCTSNode): MCTSNode {
     return child;
 }
 
-function bestUCTChild(node: MCTSNode): MCTSNode {
+function bestUCTChild(node: MCTSNode, c: number): MCTSNode {
     return node.children.reduce((best, child) => {
-        const bestVal = uctValue(node.visits, best.wins, best.visits);
-        const childVal = uctValue(node.visits, child.wins, child.visits);
+        const bestVal = uctValue(node.visits, best.wins, best.visits, c);
+        const childVal = uctValue(node.visits, child.wins, child.visits, c);
         return childVal > bestVal ? child : best;
     });
 }
@@ -146,11 +150,11 @@ function backpropagate(node: MCTSNode, result: BoardState): void {
 }
 
 // Main MCTS function
-function mcts(rootBoard: Board, player: Cell, iterations = 1000): number {
+function mcts(rootBoard: Board, player: Cell, iterations = 1000, c = Math.sqrt(2)): number {
     const root = new MCTSNode(cloneBoard(rootBoard), player, null, null);
 
     for (let i = 0; i < iterations; i++) {
-        const leaf = select(root);
+        const leaf = select(root, c);
         const result = simulate(leaf);
         backpropagate(leaf, result);
     }
