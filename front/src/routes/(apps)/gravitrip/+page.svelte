@@ -70,7 +70,9 @@
         board = makeMove(board, cell, col);
         currentPlayer = currentPlayer === 1 ? 2 : 1;
 
-        computerMove();
+        // We need to way a bit before triggering the new move
+        // to let the previous piece drop in the grid
+        setTimeout(() => computerMove(), 200);
     };
 
     const computerMove = () => {
@@ -220,6 +222,8 @@
                         class="cell"
                         class:player1={board[col][row] === 1}
                         class:player2={board[col][row] === 2}
+                        class:drop={board[col][row] && row === board[col].length - 1}
+                        style="--drop-distance: {nbRows - row};"
                     ></div>
                 </button>
             </div>
@@ -249,6 +253,9 @@
             border-radius: 50%;
             background-color: #7075f9;
         }
+        .drop {
+            animation: drop 500ms ease-in-out forwards;
+        }
         .player1 {
             background-color: #d9ed07;
         }
@@ -263,5 +270,21 @@
     .winning-cell,
     .winning-cell:hover {
         background-color: #21e07a;
+    }
+
+    @keyframes drop {
+        0% {
+            transform: translateY(calc(var(--drop-distance) * -100%));
+        }
+        80% {
+            transform: translateY(0);
+        }
+        /* small bounce */
+        90% {
+            transform: translateY(-6%);
+        }
+        100% {
+            transform: translateY(0);
+        }
     }
 </style>
