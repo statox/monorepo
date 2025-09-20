@@ -136,30 +136,6 @@
     </span>
 </span>
 
-<div class="board" style="--nb-col: {nbColumns}; --nb-row: {nbRows}">
-    {#each rowsIndices.reverse() as row}
-        {#each colsIndices as col}
-            <div>
-                <button
-                    aria-label={'col-' + col}
-                    class="outer-cell"
-                    class:selected={selectedColumn === col}
-                    class:winning-cell={isWinningCell(row, col)}
-                    onclick={() => tryMove(col, currentPlayer)}
-                    onmouseenter={() => (selectedColumn = col)}
-                    onmouseleave={() => (selectedColumn = null)}
-                >
-                    <div
-                        class="cell"
-                        class:player1={board[col][row] === 1}
-                        class:player2={board[col][row] === 2}
-                    ></div>
-                </button>
-            </div>
-        {/each}
-    {/each}
-</div>
-
 <div>
     Computer stategy:
     <select bind:value={computerStategy}>
@@ -226,6 +202,30 @@
         </small>
     </div>
 {/if}
+
+<div class="board" style="--nb-col: {nbColumns}; --nb-row: {nbRows}">
+    {#each rowsIndices.reverse() as row}
+        {#each colsIndices as col}
+            <div>
+                <button
+                    aria-label={'col-' + col}
+                    class="outer-cell"
+                    class:selected={selectedColumn === col}
+                    class:winning-cell={isWinningCell(row, col)}
+                    onclick={() => tryMove(col, currentPlayer)}
+                    onmouseenter={() => (selectedColumn = col)}
+                    onmouseleave={() => (selectedColumn = null)}
+                >
+                    <div
+                        class="cell"
+                        class:player1={board[col][row] === 1}
+                        class:player2={board[col][row] === 2}
+                    ></div>
+                </button>
+            </div>
+        {/each}
+    {/each}
+</div>
 
 <style>
     .board {
