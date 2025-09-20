@@ -15,18 +15,23 @@ const getRandomMove = (board: Board) => {
     return candidates[randIndex];
 };
 
-export const makeRandomMove = (board: Board, cell: Cell) => {
+export type MoveResult = {
+    board: Board;
+    move: number;
+};
+
+export const makeRandomMove = (board: Board, cell: Cell): MoveResult => {
     const move = getRandomMove(board);
-    return makeMove(board, cell, move);
+    return { board: makeMove(board, cell, move), move };
 };
 
 export const makeMonteCarloMove = (
     board: Board,
     cell: Cell,
     config?: { iterations?: number; c?: number }
-) => {
+): MoveResult => {
     const move = mcts(board, cell, config?.iterations, config?.c);
-    return makeMove(board, cell, move);
+    return { board: makeMove(board, cell, move), move };
 };
 
 class MCTSNode {

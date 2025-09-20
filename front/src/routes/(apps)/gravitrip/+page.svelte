@@ -11,7 +11,7 @@
         makeMove,
         isValidMove
     } from './gravitrip';
-    import { makeMonteCarloMove, makeRandomMove } from './ai';
+    import { makeMonteCarloMove, makeRandomMove, type MoveResult } from './ai';
 
     let board: Board = $state(Array.from({ length: 7 }, () => []));
     let boardState: BoardState = $derived(getBoardState(board));
@@ -39,7 +39,9 @@
     ];
     let currentMctsPreset: MctsPreset | null = $state(mctsPresets[1]);
 
+    // svelte-ignore state_referenced_locally
     let mctsIterations = $state(currentMctsPreset.iterations);
+    // svelte-ignore state_referenced_locally
     let mctsC = $state(currentMctsPreset.c);
 
     type ComputerStategy = 'mcts' | 'random';
@@ -68,7 +70,7 @@
         board = makeMove(board, cell, col);
         currentPlayer = currentPlayer === 1 ? 2 : 1;
 
-        setTimeout(() => computerMove(), 300);
+        computerMove();
     };
 
     const computerMove = () => {
@@ -78,15 +80,23 @@
         if (getBoardState(board) !== BoardState.notOver) {
             return;
         }
+
+        let moveDone: MoveResult;
         if (computerStategy === 'random') {
-            board = makeRandomMove(board, currentPlayer);
+            moveDone = makeRandomMove(board, currentPlayer);
         } else if (computerStategy === 'mcts') {
-            board = makeMonteCarloMove(board, currentPlayer, {
+            moveDone = makeMonteCarloMove(board, currentPlayer, {
                 iterations: mctsIterations,
                 c: mctsC
             });
+        } else {
+            throw new Error('computer strategy not implemented');
         }
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
+
+        const { board: newBoard, move } = moveDone;
+        board = newBoard;
+        selectedColumn = move;
+        currentPlayer = 1;
     };
 
     const isWinningCell = (row: number, col: number) => {
