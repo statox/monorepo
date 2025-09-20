@@ -11,7 +11,7 @@
         makeMove,
         isValidMove
     } from './gravitrip';
-    import { makeRandomMove } from './ai';
+    import { makeMonteCarloMove, makeRandomMove } from './ai';
 
     let board: Board = $state(Array.from({ length: 7 }, () => []));
     let boardState: BoardState = $derived(getBoardState(board));
@@ -50,7 +50,8 @@
         if (getBoardState(board) !== BoardState.notOver) {
             return;
         }
-        board = makeRandomMove(board, currentPlayer);
+        // board = makeRandomMove(board, currentPlayer);
+        board = makeMonteCarloMove(board, currentPlayer);
         currentPlayer = currentPlayer === 1 ? 2 : 1;
     };
 

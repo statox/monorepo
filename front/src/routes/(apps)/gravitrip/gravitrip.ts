@@ -23,6 +23,10 @@ export class InvalidMoveError extends Error {
     }
 }
 
+export const cloneBoard = (board: Board): Board => {
+    return board.map((row) => [...row]);
+};
+
 export const isValidMove = (board: Board, col: number) => {
     if (board[col].length === nbRows) {
         return false;
