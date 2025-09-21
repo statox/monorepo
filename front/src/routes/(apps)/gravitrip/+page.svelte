@@ -22,21 +22,32 @@
     let board: Board = $state(getNewBoard());
     let boardState: BoardState = $derived(getBoardState(board));
     let winningCells: number[][] | null = $derived(getWinningCells(board));
-    let selectedColumn: number | null = $state(null);
 
     type ComputerStategy = 'mcts' | 'random';
     let computerStategy = $state('mcts' as ComputerStategy);
     let mctsConfig: MctsConfig = $state({ iterations: 1000, c: 1.41 });
 
     let currentPlayer: Cell = $state(1);
+    let humanPlayer: Cell = 1;
+    let computerPlayer: Cell = 2;
 
     const resetBoard = () => {
         board = getNewBoard();
         currentPlayer = 1;
+
+        // Alternate the player's number so that human alternatively
+        // plays yellow then red
+        [humanPlayer, computerPlayer] = [computerPlayer, humanPlayer];
+
+        // Trigger computer move if computer must play first
+        if (computerPlayer === currentPlayer) {
+            computerMove();
+        }
     };
 
-    const tryMove = (col: number, cell: Cell) => {
-        if (currentPlayer !== 1) {
+    const changeCurrentPlayer = () => (currentPlayer = currentPlayer === 1 ? 2 : 1);
+    const humanMove = (col: number) => {
+        if (humanPlayer !== currentPlayer) {
             return;
         }
         if (!isValidMove(board, col)) {
@@ -45,8 +56,8 @@
         if (getBoardState(board) !== BoardState.notOver) {
             return;
         }
-        board = makeMove(board, cell, col);
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
+        board = makeMove(board, humanPlayer, col);
+        changeCurrentPlayer();
 
         // We need to way a bit before triggering the new move
         // to let the previous piece drop in the grid
@@ -54,7 +65,7 @@
     };
 
     const computerMove = () => {
-        if (currentPlayer !== 2) {
+        if (computerPlayer !== currentPlayer) {
             return;
         }
         if (getBoardState(board) !== BoardState.notOver) {
@@ -70,10 +81,9 @@
             throw new Error('computer strategy not implemented');
         }
 
-        const { board: newBoard, move } = moveDone;
+        const { board: newBoard } = moveDone;
         board = newBoard;
-        selectedColumn = move;
-        currentPlayer = 1;
+        changeCurrentPlayer();
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -126,10 +136,4 @@
     </span>
 </span>
 
-<BoardComp
-    {nbColumns}
-    {nbRows}
-    {board}
-    {winningCells}
-    onMove={(col: number) => tryMove(col, currentPlayer)}
-/>
+<BoardComp {nbColumns} {nbRows} {board} {winningCells} onMove={humanMove} />

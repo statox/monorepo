@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { preventDefault } from 'svelte/legacy';
     import type { Board } from '../gravitrip';
 
     interface Props {
