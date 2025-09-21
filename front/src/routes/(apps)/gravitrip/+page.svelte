@@ -18,7 +18,7 @@
     import MctsSettings from './components/MCTSSettings.svelte';
     import { pageNameStore } from '$lib/components/Header';
 
-    pageNameStore.set('Gravitrip');
+    pageNameStore.set('Gravitrips');
 
     let board: Board = $state(getNewBoard());
     let boardHistory: { board: Board; moveByPlayer: number }[] = $state([]);
@@ -154,44 +154,71 @@
 <HeadIOS title="Gravitrip" description="Gravitrip" />
 <svelte:window on:keydown={onKeyDown} />
 
-<div>
-    See <a
-        href="https://www.quora.com/What-is-the-winning-strategy-for-the-first-player-in-Connect-Four-games"
-        >this quora thread</a
-    > for some tips on the winning strategy
+<div class="page-intro">
+    <div>
+        Gravitrips (which you might know as <a href="https://en.wikipedia.org/wiki/Connect_Four">
+            Connect Four</a
+        >) is a classic two-player strategy game where players take turns dropping pieces into a
+        grid, aiming to align four in a row. On this page, you can challenge a friend on the same
+        computer or test your skills against computer opponents with different AI strategies.
+    </div>
+    <br />
+    <div>
+        See <a
+            href="https://www.quora.com/What-is-the-winning-strategy-for-the-first-player-in-Connect-Four-games"
+        >
+            this quora thread</a
+        > for some tips on the winning strategy
+    </div>
 </div>
 
 <div class="opponent-choice">
-    <span>Play against</span>
-    <button
-        class:selected={player2Strategy === 'manual'}
-        onclick={() => {
-            player2Strategy = 'manual';
-        }}>Human</button
-    >
-    <button
-        class:selected={player2Strategy === 'random'}
-        onclick={() => {
-            player2Strategy = 'random';
-            if (computerPlayer === currentPlayer) {
-                computerMove();
-            }
-        }}>Random</button
-    >
-    <button
-        class:selected={player2Strategy === 'mcts'}
-        onclick={() => {
-            player2Strategy = 'mcts';
-            if (computerPlayer === currentPlayer) {
-                computerMove();
-            }
-        }}>MCTS</button
-    >
+    <label for="opponent-options">Choose your opponent:</label>
+    <div class="opponent-options">
+        <div>
+            <button
+                class:selected={player2Strategy === 'manual'}
+                onclick={() => {
+                    player2Strategy = 'manual';
+                }}
+            >
+                Human
+            </button>
+            Play with another human on the same computer.
+        </div>
+        <div>
+            <button
+                class:selected={player2Strategy === 'random'}
+                onclick={() => {
+                    player2Strategy = 'random';
+                    if (computerPlayer === currentPlayer) {
+                        computerMove();
+                    }
+                }}
+            >
+                Random
+            </button>
+            The computer makes completely random moves, no intelligence at all.
+        </div>
+        <div>
+            <button
+                class:selected={player2Strategy === 'mcts'}
+                onclick={() => {
+                    player2Strategy = 'mcts';
+                    if (computerPlayer === currentPlayer) {
+                        computerMove();
+                    }
+                }}
+            >
+                MCTS
+            </button>
+            The computer uses a
+            <a href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search">
+                Monte Carlo tree search</a
+            > algorithm to make smart moves. You can tweak the difficulty at the bottom of the page.
+        </div>
+    </div>
 </div>
-
-{#if player2Strategy === 'mcts'}
-    <MctsSettings onUpdate={(newConfig: MctsConfig) => (mctsConfig = newConfig)} />
-{/if}
 
 <div class="game-controls">
     <button onclick={resetBoard}>New game</button>
@@ -211,11 +238,25 @@
 
 <BoardComp {nbColumns} {nbRows} {board} {winningCells} onMove={humanMove} />
 
+<div class="computer-settings">
+    {#if player2Strategy === 'mcts'}
+        <MctsSettings onUpdate={(newConfig: MctsConfig) => (mctsConfig = newConfig)} />
+    {/if}
+</div>
+
 <style>
+    .page-intro {
+        background-color: var(--nc-bg-3);
+        padding: 0.5em;
+        margin: 0.5em;
+    }
     .opponent-choice {
+        margin: 2em;
+    }
+    .opponent-options {
         display: flex;
-        flex-direction: row;
-        justify-content: space-around;
+        flex-direction: column;
+        gap: 1em;
         .selected {
             background: var(--nc-lk-2);
         }
@@ -229,5 +270,8 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
+    }
+    .computer-settings {
+        margin: 2em;
     }
 </style>

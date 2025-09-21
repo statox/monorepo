@@ -21,12 +21,10 @@
         { name: 'hard', iterations: 5000, c: 0.7 }
     ];
 
-    let currentMctsPreset: MctsPreset | null = $state(mctsPresets[1]);
+    const initialPreset = mctsPresets[1];
 
-    // svelte-ignore state_referenced_locally
-    let iterations = $state(currentMctsPreset.iterations);
-    // svelte-ignore state_referenced_locally
-    let c = $state(currentMctsPreset.c);
+    let iterations = $state(initialPreset.iterations);
+    let c = $state(initialPreset.c);
 
     const update = () => {
         onUpdate({ iterations, c });
@@ -36,60 +34,55 @@
 <div>
     <h4>Monte Carlo Tree Search parameters</h4>
 
-    <label for="mcts-preset">Preset difficulty</label>
-    <select
-        bind:value={currentMctsPreset}
-        onchange={() => {
-            if (!currentMctsPreset) {
-                return;
-            }
-            iterations = currentMctsPreset.iterations;
-            c = currentMctsPreset.c;
-            update();
-        }}
-    >
-        {#each mctsPresets as mctsPreset}
-            <option value={mctsPreset}>
-                {mctsPreset.name}
-            </option>
+    <div class="difficulty-options">
+        <label for="mcts-preset">Preset difficulty</label>
+        {#each mctsPresets as preset}
+            <button
+                class:selected={c === preset.c && iterations === preset.iterations}
+                onclick={() => {
+                    iterations = preset.iterations;
+                    c = preset.c;
+                    update();
+                }}
+            >
+                {preset.name}
+            </button>
         {/each}
-    </select>
+    </div>
 
-    <br /><br />
-
-    <label for="mcts-iterations">Iterations:</label>
-    <input
-        id="mcts-iterations"
-        onchange={() => {
-            currentMctsPreset = null;
-            update();
-        }}
-        bind:value={iterations}
-        type="number"
-        min="0"
-    />
-    <small>
+    <div>
+        <h5>Iterations:</h5>
+        <input
+            id="mcts-iterations"
+            onchange={update}
+            bind:value={iterations}
+            type="number"
+            min="0"
+        />
+    </div>
+    <div>
         Number of simulations MCTS will run before choosing a move. Higher values usually mean
         stronger play but slower decisions.
-    </small>
+    </div>
 
-    <br /><br />
-
-    <label for="mcts-c">C (exploration constant):</label>
-    <input
-        id="mcts-c"
-        onchange={() => {
-            currentMctsPreset = null;
-            update();
-        }}
-        bind:value={c}
-        type="number"
-        min="0"
-        step="0.1"
-    />
-    <small>
+    <div>
+        <h5>C (exploration constant):</h5>
+        <input id="mcts-c" onchange={update} bind:value={c} type="number" min="0" step="0.1" />
+    </div>
+    <div>
         Controls the balance between exploration and exploitation. Lower values (e.g. 0.5, 0.7)
         favor tested moves, higher values (e.g. 2.0, 5.0) explore more. A typical default is √2 ≈
         1.41.
-    </small>
+    </div>
 </div>
+
+<style>
+    .difficulty-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        .selected {
+            background: var(--nc-lk-2);
+        }
+    }
+</style>
