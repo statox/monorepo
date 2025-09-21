@@ -9,12 +9,16 @@ import {
 } from '../gravitrip';
 import type { MoveResult } from './types';
 
-export const makeMonteCarloMove = (
-    board: Board,
-    cell: Cell,
-    config?: { iterations?: number; c?: number }
-): MoveResult => {
-    const move = mcts(board, cell, config?.iterations, config?.c);
+export type MctsConfig = {
+    iterations: number;
+    c: number;
+};
+
+export type MctsPreset = { name: string } & MctsConfig;
+
+export const makeMonteCarloMove = (board: Board, cell: Cell, config: MctsConfig): MoveResult => {
+    console.log('MCTS run with', config);
+    const move = mcts(board, cell, config.iterations, config.c);
     return { board: makeMove(board, cell, move), move };
 };
 

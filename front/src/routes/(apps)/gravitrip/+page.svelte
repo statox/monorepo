@@ -11,42 +11,18 @@
         makeMove,
         isValidMove
     } from './gravitrip';
-    import { makeMonteCarloMove, makeRandomMove, type MoveResult } from './ai';
+    import { makeMonteCarloMove, makeRandomMove, type MctsConfig, type MoveResult } from './ai';
     import BoardComp from './components/Board.svelte';
+    import MctsSettings from './components/MCTSSettings.svelte';
 
     let board: Board = $state(Array.from({ length: 7 }, () => []));
     let boardState: BoardState = $derived(getBoardState(board));
     let winningCells: number[][] | null = $derived(getWinningCells(board));
     let selectedColumn: number | null = $state(null);
 
-    type MctsPreset = {
-        name: string;
-        iterations: number;
-        c: number;
-    };
-    const mctsPresets: MctsPreset[] = [
-        // Low number of iterations → weak lookahead.
-        // Higher c → favors exploration, making play less consistent (misses obvious wins).
-        // Plays at a beginner level, beatable by casual players.
-        { name: 'easy', iterations: 200, c: 2 },
-        // Enough iterations to spot short-term tactics and avoid blunders.
-        // Balanced exploration/exploitation.
-        // Plays at a decent hobby level — challenging but still beatable by a practiced human.
-        { name: 'medium', iterations: 1000, c: 1.41 },
-        // Much deeper search → reliably sees 2–3 moves ahead.
-        // Lower c makes it stick more to strong moves, less “experimental.”
-        // Feels sharp and consistent, tough even for strong casual players.
-        { name: 'hard', iterations: 5000, c: 0.7 }
-    ];
-    let currentMctsPreset: MctsPreset | null = $state(mctsPresets[1]);
-
-    // svelte-ignore state_referenced_locally
-    let mctsIterations = $state(currentMctsPreset.iterations);
-    // svelte-ignore state_referenced_locally
-    let mctsC = $state(currentMctsPreset.c);
-
     type ComputerStategy = 'mcts' | 'random';
     let computerStategy = $state('mcts' as ComputerStategy);
+    let mctsConfig: MctsConfig = $state({ iterations: 1000, c: 1.41 });
 
     let currentPlayer: Cell = $state(1);
 
@@ -85,10 +61,7 @@
         if (computerStategy === 'random') {
             moveDone = makeRandomMove(board, currentPlayer);
         } else if (computerStategy === 'mcts') {
-            moveDone = makeMonteCarloMove(board, currentPlayer, {
-                iterations: mctsIterations,
-                c: mctsC
-            });
+            moveDone = makeMonteCarloMove(board, currentPlayer, mctsConfig);
         } else {
             throw new Error('computer strategy not implemented');
         }
@@ -129,6 +102,7 @@
 </script>
 
 <HeadIOS title="Gravitrip" description="Gravitrip" />
+<svelte:window on:keydown={onKeyDown} />
 
 <div class="main">
     <h3>Gravitrip</h3>
@@ -153,59 +127,7 @@
 </div>
 
 {#if computerStategy === 'mcts'}
-    <div>
-        <h4>Monte Carlo Tree Search parameters</h4>
-
-        <label for="mcts-preset">Preset difficulty</label>
-        <select
-            bind:value={currentMctsPreset}
-            onchange={() => {
-                if (!currentMctsPreset) {
-                    return;
-                }
-                mctsIterations = currentMctsPreset.iterations;
-                mctsC = currentMctsPreset.c;
-            }}
-        >
-            {#each mctsPresets as mctsPreset}
-                <option value={mctsPreset}>
-                    {mctsPreset.name}
-                </option>
-            {/each}
-        </select>
-
-        <br /><br />
-
-        <label for="mcts-iterations">Iterations:</label>
-        <input
-            id="mcts-iterations"
-            onchange={() => (currentMctsPreset = null)}
-            bind:value={mctsIterations}
-            type="number"
-            min="0"
-        />
-        <small>
-            Number of simulations MCTS will run before choosing a move. Higher values usually mean
-            stronger play but slower decisions.
-        </small>
-
-        <br /><br />
-
-        <label for="mcts-c">C (exploration constant):</label>
-        <input
-            id="mcts-c"
-            onchange={() => (currentMctsPreset = null)}
-            bind:value={mctsC}
-            type="number"
-            min="0"
-            step="0.1"
-        />
-        <small>
-            Controls the balance between exploration and exploitation. Lower values (e.g. 0.5, 0.7)
-            favor tested moves, higher values (e.g. 2.0, 5.0) explore more. A typical default is √2
-            ≈ 1.41.
-        </small>
-    </div>
+    <MctsSettings onUpdate={(newConfig: MctsConfig) => (mctsConfig = newConfig)} />
 {/if}
 
 <span>
@@ -227,5 +149,3 @@
     {winningCells}
     onMove={(col: number) => tryMove(col, currentPlayer)}
 />
-
-<svelte:window on:keydown={onKeyDown} />
