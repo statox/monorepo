@@ -25,8 +25,8 @@
     let boardState: BoardState = $derived(getBoardState(board));
     let winningCells: number[][] | null = $derived(getWinningCells(board));
 
-    type ComputerStategy = 'mcts' | 'random';
-    let computerStategy = $state('mcts' as ComputerStategy);
+    type PlayerStategy = 'mcts' | 'random' | 'manual';
+    let player2Strategy = $state('mcts' as PlayerStategy);
     let mctsConfig: MctsConfig = $state({ iterations: 1000, c: 1.41 });
 
     let currentPlayer: Cell = $state(1);
@@ -43,7 +43,7 @@
         [humanPlayer, computerPlayer] = [computerPlayer, humanPlayer];
 
         // Trigger computer move if computer must play first
-        if (computerPlayer === currentPlayer) {
+        if (player2Strategy !== 'manual' && computerPlayer === currentPlayer) {
             computerMove();
         }
     };
@@ -54,21 +54,26 @@
     };
 
     const cancelLastMove = () => {
-        if (
-            boardHistory.length === 1 &&
-            boardHistory[boardHistory.length - 1].moveByPlayer === computerPlayer
-        ) {
-            // Can't cancel the computer's first move
-            return;
-        }
-        if (boardHistory[boardHistory.length - 1].moveByPlayer === computerPlayer) {
+        if (player2Strategy === 'manual') {
             boardHistory.pop();
-        }
-        if (
-            boardHistory.length &&
-            boardHistory[boardHistory.length - 1].moveByPlayer === humanPlayer
-        ) {
-            boardHistory.pop();
+            changeCurrentPlayer();
+        } else {
+            if (
+                boardHistory.length === 1 &&
+                boardHistory[boardHistory.length - 1].moveByPlayer === computerPlayer
+            ) {
+                // Can't cancel the computer's first move
+                return;
+            }
+            if (boardHistory[boardHistory.length - 1].moveByPlayer === computerPlayer) {
+                boardHistory.pop();
+            }
+            if (
+                boardHistory.length &&
+                boardHistory[boardHistory.length - 1].moveByPlayer === humanPlayer
+            ) {
+                boardHistory.pop();
+            }
         }
         boardHistory = boardHistory;
         if (boardHistory.length === 0) {
@@ -83,7 +88,7 @@
     const changeCurrentPlayer = () => (currentPlayer = currentPlayer === 1 ? 2 : 1);
 
     const humanMove = (col: number) => {
-        if (humanPlayer !== currentPlayer) {
+        if (humanPlayer !== currentPlayer && player2Strategy !== 'manual') {
             return;
         }
         if (!isValidMove(board, col)) {
@@ -92,13 +97,23 @@
         if (getBoardState(board) !== BoardState.notOver) {
             return;
         }
-        board = makeMove(board, humanPlayer, col);
-        addMoveToHistory(board, humanPlayer);
+        let player: Cell;
+        if (humanPlayer === currentPlayer) {
+            player = humanPlayer;
+        } else if (computerPlayer === currentPlayer && player2Strategy === 'manual') {
+            player = computerPlayer;
+        } else {
+            return;
+        }
+        board = makeMove(board, player, col);
+        addMoveToHistory(board, player);
         changeCurrentPlayer();
 
         // We need to way a bit before triggering the new move
         // to let the previous piece drop in the grid
-        setTimeout(() => computerMove(), 200);
+        if (player2Strategy !== 'manual') {
+            setTimeout(() => computerMove(), 200);
+        }
     };
 
     const computerMove = () => {
@@ -108,11 +123,14 @@
         if (getBoardState(board) !== BoardState.notOver) {
             return;
         }
+        if (player2Strategy === 'manual') {
+            return;
+        }
 
         let moveDone: MoveResult;
-        if (computerStategy === 'random') {
+        if (player2Strategy === 'random') {
             moveDone = makeRandomMove(board, currentPlayer);
-        } else if (computerStategy === 'mcts') {
+        } else if (player2Strategy === 'mcts') {
             moveDone = makeMonteCarloMove(board, currentPlayer, mctsConfig);
         } else {
             throw new Error('computer strategy not implemented');
@@ -148,9 +166,22 @@
 </div>
 
 <div>
-    Computer stategy:
-    <select bind:value={computerStategy}>
-        {#each ['mcts', 'random'] as strategy}
+    Player 2 stategy:
+    <select
+        bind:value={player2Strategy}
+        onchange={() => {
+            // If the user change the strategy from manual to an ai strategy while
+            // it's player 2 turn then we need to trigger a computer move
+            if (player2Strategy === 'manual') {
+                return;
+            }
+            if (computerPlayer !== currentPlayer) {
+                return;
+            }
+            computerMove();
+        }}
+    >
+        {#each ['mcts', 'random', 'manual'] as strategy}
             <option value={strategy}>
                 {strategy}
             </option>
@@ -158,7 +189,7 @@
     </select>
 </div>
 
-{#if computerStategy === 'mcts'}
+{#if player2Strategy === 'mcts'}
     <MctsSettings onUpdate={(newConfig: MctsConfig) => (mctsConfig = newConfig)} />
 {/if}
 
