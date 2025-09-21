@@ -10,7 +10,8 @@
         nbRows,
         nbColumns,
         makeMove,
-        isValidMove
+        isValidMove,
+        cloneBoard
     } from './gravitrip';
     import { makeMonteCarloMove, makeRandomMove, type MctsConfig, type MoveResult } from './ai';
     import BoardComp from './components/Board.svelte';
@@ -20,6 +21,7 @@
     pageNameStore.set('Gravitrip');
 
     let board: Board = $state(getNewBoard());
+    let boardHistory: { board: Board; moveByPlayer: number }[] = $state([]);
     let boardState: BoardState = $derived(getBoardState(board));
     let winningCells: number[][] | null = $derived(getWinningCells(board));
 
@@ -33,6 +35,7 @@
 
     const resetBoard = () => {
         board = getNewBoard();
+        boardHistory = [];
         currentPlayer = 1;
 
         // Alternate the player's number so that human alternatively
@@ -45,7 +48,40 @@
         }
     };
 
+    const addMoveToHistory = (board: Board, moveByPlayer: Cell) => {
+        boardHistory.push({ board: cloneBoard(board), moveByPlayer });
+        boardHistory = boardHistory;
+    };
+
+    const cancelLastMove = () => {
+        if (
+            boardHistory.length === 1 &&
+            boardHistory[boardHistory.length - 1].moveByPlayer === computerPlayer
+        ) {
+            // Can't cancel the computer's first move
+            return;
+        }
+        if (boardHistory[boardHistory.length - 1].moveByPlayer === computerPlayer) {
+            boardHistory.pop();
+        }
+        if (
+            boardHistory.length &&
+            boardHistory[boardHistory.length - 1].moveByPlayer === humanPlayer
+        ) {
+            boardHistory.pop();
+        }
+        boardHistory = boardHistory;
+        if (boardHistory.length === 0) {
+            board = getNewBoard();
+        } else {
+            // We are already adding clones to the history but if we don't clone
+            // here sometimes the board component is not updated.
+            board = cloneBoard(boardHistory[boardHistory.length - 1].board);
+        }
+    };
+
     const changeCurrentPlayer = () => (currentPlayer = currentPlayer === 1 ? 2 : 1);
+
     const humanMove = (col: number) => {
         if (humanPlayer !== currentPlayer) {
             return;
@@ -57,6 +93,7 @@
             return;
         }
         board = makeMove(board, humanPlayer, col);
+        addMoveToHistory(board, humanPlayer);
         changeCurrentPlayer();
 
         // We need to way a bit before triggering the new move
@@ -83,6 +120,7 @@
 
         const { board: newBoard } = moveDone;
         board = newBoard;
+        addMoveToHistory(board, computerPlayer);
         changeCurrentPlayer();
     };
 
@@ -125,7 +163,8 @@
 {/if}
 
 <span>
-    <button onclick={resetBoard}>Restart game</button>
+    <button onclick={resetBoard}>New game</button>
+    <button onclick={cancelLastMove} disabled={boardHistory.length === 0}>Cancel move</button>
 
     <span style="font-weight: bold">
         {#if boardState === BoardState.draw}
