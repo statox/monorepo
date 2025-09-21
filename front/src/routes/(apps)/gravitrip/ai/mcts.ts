@@ -6,24 +6,8 @@ import {
     BoardState,
     type Board,
     type Cell
-} from './gravitrip';
-
-const getRandomMove = (board: Board) => {
-    const candidates = getPossibleMoves(board);
-
-    const randIndex = Math.floor(Math.random() * candidates.length);
-    return candidates[randIndex];
-};
-
-export type MoveResult = {
-    board: Board;
-    move: number;
-};
-
-export const makeRandomMove = (board: Board, cell: Cell): MoveResult => {
-    const move = getRandomMove(board);
-    return { board: makeMove(board, cell, move), move };
-};
+} from '../gravitrip';
+import type { MoveResult } from './types';
 
 export const makeMonteCarloMove = (
     board: Board,
