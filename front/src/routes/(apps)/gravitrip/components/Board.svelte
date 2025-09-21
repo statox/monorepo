@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { preventDefault } from 'svelte/legacy';
     import type { Board } from '../gravitrip';
 
     interface Props {
@@ -24,7 +25,34 @@
             }).length > 0
         );
     };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+        switch (e.key) {
+            case 'ArrowRight':
+                if (selectedColumn === null) {
+                    selectedColumn = Math.floor(nbColumns / 2);
+                    return;
+                }
+                selectedColumn = Math.min(selectedColumn + 1, nbColumns - 1);
+                break;
+            case 'ArrowLeft':
+                if (selectedColumn === null) {
+                    selectedColumn = Math.floor(nbColumns / 2);
+                    return;
+                }
+                selectedColumn = Math.max(selectedColumn - 1, 0);
+                break;
+            case ' ':
+                if (selectedColumn === null) {
+                    return;
+                }
+                onMove(selectedColumn);
+                break;
+        }
+    };
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <div class="board" style="--nb-col: {nbColumns}; --nb-row: {nbRows}">
     {#each rowsIndices.reverse() as row}

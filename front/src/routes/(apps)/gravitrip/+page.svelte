@@ -77,29 +77,9 @@
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
-        switch (e.keyCode) {
-            case 82: // r
+        switch (e.key) {
+            case 'r':
                 resetBoard();
-                break;
-            case 39: // right
-                if (selectedColumn === null) {
-                    selectedColumn = Math.floor(nbColumns / 2);
-                    return;
-                }
-                selectedColumn = Math.min(selectedColumn + 1, nbColumns - 1);
-                break;
-            case 37: // left
-                if (selectedColumn === null) {
-                    selectedColumn = Math.floor(nbColumns / 2);
-                    return;
-                }
-                selectedColumn = Math.max(selectedColumn - 1, 0);
-                break;
-            case 32: // space
-                if (selectedColumn === null) {
-                    return;
-                }
-                tryMove(selectedColumn, currentPlayer);
                 break;
         }
     };
