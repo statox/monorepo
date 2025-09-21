@@ -17,7 +17,6 @@ export type MctsConfig = {
 export type MctsPreset = { name: string } & MctsConfig;
 
 export const makeMonteCarloMove = (board: Board, cell: Cell, config: MctsConfig): MoveResult => {
-    console.log('MCTS run with', config);
     const move = mcts(board, cell, config.iterations, config.c);
     return { board: makeMove(board, cell, move), move };
 };

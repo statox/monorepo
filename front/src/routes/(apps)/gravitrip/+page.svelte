@@ -5,6 +5,7 @@
         type Cell,
         BoardState,
         getBoardState,
+        getNewBoard,
         getWinningCells,
         nbRows,
         nbColumns,
@@ -18,7 +19,7 @@
 
     pageNameStore.set('Gravitrip');
 
-    let board: Board = $state(Array.from({ length: 7 }, () => []));
+    let board: Board = $state(getNewBoard());
     let boardState: BoardState = $derived(getBoardState(board));
     let winningCells: number[][] | null = $derived(getWinningCells(board));
     let selectedColumn: number | null = $state(null);
@@ -30,7 +31,7 @@
     let currentPlayer: Cell = $state(1);
 
     const resetBoard = () => {
-        board = Array.from({ length: 7 }, () => []);
+        board = getNewBoard();
         currentPlayer = 1;
     };
 

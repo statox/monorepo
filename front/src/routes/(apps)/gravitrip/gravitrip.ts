@@ -23,6 +23,10 @@ export class InvalidMoveError extends Error {
     }
 }
 
+export const getNewBoard = () => {
+    return Array.from({ length: nbColumns }, () => []);
+};
+
 export const cloneBoard = (board: Board): Board => {
     return board.map((row) => [...row]);
 };
