@@ -14,6 +14,9 @@
     import { makeMonteCarloMove, makeRandomMove, type MctsConfig, type MoveResult } from './ai';
     import BoardComp from './components/Board.svelte';
     import MctsSettings from './components/MCTSSettings.svelte';
+    import { pageNameStore } from '$lib/components/Header';
+
+    pageNameStore.set('Gravitrip');
 
     let board: Board = $state(Array.from({ length: 7 }, () => []));
     let boardState: BoardState = $derived(getBoardState(board));
