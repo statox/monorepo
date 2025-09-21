@@ -151,7 +151,7 @@
     };
 </script>
 
-<HeadIOS title="Gravitrip" description="Gravitrip" />
+<HeadIOS title="Gravitrip" description="Gravitrip" iconPath="/gravitrips.png" />
 <svelte:window on:keydown={onKeyDown} />
 
 <div class="page-intro">
