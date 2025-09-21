@@ -164,11 +164,27 @@
     </div>
     <br />
     <div>
-        See <a
-            href="https://www.quora.com/What-is-the-winning-strategy-for-the-first-player-in-Connect-Four-games"
-        >
-            this quora thread</a
-        > for some tips on the winning strategy
+        Some resources:
+        <ul>
+            <li>
+                <a
+                    href="https://www.quora.com/What-is-the-winning-strategy-for-the-first-player-in-Connect-Four-games"
+                >
+                    Quora thread</a
+                > with some tips on the winning strategy
+            </li>
+            <li>
+                <a href="http://statox.fr/uploads/a-knowledge-based-approach-of-connect-four.pdf"
+                    >A Knowledge-based Approach of Connect-Four - Victor Allis</a
+                >. The first paper solving the game and proposing rules to follow to win or force a
+                draw.
+            </li>
+            <li>
+                <a href="https://drimify.com/en/resources/connect-four-strategy-win-time-play/">
+                    A bogus marketting article</a
+                > talking about some human stategies
+            </li>
+        </ul>
     </div>
 </div>
 
