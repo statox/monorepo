@@ -154,10 +154,6 @@
 <HeadIOS title="Gravitrip" description="Gravitrip" />
 <svelte:window on:keydown={onKeyDown} />
 
-<div class="main">
-    <h3>Gravitrip</h3>
-</div>
-
 <div>
     See <a
         href="https://www.quora.com/What-is-the-winning-strategy-for-the-first-player-in-Connect-Four-games"
@@ -165,45 +161,73 @@
     > for some tips on the winning strategy
 </div>
 
-<div>
-    Player 2 stategy:
-    <select
-        bind:value={player2Strategy}
-        onchange={() => {
-            // If the user change the strategy from manual to an ai strategy while
-            // it's player 2 turn then we need to trigger a computer move
-            if (player2Strategy === 'manual') {
-                return;
-            }
-            if (computerPlayer !== currentPlayer) {
-                return;
-            }
-            computerMove();
-        }}
+<div class="opponent-choice">
+    <span>Play against</span>
+    <button
+        class:selected={player2Strategy === 'manual'}
+        onclick={() => {
+            player2Strategy = 'manual';
+        }}>Human</button
     >
-        {#each ['mcts', 'random', 'manual'] as strategy}
-            <option value={strategy}>
-                {strategy}
-            </option>
-        {/each}
-    </select>
+    <button
+        class:selected={player2Strategy === 'random'}
+        onclick={() => {
+            player2Strategy = 'random';
+            if (computerPlayer === currentPlayer) {
+                computerMove();
+            }
+        }}>Random</button
+    >
+    <button
+        class:selected={player2Strategy === 'mcts'}
+        onclick={() => {
+            player2Strategy = 'mcts';
+            if (computerPlayer === currentPlayer) {
+                computerMove();
+            }
+        }}>MCTS</button
+    >
 </div>
 
 {#if player2Strategy === 'mcts'}
     <MctsSettings onUpdate={(newConfig: MctsConfig) => (mctsConfig = newConfig)} />
 {/if}
 
-<span>
+<div class="game-controls">
     <button onclick={resetBoard}>New game</button>
     <button onclick={cancelLastMove} disabled={boardHistory.length === 0}>Cancel move</button>
+</div>
 
-    <span style="font-weight: bold">
+<div class="game-results">
+    {#if boardState !== BoardState.notOver}
+        Game Over -
         {#if boardState === BoardState.draw}
-            Game Over
+            Draw
         {:else if boardState === BoardState.winPlayer1 || boardState === BoardState.winPlayer2}
             Player {boardState} wins
         {/if}
-    </span>
-</span>
+    {/if}
+</div>
 
 <BoardComp {nbColumns} {nbRows} {board} {winningCells} onMove={humanMove} />
+
+<style>
+    .opponent-choice {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        .selected {
+            background: var(--nc-lk-2);
+        }
+    }
+    .game-controls {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .game-results {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+</style>
