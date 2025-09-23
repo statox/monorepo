@@ -23,7 +23,7 @@
         "@auth0/auth0-spa-js": "^2.3.0",
         "@eslint/js": "^9.33.0",
         "@sveltejs/adapter-static": "^3.0.9",
-        "@sveltejs/kit": "^2.37.1",
+        "@sveltejs/kit": "^2.43.1",
         "@sveltejs/vite-plugin-svelte": "^6.2.0",
         "@types/luxon": "^3.7.1",
         "@types/p5": "^1.7.6",
