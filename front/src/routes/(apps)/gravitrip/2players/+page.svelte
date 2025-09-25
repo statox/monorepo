@@ -34,7 +34,7 @@
     });
 
     const restart = () => {
-        socket = new WebSocket(WS_SERVER_URL);
+        socket = new WebSocket(WS_SERVER_URL + '/gravitrips/ws');
         pageState = 'connecting';
         board = null;
         boardState = null;
