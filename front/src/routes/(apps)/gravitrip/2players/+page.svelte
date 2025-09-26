@@ -1,30 +1,36 @@
 <script lang="ts">
-    import { onDestroy, onMount } from 'svelte';
+    import { onDestroy } from 'svelte';
     import { type Board, BoardState } from '../gravitrip';
     import BoardComp from '../components/Board.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
+    import { requestAPIGet } from '$lib/api';
 
     let socket: WebSocket;
     let youAre: number | null = $state(null);
     let board: Board | null = $state(null);
     let boardState: BoardState | null = $state(null);
-    let gameOverReason: string | null = $state('');
     let winningCells: number[][] | null = $state(null);
 
     type PageState =
+        | 'initial'
         | 'connecting'
         | 'waiting_for_opponent'
         | 'playing'
         | 'game_over'
         | 'disconnected';
-    let pageState: PageState = $state('connecting');
+    let pageState: PageState = $state('initial');
+
+    let gameId = $state('');
+
+    const getNewGameId = async () => {
+        const res = await requestAPIGet<{ gameId: string }>({ path: '/gravitrips/getNewGame' });
+        gameId = res.gameId;
+        startGame();
+    };
 
     // Note that we replace only "http" even for the "https" prod endpoint
     // because in prod we want to use wss://
     const WS_SERVER_URL = PUBLIC_API_URL.replace(/^http?/, 'ws');
-    onMount(() => {
-        restart();
-    });
 
     onDestroy(() => {
         if (!socket) {
@@ -33,21 +39,20 @@
         socket.close();
     });
 
-    const restart = () => {
-        socket = new WebSocket(WS_SERVER_URL + '/gravitrips/ws');
+    const startGame = () => {
+        socket = new WebSocket(WS_SERVER_URL + '/gravitrips/ws?' + gameId);
         pageState = 'connecting';
         board = null;
         boardState = null;
         winningCells = null;
-        gameOverReason = null;
 
         socket.onopen = () => {
             pageState = 'waiting_for_opponent';
         };
 
         socket.onclose = (event: CloseEvent) => {
-            pageState = 'game_over';
-            gameOverReason = event.reason;
+            console.log(event.reason);
+            pageState = 'disconnected';
         };
 
         socket.onmessage = (event) => {
@@ -62,18 +67,33 @@
                 winningCells = data.winningCells;
             } else if (data.type === 'waiting_for_opponent') {
                 boardState = null;
+            } else if (data.type === 'game_over') {
+                pageState = 'game_over';
             }
         };
     };
 
     const tryMove = (col: number) => {
         if (!socket || socket.readyState !== WebSocket.OPEN) return;
-        const message = JSON.stringify({ move: col });
+        const message = JSON.stringify({ type: 'move', column: col });
+        socket.send(message);
+    };
+
+    const tryRestart = () => {
+        if (!socket || socket.readyState !== WebSocket.OPEN) return;
+        const message = JSON.stringify({ type: 'restart' });
         socket.send(message);
     };
 </script>
 
 <h3>Simple WebSocket Client</h3>
+
+{#if ['initial', 'waiting_for_opponent', 'game_over', 'disconnected'].includes(pageState)}
+    <button onclick={getNewGameId}>Start a new game</button>
+    <br />
+    <input bind:value={gameId} type="string" />
+    <button onclick={startGame}>Join Game</button>
+{/if}
 
 {#if pageState === 'connecting'}
     <p>Connecting to the server…</p>
@@ -93,8 +113,8 @@
 {/if}
 
 {#if pageState === 'game_over'}
-    <p>Game over - {gameOverReason}</p>
-    <button onclick={restart}>New game</button>
+    <p>Game over</p>
+    <button onclick={tryRestart}>Restart</button>
     <span style="font-weight: bold">
         {#if boardState === BoardState.draw}
             Game Over
@@ -109,5 +129,4 @@
 
 {#if pageState === 'disconnected'}
     <p>Disconnected</p>
-    <button onclick={restart}>New game</button>
 {/if}
