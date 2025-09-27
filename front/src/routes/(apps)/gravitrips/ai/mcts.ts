@@ -6,7 +6,7 @@ import {
     BoardState,
     type Board,
     type Cell
-} from '../gravitrip';
+} from '../gravitrips';
 import type { MoveResult } from './types';
 
 export type MctsConfig = {

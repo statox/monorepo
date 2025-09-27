@@ -96,9 +96,9 @@ export const gameSection = {
     name: 'Games',
     apps: [
         {
-            name: 'Gravitrip',
+            name: 'Gravitrips',
             description: 'Connect four pieces to wi',
-            link: '/gravitrip'
+            link: '/gravitrips'
         },
         {
             name: 'Sudoku',

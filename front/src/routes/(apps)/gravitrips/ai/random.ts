@@ -1,4 +1,4 @@
-import { getPossibleMoves, makeMove, type Board, type Cell } from '../gravitrip';
+import { getPossibleMoves, makeMove, type Board, type Cell } from '../gravitrips';
 import type { MoveResult } from './types';
 
 const getRandomMove = (board: Board) => {

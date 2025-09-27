@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from 'svelte';
-    import { type Board, BoardState } from '../gravitrip';
+    import { type Board, BoardState } from '../gravitrips';
     import BoardComp from '../components/Board.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { requestAPIGet } from '$lib/api';
@@ -87,7 +87,7 @@
     };
 </script>
 
-<h3>Online game <button onclick={() => goto('/gravitrip')}>Back</button></h3>
+<h3>Online game <button onclick={() => goto('/gravitrips')}>Back</button></h3>
 
 {#if ['initial', 'waiting_for_opponent', 'game_over', 'disconnected'].includes(pageState)}
     <button onclick={getNewGameId}>Start a new game</button>

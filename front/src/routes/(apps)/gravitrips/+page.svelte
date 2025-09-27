@@ -6,7 +6,7 @@
     pageNameStore.set('Gravitrips');
 </script>
 
-<HeadIOS title="Gravitrip" description="Gravitrip" iconPath="/gravitrips.png" />
+<HeadIOS title="Gravitrips" description="Gravitrips" iconPath="/gravitrips.png" />
 
 <div class="page-intro">
     <div>
@@ -42,5 +42,5 @@
     </div>
 </div>
 
-<button onclick={() => goto('gravitrip/1player')}>Local game</button>
-<button onclick={() => goto('gravitrip/2players')}>Online game</button>
+<button onclick={() => goto('gravitrips/1player')}>Local game</button>
+<button onclick={() => goto('gravitrips/2players')}>Online game</button>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Board } from '../gravitrip';
+    import type { Board } from '../gravitrips';
 
     interface Props {
         nbColumns: number;

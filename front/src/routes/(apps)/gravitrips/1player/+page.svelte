@@ -12,7 +12,7 @@
         makeMove,
         isValidMove,
         cloneBoard
-    } from '../gravitrip';
+    } from '../gravitrips';
     import { makeMonteCarloMove, makeRandomMove, type MctsConfig, type MoveResult } from '../ai';
     import BoardComp from '../components/Board.svelte';
     import MctsSettings from '../components/MCTSSettings.svelte';
@@ -152,10 +152,10 @@
     };
 </script>
 
-<HeadIOS title="Gravitrip" description="Gravitrip" iconPath="/gravitrips.png" />
+<HeadIOS title="Gravitrips" description="Gravitrips" iconPath="/gravitrips.png" />
 <svelte:window on:keydown={onKeyDown} />
 
-<h3>Local game <button onclick={() => goto('/gravitrip')}>Back</button></h3>
+<h3>Local game <button onclick={() => goto('/gravitrips')}>Back</button></h3>
 
 <div class="opponent-choice">
     <label for="opponent-options">Choose your opponent:</label>

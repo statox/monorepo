@@ -1,4 +1,4 @@
-import type { Board } from '../gravitrip';
+import type { Board } from '../gravitrips';
 
 export type MoveResult = {
     board: Board;
