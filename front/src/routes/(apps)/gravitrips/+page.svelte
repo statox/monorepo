@@ -13,8 +13,7 @@
         Gravitrips (which you might know as <a href="https://en.wikipedia.org/wiki/Connect_Four">
             Connect Four</a
         >) is a classic two-player strategy game where players take turns dropping pieces into a
-        grid, aiming to align four in a row. On this page, you can challenge a friend on the same
-        computer or test your skills against computer opponents with different AI strategies.
+        grid, aiming to align four in a row.
     </div>
     <br />
     <div>
@@ -40,6 +39,13 @@
             </li>
         </ul>
     </div>
+    <br />
+    <div>
+        Click "Local game" to challenge a friend on the same computer or test your skills against
+        computer opponents with different AI strategies.
+    </div>
+    <div>Click "Online game" to challenge a friend online.</div>
+    <br />
 </div>
 
 <button onclick={() => goto('gravitrips/1player')}>Local game</button>
