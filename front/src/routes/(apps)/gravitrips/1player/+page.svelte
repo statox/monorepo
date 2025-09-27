@@ -230,11 +230,6 @@
 </div>
 
 <style>
-    .page-intro {
-        background-color: var(--nc-bg-3);
-        padding: 0.5em;
-        margin: 0.5em;
-    }
     .opponent-choice {
         margin: 2em;
     }
