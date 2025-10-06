@@ -22,7 +22,7 @@
     "devDependencies": {
         "@auth0/auth0-spa-js": "^2.4.1",
         "@eslint/js": "^9.37.0",
-        "@sveltejs/adapter-static": "^3.0.9",
+        "@sveltejs/adapter-static": "^3.0.10",
         "@sveltejs/kit": "^2.43.5",
         "@sveltejs/vite-plugin-svelte": "^6.2.1",
         "@types/luxon": "^3.7.1",
