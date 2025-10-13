@@ -44,7 +44,7 @@
         "simple-vector": "^0.0.13",
         "superagent": "^10.2.3",
         "svelte": "^5.39.11",
-        "svelte-check": "^4.3.2",
+        "svelte-check": "^4.3.3",
         "svelte-jsoneditor": "^3.10.0",
         "svelte-markdown": "^0.4.1",
         "svelte-modals": "^2.0.1",
