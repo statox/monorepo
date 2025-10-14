@@ -34,6 +34,10 @@ export const initializeAuth0 = async () => {
     if ((search.includes('code=') || search.includes('error=')) && search.includes('state=')) {
         const { appState } = await get(auth0Client).handleRedirectCallback();
         window.history.replaceState({}, document.title, window.location.pathname);
+
+        // For some reason even when the svelte/no-navigation-without-resolve rule is
+        // disabled in eslint.config.mjs this line still raise an error. Not sure why.
+        // eslint-disable-next-line svelte/no-navigation-without-resolve
         goto(appState.returnTo || '/');
     }
 

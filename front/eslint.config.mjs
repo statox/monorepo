@@ -39,6 +39,19 @@ export default [
         },
         rules: {
             ...commonRules,
+            // See https://github.com/sveltejs/eslint-plugin-svelte/issues/1353
+            // and https://github.com/statox/apps.statox.fr/pull/415
+            // I can't get this rule to work and all the existing resolve and links
+            // work well so for now I'm disabling it
+            'svelte/no-navigation-without-resolve': [
+                'off',
+                {
+                    ignoreGoto: true,
+                    ignoreLinks: true,
+                    ignorePushState: true,
+                    ignoreReplaceState: true
+                }
+            ],
             'svelte/require-each-key': 'off' // TODO Check if it's worth fixing and re-enabling
         }
     },
