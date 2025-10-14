@@ -31,7 +31,7 @@
         "chart.js": "^4.5.1",
         "eslint": "^9.37.0",
         "eslint-plugin-import": "^2.32.0",
-        "eslint-plugin-svelte": "^3.11.0",
+        "eslint-plugin-svelte": "^3.12.4",
         "globals": "^16.4.0",
         "highlight.js": "^11.11.1",
         "lunarphase-js": "^2.0.3",
