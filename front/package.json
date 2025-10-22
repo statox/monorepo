@@ -20,7 +20,7 @@
         }
     },
     "devDependencies": {
-        "@auth0/auth0-spa-js": "^2.5.0",
+        "@auth0/auth0-spa-js": "^2.7.0",
         "@eslint/js": "^9.37.0",
         "@sveltejs/adapter-static": "^3.0.10",
         "@sveltejs/kit": "^2.46.5",
