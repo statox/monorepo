@@ -48,7 +48,7 @@
         "svelte-jsoneditor": "^3.10.0",
         "svelte-markdown": "^0.4.1",
         "svelte-modals": "^2.0.1",
-        "typescript": "^5.9.2",
+        "typescript": "^5.9.3",
         "typescript-eslint": "^8.45.0",
         "vite": "^7.1.9",
         "vite-plugin-plain-text": "^1.4.2"
