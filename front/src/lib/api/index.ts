@@ -24,6 +24,7 @@ export const requestAPIGet = async <ResponseType>(options: GetOptions): Promise<
     const response = await fetch(`${PUBLIC_API_URL}${path}`, {
         method: 'GET',
         mode: 'cors',
+        credentials: 'include', // Includes the session cookie to work with passportjs
         headers
     });
 
@@ -68,6 +69,7 @@ export const requestAPIPost = async <ResponseType>(options: PostOptions): Promis
     const response = await fetch(`${PUBLIC_API_URL}${path}`, {
         method: 'POST',
         mode: 'cors',
+        credentials: 'include', // Includes the session cookie to work with passportjs
         headers: {
             'Content-Type': 'application/json',
             Authorization: isUnauthenticatedCall ? '' : `Bearer ${token}`
