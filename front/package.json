@@ -49,7 +49,7 @@
         "svelte-markdown": "^0.4.1",
         "svelte-modals": "^2.0.1",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.45.0",
+        "typescript-eslint": "^8.46.2",
         "vite": "^7.1.11",
         "vite-plugin-plain-text": "^1.4.2"
     },
