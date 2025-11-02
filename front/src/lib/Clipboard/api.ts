@@ -69,7 +69,6 @@ export const getPublicClipboard = async () => {
 
 export const getAllClipboard = async () => {
     const entries = await requestAPIGet<ClipboardEntry[]>({
-        authorize: true,
         path: '/clipboard/getAllEntries'
     });
     return entries.map((entry) => enrichEntry(entry));
@@ -77,17 +76,11 @@ export const getAllClipboard = async () => {
 
 export const uploadToClipboard = async (data: ClipboardUploadData) => {
     const url = PUBLIC_API_URL + '/clipboard/addEntry';
-    const token = await getAccessToken();
-
-    // TODO Fix return type of getAccessToken()
-    if (typeof token !== 'string') {
-        return;
-    }
 
     if (data.file) {
         await superagent
             .post(url)
-            .auth(token, { type: 'bearer' })
+            .withCredentials()
             .field('name', data.name)
             .field('content', data.content)
             .field('ttlSeconds', data.ttlSeconds)
@@ -97,9 +90,13 @@ export const uploadToClipboard = async (data: ClipboardUploadData) => {
         return;
     }
 
-    return requestAPIPost<void>({ path: '/clipboard/addEntry', data });
+    return requestAPIPost<void>({ path: '/clipboard/addEntry', data, isUnauthenticatedCall: true });
 };
 
 export const deleteClipboardEntry = (name: string) => {
-    return requestAPIPost<void>({ path: '/clipboard/deleteEntry', data: { name } });
+    return requestAPIPost<void>({
+        path: '/clipboard/deleteEntry',
+        data: { name },
+        isUnauthenticatedCall: true
+    });
 };
