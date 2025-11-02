@@ -12,7 +12,8 @@ import type {
 export const getHistogramData = async (timeWindow: TimeWindow) => {
     return await requestAPIPost<HomeTrackerLatestResponse>({
         path: '/homeTracker/histogramData',
-        data: { timeWindow }
+        data: { timeWindow },
+        isUnauthenticatedCall: true
     });
 };
 
@@ -66,5 +67,9 @@ export const updateSensorMetadata = (params: {
     tempOffset: number;
     sleepTimeSec: number;
 }) => {
-    return requestAPIPost<void>({ path: '/homeTracker/updateSensorMetadata', data: params });
+    return requestAPIPost<void>({
+        path: '/homeTracker/updateSensorMetadata',
+        data: params,
+        isUnauthenticatedCall: true
+    });
 };

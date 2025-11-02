@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { user } from '$lib/auth/service';
+    import { user } from '$lib/auth2';
     import { toast } from '$lib/components/Toast';
     import type { SensorMetadata } from '$lib/HomeTracker';
     import { updateSensorMetadata } from '$lib/HomeTracker';

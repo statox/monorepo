@@ -6,11 +6,11 @@
         type TimeWindow,
         type TimeWindowPublic
     } from '$lib/HomeTracker';
-    import { user } from '$lib/auth/service';
     import { Notice } from '$lib/components/Notice';
     import { selectedTimeWindow } from '../store';
     import TimeWindowSelection from './TimeWindowSelection.svelte';
     import { MultiSensorsGraph, type GraphType } from './MultiSensorsGraph';
+    import { user } from '$lib/auth2';
 
     const graphs: GraphType[] = [
         'temperature',
