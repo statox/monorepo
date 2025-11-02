@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ModalProps } from 'svelte-modals';
-    import { user } from '$lib/auth/service';
+    import { user } from '$lib/auth2';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
