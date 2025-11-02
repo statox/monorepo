@@ -1,6 +1,5 @@
 import { DateTime, type DurationUnit } from 'luxon';
 import { PUBLIC_API_URL } from '$env/static/public';
-import { getAccessToken } from '$lib/auth/service';
 import type {
     ClipboardEntry,
     ClipboardEntryEnriched,
