@@ -19,7 +19,7 @@
     import { visitCountsStore, failedVisitCounts } from './store';
     import { getTypeIconClass } from './utils';
     import { goto } from '$app/navigation';
-    import { user } from '$lib/auth/service';
+    import { user } from '$lib/auth2';
     import { pageNameStore } from '$lib/components/Header';
 
     pageNameStore.set('Songbook');
