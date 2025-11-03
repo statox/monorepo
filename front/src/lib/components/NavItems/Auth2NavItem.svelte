@@ -40,7 +40,7 @@
         height: 1.8em;
         border-radius: 50%;
         background-color: var(--nc-bg-2);
-        border: 2px solid var(--nc-tx-1);
+        border: 2px solid var(--nc-tx-3);
         color: var(--nc-tx-2);
         font-weight: bold;
         font-size: 1em;

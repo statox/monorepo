@@ -1,6 +1,6 @@
 <script lang="ts">
     import HomeNavItem from '$lib/components/NavItems/HomeNavItem.svelte';
-    import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
+    import UserProfileNavItem from '$lib/components/NavItems/UserProfileNavItem.svelte';
     import Auth2NavItem from '$lib/components/NavItems/Auth2NavItem.svelte';
     import ThemeSwitcherNavItem from '$lib/components/NavItems/ThemeSwitcherNavItem.svelte';
     import { pageNameStore } from './store';
@@ -12,8 +12,8 @@
     </h1>
     <nav>
         <span><HomeNavItem /></span>
-        <span><Auth2NavItem /></span>
-        <span class="before-last-item"><AuthNavItem /></span>
+        <span class="last-left-menu-item"><Auth2NavItem /></span>
+        <span><UserProfileNavItem /></span>
         <span><ThemeSwitcherNavItem /></span>
     </nav>
 </header>
@@ -36,7 +36,7 @@
         flex-grow: 1;
     }
 
-    .before-last-item {
+    .last-left-menu-item {
         flex-grow: 1;
     }
 
