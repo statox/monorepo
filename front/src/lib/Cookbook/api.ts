@@ -4,20 +4,19 @@ import type { IngredientMeta, RecipeFull, RecipeMeta, RecipeToCreate } from './t
 export const addRecipe = async (recipe: RecipeToCreate) => {
     return await requestAPIPost({
         path: '/cookbook/addRecipe',
-        data: recipe
+        data: recipe,
+        isUnauthenticatedCall: true
     });
 };
 
 export const listRecipes = async () => {
     return await requestAPIGet<{ recipes: RecipeMeta[] }>({
-        authorize: true,
         path: '/cookbook/listRecipes'
     });
 };
 
 export const listIngedients = async () => {
     return await requestAPIGet<{ ingredients: IngredientMeta[] }>({
-        authorize: true,
         path: '/cookbook/listIngredients'
     });
 };
@@ -25,6 +24,7 @@ export const listIngedients = async () => {
 export const getRecipe = async (id: number) => {
     return await requestAPIPost<RecipeFull>({
         data: { recipeId: id },
-        path: '/cookbook/getRecipe'
+        path: '/cookbook/getRecipe',
+        isUnauthenticatedCall: true
     });
 };
