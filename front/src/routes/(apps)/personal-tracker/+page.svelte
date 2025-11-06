@@ -8,8 +8,11 @@
     import { getAllEvents } from '$lib/PersonalTracker/api';
     import type { PersonalEvent } from '$lib/PersonalTracker/types';
     import { onMount } from 'svelte';
+    import { pageNameStore } from '$lib/components/Header';
 
     let events: Promise<PersonalEvent[]> | undefined = $state();
+
+    pageNameStore.set('Personal Tracker');
 
     const refreshData = () => (events = getAllEvents());
     onMount(() => (events = getAllEvents()));
