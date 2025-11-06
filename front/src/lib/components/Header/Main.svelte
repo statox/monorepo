@@ -3,7 +3,9 @@
     import UserProfileNavItem from '$lib/components/NavItems/UserProfileNavItem.svelte';
     import Auth2NavItem from '$lib/components/NavItems/Auth2NavItem.svelte';
     import ThemeSwitcherNavItem from '$lib/components/NavItems/ThemeSwitcherNavItem.svelte';
-    import { pageNameStore } from './store';
+    import { pageNameStore, showLoginSuccess } from './store';
+    import { Notice } from '../Notice';
+    import { user } from '$lib/auth2';
 </script>
 
 <header>
@@ -17,6 +19,16 @@
         <span><ThemeSwitcherNavItem /></span>
     </nav>
 </header>
+
+{#if $showLoginSuccess}
+    <Notice
+        item={{
+            level: 'success',
+            header: 'Login successful',
+            message: 'You are logged in as ' + $user?.user.username
+        }}
+    />
+{/if}
 
 <style>
     header {
