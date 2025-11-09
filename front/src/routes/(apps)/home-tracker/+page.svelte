@@ -5,8 +5,12 @@
     import SensorsHistogram from './components/SensorsHistogram.svelte';
     import WeatherForecast from './components/WeatherForecast.svelte';
     import TimeControls from './components/TimeControls.svelte';
+    import { isAllowedForUser, user } from '$lib/auth2';
+    import { Notice } from '$lib/components/Notice';
 
     pageNameStore.set('Home Tracker');
+
+    let userIsAllowed = $derived(isAllowedForUser('homeTracker', $user));
 </script>
 
 <HeadIOS title="Home Tracker" description="Recording of my sensors" iconPath="/hometracker.png" />
@@ -14,8 +18,13 @@
 <div class="content">
     <TimeControls />
     <SensorsSummary />
-    <SensorsHistogram />
-    <WeatherForecast />
+
+    {#if !userIsAllowed}
+        <Notice item={{ level: 'info', header: 'Login to access historical data' }} />
+    {:else}
+        <SensorsHistogram />
+        <WeatherForecast />
+    {/if}
 </div>
 
 <style>

@@ -10,9 +10,13 @@ export const user = writable<UserProfile | undefined>();
 /*
  * API
  */
+// List of possible scopes
+export type Scope = 'admin' | 'public' | 'homeTracker';
+
 export type User = {
     id: number;
     username: string;
+    scopes: Scope[];
 };
 export type UserProfile = {
     status: 'logged_out' | 'logged_in';
@@ -63,4 +67,15 @@ export const checkAuth = async () => {
     } catch (error) {
         user.set(undefined);
     }
+};
+
+export const isAllowedForUser = (scope: Scope, userProfile: UserProfile | undefined) => {
+    if (!userProfile) {
+        return false;
+    }
+
+    if (userProfile.user.scopes.includes('admin')) {
+        return true;
+    }
+    return userProfile.user.scopes.includes(scope);
 };
