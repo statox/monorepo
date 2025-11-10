@@ -36,9 +36,11 @@
         const timestampUTC = DateTime.now().toUTC().toUnixInteger();
         try {
             await createEvent({
-                timestampUTC,
-                type: 'weight',
-                value: Math.floor(value * 100)
+                event: {
+                    timestampUTC,
+                    type: 'weight',
+                    value: Math.floor(value * 100)
+                }
             });
             onUpload();
             close();

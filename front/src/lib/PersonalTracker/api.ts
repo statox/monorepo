@@ -1,16 +1,8 @@
-import { requestAPIGet, requestAPIPost } from '$lib/api';
-import type { NewEventParams, PersonalEvent } from './types';
+import { client } from '$lib/api';
 
-export const createEvent = async (event: NewEventParams) => {
-    return requestAPIPost<void>({
-        path: '/personalTracker/upload',
-        data: { event }
-    });
-};
+export const createEvent = client.personalTracker.upload;
 
 export const getAllEvents = async () => {
-    const { events } = await requestAPIGet<{ events: PersonalEvent[] }>({
-        path: '/personalTracker/getAll'
-    });
+    const { events } = await client.personalTracker.getAll();
     return events;
 };

@@ -1,5 +1,5 @@
-import { requestAPIGet, requestAPIPost } from '$lib/api';
-import type { Chord, ChordVisitItem, LinksChecks } from './types';
+import { client } from '$lib/api';
+import type { Chord } from './types';
 
 type RawChord = {
     artist: string;
@@ -23,9 +23,7 @@ const getType = (chord: RawChord) => {
     return 'link';
 };
 
-export const getChords = async () => {
-    return requestAPIGet<RawChord[]>({ path: '/chords/getAll' });
-};
+export const getChords = client.chords.getAll;
 
 export const getSongbook = async (): Promise<Chord[]> => {
     const chords = await getChords();
@@ -38,24 +36,10 @@ export const getSongbook = async (): Promise<Chord[]> => {
     });
 };
 
-export const getLinksVisitsCount = () => {
-    return requestAPIGet<ChordVisitItem[]>({ path: '/chords/getLinksVisitsCount' });
-};
+export const getLinksVisitsCount = client.chords.getLinksVisitsCount;
 
-export const getLinksChecks = () => {
-    return requestAPIGet<LinksChecks>({ path: '/chords/checkLinks' });
-};
+export const getLinksChecks = client.chords.checkLinks;
 
-export const uploadChords = (chords: RawChord[]) => {
-    return requestAPIPost({
-        path: '/chords/updateAll',
-        data: { chords }
-    });
-};
+export const uploadChords = client.chords.updateAll;
 
-export const uploadLinkVisit = (chordUrl: string) => {
-    return requestAPIPost({
-        path: '/chords/addLinkVisit',
-        data: { url: chordUrl }
-    });
-};
+export const uploadLinkVisit = client.chords.addLinkVisit;

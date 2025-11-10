@@ -61,7 +61,7 @@ export const getMoonPhaseIconURL = (phase: LunarPhase) => {
 };
 
 export const getEphemerides = async () => {
-    const ephemerides = await getEphemeridesAPI();
+    const { ephemerides } = await getEphemeridesAPI();
     const { moonState, sunState, upcomingLunarStates } = ephemerides;
 
     return {

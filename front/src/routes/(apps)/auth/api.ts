@@ -1,4 +1,4 @@
-import { requestAPIPost } from '$lib/api';
+import { client } from '$lib/api';
 
 export type UserProfile = {
     status: 'logged_out' | 'logged_in';
@@ -8,8 +8,4 @@ export type UserProfile = {
     };
 };
 
-export const getProfile = () =>
-    requestAPIPost<UserProfile>({
-        path: '/auth/me',
-        data: {}
-    });
+export const getProfile = client.auth.me;

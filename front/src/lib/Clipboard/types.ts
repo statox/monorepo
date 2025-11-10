@@ -17,11 +17,3 @@ export type ClipboardEntryEnriched = ClipboardEntry & {
     formatedExpirationDate: string;
     expirationStatus: ExpirationStatus;
 };
-
-export type ClipboardUploadData = {
-    name: string;
-    content: string;
-    ttlSeconds: number;
-    isPublic: boolean;
-    file?: File;
-};

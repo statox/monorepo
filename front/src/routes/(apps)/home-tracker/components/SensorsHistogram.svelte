@@ -24,8 +24,8 @@
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
         const histogramDataGetter = $user
-            ? () => getHistogramData($selectedTimeWindow)
-            : () => getHistogramDataPublic($selectedTimeWindow as TimeWindowPublic);
+            ? () => getHistogramData({ timeWindow: $selectedTimeWindow })
+            : () => getHistogramDataPublic({ timeWindow: $selectedTimeWindow as TimeWindowPublic }); // This should be removed now that auth is reworked
         const histogramData = await histogramDataGetter();
         const sensorsDetails = await getSensorsMetadata();
         return { histogramData, sensorsDetails };

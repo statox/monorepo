@@ -10,16 +10,6 @@ export type IngredientMeta = {
     name: string;
 };
 
-export type RecipeToCreate = {
-    name: string;
-    content: string;
-    ingredients: {
-        name: string;
-        quantity?: number;
-        unit?: string;
-    }[];
-};
-
 export type RecipeFull = RecipeMeta & {
     content: string;
     ingredients: {

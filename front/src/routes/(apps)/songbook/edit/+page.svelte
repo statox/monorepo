@@ -70,7 +70,7 @@
 
         try {
             const content = editor.get() as JSONContent;
-            await uploadChords(content.json as RawChord[]);
+            await uploadChords({ chords: content.json as RawChord[] });
             toast.push('<i class="fas fa-check"></i> Uploaded');
         } catch (error) {
             let errorMessage = (error as Error).message;
@@ -98,7 +98,7 @@
         chords = [{ ...params, creationDate: now }, ...chords];
 
         try {
-            await uploadChords(chords);
+            await uploadChords({ chords });
             modals.close();
             content = { json: chords };
             toast.push('<i class="fas fa-check"></i> Uploaded');

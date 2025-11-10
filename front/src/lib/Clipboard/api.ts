@@ -1,13 +1,8 @@
 import { DateTime, type DurationUnit } from 'luxon';
 import { PUBLIC_API_URL } from '$env/static/public';
-import type {
-    ClipboardEntry,
-    ClipboardEntryEnriched,
-    ClipboardUploadData,
-    ExpirationStatus
-} from './types';
+import type { ClipboardEntry, ClipboardEntryEnriched, ExpirationStatus } from './types';
 import superagent from 'superagent';
-import { requestAPIGet, requestAPIPost } from '$lib/api';
+import { client, type Clipboard_AddEntry_Input } from '$lib/api';
 
 const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
     const now = DateTime.now();
@@ -62,18 +57,16 @@ const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
 };
 
 export const getPublicClipboard = async () => {
-    const entries = await requestAPIGet<ClipboardEntry[]>({ path: '/clipboard/getPublicEntries' });
+    const entries = await client.clipboard.getPublicEntries();
     return entries.map((entry) => enrichEntry(entry));
 };
 
 export const getAllClipboard = async () => {
-    const entries = await requestAPIGet<ClipboardEntry[]>({
-        path: '/clipboard/getAllEntries'
-    });
+    const entries = await client.clipboard.getAllEntries();
     return entries.map((entry) => enrichEntry(entry));
 };
 
-export const uploadToClipboard = async (data: ClipboardUploadData) => {
+export const uploadToClipboard = async (data: Clipboard_AddEntry_Input) => {
     const url = PUBLIC_API_URL + '/clipboard/addEntry';
 
     if (data.file) {
@@ -89,12 +82,7 @@ export const uploadToClipboard = async (data: ClipboardUploadData) => {
         return;
     }
 
-    return requestAPIPost<void>({ path: '/clipboard/addEntry', data });
+    return client.clipboard.addEntry(data);
 };
 
-export const deleteClipboardEntry = (name: string) => {
-    return requestAPIPost<void>({
-        path: '/clipboard/deleteEntry',
-        data: { name }
-    });
-};
+export const deleteClipboardEntry = client.clipboard.deleteEntry;

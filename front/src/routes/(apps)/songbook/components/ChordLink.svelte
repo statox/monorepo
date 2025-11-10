@@ -39,7 +39,7 @@
 
     const addVisit = async () => {
         try {
-            await uploadLinkVisit(chord.url);
+            await uploadLinkVisit({ url: chord.url });
 
             // Once we made the call and it succeeded update the store
             // to reflect the change without having to call the API again

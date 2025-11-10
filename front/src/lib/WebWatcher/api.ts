@@ -1,30 +1,9 @@
-import { requestAPIGet, requestAPIPost } from '$lib/api';
-import type { NewWatcherParams, WatchedContent } from './types';
+import { client } from '$lib/api';
 
-export const getAllWatchers = async () => {
-    return requestAPIGet<WatchedContent[]>({ path: '/webWatcher/getAllWatchers' });
-};
+export const getAllWatchers = client.webWatchers.getAllWatchers;
 
-export const createWatcher = async (newWatcher: NewWatcherParams) => {
-    return requestAPIPost<void>({
-        path: '/webWatcher/createWatcher',
-        data: newWatcher
-    });
-};
+export const createWatcher = client.webWatchers.createWatcher;
 
-export const deleteWatcherAPI = async (watcherId: number) => {
-    return requestAPIPost<void>({
-        path: '/webWatcher/deleteWatcher',
-        data: { id: watcherId }
-    });
-};
+export const deleteWatcherAPI = client.webWatchers.deleteWatcher;
 
-export const toggleWatcherEnabledAPI = async (data: {
-    watcherId: number;
-    setToEnabled: boolean;
-}) => {
-    return requestAPIPost<void>({
-        path: '/webWatcher/toggleWatcherEnabled',
-        data
-    });
-};
+export const toggleWatcherEnabledAPI = client.webWatchers.toggleWatcherEnabled;

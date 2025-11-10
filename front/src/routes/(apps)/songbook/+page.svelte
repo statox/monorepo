@@ -53,7 +53,7 @@
                 });
 
                 for (const url of $failedVisitCounts) {
-                    await uploadLinkVisit(url);
+                    await uploadLinkVisit({ url });
                 }
 
                 enqueueNoticeMessage({

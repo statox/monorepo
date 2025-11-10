@@ -42,7 +42,7 @@
         }
 
         try {
-            await deleteWatcherAPI(watcher.id);
+            await deleteWatcherAPI({ id: watcher.id });
             dispatch('delete');
         } catch (error: unknown) {
             const message = `<strong>Watcher not deleted</strong><br/> ${(error as Error).message}`;

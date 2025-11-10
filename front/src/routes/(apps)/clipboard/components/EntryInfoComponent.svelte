@@ -14,7 +14,7 @@
     const dispatch = createEventDispatcher();
 
     const deleteEntry = (name: string) => {
-        deleteClipboardEntry(name).then(() => dispatch('delete'));
+        deleteClipboardEntry({ name }).then(() => dispatch('delete'));
     };
 </script>
 

@@ -3,8 +3,8 @@
     import { type Board, BoardState } from '../gravitrips';
     import BoardComp from '../components/Board.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
-    import { requestAPIGet } from '$lib/api';
     import { goto } from '$app/navigation';
+    import { client } from '$lib/api';
 
     let socket: WebSocket;
     let youAre: number | null = $state(null);
@@ -24,7 +24,7 @@
     let gameId = $state('');
 
     const getNewGameId = async () => {
-        const res = await requestAPIGet<{ gameId: string }>({ path: '/gravitrips/getNewGame' });
+        const res = await client.gravitrips.getNewGame();
         gameId = res.gameId;
         startGame();
     };

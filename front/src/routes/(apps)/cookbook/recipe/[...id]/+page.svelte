@@ -9,7 +9,7 @@
 
 <button onclick={() => goto('/cookbook')}>Back to list</button>
 
-{#await getRecipe(Number(id))}
+{#await getRecipe({ recipeId: Number(id) })}
     <p>Loading data</p>
 {:then recipe}
     <RecipeDisplay {recipe} />

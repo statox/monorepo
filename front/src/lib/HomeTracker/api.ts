@@ -1,51 +1,16 @@
-import { requestAPIGet, requestAPIPost } from '$lib/api';
-import type {
-    SensorMetadata,
-    Ephemerides,
-    HomeTrackerLatestResponse,
-    PressureHistoryItem,
-    TimeWindow,
-    TimeWindowPublic,
-    WeatherForecast
-} from './types';
+import { client } from '$lib/api';
+import type { SensorMetadata } from './types';
 
-export const getHistogramData = async (timeWindow: TimeWindow) => {
-    return await requestAPIPost<HomeTrackerLatestResponse>({
-        path: '/homeTracker/histogramData',
-        data: { timeWindow }
-    });
-};
+export const getHistogramData = client.homeTracker.histogramData;
 
-export const getHistogramDataPublic = async (timeWindow: TimeWindowPublic) => {
-    return await requestAPIPost<HomeTrackerLatestResponse>({
-        path: '/homeTracker/histogramDataPublic',
-        data: { timeWindow }
-    });
-};
+export const getHistogramDataPublic = client.homeTracker.histogramDataPublic;
 
-export const getWeatherForecast = async () => {
-    const { forecast, pressureHistory } = await requestAPIGet<{
-        forecast: WeatherForecast;
-        pressureHistory: PressureHistoryItem[];
-    }>({
-        path: '/homeTracker/getWeatherForecast'
-    });
-    return { forecast, pressureHistory };
-};
+export const getWeatherForecast = client.homeTracker.getWeatherForecast;
 
-export const getEphemeridesAPI = async () => {
-    const { ephemerides } = await requestAPIGet<{ ephemerides: Ephemerides }>({
-        path: '/homeTracker/getEphemerides'
-    });
-    return ephemerides;
-};
+export const getEphemeridesAPI = client.homeTracker.getEphemerides;
 
 export const getSensorsMetadata = async () => {
-    const { sensors } = await requestAPIGet<{
-        sensors: SensorMetadata[];
-    }>({
-        path: '/homeTracker/getSensorsDataForDashboard'
-    });
+    const { sensors } = await client.homeTracker.getSensorsDataForDashboard();
 
     // TODO Have this info returned by the API (and probably have the API returning the images themselves too)
     const enrichedSensors = sensors.map((sensor: SensorMetadata) => {
@@ -59,14 +24,4 @@ export const getSensorsMetadata = async () => {
     return { sensors: enrichedSensors };
 };
 
-export const updateSensorMetadata = (params: {
-    sensorName: string;
-    hexColor: string;
-    tempOffset: number;
-    sleepTimeSec: number;
-}) => {
-    return requestAPIPost<void>({
-        path: '/homeTracker/updateSensorMetadata',
-        data: params
-    });
-};
+export const updateSensorMetadata = client.homeTracker.updateSensorMetadata;

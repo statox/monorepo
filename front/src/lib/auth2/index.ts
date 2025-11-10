@@ -1,5 +1,5 @@
 import { PRNG } from 'simple-prng';
-import { requestAPIPost } from '$lib/api';
+import { client } from '$lib/api';
 
 import { writable } from 'svelte/store';
 const rng = new PRNG();
@@ -25,28 +25,18 @@ export type UserProfile = {
     user: User;
 };
 
-export const getProfile = () =>
-    requestAPIPost<UserProfile>({
-        path: '/auth/me',
-        data: {}
-    });
+export const getProfile = client.auth.me;
 
 /*
  * service
  */
 export const login = async (username: string, password: string) => {
-    await requestAPIPost<void>({
-        path: '/auth/login',
-        data: { username, password }
-    });
+    await client.auth.login({ username, password });
     await updateProfile();
 };
 
 export const logout = async () => {
-    await requestAPIPost<void>({
-        path: '/auth/logout',
-        data: {}
-    });
+    await client.auth.logout();
     await updateProfile();
 };
 
