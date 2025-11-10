@@ -9,7 +9,13 @@
 
 {#if $user}
     <h2>Hello {$user.user.username}</h2>
-    <p>Your id is: {$user.user.id}</p>
+    <p>Your id: {$user.user.id}</p>
+    <p>Your permissions</p>
+    <ul>
+        {#each $user.user.scopes as scope}
+            <li>{scope}</li>
+        {/each}
+    </ul>
 
     <button onclick={updateProfile}>Refresh my profile</button>
     <button onclick={logout}>Log out</button>
