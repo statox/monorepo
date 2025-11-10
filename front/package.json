@@ -40,7 +40,7 @@
         "p5-svelte": "^3.1.2",
         "prettier": "^3.6.2",
         "prettier-plugin-svelte": "^3.4.0",
-        "simple-prng": "^0.0.1",
+        "simple-prng": "^0.0.2",
         "simple-vector": "^0.0.14",
         "superagent": "^10.2.3",
         "svelte": "^5.43.2",
