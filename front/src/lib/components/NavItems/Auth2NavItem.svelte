@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { checkAuth, user } from '$lib/auth2';
+    import { checkAuth, user, usernameToColor } from '$lib/auth2';
 
     onMount(() => {
         checkAuth();
@@ -9,7 +9,12 @@
 </script>
 
 {#if $user}
-    <button title="My profile" class="user-profile" onclick={() => goto('/auth/me')}>
+    <button
+        title="My profile"
+        class="user-profile"
+        onclick={() => goto('/auth/me')}
+        style="--user-color: {usernameToColor($user?.user.username)}"
+    >
         {$user.user.username[0].toUpperCase()}
     </button>
 {:else}
@@ -39,7 +44,7 @@
         width: 1.8em;
         height: 1.8em;
         border-radius: 50%;
-        background-color: var(--nc-bg-2);
+        background-color: var(--user-color);
         border: 2px solid var(--nc-tx-3);
         color: var(--nc-tx-2);
         font-weight: bold;
