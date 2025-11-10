@@ -1,5 +1,4 @@
 <script lang="ts">
-    import HomeNavItem from '$lib/components/NavItems/HomeNavItem.svelte';
     import UserProfileNavItem from '$lib/components/NavItems/UserProfileNavItem.svelte';
     import Auth2NavItem from '$lib/components/NavItems/Auth2NavItem.svelte';
     import ThemeSwitcherNavItem from '$lib/components/NavItems/ThemeSwitcherNavItem.svelte';
@@ -10,13 +9,15 @@
 
 <header>
     <h1>
-        <a href="/">{$pageNameStore}</a>
+        <a class="home-link" href="/">
+            <img alt="website logo" class="home-img" src="/favicon.png" />
+            {$pageNameStore}
+        </a>
     </h1>
     <nav>
-        <span><HomeNavItem /></span>
-        <span class="last-left-menu-item"><Auth2NavItem /></span>
+        <span class="last-left-menu-item"><ThemeSwitcherNavItem /></span>
+        <span><Auth2NavItem /></span>
         <span><UserProfileNavItem /></span>
-        <span><ThemeSwitcherNavItem /></span>
     </nav>
 </header>
 
@@ -31,6 +32,19 @@
 {/if}
 
 <style>
+    .home-link:hover {
+        .home-img {
+            filter: brightness(70%) invert(10%);
+        }
+    }
+    .home-link {
+        display: flex;
+        align-items: end;
+        gap: 0.2em;
+    }
+    .home-img {
+        height: 1em;
+    }
     header {
         display: flex;
         flex-direction: row;

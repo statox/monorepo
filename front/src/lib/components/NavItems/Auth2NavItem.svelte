@@ -19,7 +19,7 @@
     </button>
 {:else}
     <button title="Log in" onclick={() => goto('/auth/login')}>
-        <i class="fa fa-sign-in" aria-hidden="true"></i>
+        <i class="fas fa-user" aria-hidden="true"></i>
     </button>
 {/if}
 
@@ -33,7 +33,7 @@
         background: none;
         color: var(--nc-lk-2);
     }
-    .fa {
+    .fas {
         font-size: 1.5em;
     }
 
