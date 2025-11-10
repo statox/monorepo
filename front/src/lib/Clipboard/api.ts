@@ -89,13 +89,12 @@ export const uploadToClipboard = async (data: ClipboardUploadData) => {
         return;
     }
 
-    return requestAPIPost<void>({ path: '/clipboard/addEntry', data, isUnauthenticatedCall: true });
+    return requestAPIPost<void>({ path: '/clipboard/addEntry', data });
 };
 
 export const deleteClipboardEntry = (name: string) => {
     return requestAPIPost<void>({
         path: '/clipboard/deleteEntry',
-        data: { name },
-        isUnauthenticatedCall: true
+        data: { name }
     });
 };

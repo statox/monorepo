@@ -8,16 +8,14 @@ export const getAllWatchers = async () => {
 export const createWatcher = async (newWatcher: NewWatcherParams) => {
     return requestAPIPost<void>({
         path: '/webWatcher/createWatcher',
-        data: newWatcher,
-        isUnauthenticatedCall: true
+        data: newWatcher
     });
 };
 
 export const deleteWatcherAPI = async (watcherId: number) => {
     return requestAPIPost<void>({
         path: '/webWatcher/deleteWatcher',
-        data: { id: watcherId },
-        isUnauthenticatedCall: true
+        data: { id: watcherId }
     });
 };
 
@@ -27,7 +25,6 @@ export const toggleWatcherEnabledAPI = async (data: {
 }) => {
     return requestAPIPost<void>({
         path: '/webWatcher/toggleWatcherEnabled',
-        data,
-        isUnauthenticatedCall: true
+        data
     });
 };

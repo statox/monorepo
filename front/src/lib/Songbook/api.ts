@@ -49,15 +49,13 @@ export const getLinksChecks = () => {
 export const uploadChords = (chords: RawChord[]) => {
     return requestAPIPost({
         path: '/chords/updateAll',
-        data: { chords },
-        isUnauthenticatedCall: true
+        data: { chords }
     });
 };
 
 export const uploadLinkVisit = (chordUrl: string) => {
     return requestAPIPost({
         path: '/chords/addLinkVisit',
-        data: { url: chordUrl },
-        isUnauthenticatedCall: true
+        data: { url: chordUrl }
     });
 };

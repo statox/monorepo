@@ -10,7 +10,7 @@
     import { selectedTimeWindow } from '../store';
     import TimeWindowSelection from './TimeWindowSelection.svelte';
     import { MultiSensorsGraph, type GraphType } from './MultiSensorsGraph';
-    import { isAllowedForUser, user } from '$lib/auth2';
+    import { user } from '$lib/auth2';
 
     const graphs: GraphType[] = [
         'temperature',

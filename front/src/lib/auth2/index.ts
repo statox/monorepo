@@ -26,8 +26,7 @@ export type UserProfile = {
 export const getProfile = () =>
     requestAPIPost<UserProfile>({
         path: '/auth/me',
-        data: {},
-        isUnauthenticatedCall: true
+        data: {}
     });
 
 /*
@@ -36,8 +35,7 @@ export const getProfile = () =>
 export const login = async (username: string, password: string) => {
     await requestAPIPost<void>({
         path: '/auth/login',
-        data: { username, password },
-        isUnauthenticatedCall: true
+        data: { username, password }
     });
     await updateProfile();
 };
@@ -45,8 +43,7 @@ export const login = async (username: string, password: string) => {
 export const logout = async () => {
     await requestAPIPost<void>({
         path: '/auth/logout',
-        data: {},
-        isUnauthenticatedCall: true
+        data: {}
     });
     await updateProfile();
 };

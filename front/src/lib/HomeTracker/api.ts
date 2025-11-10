@@ -12,16 +12,14 @@ import type {
 export const getHistogramData = async (timeWindow: TimeWindow) => {
     return await requestAPIPost<HomeTrackerLatestResponse>({
         path: '/homeTracker/histogramData',
-        data: { timeWindow },
-        isUnauthenticatedCall: true
+        data: { timeWindow }
     });
 };
 
 export const getHistogramDataPublic = async (timeWindow: TimeWindowPublic) => {
     return await requestAPIPost<HomeTrackerLatestResponse>({
         path: '/homeTracker/histogramDataPublic',
-        data: { timeWindow },
-        isUnauthenticatedCall: true
+        data: { timeWindow }
     });
 };
 
@@ -69,7 +67,6 @@ export const updateSensorMetadata = (params: {
 }) => {
     return requestAPIPost<void>({
         path: '/homeTracker/updateSensorMetadata',
-        data: params,
-        isUnauthenticatedCall: true
+        data: params
     });
 };

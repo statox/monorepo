@@ -11,6 +11,5 @@ export type UserProfile = {
 export const getProfile = () =>
     requestAPIPost<UserProfile>({
         path: '/auth/me',
-        data: {},
-        isUnauthenticatedCall: true
+        data: {}
     });

@@ -4,8 +4,7 @@ import type { IngredientMeta, RecipeFull, RecipeMeta, RecipeToCreate } from './t
 export const addRecipe = async (recipe: RecipeToCreate) => {
     return await requestAPIPost({
         path: '/cookbook/addRecipe',
-        data: recipe,
-        isUnauthenticatedCall: true
+        data: recipe
     });
 };
 
@@ -24,7 +23,6 @@ export const listIngedients = async () => {
 export const getRecipe = async (id: number) => {
     return await requestAPIPost<RecipeFull>({
         data: { recipeId: id },
-        path: '/cookbook/getRecipe',
-        isUnauthenticatedCall: true
+        path: '/cookbook/getRecipe'
     });
 };

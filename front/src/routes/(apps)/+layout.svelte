@@ -6,10 +6,8 @@
     import '$lib/styles/highlightjs_override.css';
     import '$lib/styles/helpers.css';
     import { Modals } from 'svelte-modals';
-    import { onMount, type Snippet } from 'svelte';
-    import { initializeAuth0 } from '$lib/auth/service';
+    import { type Snippet } from 'svelte';
     import { SvelteToast } from '$lib/components/Toast';
-    import { Notice } from '$lib/components/Notice';
     import { Header } from '$lib/components/Header';
 
     interface Props {
@@ -17,15 +15,6 @@
     }
 
     let { children }: Props = $props();
-
-    let auth0Error: Error | undefined = $state();
-    onMount(async () => {
-        try {
-            await initializeAuth0();
-        } catch (error: any) {
-            auth0Error = error;
-        }
-    });
 </script>
 
 <Header />
@@ -38,25 +27,6 @@
 </Modals>
 
 <SvelteToast />
-
-<!-- TODO: this error display is just a try while reworking authentication  -->
-<!-- 1. The errors thrown by initializeAuth0() might not really happen or not be relevant -->
-<!-- 2. It might be better to use svelte built-in page error mecanism that I'm not familiar with already -->
-<!-- Update 5 months later: I have never seen this notice displayed in real life yet. And I think the AuthNavItem
-  -- doesn't have anymore issues where it's not updated when I'm logged out. So I might remove that in the future.
-  -->
-<!-- Update 2 more months later: I actually got the error (invalid state) displayed when implementing the redirect
-  -- after login. So it's still useful to have that here.
-  -->
-{#if auth0Error}
-    <Notice
-        item={{
-            level: 'error',
-            header: 'Something went wrong with auth0 setup',
-            message: auth0Error.message
-        }}
-    />
-{/if}
 
 {@render children?.()}
 

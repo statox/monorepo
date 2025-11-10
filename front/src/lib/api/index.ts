@@ -1,9 +1,7 @@
 import { PUBLIC_API_URL } from '$env/static/public';
-import { getAccessToken } from '$lib/auth/service';
 
 interface GetOptions {
     path: string;
-    authorize?: true;
 }
 
 export const requestAPIGet = async <ResponseType>(options: GetOptions): Promise<ResponseType> => {
@@ -15,11 +13,6 @@ export const requestAPIGet = async <ResponseType>(options: GetOptions): Promise<
 
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
-
-    if (options.authorize) {
-        const token = await getAccessToken();
-        headers.set('Authorization', `Bearer ${token}`);
-    }
 
     const response = await fetch(`${PUBLIC_API_URL}${path}`, {
         method: 'GET',
@@ -53,16 +46,13 @@ export class ApiError extends Error {
 interface PostOptions {
     path: string;
     data: unknown;
-    isUnauthenticatedCall?: true;
 }
 export const requestAPIPost = async <ResponseType>(options: PostOptions): Promise<ResponseType> => {
-    const { path, data, isUnauthenticatedCall } = options;
+    const { path, data } = options;
 
     if (!path.length || path[0] !== '/') {
         throw new Error('Malformed path');
     }
-
-    const token = isUnauthenticatedCall ? '' : await getAccessToken();
 
     const body = JSON.stringify(data);
 
@@ -71,8 +61,7 @@ export const requestAPIPost = async <ResponseType>(options: PostOptions): Promis
         mode: 'cors',
         credentials: 'include', // Includes the session cookie to work with passportjs
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: isUnauthenticatedCall ? '' : `Bearer ${token}`
+            'Content-Type': 'application/json'
         },
         body
     });

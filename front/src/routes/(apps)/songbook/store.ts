@@ -14,6 +14,11 @@ export const visitCountsStore = writable<Map<string, ChordData>>();
  * But for a user to log in, we need to redirect to the auth0.com domain, so the
  * store is lost from memory, so we need to persist this store to local storage
  * to be able to retry the failed visits.
+ *
+ * TODO: In november 2025 I'm removing auth0 to use session cookie auth so
+ *       there is not redirect to an outside domain anymore, so we could avoid
+ *       storing the store in local storage. For now it works well tho so
+ *       I'm not touching it yet
  */
 let failedVisitCountsInitValue = [] as string[];
 const failedVisitCountsStr = localStorage.getItem('failedVisitCounts');
