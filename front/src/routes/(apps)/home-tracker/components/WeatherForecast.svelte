@@ -1,13 +1,14 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
     import { ValueWithUnit } from '$lib/components/ValueWithUnit';
-    import { formatRecordTimestampToHuman, getWeatherForecast } from '$lib/HomeTracker';
+    import { formatRecordTimestampToHuman, getWeatherForecast, type Trend } from '$lib/HomeTracker';
     import PressureHistoryGraph from './PressureHistoryGraph.svelte';
 
-    const trendIconClass = {
+    const trendIconClass: Record<Trend, string> = {
         rising: 'fa fa-arrow-up',
         falling: 'fa fa-arrow-down',
-        steady: 'fas fa-equals'
+        steady: 'fas fa-equals',
+        unknown: 'fas fa-question'
     };
 
     const getForecastData = async () => {
