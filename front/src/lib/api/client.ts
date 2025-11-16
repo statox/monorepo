@@ -9,13 +9,10 @@ import type {
 } from '$lib/HomeTracker/types';
 import type { PersonalEvent } from '$lib/PersonalTracker/types';
 import type { ReactorEntryForPublic } from '$lib/Reactor/types';
-import type { ChordVisitItem, LinksChecks, RawChord } from '$lib/Songbook/types';
 import type { WatchedContent } from '$lib/WebWatcher/types';
 
 import type {
     Auth_Login_Input,
-    Chords_AddLinkVisit_Input,
-    Chords_UpdateAll_Input,
     Cookbook_AddRecipe_Input,
     Cookbook_GetRecipe_Input,
     HomeTracker_HistogramData_Input,
@@ -33,16 +30,6 @@ export const client = {
         login: (data: Auth_Login_Input) => requestAPIPost<void>({ path: '/auth/login', data }),
         logout: () => requestAPIPost<void>({ path: '/auth/logout', data: {} }),
         me: () => requestAPIPost<UserProfile>({ path: '/auth/me', data: {} })
-    },
-    chords: {
-        addLinkVisit: (data: Chords_AddLinkVisit_Input) =>
-            requestAPIPost({ path: '/chords/addLinkVisit', data }),
-        checkLinks: () => requestAPIGet<LinksChecks>({ path: '/chords/checkLinks' }),
-        getAll: () => requestAPIGet<RawChord[]>({ path: '/chords/getAll' }),
-        getLinksVisitsCount: () =>
-            requestAPIGet<ChordVisitItem[]>({ path: '/chords/getLinksVisitsCount' }),
-        updateAll: (data: Chords_UpdateAll_Input) =>
-            requestAPIPost({ path: '/chords/updateAll', data })
     },
     cookbook: {
         addRecipe: (data: Cookbook_AddRecipe_Input) =>

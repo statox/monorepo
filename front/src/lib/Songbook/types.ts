@@ -30,8 +30,8 @@ export type LinksChecks = {
     nbSkipped: number;
     fails: {
         status: string;
-        error: any;
-        chord: Chord;
+        error?: any;
+        chord: RawChord;
     }[];
     nbFails: number;
     timestamp: number;

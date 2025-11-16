@@ -3,20 +3,6 @@ export type Auth_Login_Input = {
     password: string;
 };
 
-export type Chords_AddLinkVisit_Input = {
-    url: string;
-};
-
-export type Chords_UpdateAll_Input = {
-    chords: {
-        artist: string;
-        title: string;
-        url: string;
-        creationDate: number;
-        tags: string[];
-    }[];
-};
-
 export type Cookbook_AddRecipe_Input = {
     name: string;
     content: string;
