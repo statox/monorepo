@@ -30,9 +30,6 @@
         if (!name?.length) {
             noticeMessages.push({ level: 'error', header: 'name must be defined' });
         }
-        if (!content?.length) {
-            noticeMessages.push({ level: 'error', header: 'content must be defined' });
-        }
 
         if (ttlSeconds < 0) {
             noticeMessages.push({ level: 'error', header: 'TTL must be positive' });
@@ -45,6 +42,14 @@
         let file: File | undefined;
         if (files && files.length) {
             file = files[0] || undefined;
+        }
+
+        if (!content?.length && !file) {
+            noticeMessages.push({
+                level: 'error',
+                header: 'Either content or file must be defined'
+            });
+            return;
         }
 
         try {

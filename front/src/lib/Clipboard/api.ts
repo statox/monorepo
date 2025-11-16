@@ -1,10 +1,20 @@
 import { DateTime, type DurationUnit } from 'luxon';
 import { PUBLIC_API_URL } from '$env/static/public';
-import type { ClipboardEntry, ClipboardEntryEnriched, ExpirationStatus } from './types';
+import type { ClipboardEntryEnriched, ExpirationStatus } from './types';
 import superagent from 'superagent';
-import { client, type Clipboard_AddEntry_Input } from '$lib/api';
+import { client2 } from '$lib/api';
 
-const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
+const enrichEntry = (entry: {
+    id: number;
+    name: string;
+    content: string;
+    creationDateUnix: number;
+    ttl: number;
+    isPublic: boolean;
+    linkId: string;
+    s3Key?: string;
+    s3PresignedUrl?: string;
+}): ClipboardEntryEnriched => {
     const now = DateTime.now();
     const formatedCreationDate =
         DateTime.fromSeconds(entry.creationDateUnix).toRelative({
@@ -57,32 +67,40 @@ const enrichEntry = (entry: ClipboardEntry): ClipboardEntryEnriched => {
 };
 
 export const getPublicClipboard = async () => {
-    const entries = await client.clipboard.getPublicEntries();
+    const entries = await client2.clipboard.getPublicEntries();
     return entries.map((entry) => enrichEntry(entry));
 };
 
 export const getAllClipboard = async () => {
-    const entries = await client.clipboard.getAllEntries();
+    const entries = await client2.clipboard.getAllEntries();
     return entries.map((entry) => enrichEntry(entry));
 };
 
-export const uploadToClipboard = async (data: Clipboard_AddEntry_Input) => {
+export const uploadToClipboard = async (data: {
+    name: string;
+    content: string;
+    file?: File;
+    ttlSeconds: number;
+    isPublic: boolean;
+}) => {
     const url = PUBLIC_API_URL + '/clipboard/addEntry';
 
     if (data.file) {
-        await superagent
-            .post(url)
-            .withCredentials()
-            .field('name', data.name)
-            .field('content', data.content)
-            .field('ttlSeconds', data.ttlSeconds)
-            .field('isPublic', data.isPublic)
-            // @ts-expect-error TODO: Fix types
-            .attach('file', data.file);
+        const request = superagent.post(url).withCredentials();
+
+        if (data.name !== undefined) request.field('name', data.name);
+        if (data.content !== undefined) request.field('content', data.content);
+        if (data.ttlSeconds !== undefined) request.field('ttlSeconds', data.ttlSeconds);
+        if (data.isPublic !== undefined) request.field('isPublic', data.isPublic);
+
+        // TODO have the SDK provide a handler for form content requests
+        // @ts-expect-error We need to fix the typing of File in the SDK
+        await request.attach('file', data.file);
         return;
     }
 
-    return client.clipboard.addEntry(data);
+    // @ts-expect-error We need to fix the typing of File in the SDK
+    return client2.clipboard.addEntry(data);
 };
 
-export const deleteClipboardEntry = client.clipboard.deleteEntry;
+export const deleteClipboardEntry = client2.clipboard.deleteEntry;

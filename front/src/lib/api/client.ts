@@ -1,5 +1,4 @@
 import type { UserProfile } from '$lib/auth2';
-import type { ClipboardEntry } from '$lib/Clipboard/types';
 import type { IngredientMeta, RecipeFull, RecipeMeta } from '$lib/Cookbook/types';
 import type {
     Ephemerides,
@@ -17,8 +16,6 @@ import type {
     Auth_Login_Input,
     Chords_AddLinkVisit_Input,
     Chords_UpdateAll_Input,
-    Clipboard_AddEntry_Input,
-    Clipboard_DeleteEntry_Input,
     Cookbook_AddRecipe_Input,
     Cookbook_GetRecipe_Input,
     HomeTracker_HistogramData_Input,
@@ -46,15 +43,6 @@ export const client = {
             requestAPIGet<ChordVisitItem[]>({ path: '/chords/getLinksVisitsCount' }),
         updateAll: (data: Chords_UpdateAll_Input) =>
             requestAPIPost({ path: '/chords/updateAll', data })
-    },
-    clipboard: {
-        addEntry: (data: Clipboard_AddEntry_Input) =>
-            requestAPIPost<void>({ path: '/clipboard/addEntry', data }),
-        deleteEntry: (data: Clipboard_DeleteEntry_Input) =>
-            requestAPIPost<void>({ path: '/clipboard/deleteEntry', data }),
-        getAllEntries: () => requestAPIGet<ClipboardEntry[]>({ path: '/clipboard/getAllEntries' }),
-        getPublicEntries: () =>
-            requestAPIGet<ClipboardEntry[]>({ path: '/clipboard/getPublicEntries' })
     },
     cookbook: {
         addRecipe: (data: Cookbook_AddRecipe_Input) =>

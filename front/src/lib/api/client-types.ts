@@ -17,18 +17,6 @@ export type Chords_UpdateAll_Input = {
     }[];
 };
 
-export type Clipboard_AddEntry_Input = {
-    name: string;
-    content: string;
-    ttlSeconds: number;
-    isPublic: boolean;
-    file?: File;
-};
-
-export type Clipboard_DeleteEntry_Input = {
-    name: string;
-};
-
 export type Cookbook_AddRecipe_Input = {
     name: string;
     content: string;
