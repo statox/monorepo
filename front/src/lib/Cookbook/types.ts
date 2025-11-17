@@ -15,7 +15,7 @@ export type RecipeFull = RecipeMeta & {
     ingredients: {
         id: number;
         name: string;
-        quantity?: number;
-        unit?: string;
+        quantity?: number | null;
+        unit?: string | null;
     }[];
 };

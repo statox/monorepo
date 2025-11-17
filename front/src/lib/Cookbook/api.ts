@@ -1,9 +1,9 @@
-import { client } from '$lib/api';
+import { client2 } from '$lib/api';
 
-export const addRecipe = client.cookbook.addRecipe;
+export const addRecipe = client2.cookbook.addRecipe;
 
-export const listRecipes = client.cookbook.listRecipes;
+export const listRecipes = client2.cookbook.listRecipes;
 
-export const listIngedients = client.cookbook.listIngedients;
+export const listIngedients = client2.cookbook.listIngredients;
 
-export const getRecipe = client.cookbook.getRecipe;
+export const getRecipe = client2.cookbook.getRecipe;

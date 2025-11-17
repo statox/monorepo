@@ -1,5 +1,4 @@
 import type { UserProfile } from '$lib/auth2';
-import type { IngredientMeta, RecipeFull, RecipeMeta } from '$lib/Cookbook/types';
 import type {
     Ephemerides,
     HomeTrackerLatestResponse,
@@ -12,8 +11,6 @@ import type { ReactorEntryForPublic } from '$lib/Reactor/types';
 
 import type {
     Auth_Login_Input,
-    Cookbook_AddRecipe_Input,
-    Cookbook_GetRecipe_Input,
     HomeTracker_HistogramData_Input,
     HomeTracker_HistogramDataPublic_Input,
     HomeTracker_UpdateSensorMetadata_Input,
@@ -26,16 +23,6 @@ export const client = {
         login: (data: Auth_Login_Input) => requestAPIPost<void>({ path: '/auth/login', data }),
         logout: () => requestAPIPost<void>({ path: '/auth/logout', data: {} }),
         me: () => requestAPIPost<UserProfile>({ path: '/auth/me', data: {} })
-    },
-    cookbook: {
-        addRecipe: (data: Cookbook_AddRecipe_Input) =>
-            requestAPIPost({ path: '/cookbook/addRecipe', data }),
-        listRecipes: () =>
-            requestAPIGet<{ recipes: RecipeMeta[] }>({ path: '/cookbook/listRecipes' }),
-        listIngedients: () =>
-            requestAPIGet<{ ingredients: IngredientMeta[] }>({ path: '/cookbook/listIngredients' }),
-        getRecipe: (data: Cookbook_GetRecipe_Input) =>
-            requestAPIPost<RecipeFull>({ path: '/cookbook/getRecipe', data })
     },
     gravitrips: {
         getNewGame: () => requestAPIGet<{ gameId: string }>({ path: '/gravitrips/getNewGame' })

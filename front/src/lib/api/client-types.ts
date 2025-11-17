@@ -3,20 +3,6 @@ export type Auth_Login_Input = {
     password: string;
 };
 
-export type Cookbook_AddRecipe_Input = {
-    name: string;
-    content: string;
-    ingredients: {
-        name: string;
-        quantity?: number;
-        unit?: string;
-    }[];
-};
-
-export type Cookbook_GetRecipe_Input = {
-    recipeId: number;
-};
-
 export type HomeTracker_HistogramData_Input = {
     timeWindow: '30m' | '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '6M' | 'alltime';
 };
