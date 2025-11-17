@@ -1,8 +1,8 @@
-import { client } from '$lib/api';
+import { client2 } from '$lib/api';
 
-export const createEvent = client.personalTracker.upload;
+export const createEvent = client2.personalTracker.upload;
 
 export const getAllEvents = async () => {
-    const { events } = await client.personalTracker.getAll();
+    const { events } = await client2.personalTracker.getAll();
     return events;
 };

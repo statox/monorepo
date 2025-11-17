@@ -17,11 +17,3 @@ export type HomeTracker_UpdateSensorMetadata_Input = {
     tempOffset: number;
     sleepTimeSec: number;
 };
-
-export type PersonalTracker_Upload_Input = {
-    event: {
-        timestampUTC: number;
-        type: string;
-        value: number;
-    };
-};

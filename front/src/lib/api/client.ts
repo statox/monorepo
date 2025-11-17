@@ -6,15 +6,13 @@ import type {
     SensorMetadata,
     WeatherForecast
 } from '$lib/HomeTracker/types';
-import type { PersonalEvent } from '$lib/PersonalTracker/types';
 import type { ReactorEntryForPublic } from '$lib/Reactor/types';
 
 import type {
     Auth_Login_Input,
     HomeTracker_HistogramData_Input,
     HomeTracker_HistogramDataPublic_Input,
-    HomeTracker_UpdateSensorMetadata_Input,
-    PersonalTracker_Upload_Input
+    HomeTracker_UpdateSensorMetadata_Input
 } from './client-types';
 import { requestAPIGet, requestAPIPost } from './helpers';
 
@@ -50,12 +48,6 @@ export const client = {
                 path: '/homeTracker/updateSensorMetadata',
                 data
             })
-    },
-    personalTracker: {
-        upload: (data: PersonalTracker_Upload_Input) =>
-            requestAPIPost<void>({ path: '/personalTracker/upload', data }),
-        getAll: () =>
-            requestAPIGet<{ events: PersonalEvent[] }>({ path: '/personalTracker/getAll' })
     },
     reactor: {
         getEntriesForPublic: () =>
