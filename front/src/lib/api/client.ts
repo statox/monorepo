@@ -22,9 +22,6 @@ export const client = {
         logout: () => requestAPIPost<void>({ path: '/auth/logout', data: {} }),
         me: () => requestAPIPost<UserProfile>({ path: '/auth/me', data: {} })
     },
-    gravitrips: {
-        getNewGame: () => requestAPIGet<{ gameId: string }>({ path: '/gravitrips/getNewGame' })
-    },
     homeTracker: {
         getEphemerides: () =>
             requestAPIGet<{ ephemerides: Ephemerides }>({ path: '/homeTracker/getEphemerides' }),

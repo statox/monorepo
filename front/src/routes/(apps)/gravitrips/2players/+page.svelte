@@ -4,7 +4,7 @@
     import BoardComp from '../components/Board.svelte';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { goto } from '$app/navigation';
-    import { client } from '$lib/api';
+    import { client2 } from '$lib/api';
 
     let socket: WebSocket;
     let youAre: number | null = $state(null);
@@ -24,7 +24,10 @@
     let gameId = $state('');
 
     const getNewGameId = async () => {
-        const res = await client.gravitrips.getNewGame();
+        const res = await client2.gravitrips.getNewGame();
+        if (!res.gameId) {
+            throw new Error("Couldn't start the game");
+        }
         gameId = res.gameId;
         startGame();
     };
