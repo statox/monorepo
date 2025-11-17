@@ -6,14 +6,14 @@ export interface WatchedContent {
     notificationMessage: string;
     url: string;
     watchType: WatchType;
-    cssSelector: string;
+    cssSelector?: string;
     lastContent: string;
-    lastCheckDateUnix: number;
-    lastUpdateDateUnix: number;
-    archivalDateUnix: number;
+    lastCheckDateUnix: number | null;
+    lastUpdateDateUnix: number | null;
+    archivalDateUnix: number | null;
     checkIntervalSeconds: number;
-    lastErrorDateUnix: number;
-    lastErrorMessage: string;
+    lastErrorDateUnix: number | null;
+    lastErrorMessage: string | null;
 }
 
 export interface BaseNewWatcherParams {

@@ -9,7 +9,6 @@ import type {
 } from '$lib/HomeTracker/types';
 import type { PersonalEvent } from '$lib/PersonalTracker/types';
 import type { ReactorEntryForPublic } from '$lib/Reactor/types';
-import type { WatchedContent } from '$lib/WebWatcher/types';
 
 import type {
     Auth_Login_Input,
@@ -18,10 +17,7 @@ import type {
     HomeTracker_HistogramData_Input,
     HomeTracker_HistogramDataPublic_Input,
     HomeTracker_UpdateSensorMetadata_Input,
-    PersonalTracker_Upload_Input,
-    WebWatchers_CreateWatcher_Input,
-    WebWatchers_DeleteWatcher_Input,
-    WebWatchers_ToggleWatcherEnabled_Input
+    PersonalTracker_Upload_Input
 } from './client-types';
 import { requestAPIGet, requestAPIPost } from './helpers';
 
@@ -77,15 +73,5 @@ export const client = {
     reactor: {
         getEntriesForPublic: () =>
             requestAPIGet<ReactorEntryForPublic[]>({ path: '/reactor/getEntriesForPublic' })
-    },
-    webWatchers: {
-        createWatcher: (data: WebWatchers_CreateWatcher_Input) =>
-            requestAPIPost<void>({ path: '/webWatcher/createWatcher', data }),
-        deleteWatcher: (data: WebWatchers_DeleteWatcher_Input) =>
-            requestAPIPost<void>({ path: '/webWatcher/deleteWatcher', data }),
-        getAllWatchers: () =>
-            requestAPIGet<WatchedContent[]>({ path: '/webWatcher/getAllWatchers' }),
-        toggleWatcherEnabled: (data: WebWatchers_ToggleWatcherEnabled_Input) =>
-            requestAPIPost<void>({ path: '/webWatcher/toggleWatcherEnabled', data })
     }
 };

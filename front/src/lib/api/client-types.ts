@@ -39,28 +39,3 @@ export type PersonalTracker_Upload_Input = {
         value: number;
     };
 };
-
-type WatchType = 'CSS' | 'HASH';
-
-interface BaseNewWatcherParams {
-    name: string;
-    notificationMessage: string;
-    url: string;
-    watchType: WatchType;
-    checkIntervalSeconds: number;
-}
-
-interface NewCSSWatcherParams extends BaseNewWatcherParams {
-    watchType: 'CSS';
-    cssSelector: string;
-}
-
-interface NewHASHWatcherParams extends BaseNewWatcherParams {
-    watchType: 'HASH';
-}
-
-export type WebWatchers_CreateWatcher_Input = NewCSSWatcherParams | NewHASHWatcherParams;
-
-export type WebWatchers_DeleteWatcher_Input = { id: number };
-
-export type WebWatchers_ToggleWatcherEnabled_Input = { watcherId: number; setToEnabled: boolean };

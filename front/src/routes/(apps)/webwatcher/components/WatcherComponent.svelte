@@ -25,11 +25,11 @@
     const lastCheckDisplay =
         watcher.lastCheckDateUnix === 0
             ? 'Never checked before'
-            : formatTimestamp(watcher.lastCheckDateUnix);
+            : formatTimestamp(watcher.lastCheckDateUnix || 0);
     const lastContentChangeDisplay =
         watcher.lastUpdateDateUnix === 0
             ? 'Never changed'
-            : formatTimestamp(watcher.lastUpdateDateUnix);
+            : formatTimestamp(watcher.lastUpdateDateUnix || 0);
     const humanCheckInterval = Duration.fromMillis(watcher.checkIntervalSeconds * 1000)
         .rescale()
         .toHuman();
@@ -98,7 +98,7 @@
                 <label for="content">URL</label>
                 <a target="_blank" rel="noopener noreferrer" href={watcher.url}>{watcher.url}</a>
             </p>
-            {#if watcher.watchType === 'CSS'}
+            {#if watcher.cssSelector}
                 <p class="section-3-item">
                     <label for="css-selector">
                         CSS selector
