@@ -86,7 +86,7 @@ export interface PressureHistoryItem {
     averagePressurehPa: number;
 }
 
-enum LunarPhaseFrench {
+export enum LunarPhaseFrench {
     NEW = 'Nouvelle lune',
     WAXING_CRESCENT = 'Premier croissant',
     FIRST_QUARTER = 'Premier quartier',
