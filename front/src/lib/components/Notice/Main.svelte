@@ -20,7 +20,7 @@
         padding-bottom: 0.3em;
         padding-left: 1em;
 
-        margin-bottom: 0.3em;
+        margin: 0.3em;
 
         border-radius: 5px;
 
