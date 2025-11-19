@@ -1,17 +1,7 @@
-import type {
-    Ephemerides,
-    HomeTrackerLatestResponse,
-    PressureHistoryItem,
-    SensorMetadata,
-    WeatherForecast
-} from '$lib/HomeTracker/types';
+import type { Ephemerides, SensorMetadata } from '$lib/HomeTracker/types';
 import type { ReactorEntryForPublic } from '$lib/Reactor/types';
 
-import type {
-    HomeTracker_HistogramData_Input,
-    HomeTracker_UpdateSensorMetadata_Input
-} from './client-types';
-import { requestAPIGet, requestAPIPost } from './helpers';
+import { requestAPIGet } from './helpers';
 
 export const client = {
     homeTracker: {
@@ -20,17 +10,6 @@ export const client = {
         getSensorsDataForDashboard: () =>
             requestAPIGet<{ sensors: SensorMetadata[] }>({
                 path: '/homeTracker/getSensorsDataForDashboard'
-            }),
-        getWeatherForecast: () =>
-            requestAPIGet<{ forecast: WeatherForecast; pressureHistory: PressureHistoryItem[] }>({
-                path: '/homeTracker/getWeatherForecast'
-            }),
-        histogramData: (data: HomeTracker_HistogramData_Input) =>
-            requestAPIPost<HomeTrackerLatestResponse>({ path: '/homeTracker/histogramData', data }),
-        updateSensorMetadata: (data: HomeTracker_UpdateSensorMetadata_Input) =>
-            requestAPIPost<void>({
-                path: '/homeTracker/updateSensorMetadata',
-                data
             })
     },
     reactor: {

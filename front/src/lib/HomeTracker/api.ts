@@ -1,9 +1,9 @@
-import { client } from '$lib/api';
+import { client, client2 } from '$lib/api';
 import type { SensorMetadata } from './types';
 
-export const getHistogramData = client.homeTracker.histogramData;
+export const getHistogramData = client2.homeTracker.histogramData;
 
-export const getWeatherForecast = client.homeTracker.getWeatherForecast;
+export const getWeatherForecast = client2.homeTracker.getWeatherForecast;
 
 export const getEphemeridesAPI = client.homeTracker.getEphemerides;
 
@@ -22,4 +22,4 @@ export const getSensorsMetadata = async () => {
     return { sensors: enrichedSensors };
 };
 
-export const updateSensorMetadata = client.homeTracker.updateSensorMetadata;
+export const updateSensorMetadata = client2.homeTracker.updateSensorMetadata;
