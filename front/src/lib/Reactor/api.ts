@@ -1,9 +1,9 @@
 import { PUBLIC_API_URL } from '$env/static/public';
-import { client } from '$lib/api';
+import { client2 } from '$lib/api';
 import type { ReactorUploadData } from './types';
 import superagent from 'superagent';
 
-export const getReactionsForPublic = client.reactor.getEntriesForPublic;
+export const getReactionsForPublic = client2.reactor.getEntriesForPublic;
 
 export const uploadToReactor = async (data: ReactorUploadData) => {
     const url = PUBLIC_API_URL + '/reactor/addEntry';
