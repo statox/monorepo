@@ -1,4 +1,3 @@
-import type { UserProfile } from '$lib/auth2';
 import type {
     Ephemerides,
     HomeTrackerLatestResponse,
@@ -9,7 +8,6 @@ import type {
 import type { ReactorEntryForPublic } from '$lib/Reactor/types';
 
 import type {
-    Auth_Login_Input,
     HomeTracker_HistogramData_Input,
     HomeTracker_HistogramDataPublic_Input,
     HomeTracker_UpdateSensorMetadata_Input
@@ -17,11 +15,6 @@ import type {
 import { requestAPIGet, requestAPIPost } from './helpers';
 
 export const client = {
-    auth: {
-        login: (data: Auth_Login_Input) => requestAPIPost<void>({ path: '/auth/login', data }),
-        logout: () => requestAPIPost<void>({ path: '/auth/logout', data: {} }),
-        me: () => requestAPIPost<UserProfile>({ path: '/auth/me', data: {} })
-    },
     homeTracker: {
         getEphemerides: () =>
             requestAPIGet<{ ephemerides: Ephemerides }>({ path: '/homeTracker/getEphemerides' }),
