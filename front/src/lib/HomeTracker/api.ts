@@ -3,8 +3,6 @@ import type { SensorMetadata } from './types';
 
 export const getHistogramData = client.homeTracker.histogramData;
 
-export const getHistogramDataPublic = client.homeTracker.histogramDataPublic;
-
 export const getWeatherForecast = client.homeTracker.getWeatherForecast;
 
 export const getEphemeridesAPI = client.homeTracker.getEphemerides;

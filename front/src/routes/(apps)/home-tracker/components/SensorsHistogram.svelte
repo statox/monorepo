@@ -1,16 +1,9 @@
 <script lang="ts">
-    import {
-        getSensorsMetadata,
-        getHistogramData,
-        getHistogramDataPublic,
-        type TimeWindow,
-        type TimeWindowPublic
-    } from '$lib/HomeTracker';
+    import { getSensorsMetadata, getHistogramData, type TimeWindow } from '$lib/HomeTracker';
     import { Notice } from '$lib/components/Notice';
     import { selectedTimeWindow } from '../store';
     import TimeWindowSelection from './TimeWindowSelection.svelte';
     import { MultiSensorsGraph, type GraphType } from './MultiSensorsGraph';
-    import { user } from '$lib/auth2';
 
     const graphs: GraphType[] = [
         'temperature',
@@ -23,10 +16,7 @@
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
         selectedTimeWindow.set(timeWindowInput);
-        const histogramDataGetter = $user
-            ? () => getHistogramData({ timeWindow: $selectedTimeWindow })
-            : () => getHistogramDataPublic({ timeWindow: $selectedTimeWindow as TimeWindowPublic }); // This should be removed now that auth is reworked
-        const histogramData = await histogramDataGetter();
+        const histogramData = await getHistogramData({ timeWindow: $selectedTimeWindow });
         const sensorsDetails = await getSensorsMetadata();
         return { histogramData, sensorsDetails };
     };
