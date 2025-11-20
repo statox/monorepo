@@ -1,5 +1,5 @@
-import { client, client2 } from '$lib/api';
-import { LunarPhaseFrench, type SensorMetadata } from './types';
+import { client2 } from '$lib/api';
+import { LunarPhaseFrench } from './types';
 import { LunarPhase } from 'lunarphase-js';
 
 export const getHistogramData = client2.homeTracker.histogramData;
@@ -58,10 +58,10 @@ export const getEphemeridesAPI = async () => {
 };
 
 export const getSensorsMetadata = async () => {
-    const { sensors } = await client.homeTracker.getSensorsDataForDashboard();
+    const { sensors } = await client2.homeTracker.getSensorsDataForDashboard();
 
     // TODO Have this info returned by the API (and probably have the API returning the images themselves too)
-    const enrichedSensors = sensors.map((sensor: SensorMetadata) => {
+    const enrichedSensors = sensors.map((sensor) => {
         const { sensorName } = sensor;
         return {
             ...sensor,

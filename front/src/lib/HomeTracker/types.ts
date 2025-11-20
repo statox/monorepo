@@ -7,7 +7,7 @@ export interface SensorMetadata {
     tempOffset: number;
     sleepTimeSec: number;
     lastSyncDateUnix: number;
-    lastAlertDateUnix: number;
+    lastAlertDateUnix: number | null;
     lastLogData: SensorLogData;
     oneHourAgoLogData: SensorLogData;
     oneDayAgoLogData: SensorLogData;

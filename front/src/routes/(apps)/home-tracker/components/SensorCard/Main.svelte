@@ -46,8 +46,10 @@
         formatedLastLogTimestamp =
             formatFunction(sensor.lastSyncDateUnix) || '(error getting last timestamp)';
 
-        formatedLastAlertTimestamp =
-            formatFunction(sensor.lastAlertDateUnix) || '(error getting last timestamp)';
+        if (sensor.lastAlertDateUnix) {
+            formatedLastAlertTimestamp =
+                formatFunction(sensor.lastAlertDateUnix) || '(error getting last timestamp)';
+        }
     }, 500);
 
     onDestroy(() => {
