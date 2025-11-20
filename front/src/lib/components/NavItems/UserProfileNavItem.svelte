@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { logout, user } from '$lib/auth2';
+    import { logout, user } from '$lib/auth';
 </script>
 
 {#if $user}

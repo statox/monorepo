@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';

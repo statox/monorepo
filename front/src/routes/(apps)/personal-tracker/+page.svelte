@@ -1,6 +1,6 @@
 <script lang="ts">
     import { modals } from 'svelte-modals';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import EventForm from './components/EventForm.svelte';
     import EventsList from './components/EventsList.svelte';

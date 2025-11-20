@@ -1,10 +1,10 @@
 <script lang="ts">
     import UserProfileNavItem from '$lib/components/NavItems/UserProfileNavItem.svelte';
-    import Auth2NavItem from '$lib/components/NavItems/Auth2NavItem.svelte';
+    import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
     import ThemeSwitcherNavItem from '$lib/components/NavItems/ThemeSwitcherNavItem.svelte';
     import { pageNameStore, showLoginSuccess } from './store';
     import { Notice } from '../Notice';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
 </script>
 
 <header>
@@ -16,7 +16,7 @@
     </h1>
     <nav>
         <span class="last-left-menu-item"><ThemeSwitcherNavItem /></span>
-        <span><Auth2NavItem /></span>
+        <span><AuthNavItem /></span>
         <span><UserProfileNavItem /></span>
     </nav>
 </header>

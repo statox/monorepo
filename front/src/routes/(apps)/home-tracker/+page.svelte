@@ -5,7 +5,7 @@
     import SensorsHistogram from './components/SensorsHistogram.svelte';
     import WeatherForecast from './components/WeatherForecast.svelte';
     import TimeControls from './components/TimeControls.svelte';
-    import { isAllowedForUser, user } from '$lib/auth2';
+    import { isAllowedForUser, user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
 
     pageNameStore.set('Home Tracker');

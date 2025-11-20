@@ -1,6 +1,6 @@
 <script lang="ts">
     import { modals } from 'svelte-modals';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { getReactionsForPublic } from '$lib/Reactor/api';

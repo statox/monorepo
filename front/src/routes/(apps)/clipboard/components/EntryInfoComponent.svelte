@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import { deleteClipboardEntry } from '$lib/Clipboard/api';
     import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
     import { ButtonDelete } from '$lib/components/ButtonDelete';

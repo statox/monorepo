@@ -4,7 +4,7 @@
     import { ButtonDelete } from '$lib/components/ButtonDelete';
     import { ButtonSwitch } from '$lib/components/ButtonSwitch';
     import { toast } from '$lib/components/Toast';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import type { WatchedContent } from '$lib/WebWatcher/types';
     import { Duration } from 'luxon';
     import { deleteWatcherAPI, toggleWatcherEnabledAPI } from '$lib/WebWatcher/api';

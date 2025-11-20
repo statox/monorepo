@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import { selectedTimeWindow } from '../store';
 
     const dispatch = createEventDispatcher();

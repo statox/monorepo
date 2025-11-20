@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ModalProps } from 'svelte-modals';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
 
     interface Props extends ModalProps {
         onNewSongSubmit: (params: {

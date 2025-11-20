@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { Notice, type NoticeItem } from '$lib/components/Notice';

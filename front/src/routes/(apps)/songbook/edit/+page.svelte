@@ -4,7 +4,7 @@
     import { modals } from 'svelte-modals';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
-    import { user } from '$lib/auth2';
+    import { user } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
     import NewChordModal from './components/NewChordModal.svelte';
     import type { RawChord } from '$lib/Songbook/types';
