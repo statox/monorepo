@@ -31,7 +31,7 @@ export const getEphemeridesAPI = async () => {
         }
         if (!validLunarPhasesFr.includes(upcomingMoonPhaseFr as LunarPhaseFrench)) {
             throw new Error(
-                `Invalid french moon phase in upcoming lunar states: ${upcomingMoonPhaseFr}. Expected one of: ${validLunarPhases.join(', ')}`
+                `Invalid french moon phase in upcoming lunar states: ${upcomingMoonPhaseFr}. Expected one of: ${validLunarPhasesFr.join(', ')}`
             );
         }
         return {

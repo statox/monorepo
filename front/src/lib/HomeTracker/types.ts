@@ -93,7 +93,7 @@ export enum LunarPhaseFrench {
     WAXING_GIBBOUS = 'Gibeuse croissante',
     FULL = 'Pleine lune',
     WANING_GIBBOUS = 'Gibeuse décroissante',
-    LAST_QUARTER = 'Last Quarter',
+    LAST_QUARTER = 'Dernier quartier',
     WANING_CRESCENT = 'Dernier croissant'
 }
 
