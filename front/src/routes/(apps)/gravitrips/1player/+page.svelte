@@ -237,9 +237,6 @@
         display: flex;
         flex-direction: column;
         gap: 1em;
-        .selected {
-            background: var(--nc-lk-2);
-        }
     }
     .game-controls {
         display: flex;

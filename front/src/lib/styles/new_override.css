@@ -41,3 +41,7 @@ header {
 .hidden {
     display: none;
 }
+
+button.selected {
+    background: var(--nc-lk-2);
+}

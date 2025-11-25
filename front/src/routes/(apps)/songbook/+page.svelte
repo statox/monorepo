@@ -203,11 +203,6 @@
         }
     }
 
-    button.selected {
-        background-color: var(--nc-lk-2);
-        font-weight: bold;
-    }
-
     .fa-file-word {
         color: #1d5af4;
     }

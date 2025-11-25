@@ -102,10 +102,6 @@
 </div>
 
 <style>
-    button.selected {
-        background: var(--nc-lk-2);
-    }
-
     .subdivisions-container {
         display: flex;
         justify-content: space-evenly;

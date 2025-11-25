@@ -81,8 +81,5 @@
         display: flex;
         flex-direction: row;
         justify-content: space-around;
-        .selected {
-            background: var(--nc-lk-2);
-        }
     }
 </style>
