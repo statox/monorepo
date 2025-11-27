@@ -81,3 +81,10 @@
         />
     {/if}
 {/if}
+
+<style>
+    input {
+        /* On iOS Safari zooms the page if the font-size is smaller than 16px */
+        font-size: 16px;
+    }
+</style>
