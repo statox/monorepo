@@ -13,7 +13,7 @@
     let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
 
-    let value: number = $state(0);
+    let value: number = $state(100);
 
     const upload = async () => {
         noticeMessages = [];
@@ -59,17 +59,48 @@
 </script>
 
 <div>
-    <h4>Track weight</h4>
+    <h3>Weight</h3>
 
     {#each noticeMessages as item}
         <Notice {item} />
     {/each}
 
-    <form class="form-content">
-        <label for="weight">Weight</label>
+    <div class="input-container">
+        <button onclick={() => (value = Number((value - 0.1).toFixed(2)))}>-</button>
         <input type="number" step="0.1" bind:value />
-
-        <br />
-        <button class="form-action" onclick={upload}>Submit</button>
-    </form>
+        <button onclick={() => (value = Number((value + 0.1).toFixed(2)))}>+</button>
+    </div>
+    <button class="form-action" onclick={upload}>Submit</button>
 </div>
+
+<style>
+    .input-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        gap: 10px;
+
+        margin: 1em;
+
+        button {
+            font-weight: bolder;
+        }
+
+        input {
+            /* Disable built-in arrows Firefox */
+            -moz-appearance: textfield;
+            appearance: textfield;
+
+            font-size: larger;
+        }
+
+        /* Disable built-in arrows Chrome, Safari, Edge */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            display: none;
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+</style>

@@ -44,20 +44,29 @@
 </script>
 
 <div>
-    <h4>Track mood</h4>
+    <h3>Mood</h3>
 
     {#each noticeMessages as item}
         <Notice {item} />
     {/each}
 
-    <form class="form-content">
-        <label for="mood">Mood</label>
-
+    <div class="options-container">
         {#each [1, 2, 3, 4, 5, 6, 7, 9, 10] as mood}
             <button class:selected={value === mood} onclick={() => (value = mood)}>{mood}</button>
         {/each}
+    </div>
 
-        <br />
-        <button class="form-action" onclick={upload}>Submit</button>
-    </form>
+    <button class="form-action" onclick={upload}>Submit</button>
 </div>
+
+<style>
+    .options-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        gap: 10px;
+
+        margin: 1em;
+    }
+</style>

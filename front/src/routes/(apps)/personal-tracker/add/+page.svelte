@@ -19,20 +19,16 @@
         { name: 'mood', component: EventFormMood },
         { name: 'weight', component: EventFormWeight }
     ];
-
-    let currentForm = $state(forms[0]);
 </script>
 
 {#if $user}
     <button onclick={() => goto('/personal-tracker')}>Back</button>
 
-    <select bind:value={currentForm}>
-        {#each forms as form}
-            <option value={form}>{form.name}</option>
-        {/each}
-    </select>
+    <h2>Today's Personal Metrics</h2>
 
-    <currentForm.component {onUpload} />
+    {#each forms as form}
+        <form.component {onUpload} />
+    {/each}
 {:else}
     <Notice item={{ level: 'info', header: 'Login to add an entry or see events' }} />
 {/if}
