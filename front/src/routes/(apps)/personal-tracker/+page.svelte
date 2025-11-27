@@ -1,5 +1,6 @@
 <script lang="ts">
     import { user } from '$lib/auth';
+    import { HeadIOS } from '$lib/components/HeadIOS';
     import { Notice } from '$lib/components/Notice';
     import EventsList from './components/EventsList.svelte';
 
@@ -15,6 +16,8 @@
 
     onMount(() => (events = getAllEvents()));
 </script>
+
+<HeadIOS title="Personal Tracker" description="Track me metrics" iconPath="/personal_tracker.png" />
 
 {#if $user}
     <div>
