@@ -19,7 +19,8 @@
         previousPage = from?.url.pathname || previousPage;
     });
 
-    const doLogin = async () => {
+    const doLogin = async (event: SubmitEvent) => {
+        event.preventDefault(); // Prevent page reload
         try {
             await login(username, password);
             await checkAuth();
@@ -45,7 +46,7 @@
 {#if $user?.status == 'logged_in'}
     <p>You are already logged in a {$user?.user.username}</p>
 {:else}
-    <div>
+    <form onsubmit={doLogin}>
         <section>
             <label for="username">Username</label>
             <input
@@ -68,8 +69,8 @@
                 bind:value={password}
             />
         </section>
-        <button onclick={doLogin}>Sign in</button>
-    </div>
+        <button type="submit">Sign in</button>
+    </form>
 
     {#if error}
         <Notice
