@@ -2,7 +2,7 @@
     import UserProfileNavItem from '$lib/components/NavItems/UserProfileNavItem.svelte';
     import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
     import ThemeSwitcherNavItem from '$lib/components/NavItems/ThemeSwitcherNavItem.svelte';
-    import { pageNameStore, showLoginSuccess } from './store';
+    import { pageMetadataStore, showLoginSuccess } from './store';
     import { Notice } from '../Notice';
     import { user } from '$lib/auth';
 </script>
@@ -10,8 +10,12 @@
 <header>
     <h1>
         <a class="home-link" href="/">
-            <img alt="website logo" class="home-img" src="/favicon.png" />
-            {$pageNameStore}
+            <img
+                alt="website logo"
+                class="home-img"
+                src={$pageMetadataStore.iconPath || '/favicon.png'}
+            />
+            {$pageMetadataStore.name}
         </a>
     </h1>
     <nav>

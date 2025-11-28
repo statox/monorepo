@@ -1,4 +1,4 @@
 import Header from './Main.svelte';
-import { pageNameStore } from './store';
+import { pageMetadataStore } from './store';
 
-export { pageNameStore, Header };
+export { pageMetadataStore, Header };

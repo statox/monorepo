@@ -4,10 +4,15 @@
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
     import ClipboardView from './components/ClipboardView.svelte';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
 
-    pageNameStore.set('Clipboard');
+    const pageMetadata = {
+        name: 'Clipboard',
+        description: 'My universal clipboard app',
+        iconPath: '/clipboard.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     const getClipboard = () => {
         if ($user) {
@@ -20,7 +25,11 @@
     const fetchClipboard = () => (clipboardApi = getClipboard());
 </script>
 
-<HeadIOS title="Clipboard" description="My universal clipboard app" iconPath="/clipboard.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 <h2>Upload</h2>
 {#if $user}

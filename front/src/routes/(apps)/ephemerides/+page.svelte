@@ -1,15 +1,24 @@
 <script lang="ts">
     import { getEphemerides } from '$lib/HomeTracker';
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import { Notice } from '$lib/components/Notice';
     import Ephemerides from './components/Ephemerides.svelte';
     import LunarCycle from './components/LunarCycle.svelte';
 
-    pageNameStore.set('Ephemerides');
+    const pageMetadata = {
+        name: 'Ephemerides',
+        description: 'Get the ephemerides',
+        iconPath: '/ephemerides.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 </script>
 
-<HeadIOS title="Ephemerides" description="Get the ephemerides" iconPath="/ephemerides.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 <div class="content">
     {#await getEphemerides()}

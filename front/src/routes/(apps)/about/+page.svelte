@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { BuildInfo } from './types';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('About this website');
+    pageMetadataStore.set({ name: 'About this website' });
 
     interface Props {
         // From +page.server.ts load() function

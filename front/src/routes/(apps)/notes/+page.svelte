@@ -1,9 +1,9 @@
 <script lang="ts">
     import NoteComponent from './components/Note.svelte';
     import type { Note } from '$lib/Notes/types';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Stuff I forget');
+    pageMetadataStore.set({ name: 'Stuff I forget' });
 
     const notesModules = import.meta.glob('$lib/Notes/data/*.md');
     let searchStr: string = $state('');

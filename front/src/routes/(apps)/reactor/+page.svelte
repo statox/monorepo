@@ -6,16 +6,20 @@
     import { getReactionsForPublic } from '$lib/Reactor/api';
     import ReactorView from './components/ReactorView.svelte';
     import ReactorForm from './components/ReactorForm.svelte';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Reactor');
+    const pageMetadata = {
+        name: 'Reactor',
+        description: 'My collection of memes'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     let reactionsApi = $state(getReactionsForPublic());
 
     const onUpload = () => (reactionsApi = getReactionsForPublic());
 </script>
 
-<HeadIOS title="Reactor" description="My collection of memes" />
+<HeadIOS title={pageMetadata.name} description={pageMetadata.description} />
 
 <h2>Upload</h2>
 {#if $user}

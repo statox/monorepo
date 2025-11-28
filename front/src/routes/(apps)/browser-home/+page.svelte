@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Browser home');
+    pageMetadataStore.set({ name: 'Browser home' });
 
     interface Link {
         name: string;

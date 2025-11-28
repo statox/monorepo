@@ -20,9 +20,14 @@
     import { getTypeIconClass } from './utils';
     import { goto } from '$app/navigation';
     import { user } from '$lib/auth';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Songbook');
+    const pageMetadata = {
+        name: 'Songbook',
+        description: 'My song book',
+        iconPath: '/songbook.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     interface Props {
         // From +page.ts load() function
@@ -105,7 +110,11 @@
     const filtersKey: FilterType[] = Object.keys(defaultFilters) as FilterType[];
 </script>
 
-<HeadIOS title="Song Book" description="My song book" iconPath="/songbook.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 <h2>
     <span class="pull-right">

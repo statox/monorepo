@@ -7,17 +7,26 @@
     import { getAllEvents } from '$lib/PersonalTracker/api';
     import type { PersonalEvent } from '$lib/PersonalTracker/types';
     import { onMount } from 'svelte';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
 
     let events: Promise<PersonalEvent[]> | undefined = $state();
 
-    pageNameStore.set('Personal Tracker');
+    const pageMetadata = {
+        name: 'Personal Tracker',
+        description: 'Track me metrics',
+        iconPath: '/personal_tracker.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     onMount(() => (events = getAllEvents()));
 </script>
 
-<HeadIOS title="Personal Tracker" description="Track me metrics" iconPath="/personal_tracker.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 {#if $user}
     <div>

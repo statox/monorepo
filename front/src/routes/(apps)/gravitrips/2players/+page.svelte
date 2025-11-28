@@ -5,6 +5,15 @@
     import { PUBLIC_API_URL } from '$env/static/public';
     import { goto } from '$app/navigation';
     import { client2 } from '$lib/api';
+    import { pageMetadataStore } from '$lib/components/Header';
+    import { HeadIOS } from '$lib/components/HeadIOS';
+
+    const pageMetadata = {
+        name: 'Gravitrips',
+        description: '4 in a row',
+        iconPath: '/gravitrips.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     let socket: WebSocket;
     let youAre: number | null = $state(null);
@@ -89,6 +98,12 @@
         socket.send(message);
     };
 </script>
+
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 <h3>Online game <button onclick={() => goto('/gravitrips')}>Back</button></h3>
 

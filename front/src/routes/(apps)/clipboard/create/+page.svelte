@@ -1,8 +1,13 @@
 <script lang="ts">
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import ClipboardForm from '../components/ClipboardForm.svelte';
 
-    pageNameStore.set('Clipboard');
+    const pageMetadata = {
+        name: 'Clipboard',
+        description: 'My universal clipboard app',
+        iconPath: '/clipboard.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 </script>
 
 <ClipboardForm onUpload={() => console.log('new entry created')} />

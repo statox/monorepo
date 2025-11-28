@@ -13,9 +13,13 @@
         makeWheelTiles,
         rotateWheel
     } from '$lib/ChordWheel/wheel-service';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Chord Wheel');
+    pageMetadataStore.set({
+        name: 'Chord Wheel',
+        description: 'Find chords in a scale',
+        iconPath: '/chord_wheel.png'
+    });
 
     let _p5: p5;
     let wheelTiles: WheelTiles;

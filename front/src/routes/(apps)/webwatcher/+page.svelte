@@ -5,9 +5,9 @@
     import { getAllWatchers } from '$lib/WebWatcher/api';
     import WatcherForm from './components/WatcherForm.svelte';
     import WatchersView from './components/WatchersView.svelte';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Web Watchers');
+    pageMetadataStore.set({ name: 'Web Watchers' });
 
     let watchersApi = $state(getAllWatchers());
     const fetchWatchers = () => (watchersApi = getAllWatchers());

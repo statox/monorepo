@@ -2,12 +2,12 @@
     import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import { listRecipes } from '$lib/Cookbook';
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
 
-    pageNameStore.set('Cookbook');
+    pageMetadataStore.set({ name: 'Cookbook' });
 
     const getRecipes = () => {
         if ($user) {

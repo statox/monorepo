@@ -16,10 +16,15 @@
     import { makeMonteCarloMove, makeRandomMove, type MctsConfig, type MoveResult } from '../ai';
     import BoardComp from '../components/Board.svelte';
     import MctsSettings from '../components/MCTSSettings.svelte';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
 
-    pageNameStore.set('Gravitrips');
+    const pageMetadata = {
+        name: 'Gravitrips',
+        description: '4 in a row',
+        iconPath: '/gravitrips.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     let board: Board = $state(getNewBoard());
     let boardHistory: { board: Board; moveByPlayer: number }[] = $state([]);
@@ -152,7 +157,11 @@
     };
 </script>
 
-<HeadIOS title="Gravitrips" description="Gravitrips" iconPath="/gravitrips.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 <svelte:window on:keydown={onKeyDown} />
 
 <h3>Local game <button onclick={() => goto('/gravitrips')}>Back</button></h3>

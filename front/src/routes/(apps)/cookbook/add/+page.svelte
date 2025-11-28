@@ -2,9 +2,9 @@
     import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import RecipeForm from '../components/RecipeForm.svelte';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Cookbook');
+    pageMetadataStore.set({ name: 'Cookbook' });
 
     const onUpload = () => {
         console.log('New recipe created');

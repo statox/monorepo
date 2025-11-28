@@ -5,10 +5,10 @@
     import EventFormWeight from '../components/EventFormWeight.svelte';
     import EventFormMood from '../components/EventFormMood.svelte';
 
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
 
-    pageNameStore.set('Personal Tracker');
+    pageMetadataStore.set({ name: 'Personal Tracker', iconPath: '/personal_tracker.png' });
 
     const onUpload = () => {
         goto('/personal-tracker');

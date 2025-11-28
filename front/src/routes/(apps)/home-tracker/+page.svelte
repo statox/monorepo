@@ -1,6 +1,6 @@
 <script lang="ts">
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import SensorsSummary from './components/SensorsSummary.svelte';
     import SensorsHistogram from './components/SensorsHistogram.svelte';
     import WeatherForecast from './components/WeatherForecast.svelte';
@@ -8,12 +8,21 @@
     import { isAllowedForUser, user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
 
-    pageNameStore.set('Home Tracker');
+    const pageMetadata = {
+        name: 'Home Tracker',
+        description: 'Recording of my sensors',
+        iconPath: '/hometracker.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     let userIsAllowed = $derived(isAllowedForUser('homeTracker', $user));
 </script>
 
-<HeadIOS title="Home Tracker" description="Recording of my sensors" iconPath="/hometracker.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 <div class="content">
     <TimeControls />

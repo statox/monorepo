@@ -3,9 +3,14 @@
     import Beats from './components/Beats.svelte';
     import TempoList from './components/TempoList.svelte';
     import { TapTempo } from '$lib/TapTempo';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Tap Tempo');
+    const pageMetadata = {
+        name: 'Tap Tempo',
+        description: 'Tap Tempo Metronome',
+        iconPath: '/tap_tempo.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 
     let tapTempo = $state(new TapTempo());
     let taped = $state(false);
@@ -66,7 +71,11 @@
     };
 </script>
 
-<HeadIOS title="TapTempo" description="Tap Tempo Metronome" iconPath="/tap_tempo.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 <div class="container">
     <div>Press the space bar or click/tap anywhere on the page to get a bpm.</div>

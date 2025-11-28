@@ -1,12 +1,21 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
 
-    pageNameStore.set('Gravitrips');
+    const pageMetadata = {
+        name: 'Gravitrips',
+        description: '4 in a row',
+        iconPath: '/gravitrips.png'
+    };
+    pageMetadataStore.set(pageMetadata);
 </script>
 
-<HeadIOS title="Gravitrips" description="Gravitrips" iconPath="/gravitrips.png" />
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 <div class="page-intro">
     <div>

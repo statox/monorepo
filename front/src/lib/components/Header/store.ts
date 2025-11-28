@@ -1,4 +1,8 @@
 import { writable } from 'svelte/store';
+import type { PageMetadata } from './types';
 
-export const pageNameStore = writable<string>('My apps');
+export const pageMetadataStore = writable<PageMetadata>({
+    name: 'My apps',
+    iconPath: '/favicon.png'
+});
 export const showLoginSuccess = writable<boolean>(false);

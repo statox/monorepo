@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { degreeToRoman, notes } from '$lib/Scales/utils';
-    import { pageNameStore } from '$lib/components/Header';
+    import { pageMetadataStore } from '$lib/components/Header';
     import NotesOnInstrument from './components/NotesOnInstrument.svelte';
     import Progressions from './components/Progressions.svelte';
 
-    pageNameStore.set('Scales');
+    pageMetadataStore.set({ name: 'Scales' });
 
     // https://hellomusictheory.com/learn/scale-degree-names/
     // https://ianring.com/musictheory/scales/
