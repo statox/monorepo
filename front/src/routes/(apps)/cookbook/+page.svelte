@@ -7,7 +7,7 @@
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
 
-    pageMetadataStore.set({ name: 'Cookbook' });
+    pageMetadataStore.set({ name: 'Cookbook', showAuthInHeader: true });
 
     const getRecipes = () => {
         if ($user) {

@@ -4,7 +4,7 @@
     import RecipeForm from '../components/RecipeForm.svelte';
     import { pageMetadataStore } from '$lib/components/Header';
 
-    pageMetadataStore.set({ name: 'Cookbook' });
+    pageMetadataStore.set({ name: 'Cookbook', showAuthInHeader: true });
 
     const onUpload = () => {
         console.log('New recipe created');

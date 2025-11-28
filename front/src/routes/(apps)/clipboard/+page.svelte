@@ -10,8 +10,9 @@
     const pageMetadata = {
         name: 'Clipboard',
         description: 'My universal clipboard app',
-        iconPath: '/clipboard.png'
-    };
+        iconPath: '/clipboard.png',
+        showAuthInHeader: true
+    } as const;
     pageMetadataStore.set(pageMetadata);
 
     const getClipboard = () => {

@@ -10,7 +10,7 @@
         name: 'Ephemerides',
         description: 'Get the ephemerides',
         iconPath: '/ephemerides.png'
-    };
+    } as const;
     pageMetadataStore.set(pageMetadata);
 </script>
 

@@ -10,8 +10,9 @@
 
     const pageMetadata = {
         name: 'Reactor',
-        description: 'My collection of memes'
-    };
+        description: 'My collection of memes',
+        showAuthInHeader: true
+    } as const;
     pageMetadataStore.set(pageMetadata);
 
     let reactionsApi = $state(getReactionsForPublic());

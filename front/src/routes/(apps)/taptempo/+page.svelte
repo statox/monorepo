@@ -9,7 +9,7 @@
         name: 'Tap Tempo',
         description: 'Tap Tempo Metronome',
         iconPath: '/tap_tempo.png'
-    };
+    } as const;
     pageMetadataStore.set(pageMetadata);
 
     let tapTempo = $state(new TapTempo());

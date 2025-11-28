@@ -3,7 +3,8 @@
     import { pageMetadataStore } from '$lib/components/Header';
     pageMetadataStore.set({
         name: 'My Apps',
-        iconPath: '/favicon.png'
+        iconPath: '/favicon.png',
+        showAuthInHeader: true
     });
 </script>
 

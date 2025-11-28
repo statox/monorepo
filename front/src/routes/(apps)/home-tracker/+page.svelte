@@ -11,8 +11,9 @@
     const pageMetadata = {
         name: 'Home Tracker',
         description: 'Recording of my sensors',
-        iconPath: '/hometracker.png'
-    };
+        iconPath: '/hometracker.png',
+        showAuthInHeader: true
+    } as const;
     pageMetadataStore.set(pageMetadata);
 
     let userIsAllowed = $derived(isAllowedForUser('homeTracker', $user));

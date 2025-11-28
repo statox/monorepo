@@ -7,7 +7,7 @@
     import WatchersView from './components/WatchersView.svelte';
     import { pageMetadataStore } from '$lib/components/Header';
 
-    pageMetadataStore.set({ name: 'Web Watchers' });
+    pageMetadataStore.set({ name: 'Web Watchers', showAuthInHeader: true });
 
     let watchersApi = $state(getAllWatchers());
     const fetchWatchers = () => (watchersApi = getAllWatchers());

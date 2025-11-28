@@ -7,7 +7,7 @@
         name: 'Gravitrips',
         description: '4 in a row',
         iconPath: '/gravitrips.png'
-    };
+    } as const;
     pageMetadataStore.set(pageMetadata);
 </script>
 

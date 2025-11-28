@@ -25,8 +25,9 @@
     const pageMetadata = {
         name: 'Songbook',
         description: 'My song book',
-        iconPath: '/songbook.png'
-    };
+        iconPath: '/songbook.png',
+        showAuthInHeader: true
+    } as const;
     pageMetadataStore.set(pageMetadata);
 
     interface Props {

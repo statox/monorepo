@@ -15,8 +15,9 @@
     const pageMetadata = {
         name: 'Personal Tracker',
         description: 'Track me metrics',
-        iconPath: '/personal_tracker.png'
-    };
+        iconPath: '/personal_tracker.png',
+        showAuthInHeader: true
+    } as const;
     pageMetadataStore.set(pageMetadata);
 
     onMount(() => (events = getAllEvents()));

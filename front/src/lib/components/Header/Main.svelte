@@ -1,5 +1,5 @@
 <script lang="ts">
-    import UserProfileNavItem from '$lib/components/NavItems/UserProfileNavItem.svelte';
+    import LogoutNavItem from '$lib/components/NavItems/LogoutNavItem.svelte';
     import AuthNavItem from '$lib/components/NavItems/AuthNavItem.svelte';
     import ThemeSwitcherNavItem from '$lib/components/NavItems/ThemeSwitcherNavItem.svelte';
     import { pageMetadataStore, showLoginSuccess } from './store';
@@ -20,8 +20,10 @@
     </h1>
     <nav>
         <span class="last-left-menu-item"><ThemeSwitcherNavItem /></span>
-        <span><AuthNavItem /></span>
-        <span><UserProfileNavItem /></span>
+        {#if $pageMetadataStore.showAuthInHeader}
+            <span><AuthNavItem /></span>
+            <span><LogoutNavItem /></span>
+        {/if}
     </nav>
 </header>
 

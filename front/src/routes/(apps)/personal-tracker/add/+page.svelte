@@ -8,7 +8,11 @@
     import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
 
-    pageMetadataStore.set({ name: 'Personal Tracker', iconPath: '/personal_tracker.png' });
+    pageMetadataStore.set({
+        name: 'Personal Tracker',
+        iconPath: '/personal_tracker.png',
+        showAuthInHeader: true
+    });
 
     const onUpload = () => {
         goto('/personal-tracker');
