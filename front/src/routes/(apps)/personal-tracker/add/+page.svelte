@@ -26,13 +26,40 @@
 </script>
 
 {#if $user}
-    <button onclick={() => goto('/personal-tracker')}>Back</button>
+    <div class="contents">
+        <h4 class="title-bar">
+            Today's Personal Metrics
+            <button
+                onclick={() => {
+                    goto('/personal-tracker');
+                }}>Back</button
+            >
+        </h4>
 
-    <h2>Today's Personal Metrics</h2>
-
-    {#each forms as form}
-        <form.component {onUpload} />
-    {/each}
+        {#each forms as form}
+            <form.component {onUpload} />
+            <hr class="separator" />
+        {/each}
+    </div>
 {:else}
     <Notice item={{ level: 'info', header: 'Login to add an entry or see events' }} />
 {/if}
+
+<style>
+    .contents {
+        min-width: 240px;
+        padding: 16px;
+    }
+    .title-bar {
+        margin-bottom: 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .separator {
+        height: 2px;
+        border: none;
+        background-color: var(--nc-bg-3);
+        margin: 1em 0;
+    }
+</style>

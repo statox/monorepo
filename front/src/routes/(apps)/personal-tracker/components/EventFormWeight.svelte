@@ -59,7 +59,7 @@
 </script>
 
 <div>
-    <h3>Weight</h3>
+    <h4>Weight</h4>
 
     {#each noticeMessages as item}
         <Notice {item} />

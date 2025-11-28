@@ -44,7 +44,7 @@
 </script>
 
 <div>
-    <h3>Mood</h3>
+    <h4>Mood</h4>
 
     {#each noticeMessages as item}
         <Notice {item} />
