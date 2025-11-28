@@ -53,6 +53,11 @@
         border-radius: 15px;
     }
 
+    .app:hover {
+        background: var(--nc-bg-3);
+        border: solid 2px var(--nc-tx-1);
+    }
+
     .description {
         color: var(--nc-tx-1);
     }
