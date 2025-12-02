@@ -17,20 +17,30 @@
     iconPath={pageMetadata.iconPath}
 />
 
-{#each Object.keys(sections) as sectionName}
-    <h3>{sectionName}</h3>
-    <div class="container">
-        {#each sections[sectionName] as link}
-            <a class="app" href={link.url}>
-                <img class="link-favicon" alt={link.name} src={link.icon} />
-                <span class="link-name">{link.name}</span>
-            </a>
-        {/each}
-    </div>
-{/each}
+<div class="container">
+    {#each Object.keys(sections) as sectionName}
+        <div class="section-container">
+            <h3>{sectionName}</h3>
+            {#each sections[sectionName] as link}
+                <a class="app" href={link.url}>
+                    <img class="link-favicon" alt={link.name} src={link.icon} />
+                    <span class="link-name">{link.name}</span>
+                </a>
+            {/each}
+        </div>
+    {/each}
+</div>
 
 <style>
     .container {
+        min-width: 300px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .section-container {
         min-width: 300px;
         display: flex;
         flex-direction: column;
@@ -41,6 +51,7 @@
         display: flex;
         flex-direction: row;
         gap: 10px;
+        max-height: 2em;
         align-items: flex-start;
         justify-content: flex-start;
         flex: 1;
