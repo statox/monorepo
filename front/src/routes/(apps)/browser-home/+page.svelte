@@ -34,10 +34,12 @@
 <style>
     .container {
         min-width: 300px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 30px;
+        column-width: 300px;
+        column-gap: 30px;
+
+        @media screen and (max-width: 600px) {
+            padding: 10px;
+        }
     }
 
     .section-container {
@@ -45,6 +47,8 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+        break-inside: avoid;
+        margin-bottom: 30px;
     }
 
     .app {
