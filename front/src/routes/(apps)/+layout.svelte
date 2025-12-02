@@ -8,7 +8,7 @@
     import { Modals } from 'svelte-modals';
     import { type Snippet } from 'svelte';
     import { SvelteToast } from '$lib/components/Toast';
-    import { Header } from '$lib/components/Header';
+    import { Header, pageMetadataStore } from '$lib/components/Header';
 
     interface Props {
         children?: Snippet;
@@ -18,6 +18,11 @@
 </script>
 
 <Header />
+
+<svelte:head>
+    <title>{$pageMetadataStore.name}</title>
+    <link rel="icon" href={$pageMetadataStore.iconPath || '/favicon.png'} />
+</svelte:head>
 
 <Modals>
     {#snippet backdrop({ closeAll })}
