@@ -28,7 +28,6 @@
             <h4>{category}</h4>
             <div class="event">
                 <div>Date</div>
-                <div>Type</div>
                 <div>Value</div>
             </div>
 
@@ -38,7 +37,6 @@
                     .toFormat('dd/MM/yy HH:mm')}
                 <div class="event">
                     <div class="event-date">{formatedDate}</div>
-                    <div class="event-type">{event.type}</div>
                     <div class="event-value">{event.value}</div>
                 </div>
             {/each}
