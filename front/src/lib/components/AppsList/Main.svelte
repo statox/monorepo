@@ -38,19 +38,24 @@
 <style>
     .container {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: flex-start;
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 3em;
+        gap: 2em;
     }
 
     .app {
         flex: 1;
         min-width: 300px;
-        min-height: 300px;
+        min-height: 5em;
+        padding-bottom: 2em;
         background-color: var(--nc-bg-2);
         white-space: normal;
         border-radius: 15px;
+
+        @media screen and (min-width: 720px) {
+            max-width: 300px;
+        }
     }
 
     .app:hover {
