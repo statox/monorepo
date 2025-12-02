@@ -35,7 +35,7 @@
     .container {
         min-width: 300px;
         column-width: 300px;
-        column-gap: 30px;
+        column-gap: 20px;
 
         @media screen and (max-width: 600px) {
             padding: 10px;
@@ -48,7 +48,7 @@
         flex-direction: column;
         gap: 10px;
         break-inside: avoid;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
 
     .app {
@@ -72,5 +72,9 @@
         width: 2em;
         margin: 0;
         background-color: var(--nc-lk-2);
+    }
+
+    .link-name {
+        font-weight: bold;
     }
 </style>

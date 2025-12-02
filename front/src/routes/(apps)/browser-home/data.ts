@@ -34,6 +34,18 @@ export const sections: { [sectionName: string]: Link[] } = {
             icon: 'https://leblob.fr/themes/custom/blob/images/favicon/favicon.ico'
         }
     ],
+    Fun: [
+        {
+            name: 'Discuit',
+            url: 'https://discuit.org/',
+            icon: '/browserhome/discuit.png'
+        },
+        {
+            name: 'BlueSky',
+            url: 'https://bsky.app/',
+            icon: '/browserhome/bluesky.png'
+        }
+    ],
     Electronics: [
         {
             name: 'Adafruit Blog',
