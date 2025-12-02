@@ -2,7 +2,6 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
-    import { modals } from 'svelte-modals';
     import InfoModal from './components/InfoModal.svelte';
     import { wheel } from '$lib/ChordWheel/wheel-config';
     import type { WheelTiles } from '$lib/ChordWheel/types';
@@ -24,14 +23,31 @@
     let _p5: p5;
     let wheelTiles: WheelTiles;
     let shapePosition = $state(0);
+    let rotationProgress = $state(0);
+    let rotationInterval: ReturnType<typeof setInterval> | undefined = $state();
 
+    const triggerRotation = (clockwise: boolean) => {
+        if (rotationInterval) {
+            return;
+        }
+
+        rotationInterval = setInterval(() => {
+            if (rotationProgress >= 1 || rotationProgress <= -1) {
+                rotateWheel(wheel, clockwise);
+                rotationProgress = 0;
+                clearInterval(rotationInterval);
+                rotationInterval = undefined;
+                return;
+            }
+
+            rotationProgress += clockwise ? 0.05 : -0.05;
+        }, 1);
+    };
     const rotateWheelClockwise = () => {
-        rotateWheel(wheel, true);
-        wheelTiles = makeWheelTiles(_p5, wheel);
+        triggerRotation(true);
     };
     const rotateWheelCounterClockwise = () => {
-        rotateWheel(wheel, false);
-        wheelTiles = makeWheelTiles(_p5, wheel);
+        triggerRotation(false);
     };
 
     const sketch: Sketch = (p5) => {
@@ -40,7 +56,7 @@
 
             p5.resizeCanvas(minDimension * 0.8, minDimension * 0.8);
             wheel.scale = (minDimension / 2) * 0.75;
-            wheelTiles = makeWheelTiles(p5, wheel);
+            wheelTiles = makeWheelTiles(p5, wheel, 0);
         }
 
         p5.setup = () => {
@@ -50,6 +66,8 @@
             p5.colorMode(p5.HSB);
         };
         p5.draw = () => {
+            wheelTiles = makeWheelTiles(_p5, wheel, rotationProgress);
+
             p5.translate(p5.width / 2, p5.height / 2);
             const bodyStyle = getComputedStyle(document.body);
             const backgroundColor = bodyStyle.getPropertyValue('--nc-bg-1');
@@ -71,27 +89,22 @@
         };
 
         p5.keyPressed = (e: KeyboardEvent) => {
-            const validEvents: string[] = [
-                p5.LEFT_ARROW,
-                p5.RIGHT_ARROW,
-                p5.UP_ARROW,
-                p5.DOWN_ARROW
-            ];
-            if (!validEvents.includes(p5.key) || e.altKey) {
+            const validEvents: string[] = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+            if (!validEvents.includes(p5.key)) {
                 return;
             }
             e.preventDefault();
 
-            if (p5.key === p5.LEFT_ARROW) {
+            if (p5.key === 'ArrowLeft') {
                 shapePosition--;
             }
-            if (p5.key === p5.RIGHT_ARROW) {
+            if (p5.key === 'ArrowRight') {
                 shapePosition++;
             }
-            if (p5.key === p5.UP_ARROW) {
+            if (p5.key === 'ArrowUp') {
                 rotateWheelCounterClockwise();
             }
-            if (p5.key === p5.DOWN_ARROW) {
+            if (p5.key === 'ArrowDown') {
                 rotateWheelClockwise();
             }
         };
@@ -157,15 +170,6 @@
     });
 </script>
 
-<h2>
-    Chord wheel
-    <span>
-        <button aria-label="info" style:position="relative" onclick={() => modals.open(InfoModal)}>
-            <i class="fa fa-info-circle" aria-hidden="true"></i>
-        </button>
-    </span>
-</h2>
-
 <div class="d-flex justify-content-center">
     <P5 {sketch} />
 </div>
@@ -198,8 +202,10 @@
         ></button>
     </p>
     <p>
-        On mobile you can also swipe left/right to rotate the shape and up/down to rotate the wheel
+        On mobile swipe left/right to rotate the shape and up/down to rotate the wheel. On the
+        browser you can drag the mouse left/right and up/down.
     </p>
+    <InfoModal />
 </div>
 
 <style>

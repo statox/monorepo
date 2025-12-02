@@ -101,7 +101,8 @@ const makeTile = (
     ring: Ring,
     labelIndex: number,
     wheelPosition: number,
-    scale: number
+    scale: number,
+    transitionProgress: number
 ): Tile => {
     if (labelIndex < 0 || labelIndex >= ring.labels.length) {
         throw new Error(`OOB labelIndex: ${labelIndex}`);
@@ -112,7 +113,8 @@ const makeTile = (
     position.x = 0;
     position.y = -outerDiameter / 2;
 
-    const cellAngle = labelIndex * cellSize * ratio;
+    const cellAngle =
+        labelIndex * cellSize * ratio + p5.map(transitionProgress, 0, 1, 0, Math.PI / 6);
     position.rotate(cellAngle);
 
     const offsetAngle = cellSize / 2;
@@ -141,16 +143,16 @@ const makeTile = (
     };
 };
 
-export const makeWheelTiles = (p5: p5, wheel: Wheel): WheelTiles => {
+export const makeWheelTiles = (p5: p5, wheel: Wheel, transitionProgress: number): WheelTiles => {
     const { scale } = wheel;
     const tilesInnerRing = wheel.innerRing.labels.map((_, i) =>
-        makeTile(p5, wheel.innerRing, i, wheel.position, scale)
+        makeTile(p5, wheel.innerRing, i, wheel.position, scale, transitionProgress)
     );
     const tilesMiddleRing = wheel.middleRing.labels.map((_, i) =>
-        makeTile(p5, wheel.middleRing, i, wheel.position * 2, scale)
+        makeTile(p5, wheel.middleRing, i, wheel.position * 2, scale, transitionProgress)
     );
     const tilesOuterRing = wheel.outerRing.labels.map((_, i) =>
-        makeTile(p5, wheel.outerRing, i, wheel.position, scale)
+        makeTile(p5, wheel.outerRing, i, wheel.position, scale, transitionProgress)
     );
 
     return {
