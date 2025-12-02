@@ -10,8 +10,8 @@
     <div class="container">
         {#each sections[sectionName] as link}
             <a class="app" href={link.url}>
-                <span class="link-name">{link.name}</span>
                 <img class="link-favicon" alt={link.name} src={link.icon} />
+                <span class="link-name">{link.name}</span>
             </a>
         {/each}
     </div>
@@ -20,31 +20,29 @@
 <style>
     .container {
         min-width: 300px;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        display: flex;
+        flex-direction: column;
         gap: 10px;
-    }
-
-    @media screen and (max-width: 600px) {
-        .container {
-            grid-template-columns: repeat(2, 1fr);
-        }
     }
 
     .app {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
+        flex-direction: row;
+        gap: 10px;
+        align-items: flex-start;
+        justify-content: flex-start;
         flex: 1;
         min-width: 5vw;
-        min-height: 10em;
         background-color: var(--nc-bg-2);
         border-radius: 15px;
+
+        padding: 0.2em;
+        cursor: pointer;
     }
 
     .link-favicon {
-        width: 50%;
-        height: 50%;
+        height: 2em;
+        width: 2em;
+        margin: 0;
     }
 </style>
