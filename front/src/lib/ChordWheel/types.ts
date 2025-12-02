@@ -1,4 +1,4 @@
-import type { Vector } from 'p5';
+import p5 from 'p5';
 
 export type Ring = {
     labels: string[];
@@ -17,8 +17,8 @@ export type Wheel = {
 };
 
 export type Tile = {
-    vertices: Vector[];
-    center: Vector;
+    vertices: p5.Vector[];
+    center: p5.Vector;
     label: string;
     color: string;
     colorHue: number; // 0 -> 360

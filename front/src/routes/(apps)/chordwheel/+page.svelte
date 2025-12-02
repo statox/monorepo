@@ -36,7 +36,8 @@
 
     const sketch: Sketch = (p5) => {
         function customResizeCanvas() {
-            const minDimension = Math.min(p5.windowWidth, p5.windowHeight);
+            const minDimension = Math.max(Math.min(p5.windowWidth, p5.windowHeight), 560);
+
             p5.resizeCanvas(minDimension * 0.8, minDimension * 0.8);
             wheel.scale = (minDimension / 2) * 0.75;
             wheelTiles = makeWheelTiles(p5, wheel);
@@ -49,8 +50,13 @@
             p5.colorMode(p5.HSB);
         };
         p5.draw = () => {
-            p5.background(50);
             p5.translate(p5.width / 2, p5.height / 2);
+            const bodyStyle = getComputedStyle(document.body);
+            const backgroundColor = bodyStyle.getPropertyValue('--nc-bg-1');
+            const backgroundCircleColor = bodyStyle.getPropertyValue('--nc-bg-2');
+            p5.background(backgroundColor);
+            p5.fill(backgroundCircleColor);
+            p5.circle(0, 0, p5.width);
             wheelTiles.tilesInnerRing.forEach((tile) => drawTile(p5, tile));
             wheelTiles.tilesMiddleRing.forEach((tile) => drawTile(p5, tile));
             wheelTiles.tilesOuterRing.forEach((tile) => drawTile(p5, tile));
@@ -65,22 +71,27 @@
         };
 
         p5.keyPressed = (e: KeyboardEvent) => {
-            const validEvents = [p5.LEFT_ARROW, p5.RIGHT_ARROW, p5.UP_ARROW, p5.DOWN_ARROW];
-            if (!validEvents.includes(p5.keyCode) || e.altKey) {
+            const validEvents: string[] = [
+                p5.LEFT_ARROW,
+                p5.RIGHT_ARROW,
+                p5.UP_ARROW,
+                p5.DOWN_ARROW
+            ];
+            if (!validEvents.includes(p5.key) || e.altKey) {
                 return;
             }
             e.preventDefault();
 
-            if (p5.keyCode === p5.LEFT_ARROW) {
+            if (p5.key === p5.LEFT_ARROW) {
                 shapePosition--;
             }
-            if (p5.keyCode === p5.RIGHT_ARROW) {
+            if (p5.key === p5.RIGHT_ARROW) {
                 shapePosition++;
             }
-            if (p5.keyCode === p5.UP_ARROW) {
+            if (p5.key === p5.UP_ARROW) {
                 rotateWheelCounterClockwise();
             }
-            if (p5.keyCode === p5.DOWN_ARROW) {
+            if (p5.key === p5.DOWN_ARROW) {
                 rotateWheelClockwise();
             }
         };
@@ -89,7 +100,7 @@
             x: number;
             y: number;
         };
-        p5.touchMoved = (e: TouchEvent) => {
+        p5.mouseDragged = (e: MouseEvent) => {
             // TODO fix typing
             // @ts-expect-error property className doesn't exists on EventTarget
             if (e.target?.className !== 'p5Canvas') {

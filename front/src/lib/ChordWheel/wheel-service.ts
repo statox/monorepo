@@ -16,6 +16,86 @@ const modulo = (value: number, modulo: number): number => {
     return value;
 };
 
+/**
+ * Draws an arc through three points by calculating the circumcircle and sampling points along it.
+ * The arc goes from (x1,y1) through (x2,y2) to (x3,y3).
+ */
+const arcThroughThreePoints = (
+    p5: p5,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    x3: number,
+    y3: number
+) => {
+    /**
+     * Calculate the circumcenter coordinates (ux, uy) using the formula:
+     *
+     * ux = 1/D * [ (x₁²+y₁²)(y₂-y₃) + (x₂²+y₂²)(y₃-y₁) + (x₃²+y₃²)(y₁-y₂) ]
+     * uy = 1/D * [ (x₁²+y₁²)(x₃-x₂) + (x₂²+y₂²)(x₁-x₃) + (x₃²+y₃²)(x₂-x₁) ]
+     *
+     * where D = 2[x₁(y₂-y₃) + x₂(y₃-y₁) + x₃(y₁-y₂)]
+     *
+     * The circumcenter is equidistant from all three points, making it the center
+     * of the unique circle passing through them.
+     *
+     * Derivation: This comes from solving the system of equations where the distance
+     * from (ux,uy) to each of the three points is equal (the radius).
+     *
+     * References:
+     * - https://en.wikipedia.org/wiki/Circumcircle#Cartesian_coordinates_2
+     *   https://mathworld.wolfram.com/Circumcircle.html
+     */
+    // Calculate the denominator for the circumcenter formula
+    // This is twice the signed area of the triangle formed by the three points
+    // If d ≈ 0, the points are collinear (lie on the same line)
+    const d = 2 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+    const ux =
+        ((x1 * x1 + y1 * y1) * (y2 - y3) +
+            (x2 * x2 + y2 * y2) * (y3 - y1) +
+            (x3 * x3 + y3 * y3) * (y1 - y2)) /
+        d;
+    const uy =
+        ((x1 * x1 + y1 * y1) * (x3 - x2) +
+            (x2 * x2 + y2 * y2) * (x1 - x3) +
+            (x3 * x3 + y3 * y3) * (x2 - x1)) /
+        d;
+
+    // Calculate radius
+    const radius = p5.dist(ux, uy, x1, y1);
+
+    // Calculate angles for each point
+    const angle1 = p5.atan2(y1 - uy, x1 - ux);
+    // const angle2 = p5.atan2(y2 - uy, x2 - ux);
+    const angle3 = p5.atan2(y3 - uy, x3 - ux);
+
+    // Normalize angles to ensure we take the shorter arc through p2
+    const normalizeAngle = (angle: number) => {
+        let a = angle;
+        while (a > p5.PI) a -= p5.TWO_PI;
+        while (a < -p5.PI) a += p5.TWO_PI;
+        return a;
+    };
+
+    // Determine direction and draw arc
+    const startAngle = angle1;
+    const endAngle = angle3;
+
+    // Sample points along the arc to create smooth bezier vertices
+    const numPoints = 5;
+    let currentAngle = startAngle;
+    const totalAngle = normalizeAngle(endAngle - startAngle);
+    const angleStep = totalAngle / numPoints;
+
+    for (let i = 1; i <= numPoints; i++) {
+        currentAngle += angleStep;
+        const x = ux + radius * p5.cos(currentAngle);
+        const y = uy + radius * p5.sin(currentAngle);
+        p5.vertex(x, y);
+    }
+};
+
 const makeTile = (
     p5: p5,
     ring: Ring,
@@ -39,10 +119,10 @@ const makeTile = (
     const vertices = [
         position.copy().rotate(-offsetAngle).setMag(innerDiameter), // Bottom left
         position.copy().rotate(-offsetAngle).setMag(outerDiameter), // Top left
-        position.copy().setMag(outerDiameter * 1.02), // Top middle
+        position.copy().setMag(outerDiameter), // Top middle
         position.copy().rotate(offsetAngle).setMag(outerDiameter), // Top right
         position.copy().rotate(offsetAngle).setMag(innerDiameter), // Bottom right
-        position.copy().setMag(innerDiameter * 1.02) // Bottom middle
+        position.copy().setMag(innerDiameter) // Bottom middle
     ].map((v) => v.mult(scale));
     const center = position
         .copy()
@@ -80,25 +160,61 @@ export const makeWheelTiles = (p5: p5, wheel: Wheel): WheelTiles => {
     };
 };
 
-export const drawTile = (p5: p5, tile: Tile) => {
-    p5.strokeWeight(2);
-    p5.stroke([0, 0, 0, 0.5]);
-    p5.fill(`hsb(${tile.colorHue}, 50%, 70%)`);
+export const drawTile = (p5: p5, tile: Tile, highlight?: true) => {
+    if (highlight) {
+        p5.strokeWeight(3);
+        p5.stroke([0, 0, 0, 1]);
+        p5.fill(`hsb(${tile.colorHue}, 60%, 90%)`);
+    } else {
+        p5.strokeWeight(2);
+        p5.stroke([0, 0, 0, 0.5]);
+        p5.fill(`hsb(${tile.colorHue}, 50%, 70%)`);
+    }
 
     const [bottomLeft, topLeft, topMiddle, topRight, bottomRight, bottomMiddle] = tile.vertices;
     p5.beginShape();
+
+    // Left side
     p5.vertex(bottomLeft.x, bottomLeft.y);
     p5.vertex(topLeft.x, topLeft.y);
-    p5.quadraticVertex(topMiddle.x, topMiddle.y, topRight.x, topRight.y);
-    p5.vertex(topRight.x, topRight.y);
+
+    // Top arc (from topLeft through topMiddle to topRight)
+    arcThroughThreePoints(
+        p5,
+        topLeft.x,
+        topLeft.y,
+        topMiddle.x,
+        topMiddle.y,
+        topRight.x,
+        topRight.y
+    );
+
+    // Right side
     p5.vertex(bottomRight.x, bottomRight.y);
-    p5.quadraticVertex(bottomMiddle.x, bottomMiddle.y, bottomLeft.x, bottomLeft.y);
+
+    // Bottom arc (from bottomRight through bottomMiddle to bottomLeft)
+    arcThroughThreePoints(
+        p5,
+        bottomRight.x,
+        bottomRight.y,
+        bottomMiddle.x,
+        bottomMiddle.y,
+        bottomLeft.x,
+        bottomLeft.y
+    );
+
     p5.endShape();
 
     p5.noStroke();
     p5.fill(0);
     p5.textSize(13);
-    p5.text(tile.label, tile.center.x - p5.textWidth(tile.label) / 2, tile.center.y);
+    if (highlight) {
+        p5.textStyle(p5.BOLD);
+        p5.text(tile.label, tile.center.x - p5.textWidth(tile.label) / 2, tile.center.y);
+        p5.textStyle(p5.NORMAL);
+    } else {
+        p5.text(tile.label, tile.center.x - p5.textWidth(tile.label) / 2, tile.center.y);
+    }
 };
 
 export const drawShape = (
@@ -121,25 +237,7 @@ export const drawShape = (
     ];
 
     for (const tile of selectedTiles) {
-        p5.strokeWeight(3);
-        p5.stroke([0, 0, 0, 1]);
-        p5.fill(`hsb(${tile.colorHue}, 60%, 90%)`);
-        const [bottomLeft, topLeft, topMiddle, topRight, bottomRight, bottomMiddle] = tile.vertices;
-        p5.beginShape();
-        p5.vertex(bottomLeft.x, bottomLeft.y);
-        p5.vertex(topLeft.x, topLeft.y);
-        p5.quadraticVertex(topMiddle.x, topMiddle.y, topRight.x, topRight.y);
-        p5.vertex(topRight.x, topRight.y);
-        p5.vertex(bottomRight.x, bottomRight.y);
-        p5.quadraticVertex(bottomMiddle.x, bottomMiddle.y, bottomLeft.x, bottomLeft.y);
-        p5.endShape();
-
-        p5.noStroke();
-        p5.fill(0);
-        p5.textSize(13);
-        p5.textStyle(p5.BOLD);
-        p5.text(tile.label, tile.center.x - p5.textWidth(tile.label) / 2, tile.center.y);
-        p5.textStyle(p5.NORMAL);
+        drawTile(p5, tile, true);
     }
 };
 
