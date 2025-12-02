@@ -22,7 +22,7 @@
         <div class="section-container">
             <h3>{sectionName}</h3>
             {#each sections[sectionName] as link}
-                <a class="app" href={link.url}>
+                <a class="app" href={link.url} target="_blank" rel="noopener noreferrer">
                     <img class="link-favicon" alt={link.name} src={link.icon} />
                     <span class="link-name">{link.name}</span>
                 </a>
