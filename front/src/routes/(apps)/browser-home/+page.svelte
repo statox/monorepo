@@ -1,9 +1,21 @@
 <script lang="ts">
     import { pageMetadataStore } from '$lib/components/Header';
+    import { HeadIOS } from '$lib/components/HeadIOS';
     import { sections } from './data';
 
-    pageMetadataStore.set({ name: 'Browser home' });
+    const pageMetadata = {
+        name: 'Browser home',
+        description: 'Browse the news',
+        iconPath: '/browser_home.png'
+    } as const;
+    pageMetadataStore.set(pageMetadata);
 </script>
+
+<HeadIOS
+    title={pageMetadata.name}
+    description={pageMetadata.description}
+    iconPath={pageMetadata.iconPath}
+/>
 
 {#each Object.keys(sections) as sectionName}
     <h3>{sectionName}</h3>
@@ -44,5 +56,6 @@
         height: 2em;
         width: 2em;
         margin: 0;
+        background-color: var(--nc-lk-2);
     }
 </style>
