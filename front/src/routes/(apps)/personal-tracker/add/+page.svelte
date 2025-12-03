@@ -7,6 +7,7 @@
 
     import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
+    import EventEmotionWheel from '../components/EventEmotionWheel.svelte';
 
     pageMetadataStore.set({
         name: 'Personal Tracker',
@@ -20,6 +21,7 @@
     };
 
     let forms = [
+        { name: 'emotionWheel', component: EventEmotionWheel },
         { name: 'mood', component: EventFormMood },
         { name: 'weight', component: EventFormWeight }
     ];
@@ -37,7 +39,9 @@
         </h4>
 
         {#each forms as form}
-            <form.component {onUpload} />
+            <div class="input-form">
+                <form.component {onUpload} />
+            </div>
             <hr class="separator" />
         {/each}
     </div>
@@ -61,5 +65,8 @@
         border: none;
         background-color: var(--nc-bg-3);
         margin: 1em 0;
+    }
+    .input-form {
+        max-width: 800px;
     }
 </style>
