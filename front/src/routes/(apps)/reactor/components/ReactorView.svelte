@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { run } from 'svelte/legacy';
-
     import { toast } from '$lib/components/Toast';
     import { PUBLIC_API_URL } from '$env/static/public';
     import { type ReactorEntryForPublic } from '$lib/Reactor/types';
@@ -12,9 +10,14 @@
     let { reactions }: Props = $props();
     const pageSize = 10;
     let page = $state(1);
-    let displayedReactions: ReactorEntryForPublic[] = $state([]);
-
     let searchString = $state('');
+
+    const filteredReactions: ReactorEntryForPublic[] = $derived(
+        reactions
+            .filter((entry) => matchSearch(entry, searchString))
+            .sort((a, b) => b.creationDateUnix - a.creationDateUnix)
+            .slice(0, searchString.length ? undefined : page * pageSize)
+    );
 
     const matchSearch = (entry: ReactorEntryForPublic, searchString: string) => {
         if (!searchString.length) {
@@ -49,13 +52,6 @@
     const isVideoEntry = (entry: ReactorEntryForPublic) => {
         return entry.s3PresignedUrl.includes('.mp4');
     };
-
-    run(() => {
-        displayedReactions = reactions
-            .filter((entry) => matchSearch(entry, searchString))
-            .sort((a, b) => b.creationDateUnix - a.creationDateUnix)
-            .slice(0, searchString.length ? undefined : page * pageSize);
-    });
 </script>
 
 <input
@@ -66,7 +62,7 @@
 />
 
 <div class="container">
-    {#each displayedReactions as entry}
+    {#each filteredReactions as entry}
         <div>
             <div><b>{entry.name}</b></div>
             <div>
