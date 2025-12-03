@@ -43,7 +43,7 @@
 {#await clipboardApi}
     <p>Loading data</p>
 {:then clipboard}
-    <ClipboardView {clipboard} on:delete={fetchClipboard} />
+    <ClipboardView {clipboard} onDelete={fetchClipboard} />
 {:catch error}
     <p>Something went wrong</p>
     <p>{JSON.stringify(error)}</p>

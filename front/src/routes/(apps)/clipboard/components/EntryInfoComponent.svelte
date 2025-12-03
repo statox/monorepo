@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
     import { user } from '$lib/auth';
     import { deleteClipboardEntry } from '$lib/Clipboard/api';
     import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
@@ -8,13 +7,14 @@
 
     interface Props {
         entry: ClipboardEntryEnriched;
+        onDelete: () => void;
     }
 
-    let { entry }: Props = $props();
-    const dispatch = createEventDispatcher();
+    let { entry, onDelete }: Props = $props();
 
-    const deleteEntry = (name: string) => {
-        deleteClipboardEntry({ name }).then(() => dispatch('delete'));
+    const deleteEntry = async (name: string) => {
+        await deleteClipboardEntry({ name });
+        onDelete();
     };
 </script>
 

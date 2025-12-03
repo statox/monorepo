@@ -1,21 +1,20 @@
 <script lang="ts">
     import { type ClipboardEntryEnriched } from '$lib/Clipboard/types';
-    import { createEventDispatcher } from 'svelte';
     import EntryContentComponent from './EntryContentComponent.svelte';
     import EntryFileComponent from './EntryFileComponent.svelte';
     import EntryInfoComponent from './EntryInfoComponent.svelte';
 
-    const dispatch = createEventDispatcher();
     interface Props {
         clipboard: ClipboardEntryEnriched[];
+        onDelete: () => void;
     }
 
-    let { clipboard }: Props = $props();
+    let { clipboard, onDelete }: Props = $props();
 </script>
 
 <div class="container">
     {#each clipboard.sort((a, b) => b.creationDateUnix - a.creationDateUnix) as entry}
-        <EntryInfoComponent {entry} on:delete={() => dispatch('delete')} />
+        <EntryInfoComponent {entry} {onDelete} />
         <div><b>{entry.name}</b></div>
         <div class="entry-data-section">
             <EntryContentComponent {entry} />
