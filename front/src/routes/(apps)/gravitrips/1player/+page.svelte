@@ -162,7 +162,7 @@
     description={pageMetadata.description}
     iconPath={pageMetadata.iconPath}
 />
-<svelte:window on:keydown={onKeyDown} />
+<svelte:window onkeydown={onKeyDown} />
 
 <h3>Local game <button onclick={() => goto('/gravitrips')}>Back</button></h3>
 

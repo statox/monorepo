@@ -28,6 +28,7 @@
     const onKeyDown = (e: KeyboardEvent) => {
         switch (e.key) {
             case 'ArrowRight':
+                e.preventDefault();
                 if (selectedColumn === null) {
                     selectedColumn = Math.floor(nbColumns / 2);
                     return;
@@ -35,6 +36,7 @@
                 selectedColumn = Math.min(selectedColumn + 1, nbColumns - 1);
                 break;
             case 'ArrowLeft':
+                e.preventDefault();
                 if (selectedColumn === null) {
                     selectedColumn = Math.floor(nbColumns / 2);
                     return;
@@ -42,6 +44,7 @@
                 selectedColumn = Math.max(selectedColumn - 1, 0);
                 break;
             case ' ':
+                e.preventDefault();
                 if (selectedColumn === null) {
                     return;
                 }
@@ -51,7 +54,7 @@
     };
 </script>
 
-<svelte:window on:keydown={onKeyDown} />
+<svelte:window onkeydown={onKeyDown} />
 
 <div class="board" style="--nb-col: {nbColumns}; --nb-row: {nbRows}">
     {#each rowsIndices.reverse() as row}
