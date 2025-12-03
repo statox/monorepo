@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { run } from 'svelte/legacy';
-
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
@@ -46,7 +44,7 @@
         };
     };
 
-    run(() => {
+    $effect(() => {
         if (pause) {
             _p5?.noLoop();
         } else {

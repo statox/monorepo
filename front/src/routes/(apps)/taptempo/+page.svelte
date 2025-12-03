@@ -28,12 +28,11 @@
 
     const reset = () => {
         tapTempo.reset();
-        tapTempo = tapTempo;
+        pause = false;
     };
 
     let pause = $state(false);
 
-    let keyReleased = true;
     const onKeyDown = (e: KeyboardEvent) => {
         const SPACE = ' ';
         const ENTER = 'Enter';
@@ -43,10 +42,6 @@
             return;
         }
         e.preventDefault();
-        if (!keyReleased) {
-            return;
-        }
-        keyReleased = false;
         if (e.key === SPACE) {
             pause = false;
             addBeat();
@@ -59,14 +54,6 @@
         if (e.key === C) {
             reset();
             tapTempo = tapTempo;
-        }
-    };
-
-    const onKeyUp = (e: KeyboardEvent) => {
-        const SPACE = ' ';
-        if (!keyReleased && e.key === SPACE) {
-            keyReleased = true;
-            e.preventDefault();
         }
     };
 </script>
@@ -94,7 +81,7 @@
     <TempoList currentBpm={tapTempo.bpm} />
 </div>
 
-<svelte:window onkeydown={onKeyDown} onkeyup={onKeyUp} onpointerdown={addBeat} />
+<svelte:window onkeydown={onKeyDown} onpointerdown={addBeat} />
 
 <style>
     .container {
