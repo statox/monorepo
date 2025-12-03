@@ -17,7 +17,7 @@
 </script>
 
 <div class="controls-container">
-    <button class:taped on:click={addBeat}> Tap </button>
+    <button class:taped onclick={addBeat}> Tap </button>
 </div>
 
 <style>

@@ -29,7 +29,7 @@
             <button
                 aria-label="info"
                 style:position="relative"
-                on:click={() => modals.open(InfoModal)}
+                onclick={() => modals.open(InfoModal)}
             >
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
             </button>

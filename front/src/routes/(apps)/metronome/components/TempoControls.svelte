@@ -18,8 +18,8 @@
 
 <div class="tempo-container">
     <div class="tempo-less">
-        <button on:click={() => (metronome.tempo = Number(metronome.tempo) - 5)}>-5</button>
-        <button on:click={() => (metronome.tempo = Number(metronome.tempo) - 1)}>-1</button>
+        <button onclick={() => (metronome.tempo = Number(metronome.tempo) - 5)}>-5</button>
+        <button onclick={() => (metronome.tempo = Number(metronome.tempo) - 1)}>-1</button>
     </div>
     <div class="tempo-value" style="font-size: x-large">
         <input
@@ -28,12 +28,12 @@
             min="1"
             max="400"
             value={metronome.tempo}
-            on:change={updateTempo}
+            onchange={updateTempo}
         /> BPM
     </div>
     <div class="tempo-more">
-        <button on:click={() => (metronome.tempo = Number(metronome.tempo) + 1)}>+1</button>
-        <button on:click={() => (metronome.tempo = Number(metronome.tempo) + 5)}>+5</button>
+        <button onclick={() => (metronome.tempo = Number(metronome.tempo) + 1)}>+1</button>
+        <button onclick={() => (metronome.tempo = Number(metronome.tempo) + 5)}>+5</button>
     </div>
 </div>
 

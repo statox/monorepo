@@ -9,7 +9,7 @@
         <label for="beatsInBar"><h4>Beats in bar</h4></label>
         <div class="subdivisions-container">
             <button
-                on:click={() => (metronome.beatsPerBar = Math.max(metronome.beatsPerBar - 1, 1))}
+                onclick={() => (metronome.beatsPerBar = Math.max(metronome.beatsPerBar - 1, 1))}
             >
                 -1
             </button>
@@ -17,7 +17,7 @@
                 {metronome.beatsPerBar}
             </span>
             <button
-                on:click={() => (metronome.beatsPerBar = Math.min(metronome.beatsPerBar + 1, 10))}
+                onclick={() => (metronome.beatsPerBar = Math.min(metronome.beatsPerBar + 1, 10))}
             >
                 +1
             </button>
@@ -32,7 +32,7 @@
             <button
                 aria-label="1 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 1}
-                on:click={() => (metronome.subdivisionsInBeat = 1)}
+                onclick={() => (metronome.subdivisionsInBeat = 1)}
             >
                 <svg
                     width="15"
@@ -48,7 +48,7 @@
             <button
                 aria-label="2 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 2}
-                on:click={() => (metronome.subdivisionsInBeat = 2)}
+                onclick={() => (metronome.subdivisionsInBeat = 2)}
             >
                 <svg
                     width="15"
@@ -64,7 +64,7 @@
             <button
                 aria-label="3 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 3}
-                on:click={() => (metronome.subdivisionsInBeat = 3)}
+                onclick={() => (metronome.subdivisionsInBeat = 3)}
             >
                 <svg
                     width="24"
@@ -83,7 +83,7 @@
             <button
                 aria-label="4 subdivision by beat"
                 class:selected={metronome.subdivisionsInBeat === 4}
-                on:click={() => (metronome.subdivisionsInBeat = 4)}
+                onclick={() => (metronome.subdivisionsInBeat = 4)}
             >
                 <svg
                     width="27"

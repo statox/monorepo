@@ -23,7 +23,7 @@
 </script>
 
 <div class="controls-container">
-    <button style="min-width: 300px" on:click={metronomeStartStop}>
+    <button style="min-width: 300px" onclick={metronomeStartStop}>
         {#if metronome.isRunning}
             <svg
                 width="20"
@@ -45,7 +45,7 @@
     </button>
 </div>
 
-<svelte:window on:keydown={onKeyDown} />
+<svelte:window onkeydown={onKeyDown} />
 
 <style>
     .controls-container {
