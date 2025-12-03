@@ -20,8 +20,8 @@
 <Header />
 
 <svelte:head>
-    <title>{$pageMetadataStore.name}</title>
-    <link rel="icon" href={$pageMetadataStore.iconPath || '/favicon.png'} />
+    <title>{$pageMetadataStore?.name || 'My Apps'}</title>
+    <link rel="icon" href={$pageMetadataStore?.iconPath || '/favicon.png'} />
 </svelte:head>
 
 <Modals>
