@@ -1,9 +1,12 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
     import { user } from '$lib/auth';
+    import type { TimeWindow } from '$lib/HomeTracker';
     import { selectedTimeWindow } from '../store';
 
-    const dispatch = createEventDispatcher();
+    interface Props {
+        onSelect: (newTimeWindow: TimeWindow) => void;
+    }
+    const { onSelect }: Props = $props();
 
     const authenticatedOptions = [
         { name: '30 minutes', value: '30m' },
@@ -37,7 +40,7 @@
     <select
         id="time-window-select"
         bind:value={$selectedTimeWindow}
-        onchange={() => dispatch('select', $selectedTimeWindow)}
+        onchange={() => onSelect($selectedTimeWindow)}
     >
         {#each options as option}
             <option value={option.value}>{option.name}</option>

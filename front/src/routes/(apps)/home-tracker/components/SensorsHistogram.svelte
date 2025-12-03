@@ -30,7 +30,7 @@
 
 <h1 class="title">
     <span>History</span>
-    <TimeWindowSelection on:select={(event) => (apiData = refreshData(event.detail))} />
+    <TimeWindowSelection onSelect={(newTimeWindow) => (apiData = refreshData(newTimeWindow))} />
 </h1>
 
 {#await apiData}
