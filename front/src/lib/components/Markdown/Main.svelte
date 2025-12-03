@@ -5,7 +5,11 @@
     import ImageRenderer from './renderers/Image.svelte';
     import LinkRenderer from './renderers/Link.svelte';
 
-    export let source: string;
+    interface Props {
+        source: string;
+    }
+
+    let { source }: Props = $props();
 
     const renderers = { image: ImageRenderer, link: LinkRenderer };
     onMount(() => {
