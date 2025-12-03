@@ -13,14 +13,16 @@
     import { goto } from '$app/navigation';
     import { Notice } from '$lib/components/Notice';
 
-    // TODO Migrate this component to svelte 5
+    interface Props {
+        // From +page.ts load() function
+        data: { chords: RawChord[] };
+    }
 
-    // From +page.ts load() function
-    export let data: { chords: RawChord[] };
-    let { chords } = data;
-    let content = {
+    let { data }: Props = $props();
+    let { chords } = $state(data);
+    let content = $derived({
         json: chords
-    };
+    });
 
     const schema = {
         type: 'array',
@@ -52,11 +54,11 @@
     };
 
     const validator = createAjvValidator({ schema });
-    let editor: JSONEditor;
+    let editor: JSONEditor | undefined = $state();
 
-    let isValid = true;
+    let isValid = $state(true);
     const onJsonChange = () => {
-        if (editor.validate()) {
+        if (editor?.validate()) {
             isValid = false;
             return;
         }
@@ -64,12 +66,12 @@
     };
 
     const upload = async () => {
-        if (editor.validate()) {
+        if (editor?.validate()) {
             return;
         }
 
         try {
-            const content = editor.get() as JSONContent;
+            const content = editor?.get() as JSONContent;
             await uploadChords({ chords: content.json as RawChord[] });
             toast.push('<i class="fas fa-check"></i> Uploaded');
         } catch (error) {
@@ -118,7 +120,7 @@
     Edit song book
 
     <span class="pull-right">
-        <button style:position="relative" on:click={() => goto('/songbook')}>
+        <button style:position="relative" onclick={() => goto('/songbook')}>
             Back to songbook
         </button>
     </span>
@@ -127,7 +129,7 @@
 {#if $user}
     <button
         style:position="relative"
-        on:click={() => modals.open(NewChordModal, { onNewSongSubmit })}
+        onclick={() => modals.open(NewChordModal, { onNewSongSubmit })}
     >
         Add a song
     </button>
@@ -136,7 +138,7 @@
 {#if chords?.length}
     {#if isValid}
         {#if $user}
-            <button on:click={upload}>Upload</button>
+            <button onclick={upload}>Upload</button>
         {:else}
             <span><Notice item={{ level: 'info', header: 'Login to upload changes' }} /></span>
         {/if}
