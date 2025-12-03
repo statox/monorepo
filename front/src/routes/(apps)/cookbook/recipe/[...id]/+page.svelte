@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { page } from '$app/stores';
+    import { page } from '$app/state';
     import { goto } from '$app/navigation';
     import { getRecipe } from '$lib/Cookbook';
     import RecipeDisplay from '../../components/RecipeDisplay.svelte';
 
-    const id = $page.params.id;
+    const id = page.params.id;
 </script>
 
 <button onclick={() => goto('/cookbook')}>Back to list</button>

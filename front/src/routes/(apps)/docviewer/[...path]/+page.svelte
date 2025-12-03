@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { page } from '$app/stores';
+    import { page } from '$app/state';
 
     // Using the Office Web Viewer to display Microsoft documents
     // currently used by the Song Book app to display .doc and .docx songs
@@ -7,7 +7,7 @@
 
     let innerWidth: number = $state(0);
 
-    const { path } = $page.params;
+    const { path } = page.params;
     const src = `https://view.officeapps.live.com/op/embed.aspx?src=${path}`;
 
     let viewWidth = $derived(Math.min(innerWidth, 700));

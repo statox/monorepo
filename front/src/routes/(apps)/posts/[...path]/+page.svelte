@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { page } from '$app/stores';
+    import { page } from '$app/state';
     import { PUBLIC_BLOG_URL } from '$env/static/public';
 
     // We need to do the redirection on component mount on the client side
@@ -10,7 +10,7 @@
     // The idea comes from this repo
     // https://github.com/mohit2152sharma/svelte-mpa-example
     onMount(() => {
-        const { path } = $page.params;
+        const { path } = page.params;
         window.location.href = PUBLIC_BLOG_URL + /posts/ + path;
     });
 </script>
