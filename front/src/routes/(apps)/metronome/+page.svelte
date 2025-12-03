@@ -14,10 +14,30 @@
     pageMetadataStore.set({ name: 'Metronome' });
 
     let metronome = new Metronome(80);
+    // We use reactive values outside of the metronome object to avoid having
+    // to create $state properties directly in the class
+    let tempo = $state(metronome.tempo);
+    let beatsPerBar = $state(metronome.beatsPerBar);
+    let subdivisionsInBeat = $state(metronome.subdivisionsInBeat);
 
     onDestroy(() => {
         metronome.stop();
     });
+
+    const onTempoUpdate = (newTempo: number) => {
+        tempo = newTempo;
+        metronome.tempo = newTempo;
+    };
+
+    const onBeatsPerBarUpdate = (newBeatsPerBar: number) => {
+        beatsPerBar = newBeatsPerBar;
+        metronome.beatsPerBar = newBeatsPerBar;
+    };
+
+    const onSubdivisionsInBeatUpdate = (newSubdivisionsInBeat: number) => {
+        subdivisionsInBeat = newSubdivisionsInBeat;
+        metronome.subdivisionsInBeat = newSubdivisionsInBeat;
+    };
 </script>
 
 <HeadIOS title="Metronome" description="Metronome" />
@@ -40,16 +60,16 @@
         <PlayPause {metronome} />
     </div>
     <div class="section">
-        <TempoControls {metronome} />
-        <Tap
-            onNewBPM={(newBPM) => {
-                metronome.tempo = newBPM / metronome.subdivisionsInBeat;
-                metronome = metronome;
-            }}
-        />
+        <TempoControls bind:tempo {onTempoUpdate} />
+        <Tap onNewBPM={(newBPM) => onTempoUpdate(newBPM / metronome.subdivisionsInBeat)} />
     </div>
     <div class="section">
-        <BeatsControls {metronome} />
+        <BeatsControls
+            bind:beatsPerBar
+            bind:subdivisionsInBeat
+            {onBeatsPerBarUpdate}
+            {onSubdivisionsInBeatUpdate}
+        />
     </div>
     <div class="section">
         <MetronomeVisualization {metronome} />

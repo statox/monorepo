@@ -1,9 +1,13 @@
 <script lang="ts">
     import { TapTempo } from '$lib/TapTempo';
 
-    export let onNewBPM: (bpm: number) => void;
+    interface Props {
+        onNewBPM: (bpm: number) => void;
+    }
+
+    let { onNewBPM }: Props = $props();
     let tapTempo = new TapTempo();
-    let taped = false;
+    let taped = $state(false);
 
     const addBeat = () => {
         tapTempo.addBeat();

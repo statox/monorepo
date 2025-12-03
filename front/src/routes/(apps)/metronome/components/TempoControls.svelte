@@ -1,7 +1,10 @@
 <script lang="ts">
-    import type { Metronome } from '$lib/Metronome';
+    interface Props {
+        tempo: number;
+        onTempoUpdate: (tempo: number) => void;
+    }
 
-    export let metronome: Metronome;
+    let { tempo = $bindable(), onTempoUpdate }: Props = $props();
 
     const updateTempo = (event: Event) => {
         if (!event || !event.target) {
@@ -12,14 +15,14 @@
         if (!value || value < 1) {
             return;
         }
-        metronome.tempo = value;
+        onTempoUpdate(value);
     };
 </script>
 
 <div class="tempo-container">
     <div class="tempo-less">
-        <button onclick={() => (metronome.tempo = Number(metronome.tempo) - 5)}>-5</button>
-        <button onclick={() => (metronome.tempo = Number(metronome.tempo) - 1)}>-1</button>
+        <button onclick={() => onTempoUpdate(tempo - 5)}>-5</button>
+        <button onclick={() => onTempoUpdate(tempo - 1)}>-1</button>
     </div>
     <div class="tempo-value" style="font-size: x-large">
         <input
@@ -27,13 +30,13 @@
             type="number"
             min="1"
             max="400"
-            value={metronome.tempo}
+            bind:value={tempo}
             onchange={updateTempo}
         /> BPM
     </div>
     <div class="tempo-more">
-        <button onclick={() => (metronome.tempo = Number(metronome.tempo) + 1)}>+1</button>
-        <button onclick={() => (metronome.tempo = Number(metronome.tempo) + 5)}>+5</button>
+        <button onclick={() => onTempoUpdate(tempo + 1)}>+1</button>
+        <button onclick={() => onTempoUpdate(tempo + 5)}>+5</button>
     </div>
 </div>
 

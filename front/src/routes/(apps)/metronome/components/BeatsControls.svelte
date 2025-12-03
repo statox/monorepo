@@ -1,26 +1,28 @@
 <script lang="ts">
-    import type { Metronome } from '$lib/Metronome';
+    interface Props {
+        beatsPerBar: number;
+        subdivisionsInBeat: number;
+        onBeatsPerBarUpdate: (newBeatsPerBar: number) => void;
+        onSubdivisionsInBeatUpdate: (newSubdivisionsInBeat: number) => void;
+    }
 
-    export let metronome: Metronome;
+    let {
+        beatsPerBar = $bindable(),
+        subdivisionsInBeat = $bindable(),
+        onBeatsPerBarUpdate,
+        onSubdivisionsInBeatUpdate
+    }: Props = $props();
 </script>
 
 <div class="controls-container">
     <div class="controls-sub-container">
         <label for="beatsInBar"><h4>Beats in bar</h4></label>
         <div class="subdivisions-container">
-            <button
-                onclick={() => (metronome.beatsPerBar = Math.max(metronome.beatsPerBar - 1, 1))}
-            >
-                -1
-            </button>
+            <button onclick={() => onBeatsPerBarUpdate(Math.max(beatsPerBar - 1, 1))}> -1 </button>
             <span style="font-size: large; margin-left: 1em; margin-right: 1em">
-                {metronome.beatsPerBar}
+                {beatsPerBar}
             </span>
-            <button
-                onclick={() => (metronome.beatsPerBar = Math.min(metronome.beatsPerBar + 1, 10))}
-            >
-                +1
-            </button>
+            <button onclick={() => onBeatsPerBarUpdate(Math.min(beatsPerBar + 1, 10))}> +1 </button>
         </div>
     </div>
     <br />
@@ -31,8 +33,8 @@
         <div class="subdivisions-container">
             <button
                 aria-label="1 subdivision by beat"
-                class:selected={metronome.subdivisionsInBeat === 1}
-                onclick={() => (metronome.subdivisionsInBeat = 1)}
+                class:selected={subdivisionsInBeat === 1}
+                onclick={() => onSubdivisionsInBeatUpdate(1)}
             >
                 <svg
                     width="15"
@@ -47,8 +49,8 @@
             </button>
             <button
                 aria-label="2 subdivision by beat"
-                class:selected={metronome.subdivisionsInBeat === 2}
-                onclick={() => (metronome.subdivisionsInBeat = 2)}
+                class:selected={subdivisionsInBeat === 2}
+                onclick={() => onSubdivisionsInBeatUpdate(2)}
             >
                 <svg
                     width="15"
@@ -63,8 +65,8 @@
             </button>
             <button
                 aria-label="3 subdivision by beat"
-                class:selected={metronome.subdivisionsInBeat === 3}
-                onclick={() => (metronome.subdivisionsInBeat = 3)}
+                class:selected={subdivisionsInBeat === 3}
+                onclick={() => onSubdivisionsInBeatUpdate(3)}
             >
                 <svg
                     width="24"
@@ -82,8 +84,8 @@
             </button>
             <button
                 aria-label="4 subdivision by beat"
-                class:selected={metronome.subdivisionsInBeat === 4}
-                onclick={() => (metronome.subdivisionsInBeat = 4)}
+                class:selected={subdivisionsInBeat === 4}
+                onclick={() => onSubdivisionsInBeatUpdate(4)}
             >
                 <svg
                     width="27"

@@ -1,11 +1,14 @@
 <script lang="ts">
     import type { Metronome } from '$lib/Metronome';
 
-    export let metronome: Metronome;
+    interface Props {
+        metronome: Metronome;
+    }
+
+    let { metronome = $bindable() }: Props = $props();
 
     const metronomeStartStop = () => {
         metronome.startStop();
-        metronome = metronome;
     };
 
     const onKeyDown = (e: KeyboardEvent) => {

@@ -4,7 +4,11 @@
     import type { Metronome } from '$lib/Metronome';
     import { onDestroy, onMount } from 'svelte';
 
-    export let metronome: Metronome;
+    interface Props {
+        metronome: Metronome;
+    }
+
+    let { metronome = $bindable() }: Props = $props();
 
     let beatIsPlaying = false;
     let beatPlaying = 0;
