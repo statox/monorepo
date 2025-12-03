@@ -13,7 +13,5 @@ for i in {0..255}; do
 done
 ```
 
-<div style="display: flex; flex-wrap: wrap">
-    <img src="/notes/tmux_colors/tmux_colors_light.png" />
-    <img src="/notes/tmux_colors/tmux_colors_dark.png" />
-</div>
+![Tmux colors light background](/notes/tmux_colors/tmux_colors_light.png 'Tmux colors light background')
+![Tmux colors dark background](/notes/tmux_colors/tmux_colors_dark.png 'Tmux colors dark background')

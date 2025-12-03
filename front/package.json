@@ -14,13 +14,9 @@
         "prettier:fix": "prettier --write .",
         "setup-githooks": "./githooks/setup.sh"
     },
-    "overrides": {
-        "svelte-markdown": {
-            "svelte": "^5.17.5"
-        }
-    },
     "devDependencies": {
         "@eslint/js": "^9.39.1",
+        "@humanspeak/svelte-markdown": "^0.8.13",
         "@sveltejs/adapter-static": "^3.0.10",
         "@sveltejs/kit": "^2.49.0",
         "@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -47,7 +43,6 @@
         "svelte": "^5.43.14",
         "svelte-check": "^4.3.4",
         "svelte-jsoneditor": "^3.10.0",
-        "svelte-markdown": "^0.4.1",
         "svelte-modals": "^2.0.1",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.48.0",

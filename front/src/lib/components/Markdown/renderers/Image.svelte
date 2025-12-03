@@ -4,10 +4,10 @@
     export let text = '';
 </script>
 
-<img src={href} {title} alt={text} />
+<img src={href} {title} alt={text} loading="lazy" />
 
 <style>
     img {
-        width: 20vw;
+        width: 70vw;
     }
 </style>
