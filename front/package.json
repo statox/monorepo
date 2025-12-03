@@ -39,7 +39,7 @@
         "mime": "^4.1.0",
         "p5": "^2.1.1",
         "p5-svelte": "^3.1.2",
-        "prettier": "^3.6.2",
+        "prettier": "^3.7.4",
         "prettier-plugin-svelte": "^3.4.0",
         "simple-prng": "^0.0.2",
         "simple-vector": "^0.0.14",
