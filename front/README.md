@@ -8,14 +8,17 @@
 - [x] Fix css duplicated by Markdown in `<svelte:head>`
 - [ ] Find a way to use `hljs.highlightElement` in Markdown to avoid calling `highlight` on already highlighted code. Maybe replace `hljs` by `prism` as I do on www.statox.fr because the highlighting is slightly better
 - [ ] Fix `audioContext` on iOS Safari in Metronome page
-- [ ] Find a better way to store authentication token. For now they are insecure in the local storage
+- [x] Find a better way to store authentication token. For now they are insecure in the local storage
+    - Auth is now stored in the cookie `connect.sid` not accessible via javascript.
 
 ### Improvements
 
-- [ ] Svelte 5:
-    - [x] Most components are migrated but ~[svelte-markdown](https://github.com/pablo-abc/svelte-markdown) and~ [svelte-jsoneditor](https://github.com/josdejong/svelte-jsoneditor) still cause some issues, so a couple are not migrated because of that.
+- [x] Svelte 5:
+    - [x] Most components are migrated some were not migrated because of:
+        - [x] [svelte-markdown](https://github.com/pablo-abc/svelte-markdown). Now replaced with [humanspeak/svelte-markdown](https://github.com/humanspeak/svelte-markdown).
+        - [x] [svelte-jsoneditor](https://github.com/josdejong/svelte-jsoneditor). The repo was updated and issues are solved.
     - [x] A couple of components still use `run` from `svelte/legacy` instead of `$effect` because the migration break them and I have to look into it.
-    - [ ] Replace `createEventDispatcher` by callback props
+    - [x] Replace `createEventDispatcher` by callback props
 - [x] Add checks to allow Dependabot MRs to be merged automatically
 - [x] Add link to the last GitHub Pages deployment
 - [x] Rework `fetch` calls into a framework for unified access to api.statox.fr
