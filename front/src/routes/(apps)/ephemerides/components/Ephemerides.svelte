@@ -1,8 +1,7 @@
 <script lang="ts">
     import { getMoonPhasePictureURL } from '$lib/HomeTracker';
 
-    export let moonState;
-    export let sunState;
+    let { moonState, sunState } = $props();
 </script>
 
 <div class="container">

@@ -2,10 +2,14 @@
     import type { DateTime } from 'luxon';
     import { getMoonPhaseIconURL, type EnrichedMoonState } from '$lib/HomeTracker';
 
-    export let upcomingLunarStates: {
-        date: DateTime;
-        lunarState: EnrichedMoonState;
-    }[];
+    interface Props {
+        upcomingLunarStates: {
+            date: DateTime;
+            lunarState: EnrichedMoonState;
+        }[];
+    }
+
+    let { upcomingLunarStates }: Props = $props();
 </script>
 
 <div class="container">
