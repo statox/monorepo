@@ -1,9 +1,14 @@
-import eslint from '@eslint/js';
-import pluginImport from 'eslint-plugin-import';
-import svelteEslint from 'eslint-plugin-svelte';
+import eslintJS from '@eslint/js';
+import eslintPrettier from 'eslint-config-prettier';
+import eslintSvelte from 'eslint-plugin-svelte';
+import eslintTS from 'typescript-eslint';
 import globals from 'globals';
+import pluginImport from 'eslint-plugin-import';
+import svelteConfig from './svelte.config.js';
 import svelteParser from 'svelte-eslint-parser';
-import tsEslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
+import { fileURLToPath } from 'node:url';
+import { includeIgnoreFile } from '@eslint/compat';
 
 const commonRules = {
     // TODO Fix code to re-enable this rule
@@ -17,21 +22,23 @@ const commonRules = {
     ]
 };
 
-/** @type {import('eslint').Linter.FlatConfig[]} */
-export default [
+const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
+
+export default defineConfig(
+    includeIgnoreFile(gitignorePath),
+    { ignores: ['**/*.d.ts'] },
+    eslintJS.configs.recommended,
+    ...eslintTS.configs.recommended,
+    ...eslintSvelte.configs.recommended,
+    ...eslintSvelte.configs.prettier,
+    eslintPrettier,
     {
-        ignores: ['**/*.d.ts']
-    },
-    eslint.configs.recommended,
-    ...tsEslint.configs.recommended,
-    ...svelteEslint.configs['flat/recommended'],
-    ...svelteEslint.configs['flat/prettier'],
-    {
-        files: ['**/*.svelte'],
+        files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
         languageOptions: {
             parser: svelteParser,
             parserOptions: {
-                parser: tsEslint.parser
+                parser: eslintTS.parser,
+                svelteConfig
             },
             globals: {
                 ...globals.browser
@@ -58,7 +65,7 @@ export default [
     {
         files: ['**/*.ts'],
         languageOptions: {
-            parser: tsEslint.parser
+            parser: eslintTS.parser
         },
         rules: {
             ...commonRules
@@ -67,7 +74,7 @@ export default [
     {
         files: ['**/*server.ts'],
         languageOptions: {
-            parser: tsEslint.parser,
+            parser: eslintTS.parser,
             globals: {
                 ...globals.node
             }
@@ -78,11 +85,11 @@ export default [
     },
     {
         plugins: {
-            '@typescript-eslint': tsEslint.plugin,
+            '@typescript-eslint': eslintTS.plugin,
             import: pluginImport
         },
         rules: {
             // 'svelte/sort-attributes': 'warn' // Check if it's worth enabling
         }
     }
-];
+);
