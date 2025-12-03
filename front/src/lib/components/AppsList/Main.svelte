@@ -52,6 +52,7 @@
         background-color: var(--nc-bg-2);
         white-space: normal;
         border-radius: 15px;
+        border: solid 2px var(--nc-bg-2);
 
         @media screen and (min-width: 720px) {
             max-width: 300px;
