@@ -13,8 +13,8 @@
 ### Improvements
 
 - [ ] Svelte 5:
-    - [ ] Most components are migrated but ~[svelte-markdown](https://github.com/pablo-abc/svelte-markdown) and~ [svelte-jsoneditor](https://github.com/josdejong/svelte-jsoneditor) still cause some issues, so a couple are not migrated because of that.
-    - [ ] A couple of components still use `run` from `svelte-legacy` instead of `$effect` because the migration break them and I have to look into it.
+    - [x] Most components are migrated but ~[svelte-markdown](https://github.com/pablo-abc/svelte-markdown) and~ [svelte-jsoneditor](https://github.com/josdejong/svelte-jsoneditor) still cause some issues, so a couple are not migrated because of that.
+    - [x] A couple of components still use `run` from `svelte/legacy` instead of `$effect` because the migration break them and I have to look into it.
     - [ ] Replace `createEventDispatcher` by callback props
 - [x] Add checks to allow Dependabot MRs to be merged automatically
 - [x] Add link to the last GitHub Pages deployment
