@@ -41,8 +41,8 @@
         data (theoretically) requires to login as myself, so you shouldn't be able to do it. (The
         authentication used to be handled via <a target="_blank" href="https://auth0.com/">auth0</a>
         and used Github as the identity provider. Now our own api uses passportJS to handle login and
-        session cookies and we use the browsers built-in cookie handling to authenticate calls after
-        the initial login.
+        session cookies and we use the browsers built-in cookie handling to authenticate calls after the
+        initial login.
     </p>
     <br />
     <p>
