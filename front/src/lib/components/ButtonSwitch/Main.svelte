@@ -26,14 +26,15 @@
 -->
 
 <script lang="ts">
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { onMount } from 'svelte';
 
     interface Props {
         label: any;
         design?: string;
         options?: string[]; // Two options to display around the switch
         fontSize?: number;
-        value?: string;
+        value?: 'on' | 'off';
+        onchange?: (value: 'on' | 'off') => void;
     }
 
     let {
@@ -41,13 +42,13 @@
         design = 'inner label',
         options = [],
         fontSize = 16,
-        value = $bindable('on')
+        value = $bindable('on'),
+        onchange = () => {}
     }: Props = $props();
 
     let checked = $state(true);
 
     const uniqueID = Math.floor(Math.random() * 100);
-    const dispatch = createEventDispatcher();
 
     function handleClick(event: MouseEvent) {
         const target = event.target as HTMLInputElement;
@@ -57,7 +58,7 @@
         checked = state === 'true' ? false : true;
 
         value = checked === true ? 'on' : 'off';
-        dispatch('change', value);
+        onchange(value);
     }
 
     onMount(() => {

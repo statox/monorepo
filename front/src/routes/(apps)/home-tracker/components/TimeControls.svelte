@@ -5,7 +5,7 @@
     import { ButtonSwitch } from '$lib/components/ButtonSwitch';
     import { ProgressIndicatorCircle } from '$lib/components/ProgressIndicatorCircle';
 
-    let enableAutoRefresh = $state(false);
+    let enableAutoRefresh: 'on' | 'off' = $state('off');
     let refreshProgress = $state(0);
     // TODO find way to properly type interval
     let autoRefreshInterval: any | null = null;
@@ -21,8 +21,8 @@
         nextRefreshDate = lastRefreshDate.plus({ milliseconds: AUTO_REFRESH_INTERVAL });
     };
 
-    const toggleAutoRefresh = () => {
-        enableAutoRefresh = !enableAutoRefresh;
+    const toggleAutoRefresh = (newValue: 'on' | 'off') => {
+        enableAutoRefresh = newValue;
 
         if (autoRefreshInterval !== null) {
             clearInterval(autoRefreshInterval);
@@ -62,9 +62,9 @@
     </div>
     <div class="auto-refresh-controls">
         <ButtonSwitch
-            value={enableAutoRefresh.toString()}
+            value={enableAutoRefresh}
             label="Auto refresh"
-            on:change={toggleAutoRefresh}
+            onchange={toggleAutoRefresh}
             design="slider"
         />
         {#if enableAutoRefresh}

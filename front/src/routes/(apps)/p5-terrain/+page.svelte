@@ -39,7 +39,7 @@
     let noiseMode = localStore<NoiseMode>('p5-terrain-nodeMode', 'carthesian');
 
     // Used only for the UI slider, not used in the controls
-    let enableBlur = $state(blurEnabled.value ? 'on' : 'off');
+    let enableBlur: 'on' | 'off' = $state(blurEnabled.value ? 'on' : 'off');
 
     const resetAllControls = () => {
         const controls = [
@@ -161,9 +161,9 @@
                 <ButtonSwitch
                     value={enableBlur}
                     label=""
-                    on:change={() => {
-                        blurEnabled.value = !blurEnabled.value;
-                        enableBlur = blurEnabled.value ? 'on' : 'off';
+                    onchange={(value) => {
+                        enableBlur = value;
+                        blurEnabled.value = value === 'on';
                     }}
                     design="slider"
                 />

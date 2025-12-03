@@ -54,15 +54,15 @@
         }
     };
 
-    const updateWatcherEnabled = async (event: CustomEvent) => {
+    const updateWatcherEnabled = async (value: 'on' | 'off') => {
         await toggleWatcherEnabledAPI({
             watcherId: watcher.id,
-            setToEnabled: event.detail === 'on'
+            setToEnabled: value === 'on'
         });
         dispatch('update');
     };
 
-    let isEnabled = watcher.archivalDateUnix ? 'off' : 'on';
+    let isEnabled: 'on' | 'off' = watcher.archivalDateUnix ? 'off' : 'on';
 </script>
 
 {#if $user}
@@ -73,7 +73,7 @@
                 <ButtonSwitch
                     value={isEnabled}
                     label="Enabled"
-                    on:change={updateWatcherEnabled}
+                    onchange={updateWatcherEnabled}
                     design="slider"
                 />
                 <ButtonDelete deleteAction={deleteWatcher} />
