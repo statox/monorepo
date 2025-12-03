@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
     import { ButtonCopy } from '$lib/components/ButtonCopy';
     import { ButtonDelete } from '$lib/components/ButtonDelete';
     import { ButtonSwitch } from '$lib/components/ButtonSwitch';
@@ -9,13 +8,13 @@
     import { Duration } from 'luxon';
     import { deleteWatcherAPI, toggleWatcherEnabledAPI } from '$lib/WebWatcher/api';
 
-    const dispatch = createEventDispatcher();
-
     interface Props {
         watcher: WatchedContent;
+        onDelete: () => void;
+        onUpdate: () => void;
     }
 
-    let { watcher }: Props = $props();
+    let { watcher, onDelete, onUpdate }: Props = $props();
 
     const formatTimestamp = (timestamp: number) => {
         const date = new Date(timestamp * 1000);
@@ -43,7 +42,7 @@
 
         try {
             await deleteWatcherAPI({ id: watcher.id });
-            dispatch('delete');
+            onDelete();
         } catch (error: unknown) {
             const message = `<strong>Watcher not deleted</strong><br/> ${(error as Error).message}`;
             toast.push(message, {
@@ -59,7 +58,7 @@
             watcherId: watcher.id,
             setToEnabled: value === 'on'
         });
-        dispatch('update');
+        onUpdate();
     };
 
     let isEnabled: 'on' | 'off' = watcher.archivalDateUnix ? 'off' : 'on';
