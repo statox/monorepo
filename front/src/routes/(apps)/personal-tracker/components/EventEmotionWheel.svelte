@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { toast } from '$lib/components/Toast';
+    import { createEvent } from '$lib/PersonalTracker/api';
     import { emotionWheel } from '$lib/PersonalTracker/emotionWheel';
     import { DateTime } from 'luxon';
     import { SvelteSet } from 'svelte/reactivity';
@@ -9,7 +11,36 @@
     let { onUpload }: Props = $props();
 
     const upload = async () => {
-        console.log('upload');
+        const emotions = [...selection].map((item) => {
+            const [category, subcategory, emotion, color] = item.split(' - ');
+            return {
+                category,
+                subcategory,
+                emotion,
+                color
+            };
+        });
+        const timestampUTC = DateTime.now().toUTC().toUnixInteger();
+        try {
+            await createEvent({
+                event: {
+                    timestampUTC,
+                    type: 'emotionwheel',
+                    data: {
+                        emotions
+                    }
+                }
+            });
+            onUpload();
+        } catch (error) {
+            let errorMessage = (error as Error).message;
+            const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
+        }
         onUpload();
     };
 
@@ -20,15 +51,6 @@
         emotion: string;
         color: string;
     }) => {
-        const timestampUTC = DateTime.now().toUTC().toUnixInteger();
-
-        const event = {
-            timestampUTC,
-            type: 'emotion',
-            value
-        };
-        console.log('selected', JSON.stringify(event));
-
         const entryAsStr = [value.category, value.subcategory, value.emotion, value.color].join(
             ' - '
         );

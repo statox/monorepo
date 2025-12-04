@@ -29,6 +29,7 @@
             <div class="event">
                 <div>Date</div>
                 <div>Value</div>
+                <div>Data</div>
             </div>
 
             {#each categories[category] as event}
@@ -38,6 +39,17 @@
                 <div class="event">
                     <div class="event-date">{formatedDate}</div>
                     <div class="event-value">{event.value}</div>
+                    {#if event.data?.emotions}
+                        <div class="selection">
+                            {#each event.data.emotions as item}
+                                <button class="emotion-item" style="--color: {item.color}">
+                                    {item.category}
+                                    {item.subcategory}
+                                    {item.emotion}
+                                </button>
+                            {/each}
+                        </div>
+                    {/if}
                 </div>
             {/each}
         {/each}
@@ -58,5 +70,9 @@
         row-gap: 1em;
         grid-template-columns: repeat(3, 33%);
         margin: 1em;
+    }
+    .emotion-item {
+        background-color: var(--color);
+        color: black;
     }
 </style>

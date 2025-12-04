@@ -7,5 +7,8 @@ export interface NewEventParams {
 export interface PersonalEvent {
     eventDateUnix: number;
     type: string;
-    value: number;
+    value?: number;
+    data?: {
+        [k: string]: any; // TODO Do better
+    };
 }
