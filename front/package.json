@@ -15,7 +15,7 @@
         "setup-githooks": "./githooks/setup.sh"
     },
     "devDependencies": {
-        "@eslint/compat": "^1.4.0",
+        "@eslint/compat": "^2.0.0",
         "@eslint/js": "^9.39.2",
         "@humanspeak/svelte-markdown": "^0.8.13",
         "@sveltejs/adapter-static": "^3.0.10",
