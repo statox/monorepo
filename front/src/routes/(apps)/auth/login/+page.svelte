@@ -41,44 +41,107 @@
     };
 </script>
 
-<h2>Login</h2>
+<div class="login-container">
+    <div class="login-card">
+        <h2>Login</h2>
 
-{#if $user?.status == 'logged_in'}
-    <p>You are already logged in a {$user?.user.username}</p>
-{:else}
-    <form onsubmit={doLogin}>
-        <section>
-            <label for="username">Username</label>
-            <input
-                id="username"
-                name="username"
-                type="text"
-                autocomplete="username"
-                required
-                bind:value={username}
-            />
-        </section>
-        <section>
-            <label for="current-password">Password</label>
-            <input
-                id="current-password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                required
-                bind:value={password}
-            />
-        </section>
-        <button type="submit">Sign in</button>
-    </form>
+        {#if $user?.status == 'logged_in'}
+            <p>You are already logged in as {$user?.user.username}</p>
+        {:else}
+            <form onsubmit={doLogin}>
+                <div class="input-group">
+                    <label for="username">Username:</label>
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        autocomplete="username"
+                        placeholder="Enter your username"
+                        required
+                        bind:value={username}
+                    />
+                </div>
+                <div class="input-group">
+                    <label for="current-password">Password:</label>
+                    <input
+                        id="current-password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
+                        required
+                        bind:value={password}
+                    />
+                </div>
 
-    {#if error}
-        <Notice
-            item={{
-                level: 'error',
-                header: 'Failed auth',
-                message: error.toString()
-            }}
-        />
-    {/if}
-{/if}
+                {#if error}
+                    <Notice
+                        item={{
+                            level: 'error',
+                            header: 'Failed auth',
+                            message: error.toString()
+                        }}
+                    />
+                {/if}
+
+                <button type="submit">Sign in</button>
+            </form>
+        {/if}
+    </div>
+</div>
+
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+        padding: 2rem;
+    }
+
+    .login-card {
+        max-width: 500px;
+        width: 100%;
+        padding: 2rem;
+        border: 1px solid var(--nc-bg-3);
+        border-radius: 8px;
+        background-color: var(--nc-bg-2);
+    }
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .input-group {
+        margin: 1.5rem 0;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: 1px solid var(--nc-bg-3);
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-top: 1rem;
+    }
+
+    p {
+        text-align: center;
+    }
+</style>
