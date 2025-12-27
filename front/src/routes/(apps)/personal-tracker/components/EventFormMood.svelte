@@ -42,7 +42,7 @@
     {/each}
 
     <div class="options-container">
-        {#each [1, 2, 3, 4, 5, 6, 7, 9, 10] as mood}
+        {#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as mood}
             <button class:selected={value === mood} onclick={() => (value = mood)}>{mood}</button>
         {/each}
     </div>
