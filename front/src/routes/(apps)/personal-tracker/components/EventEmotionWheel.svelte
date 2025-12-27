@@ -1,8 +1,7 @@
 <script lang="ts">
     import { toast } from '$lib/components/Toast';
-    import { createEvent } from '$lib/PersonalTracker/api';
     import { emotionWheel } from '$lib/PersonalTracker/emotionWheel';
-    import { DateTime } from 'luxon';
+    import { encryptAndUpload, type PersonalTrackerData } from '$lib/PersonalTracker/service';
     import { SvelteSet } from 'svelte/reactivity';
 
     interface Props {
@@ -20,17 +19,10 @@
                 color
             };
         });
-        const timestampUTC = DateTime.now().toUTC().toUnixInteger();
+        const data: PersonalTrackerData = { type: 'emotionwheel', data: { emotions } };
+
         try {
-            await createEvent({
-                event: {
-                    timestampUTC,
-                    type: 'emotionwheel',
-                    data: {
-                        emotions
-                    }
-                }
-            });
+            await encryptAndUpload(data, 'Correct Horse Battery Staple');
             onUpload();
         } catch (error) {
             let errorMessage = (error as Error).message;

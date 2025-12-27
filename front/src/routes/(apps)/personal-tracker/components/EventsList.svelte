@@ -1,12 +1,12 @@
 <script lang="ts">
     import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
-    import { getAllEvents } from '$lib/PersonalTracker/api';
-    import type { PersonalEvent } from '$lib/PersonalTracker/types';
+    import { getAndDecryptEvents } from '$lib/PersonalTracker/service';
+    import type { PersonalTrackerEvent } from '$lib/PersonalTracker';
     import { DateTime } from 'luxon';
 
     const getEventsByCategory = async () => {
-        const events = await getAllEvents();
+        const events = await getAndDecryptEvents('Correct Horse Battery Staple');
         return events.reduce(
             (categories, event) => {
                 if (!categories[event.type]) {
@@ -15,7 +15,7 @@
                 categories[event.type].push(event);
                 return categories;
             },
-            {} as { [key: string]: PersonalEvent[] }
+            {} as { [key: string]: PersonalTrackerEvent[] }
         );
     };
 </script>
@@ -38,8 +38,8 @@
                     .toFormat('dd/MM/yy HH:mm')}
                 <div class="event">
                     <div class="event-date">{formatedDate}</div>
-                    <div class="event-value">{event.value}</div>
-                    {#if event.data?.emotions}
+                    <div class="event-value">{event.data}</div>
+                    {#if typeof event.data === 'object' && event.data?.emotions}
                         <div class="selection">
                             {#each event.data.emotions as item}
                                 <button class="emotion-item" style="--color: {item.color}">
