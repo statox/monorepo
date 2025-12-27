@@ -1,12 +1,12 @@
 <script lang="ts">
     import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
-    import { getAndDecryptEvents } from '$lib/PersonalTracker/service';
+    import { getAndDecryptEvents, personalTrackerPassword } from '$lib/PersonalTracker';
     import type { PersonalTrackerEvent } from '$lib/PersonalTracker';
     import { DateTime } from 'luxon';
 
     const getEventsByCategory = async () => {
-        const events = await getAndDecryptEvents('Correct Horse Battery Staple');
+        const events = await getAndDecryptEvents($personalTrackerPassword);
         return events.reduce(
             (categories, event) => {
                 if (!categories[event.type]) {

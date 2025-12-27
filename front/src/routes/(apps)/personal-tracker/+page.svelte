@@ -3,6 +3,7 @@
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { Notice } from '$lib/components/Notice';
     import EventsList from './components/EventsList.svelte';
+    import PasswordGuard from './components/PasswordGuard.svelte';
 
     import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
@@ -23,10 +24,12 @@
 />
 
 {#if $user}
-    <div>
-        <button onclick={() => goto('/personal-tracker/add')}> Add an entry </button>
-    </div>
-    <EventsList />
+    <PasswordGuard>
+        <div>
+            <button onclick={() => goto('/personal-tracker/add')}> Add an entry </button>
+        </div>
+        <EventsList />
+    </PasswordGuard>
 {:else}
     <Notice item={{ level: 'info', header: 'Login to add an entry or see events' }} />
 {/if}

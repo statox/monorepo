@@ -1,7 +1,11 @@
 <script lang="ts">
     import { toast } from '$lib/components/Toast';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
-    import { encryptAndUpload, type PersonalTrackerData } from '$lib/PersonalTracker/service';
+    import {
+        encryptAndUpload,
+        personalTrackerPassword,
+        type PersonalTrackerData
+    } from '$lib/PersonalTracker';
 
     interface Props {
         onUpload: () => void;
@@ -16,7 +20,7 @@
         const data: PersonalTrackerData = { type: 'mood', data: value };
 
         try {
-            await encryptAndUpload(data, 'Correct Horse Battery Staple');
+            await encryptAndUpload(data, $personalTrackerPassword);
             onUpload();
         } catch (error) {
             let errorMessage = (error as Error).message;

@@ -1,7 +1,11 @@
 <script lang="ts">
     import { toast } from '$lib/components/Toast';
     import { emotionWheel } from '$lib/PersonalTracker/emotionWheel';
-    import { encryptAndUpload, type PersonalTrackerData } from '$lib/PersonalTracker/service';
+    import {
+        encryptAndUpload,
+        personalTrackerPassword,
+        type PersonalTrackerData
+    } from '$lib/PersonalTracker';
     import { SvelteSet } from 'svelte/reactivity';
 
     interface Props {
@@ -22,7 +26,7 @@
         const data: PersonalTrackerData = { type: 'emotionwheel', data: { emotions } };
 
         try {
-            await encryptAndUpload(data, 'Correct Horse Battery Staple');
+            await encryptAndUpload(data, $personalTrackerPassword);
             onUpload();
         } catch (error) {
             let errorMessage = (error as Error).message;

@@ -4,6 +4,7 @@
     import { Notice } from '$lib/components/Notice';
     import EventFormWeight from '../components/EventFormWeight.svelte';
     import EventFormMood from '../components/EventFormMood.svelte';
+    import PasswordGuard from '../components/PasswordGuard.svelte';
 
     import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
@@ -28,23 +29,25 @@
 </script>
 
 {#if $user}
-    <div class="contents">
-        <h4 class="title-bar">
-            Today's Personal Metrics
-            <button
-                onclick={() => {
-                    goto('/personal-tracker');
-                }}>Back</button
-            >
-        </h4>
+    <PasswordGuard>
+        <div class="contents">
+            <h4 class="title-bar">
+                Today's Personal Metrics
+                <button
+                    onclick={() => {
+                        goto('/personal-tracker');
+                    }}>Back</button
+                >
+            </h4>
 
-        {#each forms as form}
-            <div class="input-form">
-                <form.component {onUpload} />
-            </div>
-            <hr class="separator" />
-        {/each}
-    </div>
+            {#each forms as form}
+                <div class="input-form">
+                    <form.component {onUpload} />
+                </div>
+                <hr class="separator" />
+            {/each}
+        </div>
+    </PasswordGuard>
 {:else}
     <Notice item={{ level: 'info', header: 'Login to add an entry or see events' }} />
 {/if}
