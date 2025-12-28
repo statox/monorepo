@@ -29,7 +29,6 @@
             <div class="event">
                 <div>Date</div>
                 <div>Value</div>
-                <div>Data</div>
             </div>
 
             {#each categories[category] as event}
@@ -38,18 +37,25 @@
                     .toFormat('dd/MM/yy HH:mm')}
                 <div class="event">
                     <div class="event-date">{formatedDate}</div>
-                    <div class="event-value">{event.data}</div>
-                    {#if typeof event.data === 'object' && event.data?.emotions}
-                        <div class="selection">
-                            {#each event.data.emotions as item}
-                                <button class="emotion-item" style="--color: {item.color}">
-                                    {item.category}
-                                    {item.subcategory}
-                                    {item.emotion}
-                                </button>
-                            {/each}
-                        </div>
-                    {/if}
+                    <div class="event-value">
+                        {#if event.type === 'mood'}
+                            {event.data}
+                        {:else if event.type === 'weight'}
+                            {event.data}
+                        {:else if event.type === 'emotionwheel'}
+                            <div class="selection">
+                                {#each event.data.emotions as item}
+                                    <button class="emotion-item" style="--color: {item.color}">
+                                        {item.category}
+                                        {item.subcategory}
+                                        {item.emotion}
+                                    </button>
+                                {/each}
+                            </div>
+                        {:else}
+                            Unknown type of data
+                        {/if}
+                    </div>
                 </div>
             {/each}
         {/each}

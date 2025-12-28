@@ -74,7 +74,6 @@ export const decryptData = (params: {
     }
 
     const { ciphertextB64, nonceB64, keyB64 } = params;
-    console.log('in decryptData', params);
 
     try {
         const decryptionKey = sodium.from_base64(keyB64);
