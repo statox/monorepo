@@ -1,22 +1,14 @@
 <script lang="ts">
-    import { toast } from '$lib/components/Toast';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
-    import {
-        encryptAndUpload,
-        personalTrackerPassword,
-        type PersonalTrackerData
-    } from '$lib/PersonalTracker';
 
     interface Props {
-        onUpload: () => void;
+        value?: number;
     }
 
-    let { onUpload }: Props = $props();
+    let { value = $bindable(100) }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
 
-    let value: number = $state(100);
-
-    const upload = async () => {
+    export const validate = (): boolean => {
         noticeMessages = [];
         if (value !== Number(value.toFixed(1))) {
             noticeMessages.push({
@@ -28,23 +20,11 @@
             noticeMessages.push({ level: 'error', header: 'Value must be in kg' });
         }
 
-        if (noticeMessages.length) {
-            return;
-        }
+        return noticeMessages.length === 0;
+    };
 
-        const data: PersonalTrackerData = { type: 'weight', data: Math.floor(value * 100) };
-        try {
-            await encryptAndUpload(data, $personalTrackerPassword);
-            onUpload();
-        } catch (error) {
-            let errorMessage = (error as Error).message;
-            const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
-            toast.push(message, {
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
-        }
+    export const getStorageValue = (): number => {
+        return Math.floor(value * 100);
     };
 </script>
 
@@ -60,7 +40,6 @@
         <input type="number" step="0.1" bind:value />
         <button onclick={() => (value = Number((value + 0.1).toFixed(2)))}>+</button>
     </div>
-    <button class="form-action" onclick={upload}>Submit</button>
 </div>
 
 <style>

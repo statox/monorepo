@@ -2,62 +2,71 @@
     import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import { getAndDecryptEvents, personalTrackerPassword } from '$lib/PersonalTracker';
-    import type { PersonalTrackerEvent } from '$lib/PersonalTracker';
     import { DateTime } from 'luxon';
+    import { goto } from '$app/navigation';
 
-    const getEventsByCategory = async () => {
+    const getEvents = async () => {
         const events = await getAndDecryptEvents($personalTrackerPassword);
-        return events.reduce(
-            (categories, event) => {
-                if (!categories[event.type]) {
-                    categories[event.type] = [];
-                }
-                categories[event.type].push(event);
-                return categories;
-            },
-            {} as { [key: string]: PersonalTrackerEvent[] }
-        );
+        // Sort by date, most recent first
+        return events.sort((a, b) => b.eventDateUnix - a.eventDateUnix);
+    };
+
+    const handleEdit = (eventDateUnix: number) => {
+        goto(`/personal-tracker/add?timestamp=${eventDateUnix}`);
     };
 </script>
 
 {#if $user}
-    {#await getEventsByCategory()}
+    {#await getEvents()}
         <p>Loading events</p>
-    {:then categories}
-        {#each Object.keys(categories) as category}
-            <h4>{category}</h4>
-            <div class="event">
-                <div>Date</div>
-                <div>Value</div>
-            </div>
+    {:then events}
+        <div class="events-header">
+            <div>Date</div>
+            <div>Mood</div>
+            <div>Weight</div>
+            <div>Emotions</div>
+            <div>Actions</div>
+        </div>
 
-            {#each categories[category] as event}
-                {@const formatedDate = DateTime.fromSeconds(event.eventDateUnix)
-                    .toLocal()
-                    .toFormat('dd/MM/yy HH:mm')}
-                <div class="event">
-                    <div class="event-date">{formatedDate}</div>
-                    <div class="event-value">
-                        {#if event.type === 'mood'}
-                            {event.data}
-                        {:else if event.type === 'weight'}
-                            {event.data}
-                        {:else if event.type === 'emotionwheel'}
-                            <div class="selection">
-                                {#each event.data.emotions as item}
-                                    <button class="emotion-item" style="--color: {item.color}">
-                                        {item.category}
-                                        {item.subcategory}
-                                        {item.emotion}
-                                    </button>
-                                {/each}
-                            </div>
-                        {:else}
-                            Unknown type of data
-                        {/if}
-                    </div>
+        {#each events as event}
+            {@const formatedDate = DateTime.fromSeconds(event.eventDateUnix)
+                .toLocal()
+                .toFormat('dd/MM/yy HH:mm')}
+            <div class="event">
+                <div class="event-date">{formatedDate}</div>
+                <div class="event-value">
+                    {#if event.mood !== undefined}
+                        {event.mood}
+                    {:else}
+                        -
+                    {/if}
                 </div>
-            {/each}
+                <div class="event-value">
+                    {#if event.weight !== undefined}
+                        {(event.weight / 100).toFixed(1)} kg
+                    {:else}
+                        -
+                    {/if}
+                </div>
+                <div class="event-value">
+                    {#if event.emotionwheel?.emotions}
+                        <div class="selection">
+                            {#each event.emotionwheel.emotions as item}
+                                <button class="emotion-item" style="--color: {item.color}">
+                                    {item.category}
+                                    {item.subcategory}
+                                    {item.emotion}
+                                </button>
+                            {/each}
+                        </div>
+                    {:else}
+                        -
+                    {/if}
+                </div>
+                <div class="event-actions">
+                    <button onclick={() => handleEdit(event.eventDateUnix)}>Edit</button>
+                </div>
+            </div>
         {/each}
     {:catch error}
         <Notice
@@ -71,14 +80,43 @@
 {/if}
 
 <style>
+    .events-header {
+        display: grid;
+        grid-template-columns: 150px 80px 100px 1fr 100px;
+        gap: 1em;
+        padding: 1em;
+        font-weight: bold;
+        border-bottom: 2px solid var(--nc-bg-3);
+    }
+
     .event {
         display: grid;
-        row-gap: 1em;
-        grid-template-columns: repeat(3, 33%);
-        margin: 1em;
+        grid-template-columns: 150px 80px 100px 1fr 100px;
+        gap: 1em;
+        padding: 1em;
+        border-bottom: 1px solid var(--nc-bg-2);
+        align-items: center;
     }
+
+    .event-value {
+        overflow: hidden;
+    }
+
+    .selection {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
     .emotion-item {
         background-color: var(--color);
         color: black;
+        font-size: 0.8em;
+        padding: 4px 8px;
+        cursor: default;
+    }
+
+    .event-actions button {
+        padding: 4px 12px;
     }
 </style>

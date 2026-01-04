@@ -1,37 +1,12 @@
 <script lang="ts">
-    import { toast } from '$lib/components/Toast';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
-    import {
-        encryptAndUpload,
-        personalTrackerPassword,
-        type PersonalTrackerData
-    } from '$lib/PersonalTracker';
 
     interface Props {
-        onUpload: () => void;
+        value?: number;
     }
 
-    let { onUpload }: Props = $props();
+    let { value = $bindable(5) }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
-
-    let value: number = $state(5);
-
-    const upload = async () => {
-        const data: PersonalTrackerData = { type: 'mood', data: value };
-
-        try {
-            await encryptAndUpload(data, $personalTrackerPassword);
-            onUpload();
-        } catch (error) {
-            let errorMessage = (error as Error).message;
-            const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
-            toast.push(message, {
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
-        }
-    };
 </script>
 
 <div>
@@ -46,8 +21,6 @@
             <button class:selected={value === mood} onclick={() => (value = mood)}>{mood}</button>
         {/each}
     </div>
-
-    <button class="form-action" onclick={upload}>Submit</button>
 </div>
 
 <style>

@@ -1,20 +1,14 @@
 <script lang="ts">
-    import { toast } from '$lib/components/Toast';
     import { emotionWheel } from '$lib/PersonalTracker/emotionWheel';
-    import {
-        encryptAndUpload,
-        personalTrackerPassword,
-        type PersonalTrackerData
-    } from '$lib/PersonalTracker';
     import { SvelteSet } from 'svelte/reactivity';
 
     interface Props {
-        onUpload: () => void;
+        selection: SvelteSet<string>;
     }
-    let { onUpload }: Props = $props();
+    let { selection }: Props = $props();
 
-    const upload = async () => {
-        const emotions = [...selection].map((item) => {
+    export const getEmotionsData = () => {
+        return [...selection].map((item) => {
             const [category, subcategory, emotion, color] = item.split(' - ');
             return {
                 category,
@@ -23,24 +17,7 @@
                 color
             };
         });
-        const data: PersonalTrackerData = { type: 'emotionwheel', data: { emotions } };
-
-        try {
-            await encryptAndUpload(data, $personalTrackerPassword);
-            onUpload();
-        } catch (error) {
-            let errorMessage = (error as Error).message;
-            const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
-            toast.push(message, {
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
-        }
-        onUpload();
     };
-
-    const selection = new SvelteSet<string>();
     const select = (value: {
         category: string;
         subcategory: string;
@@ -380,9 +357,6 @@
         </button>
     {/each}
 </div>
-
-<br />
-<button onclick={upload}>Submit</button>
 
 <style>
     .emotion-wheel-container {

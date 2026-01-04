@@ -2,35 +2,29 @@ import { ApiError } from '$lib/api';
 import { toast } from '$lib/components/Toast';
 import { createEvent, getAllEvents } from './api';
 import { encryptData, decryptData, getRandomSalt, getUserKey } from '$lib/encryption';
-import { DateTime } from 'luxon';
 
-export type PersonalTrackerData =
-    | {
-          type: 'mood';
-          data: number;
-      }
-    | {
-          type: 'weight';
-          data: number;
-      }
-    | {
-          type: 'emotionwheel';
-          data: {
-              emotions: {
-                  category: string;
-                  subcategory: string;
-                  emotion: string;
-                  color: string;
-              }[];
-          };
-      };
+export type PersonalTrackerData = {
+    mood?: number;
+    weight?: number;
+    emotionwheel?: {
+        emotions: {
+            category: string;
+            subcategory: string;
+            emotion: string;
+            color: string;
+        }[];
+    };
+};
 
-export const encryptAndUpload = async (data: PersonalTrackerData, password: string) => {
+export const encryptAndUpload = async (
+    data: PersonalTrackerData,
+    password: string,
+    eventDateUnix: number
+) => {
     const saltB64 = getRandomSalt().saltB64;
     const { keyB64 } = getUserKey({ password, saltB64 });
     const { ciphertextB64, nonceB64 } = encryptData({ data: JSON.stringify(data), keyB64 });
 
-    const eventDateUnix = DateTime.now().toUTC().toUnixInteger();
     try {
         await createEvent({
             eventDateUnix,
