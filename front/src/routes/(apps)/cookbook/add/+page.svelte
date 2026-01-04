@@ -3,11 +3,12 @@
     import { Notice } from '$lib/components/Notice';
     import RecipeForm from '../components/RecipeForm.svelte';
     import { pageMetadataStore } from '$lib/components/Header';
+    import { goto } from '$app/navigation';
 
     pageMetadataStore.set({ name: 'Cookbook', showAuthInHeader: true });
 
     const onUpload = () => {
-        console.log('New recipe created');
+        goto('/cookbook');
     };
 </script>
 
