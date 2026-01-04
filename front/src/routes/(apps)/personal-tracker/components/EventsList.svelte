@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import { eventsStore, personalTrackerPassword } from '$lib/PersonalTracker';
     import { DateTime } from 'luxon';

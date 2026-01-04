@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
     import {
         eventsStore,
@@ -33,9 +32,9 @@
         currentMonth = DateTime.now().startOf('month');
     };
 
-    // Handle clicking on a day with an event
-    const handleDayClick = (event: PersonalTrackerEvent) => {
-        goto(`/personal-tracker/add/${event.eventDateUnix}`);
+    // Handle clicking on any day (with or without event)
+    const handleDayClick = (timestamp: number) => {
+        goto(`/personal-tracker/add/${timestamp}`);
     };
 
     // Generate calendar days for the current month
@@ -118,17 +117,23 @@
 
             <!-- Calendar days -->
             {#each calendarDays as day}
-                <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div
                     class="calendar-day"
                     class:other-month={!day.isCurrentMonth}
                     class:has-event={day.event}
                     class:today={day.isToday}
-                    onclick={() => day.event && handleDayClick(day.event)}
-                    role={day.event ? 'button' : undefined}
-                    tabindex={day.event ? 0 : undefined}
+                    onclick={() => handleDayClick(day.timestamp)}
+                    role="button"
+                    tabindex="0"
                 >
                     <div class="day-number">{day.date.day}</div>
+
+                    {#if !day.event}
+                        <div class="add-indicator">
+                            <span class="plus-sign">+</span>
+                        </div>
+                    {/if}
 
                     {#if day.event}
                         <div class="event-indicators">
@@ -229,6 +234,11 @@
         padding: 0.5em;
         position: relative;
         transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .calendar-day:hover {
+        background-color: var(--nc-bg-2);
     }
 
     .calendar-day.other-month {
@@ -241,8 +251,8 @@
     }
 
     .calendar-day.has-event {
-        cursor: pointer;
         background-color: var(--nc-bg-2);
+        border-left: 3px solid var(--nc-ac-1);
     }
 
     .calendar-day.has-event:hover {
@@ -253,6 +263,33 @@
     .day-number {
         font-weight: bold;
         margin-bottom: 0.5em;
+    }
+
+    .add-indicator {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--nc-ac-1);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .calendar-day:hover .add-indicator {
+        display: flex;
+    }
+
+    .plus-sign {
+        color: white;
+        font-size: 2em;
+        font-weight: bold;
+        line-height: 1;
     }
 
     .event-indicators {
@@ -315,6 +352,15 @@
             font-size: 0.9em;
         }
 
+        .add-indicator {
+            width: 32px;
+            height: 32px;
+        }
+
+        .plus-sign {
+            font-size: 1.5em;
+        }
+
         .indicator {
             min-width: 20px;
             height: 20px;
@@ -336,6 +382,15 @@
         .day-name {
             font-size: 0.75em;
             padding: 0.3em;
+        }
+
+        .add-indicator {
+            width: 28px;
+            height: 28px;
+        }
+
+        .plus-sign {
+            font-size: 1.3em;
         }
 
         .indicator {
