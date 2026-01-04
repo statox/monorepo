@@ -15,28 +15,29 @@
     let userIsAllowed = $derived(
         requiredScope !== undefined ? isAllowedForUser(requiredScope, $user) : true
     );
+
+    let cause: string | undefined = $derived.by(() => {
+        if ($user && userIsAllowed) {
+            return;
+        }
+        if (!$user) {
+            return 'User is logged out';
+        }
+        if (!userIsAllowed) {
+            return "User doesn't have required scope";
+        }
+        return 'Something is wrong. Please contact admin.';
+    });
 </script>
 
-{#if !$user}
-    {#if !hideIfForbidden}
-        <Notice
-            item={{
-                level: 'info',
-                header: message ?? 'Login required',
-                message: 'User is logged out'
-            }}
-        />
-    {/if}
-{:else if !userIsAllowed}
-    {#if !hideIfForbidden}
-        <Notice
-            item={{
-                level: 'info',
-                header: message ?? 'Login required',
-                message: "User doesn't have required scope"
-            }}
-        />
-    {/if}
-{:else}
+{#if $user && userIsAllowed}
     {@render children()}
+{:else if !hideIfForbidden}
+    <Notice
+        item={{
+            level: 'info',
+            header: message ?? 'Login required',
+            message: cause
+        }}
+    />
 {/if}
