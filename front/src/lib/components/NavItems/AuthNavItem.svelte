@@ -10,7 +10,7 @@
 
 {#if $user}
     <button
-        title="My profile"
+        title={$user.user.username}
         class="user-profile"
         onclick={() => goto('/auth/me')}
         style="--user-color: {usernameToColor($user?.user.username)}"
