@@ -7,7 +7,7 @@
     import PasswordGuard from '../../components/PasswordGuard.svelte';
     import {
         encryptAndUpload,
-        getAndDecryptEvents,
+        eventsStore,
         personalTrackerPassword,
         type PersonalTrackerData
     } from '$lib/PersonalTracker';
@@ -61,11 +61,15 @@
     // Load existing event on mount
     onMount(async () => {
         try {
-            const events = await getAndDecryptEvents($personalTrackerPassword);
+            // Fetch events if not already cached
+            await eventsStore.fetch($personalTrackerPassword);
+
             const targetTimestamp = getTargetTimestamp();
 
             // Find event with target timestamp (exact match)
-            const existingEvent = events.find((event) => event.eventDateUnix === targetTimestamp);
+            const existingEvent = $eventsStore.events.find(
+                (event) => event.eventDateUnix === targetTimestamp
+            );
 
             if (existingEvent) {
                 // Pre-populate form values and enable sections with data
@@ -143,6 +147,10 @@
         try {
             const eventDateUnix = getTargetTimestamp();
             await encryptAndUpload(data, $personalTrackerPassword, eventDateUnix);
+
+            // Invalidate cache so list page will refetch
+            eventsStore.invalidate();
+
             goto('/personal-tracker');
             toast.push(isEditMode ? 'Entry updated' : 'Entry created');
         } catch (error) {

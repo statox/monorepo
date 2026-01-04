@@ -1,15 +1,15 @@
 <script lang="ts">
     import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
-    import { getAndDecryptEvents, personalTrackerPassword } from '$lib/PersonalTracker';
+    import { eventsStore, personalTrackerPassword } from '$lib/PersonalTracker';
     import { DateTime } from 'luxon';
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
 
-    const getEvents = async () => {
-        const events = await getAndDecryptEvents($personalTrackerPassword);
-        // Sort by date, most recent first
-        return events.sort((a, b) => b.eventDateUnix - a.eventDateUnix);
-    };
+    // Fetch events on mount if not already cached
+    onMount(() => {
+        eventsStore.fetch($personalTrackerPassword);
+    });
 
     const handleEdit = (eventDateUnix: number) => {
         goto(`/personal-tracker/add/${eventDateUnix}`);
@@ -17,9 +17,17 @@
 </script>
 
 {#if $user}
-    {#await getEvents()}
+    {#if $eventsStore.loading}
         <p>Loading events</p>
-    {:then events}
+    {:else if $eventsStore.error}
+        <Notice
+            item={{
+                level: 'error',
+                header: 'Something went wrong getting events',
+                message: $eventsStore.error.message
+            }}
+        />
+    {:else}
         <div class="events-header">
             <div>Date</div>
             <div>Mood</div>
@@ -28,7 +36,7 @@
             <div>Actions</div>
         </div>
 
-        {#each events as event}
+        {#each $eventsStore.events.sort((a, b) => b.eventDateUnix - a.eventDateUnix) as event}
             {@const formatedDate = DateTime.fromSeconds(event.eventDateUnix)
                 .toLocal()
                 .toFormat('dd/MM/yy HH:mm')}
@@ -68,15 +76,7 @@
                 </div>
             </div>
         {/each}
-    {:catch error}
-        <Notice
-            item={{
-                level: 'error',
-                header: 'Something went wrong getting events',
-                message: error
-            }}
-        />
-    {/await}
+    {/if}
 {/if}
 
 <style>
