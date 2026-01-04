@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
     import { pageMetadataStore } from '$lib/components/Header';
     import ClipboardForm from '../components/ClipboardForm.svelte';
 
@@ -11,4 +12,4 @@
     pageMetadataStore.set(pageMetadata);
 </script>
 
-<ClipboardForm onUpload={() => console.log('new entry created')} />
+<ClipboardForm onUpload={() => goto('/clipboard')} />
