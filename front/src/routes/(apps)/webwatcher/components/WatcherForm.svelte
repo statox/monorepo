@@ -1,6 +1,5 @@
 <script lang="ts">
     import type { ModalProps } from 'svelte-modals';
-    import { user } from '$lib/auth';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
@@ -8,6 +7,7 @@
     import { DurationPicker } from '$lib/components/DurationPicker';
     import { createWatcher } from '$lib/WebWatcher/api';
     import type { WatchType } from '$lib/WebWatcher/types';
+    import { AuthGuard } from '$lib/components/AuthGuard';
 
     interface Props extends ModalProps {
         onUpload: () => void;
@@ -102,47 +102,45 @@
                 <button onclick={close}>Close</button>
             </h3>
 
-            {#each noticeMessages as item}
-                <Notice {item} />
-            {/each}
+            <AuthGuard message="Login to upload an entry" requiredScope="admin">
+                {#each noticeMessages as item}
+                    <Notice {item} />
+                {/each}
 
-            <form class="form-content">
-                <label for="name">Name</label>
-                <input type="text" bind:value={name} />
+                <form class="form-content">
+                    <label for="name">Name</label>
+                    <input type="text" bind:value={name} />
 
-                <label for="check-interval">Check interval</label>
-                <DurationPicker
-                    bind:valueInSeconds={checkIntervalSeconds}
-                    allowedUnits={['minutes', 'hours', 'days']}
-                    defaultDuration={{ value: 1, unit: 'hours' }}
-                />
+                    <label for="check-interval">Check interval</label>
+                    <DurationPicker
+                        bind:valueInSeconds={checkIntervalSeconds}
+                        allowedUnits={['minutes', 'hours', 'days']}
+                        defaultDuration={{ value: 1, unit: 'hours' }}
+                    />
 
-                <label for="notification-message">
-                    Notification message (the @mention is automatically added)
-                </label>
-                <input type="textarea" bind:value={notificationMessage} />
+                    <label for="notification-message">
+                        Notification message (the @mention is automatically added)
+                    </label>
+                    <input type="textarea" bind:value={notificationMessage} />
 
-                <label for="watch-type"> Watcher type </label>
-                <select id="watch-type" bind:value={watchType}>
-                    <option value="CSS">CSS</option>
-                    <option value="HASH">HASH</option>
-                </select>
+                    <label for="watch-type"> Watcher type </label>
+                    <select id="watch-type" bind:value={watchType}>
+                        <option value="CSS">CSS</option>
+                        <option value="HASH">HASH</option>
+                    </select>
 
-                <label for="content">URL</label>
-                <input type="textarea" bind:value={url} />
+                    <label for="content">URL</label>
+                    <input type="textarea" bind:value={url} />
 
-                {#if watchType === 'CSS'}
-                    <label for="css-selector">CSS selector</label>
-                    <input type="textarea" bind:value={cssSelector} />
-                {/if}
+                    {#if watchType === 'CSS'}
+                        <label for="css-selector">CSS selector</label>
+                        <input type="textarea" bind:value={cssSelector} />
+                    {/if}
 
-                <br />
-                {#if $user}
+                    <br />
                     <button class="form-action" onclick={upload}>Submit</button>
-                {:else}
-                    <span class="form-action">Login to upload an entry</span>
-                {/if}
-            </form>
+                </form>
+            </AuthGuard>
         </div>
     </div>
 {/if}

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { user } from '$lib/auth';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
+    import { AuthGuard } from '$lib/components/AuthGuard';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { Spinner } from '$lib/components/Spinner';
     import { toast } from '$lib/components/Toast';
@@ -88,29 +88,29 @@
         <button onclick={() => goto('/cookbook')}>Back to list</button>
     </span>
 
-    {#each noticeMessages as item}
-        <Notice {item} />
-    {/each}
+    <AuthGuard message="Login to add an entry" requiredScope="admin">
+        {#each noticeMessages as item}
+            <Notice {item} />
+        {/each}
 
-    <div class="form-content">
-        <label for="name">Name</label>
-        <input type="text" bind:value={name} />
+        <div class="form-content">
+            <label for="name">Name</label>
+            <input type="text" bind:value={name} />
 
-        <label for="ingredients">New ingredient</label>
-        <div>
-            <IngredientInput onAdd={addIngredient} />
+            <label for="ingredients">New ingredient</label>
+            <div>
+                <IngredientInput onAdd={addIngredient} />
+            </div>
+
+            <label for="ingredients">List of ingredients</label>
+            <div>
+                <IngredientsList {ingredients} editable={true} />
+            </div>
+
+            <label for="content">Instructions</label>
+            <textarea bind:value={content} rows="10" cols="50"></textarea>
         </div>
 
-        <label for="ingredients">List of ingredients</label>
-        <div>
-            <IngredientsList {ingredients} editable={true} />
-        </div>
-
-        <label for="content">Instructions</label>
-        <textarea bind:value={content} rows="10" cols="50"></textarea>
-    </div>
-
-    {#if $user}
         <button class="form-action" onclick={upload} disabled={uploading}>
             {#if uploading}
                 <Spinner size={0.5} unit="em" durationSeconds={0.5} />
@@ -118,9 +118,7 @@
                 Submit
             {/if}
         </button>
-    {:else}
-        <span class="form-action">Login to upload an entry</span>
-    {/if}
+    </AuthGuard>
 </div>
 
 <style>

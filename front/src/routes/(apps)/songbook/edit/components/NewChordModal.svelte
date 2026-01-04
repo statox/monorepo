@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ModalProps } from 'svelte-modals';
-    import { user } from '$lib/auth';
+    import { AuthGuard } from '$lib/components/AuthGuard';
 
     interface Props extends ModalProps {
         onNewSongSubmit: (params: {
@@ -35,25 +35,23 @@
                 <button onclick={close}>Close</button>
             </h4>
 
-            <form class="form-content">
-                <label for="artist">Artist</label>
-                <input type="text" bind:value={artist} />
+            <AuthGuard message="Login to add a new song" requiredScope="admin">
+                <form class="form-content">
+                    <label for="artist">Artist</label>
+                    <input type="text" bind:value={artist} />
 
-                <label for="title">Title</label>
-                <input type="text" bind:value={title} />
+                    <label for="title">Title</label>
+                    <input type="text" bind:value={title} />
 
-                <label for="url">Url</label>
-                <input type="text" bind:value={url} />
+                    <label for="url">Url</label>
+                    <input type="text" bind:value={url} />
 
-                <label for="tags">Tags</label>
-                <input type="text" bind:value={tagsStr} />
+                    <label for="tags">Tags</label>
+                    <input type="text" bind:value={tagsStr} />
 
-                {#if $user}
                     <button class="form-action" onclick={submit}>Submit</button>
-                {:else}
-                    <span class="form-action">Login to update a new song</span>
-                {/if}
-            </form>
+                </form>
+            </AuthGuard>
         </div>
     </div>
 {/if}

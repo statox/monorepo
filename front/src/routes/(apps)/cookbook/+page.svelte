@@ -1,6 +1,6 @@
 <script lang="ts">
     import { user } from '$lib/auth';
-    import { Notice } from '$lib/components/Notice';
+    import { AuthGuard } from '$lib/components/AuthGuard';
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { pageMetadataStore } from '$lib/components/Header';
     import { listRecipes } from '$lib/Cookbook';
@@ -25,7 +25,7 @@
 
 <HeadIOS title="Cookbook" description="Recipes and food" />
 
-{#if $user}
+<AuthGuard message="Login to access the recipes" requiredScope="admin">
     <button onclick={() => goto('/cookbook/add')}> Add a new recipe </button>
 
     <div>
@@ -42,6 +42,4 @@
             <p>{JSON.stringify(error)}</p>
         {/await}
     </div>
-{:else}
-    <Notice item={{ level: 'info', header: 'Login to access the recipes' }} />
-{/if}
+</AuthGuard>

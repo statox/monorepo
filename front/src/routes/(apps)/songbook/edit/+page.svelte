@@ -4,7 +4,6 @@
     import { modals } from 'svelte-modals';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
-    import { user } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
     import NewChordModal from './components/NewChordModal.svelte';
     import type { RawChord } from '$lib/Songbook/types';
@@ -12,6 +11,7 @@
 
     import { goto } from '$app/navigation';
     import { Notice } from '$lib/components/Notice';
+    import { AuthGuard } from '$lib/components/AuthGuard';
 
     interface Props {
         // From +page.ts load() function
@@ -126,22 +126,22 @@
     </span>
 </h2>
 
-{#if $user}
+<AuthGuard message="Login to upload changes" requiredScope="admin">
     <button
         style:position="relative"
         onclick={() => modals.open(NewChordModal, { onNewSongSubmit })}
     >
         Add a song
     </button>
-{/if}
+</AuthGuard>
 
 {#if chords?.length}
     {#if isValid}
-        {#if $user}
+        <AuthGuard hideIfForbidden={true} requiredScope="admin">
             <button onclick={upload}>Upload</button>
-        {:else}
-            <span><Notice item={{ level: 'info', header: 'Login to upload changes' }} /></span>
-        {/if}
+        </AuthGuard>
+    {:else}
+        <Notice item={{ level: 'error', header: 'Fix JSON errors to upload changes' }} />
     {/if}
     <div class="json-editor jse-theme-dark" style="width: 100%">
         <JSONEditor

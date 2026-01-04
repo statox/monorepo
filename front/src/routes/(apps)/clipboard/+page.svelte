@@ -1,6 +1,6 @@
 <script lang="ts">
     import { user } from '$lib/auth';
-    import { Notice } from '$lib/components/Notice';
+    import { AuthGuard } from '$lib/components/AuthGuard';
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
     import ClipboardView from './components/ClipboardView.svelte';
@@ -33,11 +33,9 @@
 />
 
 <h2>Upload</h2>
-{#if $user}
+<AuthGuard message="Login to add an entry" requiredScope="admin">
     <button onclick={() => goto('clipboard/create')}>Add an entry</button>
-{:else}
-    <Notice item={{ level: 'info', header: 'Login to add an entry' }} />
-{/if}
+</AuthGuard>
 
 <h2>Content</h2>
 {#await clipboardApi}

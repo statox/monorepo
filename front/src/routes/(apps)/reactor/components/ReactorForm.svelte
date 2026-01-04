@@ -1,11 +1,11 @@
 <script lang="ts">
     import type { ModalProps } from 'svelte-modals';
-    import { user } from '$lib/auth';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
     import { uploadToReactor } from '$lib/Reactor/api';
+    import { AuthGuard } from '$lib/components/AuthGuard';
     import { Spinner } from '$lib/components/Spinner';
 
     interface Props extends ModalProps {
@@ -71,34 +71,35 @@
                 <button onclick={close}>Close</button>
             </h4>
 
-            {#each noticeMessages as item}
-                <Notice {item} />
-            {/each}
+            <AuthGuard message="Login to add an entry" requiredScope="admin">
+                {#each noticeMessages as item}
+                    <Notice {item} />
+                {/each}
 
-            <form class="form-content">
-                <label for="name">Name</label>
-                <input type="text" bind:value={name} />
+                <form class="form-content">
+                    <label for="name">Name</label>
+                    <input type="text" bind:value={name} />
 
-                <label for="content">Tags</label>
-                <input type="textarea" bind:value={commaSeparatedTags} />
+                    <label for="content">Tags</label>
+                    <input type="textarea" bind:value={commaSeparatedTags} />
 
-                <label for="file">File</label>
-                <span>
-                    <input class="file-input" type="file" bind:files bind:this={fileInput} />
-                    <button
-                        aria-label="delete file"
-                        onclick={() => {
-                            if (fileInput !== undefined) {
-                                fileInput.value = '';
-                            }
-                        }}
-                    >
-                        <i class="fas fa-times-circle"></i>
-                    </button>
-                </span>
+                    <label for="file">File</label>
+                    <span>
+                        <input class="file-input" type="file" bind:files bind:this={fileInput} />
+                        <button
+                            aria-label="delete file"
+                            onclick={() => {
+                                if (fileInput !== undefined) {
+                                    fileInput.value = '';
+                                }
+                            }}
+                        >
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </span>
 
-                <br />
-                {#if $user}
+                    <br />
+
                     <button class="form-action" onclick={upload} disabled={uploading}>
                         {#if uploading}
                             <Spinner size={0.5} unit="em" durationSeconds={0.5} />
@@ -106,10 +107,8 @@
                             Submit
                         {/if}
                     </button>
-                {:else}
-                    <span class="form-action">Login to upload an entry</span>
-                {/if}
-            </form>
+                </form>
+            </AuthGuard>
         </div>
     </div>
 {/if}

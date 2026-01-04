@@ -5,8 +5,7 @@
     import SensorsHistogram from './components/SensorsHistogram.svelte';
     import WeatherForecast from './components/WeatherForecast.svelte';
     import TimeControls from './components/TimeControls.svelte';
-    import { isAllowedForUser, user } from '$lib/auth';
-    import { Notice } from '$lib/components/Notice';
+    import { AuthGuard } from '$lib/components/AuthGuard';
 
     const pageMetadata = {
         name: 'Home Tracker',
@@ -15,8 +14,6 @@
         showAuthInHeader: true
     } as const;
     pageMetadataStore.set(pageMetadata);
-
-    let userIsAllowed = $derived(isAllowedForUser('homeTracker', $user));
 </script>
 
 <HeadIOS
@@ -29,12 +26,10 @@
     <TimeControls />
     <SensorsSummary />
 
-    {#if !userIsAllowed}
-        <Notice item={{ level: 'info', header: 'Login to access historical data' }} />
-    {:else}
+    <AuthGuard requiredScope="homeTracker" message="Login to access historical data">
         <SensorsHistogram />
         <WeatherForecast />
-    {/if}
+    </AuthGuard>
 </div>
 
 <style>

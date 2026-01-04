@@ -1,7 +1,6 @@
 <script lang="ts">
+    import { AuthGuard } from '$lib/components/AuthGuard';
     import { toast } from '$lib/components/Toast';
-    import { user } from '$lib/auth';
-    import { Notice } from '$lib/components/Notice';
     import EventFormEmotionWheel from './components/EventFormEmotionWheel.svelte';
     import EventFormMood from './components/EventFormMood.svelte';
     import EventFormWeight from './components/EventFormWeight.svelte';
@@ -28,7 +27,7 @@
     ];
 </script>
 
-{#if $user}
+<AuthGuard message="Login to add an entry">
     <PasswordGuard>
         <div class="contents">
             <h4 class="title-bar">
@@ -48,9 +47,7 @@
             {/each}
         </div>
     </PasswordGuard>
-{:else}
-    <Notice item={{ level: 'info', header: 'Login to add an entry or see events' }} />
-{/if}
+</AuthGuard>
 
 <style>
     .contents {

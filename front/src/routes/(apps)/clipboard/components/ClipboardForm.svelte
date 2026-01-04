@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { user } from '$lib/auth';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
+    import { AuthGuard } from '$lib/components/AuthGuard';
     import { toast } from '$lib/components/Toast';
     import { Spinner } from '$lib/components/Spinner';
     import { Notice, type NoticeItem } from '$lib/components/Notice';
@@ -87,56 +87,56 @@
         <button onclick={onClose}>Back</button>
     </h4>
 
-    {#each noticeMessages as item}
-        <Notice {item} />
-    {/each}
+    <AuthGuard message="Login to add an entry" requiredScope="admin">
+        {#each noticeMessages as item}
+            <Notice {item} />
+        {/each}
 
-    <form class="form-content">
-        <label for="name">Name</label>
-        <input type="text" bind:value={name} />
+        <form class="form-content">
+            <label for="name">Name</label>
+            <input type="text" bind:value={name} />
 
-        <label for="content">Content</label>
-        <input type="textarea" bind:value={content} />
+            <label for="content">Content</label>
+            <input type="textarea" bind:value={content} />
 
-        <label for="file">File</label>
-        <span>
-            <input class="file-input" type="file" bind:files bind:this={fileInput} />
+            <label for="file">File</label>
+            <span>
+                <input class="file-input" type="file" bind:files bind:this={fileInput} />
+                <button
+                    aria-label="delete file"
+                    onclick={() => {
+                        if (fileInput !== undefined) {
+                            fileInput.value = '';
+                        }
+                    }}
+                >
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            </span>
+
+            <label for="ttlSeconds">TTL</label>
+            <DurationPicker
+                bind:valueInSeconds={ttlSeconds}
+                allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
+                defaultDuration={{ value: 10, unit: 'minutes' }}
+            />
+
+            <label for="isPublic">Access</label>
             <button
-                aria-label="delete file"
-                onclick={() => {
-                    if (fileInput !== undefined) {
-                        fileInput.value = '';
-                    }
-                }}
+                class="visibility-status"
+                class:visibility-public={isPublic}
+                onclick={() => (isPublic = !isPublic)}
             >
-                <i class="fas fa-times-circle"></i>
+                {#if isPublic}
+                    Public
+                    <i class="fas fa-lock-open"></i>
+                {:else}
+                    Private
+                    <i class="fas fa-lock"></i>
+                {/if}
             </button>
-        </span>
+        </form>
 
-        <label for="ttlSeconds">TTL</label>
-        <DurationPicker
-            bind:valueInSeconds={ttlSeconds}
-            allowedUnits={['minutes', 'hours', 'days', 'months', 'years']}
-            defaultDuration={{ value: 10, unit: 'minutes' }}
-        />
-
-        <label for="isPublic">Access</label>
-        <button
-            class="visibility-status"
-            class:visibility-public={isPublic}
-            onclick={() => (isPublic = !isPublic)}
-        >
-            {#if isPublic}
-                Public
-                <i class="fas fa-lock-open"></i>
-            {:else}
-                Private
-                <i class="fas fa-lock"></i>
-            {/if}
-        </button>
-    </form>
-
-    {#if $user}
         <button class="form-action" onclick={upload} disabled={uploading}>
             {#if uploading}
                 <Spinner size={0.5} unit="em" durationSeconds={0.5} />
@@ -147,9 +147,7 @@
         {#if uploadSucess}
             <i class="sucess-indicator fas fa-check"></i>
         {/if}
-    {:else}
-        <span class="form-action">Login to upload an entry</span>
-    {/if}
+    </AuthGuard>
 </div>
 
 <style>

@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { user } from '$lib/auth';
+    import { AuthGuard } from '$lib/components/AuthGuard';
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { Notice } from '$lib/components/Notice';
     import EventsList from './components/EventsList.svelte';
     import PasswordGuard from './components/PasswordGuard.svelte';
 
@@ -23,13 +22,11 @@
     iconPath={pageMetadata.iconPath}
 />
 
-{#if $user}
+<AuthGuard message="Login to see events">
     <PasswordGuard>
         <div>
-            <button onclick={() => goto('/personal-tracker/add')}> Add an entry </button>
+            <button onclick={() => goto('/personal-tracker/add')}>Add an entry</button>
         </div>
         <EventsList />
     </PasswordGuard>
-{:else}
-    <Notice item={{ level: 'info', header: 'Login to add an entry or see events' }} />
-{/if}
+</AuthGuard>
