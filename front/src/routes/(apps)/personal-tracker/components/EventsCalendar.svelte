@@ -87,95 +87,93 @@
     const monthYearDisplay = $derived(currentMonth.toFormat('MMMM yyyy'));
 </script>
 
-{#if $user}
-    {#if $eventsStore.loading}
-        <p>Loading events</p>
-    {:else if $eventsStore.error}
-        <Notice
-            item={{
-                level: 'error',
-                header: 'Something went wrong getting events',
-                message: $eventsStore.error.message
-            }}
-        />
-    {:else}
-        <div class="calendar-container">
-            <div class="calendar-header">
-                <button onclick={previousMonth} class="nav-button">&lt;</button>
-                <h3 class="month-year">{monthYearDisplay}</h3>
-                <button onclick={nextMonth} class="nav-button">&gt;</button>
-                <button onclick={goToToday} class="today-button">Today</button>
+{#if $eventsStore.loading}
+    <p>Loading events</p>
+{:else if $eventsStore.error}
+    <Notice
+        item={{
+            level: 'error',
+            header: 'Something went wrong getting events',
+            message: $eventsStore.error.message
+        }}
+    />
+{:else}
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button onclick={previousMonth} class="nav-button">&lt;</button>
+            <h3 class="month-year">{monthYearDisplay}</h3>
+            <button onclick={nextMonth} class="nav-button">&gt;</button>
+            <button onclick={goToToday} class="today-button">Today</button>
+        </div>
+
+        <div class="calendar-grid">
+            <!-- Day names header -->
+            <div class="day-name">Mon</div>
+            <div class="day-name">Tue</div>
+            <div class="day-name">Wed</div>
+            <div class="day-name">Thu</div>
+            <div class="day-name">Fri</div>
+            <div class="day-name">Sat</div>
+            <div class="day-name">Sun</div>
+
+            <!-- Calendar days -->
+            {#each calendarDays as day}
+                <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+                <div
+                    class="calendar-day"
+                    class:other-month={!day.isCurrentMonth}
+                    class:has-event={day.event}
+                    class:today={day.isToday}
+                    onclick={() => day.event && handleDayClick(day.event)}
+                    role={day.event ? 'button' : undefined}
+                    tabindex={day.event ? 0 : undefined}
+                >
+                    <div class="day-number">{day.date.day}</div>
+
+                    {#if day.event}
+                        <div class="event-indicators">
+                            {#if day.event.mood !== undefined}
+                                <div class="indicator mood" title="Mood: {day.event.mood}">
+                                    {day.event.mood}
+                                </div>
+                            {/if}
+                            {#if day.event.weight !== undefined}
+                                <div
+                                    class="indicator weight"
+                                    title="Weight: {(day.event.weight / 100).toFixed(1)} kg"
+                                >
+                                    W
+                                </div>
+                            {/if}
+                            {#if day.event.emotionwheel?.emotions}
+                                <div
+                                    class="indicator emotions"
+                                    title="{day.event.emotionwheel.emotions.length} emotions"
+                                >
+                                    E
+                                </div>
+                            {/if}
+                        </div>
+                    {/if}
+                </div>
+            {/each}
+        </div>
+
+        <div class="calendar-legend">
+            <div class="legend-item">
+                <div class="indicator mood">5</div>
+                <span>Mood</span>
             </div>
-
-            <div class="calendar-grid">
-                <!-- Day names header -->
-                <div class="day-name">Mon</div>
-                <div class="day-name">Tue</div>
-                <div class="day-name">Wed</div>
-                <div class="day-name">Thu</div>
-                <div class="day-name">Fri</div>
-                <div class="day-name">Sat</div>
-                <div class="day-name">Sun</div>
-
-                <!-- Calendar days -->
-                {#each calendarDays as day}
-                    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-                    <div
-                        class="calendar-day"
-                        class:other-month={!day.isCurrentMonth}
-                        class:has-event={day.event}
-                        class:today={day.isToday}
-                        onclick={() => day.event && handleDayClick(day.event)}
-                        role={day.event ? 'button' : undefined}
-                        tabindex={day.event ? 0 : undefined}
-                    >
-                        <div class="day-number">{day.date.day}</div>
-
-                        {#if day.event}
-                            <div class="event-indicators">
-                                {#if day.event.mood !== undefined}
-                                    <div class="indicator mood" title="Mood: {day.event.mood}">
-                                        {day.event.mood}
-                                    </div>
-                                {/if}
-                                {#if day.event.weight !== undefined}
-                                    <div
-                                        class="indicator weight"
-                                        title="Weight: {(day.event.weight / 100).toFixed(1)} kg"
-                                    >
-                                        W
-                                    </div>
-                                {/if}
-                                {#if day.event.emotionwheel?.emotions}
-                                    <div
-                                        class="indicator emotions"
-                                        title="{day.event.emotionwheel.emotions.length} emotions"
-                                    >
-                                        E
-                                    </div>
-                                {/if}
-                            </div>
-                        {/if}
-                    </div>
-                {/each}
+            <div class="legend-item">
+                <div class="indicator weight">W</div>
+                <span>Weight</span>
             </div>
-
-            <div class="calendar-legend">
-                <div class="legend-item">
-                    <div class="indicator mood">5</div>
-                    <span>Mood</span>
-                </div>
-                <div class="legend-item">
-                    <div class="indicator weight">W</div>
-                    <span>Weight</span>
-                </div>
-                <div class="legend-item">
-                    <div class="indicator emotions">E</div>
-                    <span>Emotions</span>
-                </div>
+            <div class="legend-item">
+                <div class="indicator emotions">E</div>
+                <span>Emotions</span>
             </div>
         </div>
-    {/if}
+    </div>
 {/if}
 
 <style>

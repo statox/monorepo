@@ -16,67 +16,65 @@
     };
 </script>
 
-{#if $user}
-    {#if $eventsStore.loading}
-        <p>Loading events</p>
-    {:else if $eventsStore.error}
-        <Notice
-            item={{
-                level: 'error',
-                header: 'Something went wrong getting events',
-                message: $eventsStore.error.message
-            }}
-        />
-    {:else}
-        <div class="events-header">
-            <div>Date</div>
-            <div>Mood</div>
-            <div>Weight</div>
-            <div>Emotions</div>
-            <div>Actions</div>
-        </div>
+{#if $eventsStore.loading}
+    <p>Loading events</p>
+{:else if $eventsStore.error}
+    <Notice
+        item={{
+            level: 'error',
+            header: 'Something went wrong getting events',
+            message: $eventsStore.error.message
+        }}
+    />
+{:else}
+    <div class="events-header">
+        <div>Date</div>
+        <div>Mood</div>
+        <div>Weight</div>
+        <div>Emotions</div>
+        <div>Actions</div>
+    </div>
 
-        {#each $eventsStore.events.sort((a, b) => b.eventDateUnix - a.eventDateUnix) as event}
-            {@const formatedDate = DateTime.fromSeconds(event.eventDateUnix)
-                .toLocal()
-                .toFormat('dd/MM/yy HH:mm')}
-            <div class="event">
-                <div class="event-date">{formatedDate}</div>
-                <div class="event-value">
-                    {#if event.mood !== undefined}
-                        {event.mood}
-                    {:else}
-                        -
-                    {/if}
-                </div>
-                <div class="event-value">
-                    {#if event.weight !== undefined}
-                        {(event.weight / 100).toFixed(1)} kg
-                    {:else}
-                        -
-                    {/if}
-                </div>
-                <div class="event-value">
-                    {#if event.emotionwheel?.emotions}
-                        <div class="selection">
-                            {#each event.emotionwheel.emotions as item}
-                                <button class="emotion-item" style="--color: {item.color}">
-                                    {item.category}
-                                    {item.subcategory}
-                                    {item.emotion}
-                                </button>
-                            {/each}
-                        </div>
-                    {:else}
-                        -
-                    {/if}
-                </div>
-                <div class="event-actions">
-                    <button onclick={() => handleEdit(event.eventDateUnix)}>Edit</button>
-                </div>
+    {#each $eventsStore.events.sort((a, b) => b.eventDateUnix - a.eventDateUnix) as event}
+        {@const formatedDate = DateTime.fromSeconds(event.eventDateUnix)
+            .toLocal()
+            .toFormat('dd/MM/yy HH:mm')}
+        <div class="event">
+            <div class="event-date">{formatedDate}</div>
+            <div class="event-value">
+                {#if event.mood !== undefined}
+                    {event.mood}
+                {:else}
+                    -
+                {/if}
             </div>
-        {/each}
-    {/if}
+            <div class="event-value">
+                {#if event.weight !== undefined}
+                    {(event.weight / 100).toFixed(1)} kg
+                {:else}
+                    -
+                {/if}
+            </div>
+            <div class="event-value">
+                {#if event.emotionwheel?.emotions}
+                    <div class="selection">
+                        {#each event.emotionwheel.emotions as item}
+                            <button class="emotion-item" style="--color: {item.color}">
+                                {item.category}
+                                {item.subcategory}
+                                {item.emotion}
+                            </button>
+                        {/each}
+                    </div>
+                {:else}
+                    -
+                {/if}
+            </div>
+            <div class="event-actions">
+                <button onclick={() => handleEdit(event.eventDateUnix)}>Edit</button>
+            </div>
+        </div>
+    {/each}
 {/if}
 
 <style>
