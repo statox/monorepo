@@ -4,7 +4,7 @@
     import EventFormEmotionWheel from './components/EventFormEmotionWheel.svelte';
     import EventFormMood from './components/EventFormMood.svelte';
     import EventFormWeight from './components/EventFormWeight.svelte';
-    import PasswordGuard from '../components/PasswordGuard.svelte';
+    import PasswordGuard from '../../components/PasswordGuard.svelte';
     import {
         encryptAndUpload,
         getAndDecryptEvents,
@@ -45,7 +45,7 @@
 
     // Get the timestamp to work with (from URL param or default to today)
     const getTargetTimestamp = (): number => {
-        const timestampParam = page.url.searchParams.get('timestamp');
+        const timestampParam = page.params.timestamp;
         if (timestampParam) {
             const parsed = parseInt(timestampParam, 10);
             if (!isNaN(parsed)) {
@@ -56,7 +56,7 @@
     };
 
     // Check if we're in edit mode
-    const isEditMode = $derived(page.url.searchParams.has('timestamp'));
+    const isEditMode = $derived(!!page.params.timestamp);
 
     // Load existing event on mount
     onMount(async () => {

@@ -12,7 +12,7 @@
     };
 
     const handleEdit = (eventDateUnix: number) => {
-        goto(`/personal-tracker/add?timestamp=${eventDateUnix}`);
+        goto(`/personal-tracker/add/${eventDateUnix}`);
     };
 </script>
 
