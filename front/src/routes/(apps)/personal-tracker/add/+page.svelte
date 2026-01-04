@@ -2,13 +2,13 @@
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth';
     import { Notice } from '$lib/components/Notice';
-    import EventFormWeight from '../components/EventFormWeight.svelte';
-    import EventFormMood from '../components/EventFormMood.svelte';
+    import EventFormEmotionWheel from './components/EventFormEmotionWheel.svelte';
+    import EventFormMood from './components/EventFormMood.svelte';
+    import EventFormWeight from './components/EventFormWeight.svelte';
     import PasswordGuard from '../components/PasswordGuard.svelte';
 
     import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
-    import EventEmotionWheel from '../components/EventEmotionWheel.svelte';
 
     pageMetadataStore.set({
         name: 'Personal Tracker',
@@ -22,7 +22,7 @@
     };
 
     let forms = [
-        { name: 'emotionWheel', component: EventEmotionWheel },
+        { name: 'emotionWheel', component: EventFormEmotionWheel },
         { name: 'mood', component: EventFormMood },
         { name: 'weight', component: EventFormWeight }
     ];
