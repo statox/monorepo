@@ -22,7 +22,7 @@
     iconPath={pageMetadata.iconPath}
 />
 
-<AuthGuard message="Login to see events">
+<AuthGuard message="Login to see events" requiredScope="admin">
     <PasswordGuard>
         <div>
             <button onclick={() => goto('/personal-tracker/add')}>Add an entry</button>
