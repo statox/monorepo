@@ -16,32 +16,32 @@
 
 <style>
     .container {
-        padding-top: 0.3em;
-        padding-bottom: 0.3em;
-        padding-left: 1em;
-
-        margin: 0.3em;
-
+        padding: 1em;
+        margin-bottom: 0.5em;
         border-radius: 5px;
+        border-left: 4px solid;
+        background-color: var(--nc-bg-2);
+    }
 
-        border: 1px solid var(--nc-tx-1);
-    }
     .container.error {
-        background-color: var(--nc-error);
+        border-left-color: var(--nc-error);
     }
+
     .container.info {
-        background-color: var(--nc-info);
+        border-left-color: var(--nc-info);
     }
+
     .container.success {
-        background-color: var(--nc-success);
+        border-left-color: var(--nc-ac-1);
     }
 
     .header {
-        color: var(--nc-white);
-        font-weight: bolder;
+        color: var(--nc-tx-2);
+        font-weight: bold;
     }
 
     .message {
-        color: var(--nc-white);
+        color: var(--nc-tx-2);
+        margin-top: 0.25em;
     }
 </style>
