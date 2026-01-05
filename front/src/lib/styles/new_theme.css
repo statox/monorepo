@@ -21,6 +21,11 @@
     --nc-light-lk-tx: #f3f4f5;
     --nc-light-ac-1: #91b859;
     --nc-light-ac-tx: #fafafa;
+    --nc-light-success: #4e8759;
+    --nc-light-info: #528aff;
+    --nc-light-error-rgb: 171, 0, 0;
+    --nc-light-error: #ab0000;
+    --nc-light-white: #ffffff;
 
     /* Theme of my blog */
     --nc-dark-tx-1: #ffffff;
@@ -34,14 +39,11 @@
     --nc-dark-lk-tx: #2e3c43;
     --nc-dark-ac-1: #c3e88d;
     --nc-dark-ac-tx: #263238;
-
-    /* Helpers working on both themes */
-    --nc-success: #4e8759;
-    --nc-info: #528aff;
-    --nc-error-rgb:
-        171, 0, 0; /* Used when I need to add transparency with rgba(var(--nc-error-rgb), 0.1) */
-    --nc-error: #ab0000;
-    --nc-white: #ffffff;
+    --nc-dark-success: #4e8759;
+    --nc-dark-info: #528aff;
+    --nc-dark-error-rgb: 171, 0, 0;
+    --nc-dark-error: #ab0000;
+    --nc-dark-white: #ffffff;
 }
 
 html {
@@ -56,6 +58,12 @@ html {
     --nc-lk-tx: var(--nc-light-lk-tx);
     --nc-ac-1: var(--nc-light-ac-1);
     --nc-ac-tx: var(--nc-light-ac-tx);
+    --nc-success: var(--nc-light-success);
+    --nc-info: var(--nc-light-info);
+    /* --nc-error-rgb is used when I need to add transparency with rgba(var(--nc-error-rgb), 0.1) */
+    --nc-error-rgb: var(--nc-light-error-rgb);
+    --nc-error: var(--nc-light-error);
+    --nc-white: var(--nc-light-white);
 }
 
 html[data-theme='dark'] {
@@ -70,6 +78,11 @@ html[data-theme='dark'] {
     --nc-lk-tx: var(--nc-dark-lk-tx);
     --nc-ac-1: var(--nc-dark-ac-1);
     --nc-ac-tx: var(--nc-dark-ac-tx);
+    --nc-success: var(--nc-dark-success);
+    --nc-info: var(--nc-dark-info);
+    --nc-error-rgb: var(--nc-dark-error-rgb);
+    --nc-error: var(--nc-dark-error);
+    --nc-white: var(--nc-dark-white);
 }
 
 /* TODO See if that works */
