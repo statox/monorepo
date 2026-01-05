@@ -10,9 +10,17 @@
     }
 
     let { sensor }: Props = $props();
-    let hexColor = $state(sensor.hexColor);
-    let tempOffset = $state(sensor.tempOffset);
-    let sleepTimeSec = $state(sensor.sleepTimeSec);
+    // Initialize with empty values, will be set by effect
+    let hexColor = $state<string>('');
+    let tempOffset = $state<number>(0);
+    let sleepTimeSec = $state<number>(0);
+
+    // Sync state when sensor prop changes
+    $effect(() => {
+        hexColor = sensor.hexColor;
+        tempOffset = sensor.tempOffset;
+        sleepTimeSec = sensor.sleepTimeSec;
+    });
 
     const updateMetadata = async () => {
         try {

@@ -11,12 +11,19 @@
 
     let { item }: Props = $props();
 
-    let next = $state(item.initial);
-    let prev = $state(item.initial);
+    let next = $state<number | undefined>(undefined);
+    let prev = $state<number | undefined>(undefined);
     let paused = $state(false);
     let unlisten: () => void;
 
-    const progress = tweened(item.initial, { duration: item.duration, easing: linear });
+    // Initialize/sync state with item initial value
+    $effect(() => {
+        next = item.initial;
+        prev = item.initial;
+    });
+
+    // Initialize tweened - values captured at creation time (toast items don't change props)
+    const progress = tweened(item.initial ?? 0, { duration: item.duration ?? 0, easing: linear });
 
     function close() {
         toast.pop(item.id);

@@ -26,8 +26,15 @@
         valueInSeconds = $bindable()
     }: Props = $props();
 
-    let inputUnit = $state(defaultDuration.unit);
-    let inputValue = $state(defaultDuration.value);
+    // Initialize with default values, will be set by effect
+    let inputUnit = $state<DurationUnit>('seconds');
+    let inputValue = $state<number>(0);
+
+    // Sync state when defaultDuration prop changes
+    $effect(() => {
+        inputUnit = defaultDuration.unit;
+        inputValue = defaultDuration.value;
+    });
 
     $effect(() => {
         const durationLikeObj: DurationLikeObject = {};
