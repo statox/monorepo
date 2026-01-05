@@ -36,7 +36,7 @@
     let emotionEnabled = $state<boolean>(false);
 
     // Form refs for validation
-    let weightFormRef: EventFormWeight;
+    let weightFormRef: EventFormWeight | undefined = $state();
 
     // Compute consistent timestamp for today (start of day in UTC)
     const getTodayTimestamp = () => {
@@ -133,6 +133,9 @@
         }
 
         if (weightEnabled) {
+            if (!weightFormRef) {
+                throw new Error('Reference to weight form undefined');
+            }
             data.weight = weightFormRef.getStorageValue();
         }
 
