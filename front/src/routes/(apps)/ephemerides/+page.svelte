@@ -25,9 +25,9 @@
         <p>Loading ephemerides data</p>
     {:then { moonState, sunState, upcomingLunarStates }}
         <Ephemerides {moonState} {sunState} />
-        <br />
+        <div class="separator"></div>
         <LunarCycle {upcomingLunarStates} />
-        <br />
+        <div class="separator"></div>
         <Notice item={{ level: 'info', message: 'All data is computed for Paris, France' }} />
     {:catch error}
         <Notice
@@ -39,3 +39,11 @@
         />
     {/await}
 </div>
+
+<style>
+    .separator {
+        background-color: var(--nc-ac-1);
+        height: 1px;
+        margin: 1em;
+    }
+</style>

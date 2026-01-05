@@ -59,10 +59,6 @@
 
 <style>
     .container {
-        border-bottom: solid 2px;
-        border-color: #9edcff;
-        border-radius: 5px;
-
         padding: 0.3em;
 
         display: flex;
