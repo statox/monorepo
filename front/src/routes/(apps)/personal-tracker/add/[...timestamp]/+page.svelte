@@ -1,7 +1,7 @@
 <script lang="ts">
     import { AuthGuard } from '$lib/components/AuthGuard';
     import { toast } from '$lib/components/Toast';
-    import EventFormEmotionWheel from './components/EventFormEmotionWheel.svelte';
+    import EventFormEmotion from './components/EventFormEmotion.svelte';
     import EventFormMood from './components/EventFormMood.svelte';
     import EventFormWeight from './components/EventFormWeight.svelte';
     import PasswordGuard from '../../components/PasswordGuard.svelte';
@@ -186,7 +186,7 @@
                     </label>
                 </div>
                 {#if emotionEnabled}
-                    <EventFormEmotionWheel selection={emotionSelection} />
+                    <EventFormEmotion selection={emotionSelection} />
                 {/if}
             </div>
             <hr class="separator" />

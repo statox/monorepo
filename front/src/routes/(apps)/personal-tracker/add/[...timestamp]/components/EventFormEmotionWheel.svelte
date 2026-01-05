@@ -7,17 +7,6 @@
     }
     let { selection }: Props = $props();
 
-    export const getEmotionsData = () => {
-        return [...selection].map((item) => {
-            const [category, subcategory, emotion, color] = item.split(' - ');
-            return {
-                category,
-                subcategory,
-                emotion,
-                color
-            };
-        });
-    };
     const select = (value: {
         category: string;
         subcategory: string;
@@ -343,21 +332,6 @@
     </svg>
 </div>
 
-<div class="selection">
-    {#each [...selection] as item}
-        {@const [category, subcategory, emotion, color] = item.split(' - ')}
-        <button
-            class="selection-item"
-            style="--color: {color}"
-            onclick={() => selection.delete(item)}
-        >
-            {category}
-            {subcategory}
-            {emotion}
-        </button>
-    {/each}
-</div>
-
 <style>
     .emotion-wheel-container {
         width: 100%;
@@ -457,16 +431,5 @@
         fill: white;
         stroke: #333;
         stroke-width: 0.2;
-    }
-
-    .selection {
-        display: flex;
-        flex-direction: rows;
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    .selection-item {
-        background-color: var(--color);
-        color: black;
     }
 </style>
