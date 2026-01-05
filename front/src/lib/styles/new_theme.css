@@ -9,23 +9,23 @@
  * `html[data-theme='dark']` is triggered and the corresponding variables are used
  */
 :root {
-    /* statox light theme */
-    --nc-light-tx-1: #546e7a;
-    --nc-light-tx-2: #161d21;
-    --nc-light-tx-3: #6d7169;
-    --nc-light-bg-1: #f4f4f4;
-    --nc-light-bg-2: #eae8e8;
-    --nc-light-bg-3: #fafafa;
-    --nc-light-lk-1: #176166;
-    --nc-light-lk-2: #528aff;
-    --nc-light-lk-tx: #f3f4f5;
-    --nc-light-ac-1: #91b859;
-    --nc-light-ac-tx: #fafafa;
-    --nc-light-success: #4e8759;
-    --nc-light-info: #528aff;
-    --nc-light-error-rgb: 171, 0, 0;
-    --nc-light-error: #ab0000;
-    --nc-light-white: #ffffff;
+    /* dayfox theme */
+    --nc-light-tx-1: #302b5d;
+    --nc-light-tx-2: #3d2b5a;
+    --nc-light-tx-3: #837a72;
+    --nc-light-bg-1: #f6f2ee;
+    --nc-light-bg-2: #e4dcd4;
+    --nc-light-bg-3: #dbd1dd;
+    --nc-light-lk-1: #2848a9;
+    --nc-light-lk-2: #287980;
+    --nc-light-lk-tx: #dbd1dd;
+    --nc-light-ac-1: #396847;
+    --nc-light-ac-tx: #f2e9e1;
+    --nc-light-success: #396847;
+    --nc-light-info: #2848a9;
+    --nc-light-error-rgb: 165, 34, 47;
+    --nc-light-error: #a5222f;
+    --nc-light-white: #f2e9e1;
 
     /* nightfox theme */
     --nc-dark-tx-1: #d6d6d7;
