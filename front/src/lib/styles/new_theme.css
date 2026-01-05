@@ -27,23 +27,23 @@
     --nc-light-error: #ab0000;
     --nc-light-white: #ffffff;
 
-    /* Theme of my blog */
-    --nc-dark-tx-1: #ffffff;
-    --nc-dark-tx-2: #b7b7b7;
-    --nc-dark-tx-3: #8a8d87;
-    --nc-dark-bg-1: #1e272c;
-    --nc-dark-bg-2: #161d21;
-    --nc-dark-bg-3: #263238;
-    --nc-dark-lk-1: #5e92ff;
-    --nc-dark-lk-2: #99b2e8;
-    --nc-dark-lk-tx: #2e3c43;
-    --nc-dark-ac-1: #c3e88d;
-    --nc-dark-ac-tx: #263238;
-    --nc-dark-success: #4e8759;
-    --nc-dark-info: #528aff;
-    --nc-dark-error-rgb: 171, 0, 0;
-    --nc-dark-error: #ab0000;
-    --nc-dark-white: #ffffff;
+    /* nightfox theme */
+    --nc-dark-tx-1: #d6d6d7;
+    --nc-dark-tx-2: #aeafb0;
+    --nc-dark-tx-3: #738091;
+    --nc-dark-bg-1: #192330;
+    --nc-dark-bg-2: #131a24;
+    --nc-dark-bg-3: #212e3f;
+    --nc-dark-lk-1: #719cd6;
+    --nc-dark-lk-2: #63cdcf;
+    --nc-dark-lk-tx: #212e3f;
+    --nc-dark-ac-1: #81b29a;
+    --nc-dark-ac-tx: #212e3f;
+    --nc-dark-success: #81b29a;
+    --nc-dark-info: #719cd6;
+    --nc-dark-error-rgb: 201, 79, 109;
+    --nc-dark-error: #c94f6d;
+    --nc-dark-white: #dfdfe0;
 }
 
 html {
