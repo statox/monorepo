@@ -14,7 +14,7 @@
     {:else}
         <div class="selected-items">
             {#each [...selection] as item}
-                {@const [emotion, color] = item.split(' - ')}.slice(2)
+                {@const [emotion, color] = item.split(' - ').slice(2)}
                 <button
                     class="selected-item"
                     style="--color: {color}"
