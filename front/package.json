@@ -30,7 +30,7 @@
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-svelte": "^3.13.1",
-        "globals": "^16.5.0",
+        "globals": "^17.0.0",
         "highlight.js": "^11.11.1",
         "json-schema-to-ts": "^3.1.1",
         "lunarphase-js": "^2.0.3",
