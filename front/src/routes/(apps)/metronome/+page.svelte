@@ -20,14 +20,22 @@
     let beatsPerBar = $state(metronome.beatsPerBar);
     let subdivisionsInBeat = $state(metronome.subdivisionsInBeat);
 
+    // Sync state with metronome object
+    $effect(() => {
+        metronome.tempo = tempo;
+    });
+
+    $effect(() => {
+        metronome.beatsPerBar = beatsPerBar;
+    });
+
+    $effect(() => {
+        metronome.subdivisionsInBeat = subdivisionsInBeat;
+    });
+
     onDestroy(() => {
         metronome.stop();
     });
-
-    const onTempoUpdate = (newTempo: number) => {
-        tempo = newTempo;
-        metronome.tempo = newTempo;
-    };
 
     const onBeatsPerBarUpdate = (newBeatsPerBar: number) => {
         beatsPerBar = newBeatsPerBar;
@@ -60,8 +68,8 @@
         <PlayPause {metronome} />
     </div>
     <div class="section">
-        <TempoControls bind:tempo {onTempoUpdate} />
-        <Tap onNewBPM={(newBPM) => onTempoUpdate(newBPM / metronome.subdivisionsInBeat)} />
+        <TempoControls bind:tempo />
+        <Tap onNewBPM={(newBPM) => (tempo = newBPM / metronome.subdivisionsInBeat)} />
     </div>
     <div class="section">
         <BeatsControls
