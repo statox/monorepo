@@ -10,6 +10,8 @@
     import ComponentsSection from './components/ComponentsSection.svelte';
     import SemanticStatesSection from './components/SemanticStatesSection.svelte';
     import ToastsSection from './components/ToastsSection.svelte';
+    import EmojiSliderPickerDemo from './components/EmojiSliderPickerDemo.svelte';
+    import NumericSliderPickerDemo from './components/NumericSliderPickerDemo.svelte';
 
     pageMetadataStore.set({ name: 'Theme Playground' });
 </script>
@@ -31,6 +33,12 @@
     <ComponentsSection />
     <SemanticStatesSection />
     <ToastsSection />
+
+    <section class="demo-section">
+        <h2>Custom Picker Components</h2>
+        <EmojiSliderPickerDemo />
+        <NumericSliderPickerDemo />
+    </section>
 </div>
 
 <style>
@@ -47,6 +55,17 @@
 
     .intro {
         color: var(--nc-tx-2);
+        margin-bottom: 2rem;
+    }
+
+    .demo-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 2px solid var(--nc-bg-3);
+    }
+
+    .demo-section h2 {
+        color: var(--nc-tx-1);
         margin-bottom: 2rem;
     }
 </style>
