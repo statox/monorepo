@@ -5,6 +5,7 @@
     import { pageMetadataStore, showLoginSuccess } from './store';
     import { Notice } from '../Notice';
     import { user } from '$lib/auth';
+    import DebugNavItem from '../NavItems/DebugNavItem.svelte';
 </script>
 
 <header>
@@ -20,6 +21,7 @@
     </h1>
     <nav>
         <span class="last-left-menu-item"><ThemeSwitcherNavItem /></span>
+        <span><DebugNavItem /></span>
         {#if $pageMetadataStore.showAuthInHeader}
             <span><AuthNavItem /></span>
             <span><LogoutNavItem /></span>
