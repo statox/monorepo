@@ -220,7 +220,9 @@
         <div class="contents">
             <h4 class="title-bar">
                 <div class="title-text">
-                    <span class="title-main">{isEditMode ? 'Edit Entry' : "Today's Personal Metrics"}</span>
+                    <span class="title-main"
+                        >{isEditMode ? 'Edit Entry' : "Today's Personal Metrics"}</span
+                    >
                     <span class="title-date">{formattedDate()}</span>
                 </div>
                 <button

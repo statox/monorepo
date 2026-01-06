@@ -172,9 +172,7 @@
                                 </div>
                             {/if}
                             {#if day.event.journal !== undefined}
-                                <div class="indicator journal" title="Journal entry">
-                                    📝
-                                </div>
+                                <div class="indicator journal" title="Journal entry">📝</div>
                             {/if}
                         </div>
                     {/if}

@@ -25,8 +25,12 @@
 
     <div class="current-workplace">
         <div class="workplace-display">
-            <span class="workplace-emoji">{workplaceOptions.find(opt => opt.value === value)?.emoji}</span>
-            <span class="workplace-label">{workplaceOptions.find(opt => opt.value === value)?.label}</span>
+            <span class="workplace-emoji"
+                >{workplaceOptions.find((opt) => opt.value === value)?.emoji}</span
+            >
+            <span class="workplace-label"
+                >{workplaceOptions.find((opt) => opt.value === value)?.label}</span
+            >
         </div>
     </div>
 

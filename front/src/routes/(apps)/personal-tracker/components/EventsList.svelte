@@ -54,14 +54,17 @@
     </div>
 
     {#each $eventsStore.events.sort((a, b) => b.eventDateUnix - a.eventDateUnix) as event}
-        {@const formatedDate = DateTime.fromSeconds(event.eventDateUnix).toFormat('EEEE, d MMMM yyyy')}
+        {@const formatedDate = DateTime.fromSeconds(event.eventDateUnix).toFormat(
+            'EEEE, d MMMM yyyy'
+        )}
         {@const isJournalExpanded = expandedJournals.has(event.eventDateUnix)}
         <div class="event">
             <div class="event-date">{formatedDate}</div>
             <div class="event-value" data-label="Mood:">
                 {#if event.mood !== undefined}
                     <span class="emoji-value">
-                        {moodEmojis[event.mood - 1]} {event.mood}
+                        {moodEmojis[event.mood - 1]}
+                        {event.mood}
                     </span>
                 {:else}
                     -
@@ -70,7 +73,8 @@
             <div class="event-value" data-label="Energy:">
                 {#if event.energy !== undefined}
                     <span class="emoji-value">
-                        {energyEmojis[event.energy - 1]} {event.energy}
+                        {energyEmojis[event.energy - 1]}
+                        {event.energy}
                     </span>
                 {:else}
                     -
@@ -109,7 +113,10 @@
             </div>
             <div class="event-value journal-cell">
                 {#if event.journal !== undefined}
-                    <button class="journal-toggle" onclick={() => toggleJournal(event.eventDateUnix)}>
+                    <button
+                        class="journal-toggle"
+                        onclick={() => toggleJournal(event.eventDateUnix)}
+                    >
                         {isJournalExpanded ? '📖 Hide' : '📝 Show'}
                     </button>
                     {#if isJournalExpanded}
