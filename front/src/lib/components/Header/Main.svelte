@@ -42,6 +42,7 @@
         .home-img {
             filter: brightness(70%) invert(10%);
         }
+        color: var(--nc-tx-1);
     }
     .home-link {
         display: flex;
