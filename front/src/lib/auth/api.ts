@@ -1,4 +1,5 @@
 import { client2 } from '$lib/api';
+import { personalTrackerPassword } from '$lib/PersonalTracker';
 import { user } from './store';
 
 export const getProfile = client2.auth.me;
@@ -13,15 +14,21 @@ export const logout = async () => {
     await updateProfile();
 };
 
+const logoutCleanup = () => {
+    console.log('Clean up user data');
+    personalTrackerPassword.clearPassword();
+    user.set(undefined);
+};
+
 export const updateProfile = async () => {
     try {
         const profile = await getProfile({});
         if (profile.status === 'logged_in') {
             user.set(profile);
-        } else {
-            user.set(undefined);
+            return;
         }
+        logoutCleanup();
     } catch (error) {
-        user.set(undefined);
+        logoutCleanup();
     }
 };
