@@ -1,11 +1,9 @@
 <script lang="ts">
     import { JSONEditor, Mode, createAjvValidator } from 'svelte-jsoneditor';
     import type { JSONContent } from 'svelte-jsoneditor';
-    import { modals } from 'svelte-modals';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
-    import ChordForm from './components/ChordForm.svelte';
     import type { RawChord } from '$lib/Songbook/types';
     import { uploadChords } from '$lib/Songbook/api';
 
@@ -89,31 +87,6 @@
             });
         }
     };
-
-    const onNewSongSubmit = async (params: {
-        title: string;
-        artist: string;
-        url: string;
-        tags: string[];
-    }) => {
-        const now = Date.now();
-        chords = [{ ...params, creationDate: now }, ...chords];
-
-        try {
-            await uploadChords({ chords });
-            modals.close();
-            content = { json: chords };
-            toast.push('<i class="fas fa-check"></i> Uploaded');
-        } catch (error) {
-            const message = `<strong>Entry not created</strong><br/> ${(error as Error).message}`;
-            toast.push(message, {
-                duration: 0,
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
-        }
-    };
 </script>
 
 <h2>
@@ -127,7 +100,7 @@
 </h2>
 
 <AuthGuard message="Login to upload changes" requiredScope="admin">
-    <button style:position="relative" onclick={() => modals.open(ChordForm, { onNewSongSubmit })}>
+    <button style:position="relative" onclick={() => goto('/songbook/edit/create')}>
         Add a song
     </button>
 </AuthGuard>

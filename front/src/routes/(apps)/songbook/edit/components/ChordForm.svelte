@@ -1,60 +1,80 @@
 <script lang="ts">
-    import type { ModalProps } from 'svelte-modals';
+    import { goto } from '$app/navigation';
     import { AuthGuard } from '$lib/components/AuthGuard';
+    import { toast } from '$lib/components/Toast';
+    import { ApiError } from '$lib/api';
+    import { UserLoggedOutError } from '$lib/auth';
+    import type { RawChord } from '$lib/Songbook/types';
+    import { uploadNewChord } from '$lib/Songbook/service';
 
-    interface Props extends ModalProps {
-        onNewSongSubmit: (params: {
-            title: string;
-            artist: string;
-            url: string;
-            tags: string[];
-        }) => Promise<void>;
+    interface Props {
+        onUpload: () => void;
     }
 
-    let { isOpen, close, onNewSongSubmit }: Props = $props();
+    let { onUpload }: Props = $props();
 
     let title: string = $state('');
     let artist: string = $state('');
     let url: string = $state('');
     let tagsStr: string = $state('');
 
-    const submit = () => {
+    const submit = async () => {
+        console.log('In submit');
         const tags = [];
         if (tagsStr) {
             tags.push(...tagsStr.replaceAll(' ', '').split(','));
         }
-        onNewSongSubmit({ title, artist, url, tags });
+
+        const now = Date.now();
+        const newChord: RawChord = { title, artist, url, tags, creationDate: now };
+        console.log({ newChord });
+
+        try {
+            await uploadNewChord(newChord);
+            toast.push('<i class="fas fa-check"></i> Song added successfully');
+            onUpload();
+        } catch (error) {
+            let errorMessage = (error as Error).message;
+            if (error instanceof ApiError && error.code === 401) {
+                errorMessage = 'Invalid logged in user';
+            } else if (error instanceof UserLoggedOutError) {
+                errorMessage = 'User is logged out';
+            }
+            const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
+            toast.push(message, {
+                duration: 0,
+                theme: {
+                    '--toastBarBackground': '#FF0000'
+                }
+            });
+        }
     };
 </script>
 
-{#if isOpen}
-    <div role="dialog" class="modal">
-        <div class="contents">
-            <h4 class="title-bar">
-                Add a new song
-                <button onclick={close}>Close</button>
-            </h4>
+<div class="page-content">
+    <h2 class="title-bar">
+        Add a new song
+        <button onclick={() => goto('/songbook/edit')}>Back</button>
+    </h2>
 
-            <AuthGuard message="Login to add a new song" requiredScope="admin">
-                <form class="form-content">
-                    <label for="artist">Artist</label>
-                    <input type="text" bind:value={artist} />
+    <AuthGuard message="Login to add a new song" requiredScope="admin">
+        <form class="form-content">
+            <label for="artist">Artist</label>
+            <input type="text" bind:value={artist} />
 
-                    <label for="title">Title</label>
-                    <input type="text" bind:value={title} />
+            <label for="title">Title</label>
+            <input type="text" bind:value={title} />
 
-                    <label for="url">Url</label>
-                    <input type="text" bind:value={url} />
+            <label for="url">Url</label>
+            <input type="text" bind:value={url} />
 
-                    <label for="tags">Tags</label>
-                    <input type="text" bind:value={tagsStr} />
+            <label for="tags">Tags</label>
+            <input type="text" bind:value={tagsStr} />
 
-                    <button class="form-action" onclick={submit}>Submit</button>
-                </form>
-            </AuthGuard>
-        </div>
-    </div>
-{/if}
+            <button class="form-action" onclick={submit}>Submit</button>
+        </form>
+    </AuthGuard>
+</div>
 
 <style>
     .form-action {
@@ -66,29 +86,8 @@
         grid-template-columns: auto auto;
     }
 
-    .modal {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        margin: 3em;
-        z-index: 9999;
+    .page-content {
         max-width: 900px;
-
-        /* allow click-through to backdrop */
-        pointer-events: none;
-    }
-
-    .contents {
-        min-width: 240px;
-        border-radius: 26px;
-        padding: 16px;
-        background: var(--nc-bg-1);
-        pointer-events: auto;
-
-        max-height: 90%;
-        overflow: auto;
     }
 
     .title-bar {
