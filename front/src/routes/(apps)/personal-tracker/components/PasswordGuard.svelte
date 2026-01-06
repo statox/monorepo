@@ -18,10 +18,10 @@
 
 {#if $personalTrackerPassword}
     <div class="unlocked-container">
+        {@render children()}
         <div class="lock-button-container">
             <button onclick={handleLock}>🔒 Lock</button>
         </div>
-        {@render children()}
     </div>
 {:else}
     <PasswordPrompt />
