@@ -1,10 +1,10 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { checkAuth, user, usernameToColor } from '$lib/auth';
+    import { updateProfile, user, usernameToColor } from '$lib/auth';
 
     onMount(() => {
-        checkAuth();
+        updateProfile();
     });
 
     let userColors = $derived(usernameToColor($user?.user.username));

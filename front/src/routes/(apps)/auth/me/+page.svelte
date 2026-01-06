@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { checkAuth, logout, updateProfile, user } from '$lib/auth';
+    import { updateProfile, logout, user } from '$lib/auth';
 
     onMount(() => {
-        checkAuth();
+        updateProfile();
     });
 </script>
 

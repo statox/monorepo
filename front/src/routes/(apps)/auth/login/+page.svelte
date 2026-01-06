@@ -1,6 +1,6 @@
 <script lang="ts">
     import { afterNavigate, goto } from '$app/navigation';
-    import { checkAuth, login, user } from '$lib/auth';
+    import { updateProfile, login, user } from '$lib/auth';
     import { showLoginSuccess } from '$lib/components/Header/store';
     import { Notice } from '$lib/components/Notice';
 
@@ -23,7 +23,7 @@
         event.preventDefault(); // Prevent page reload
         try {
             await login(username, password);
-            await checkAuth();
+            await updateProfile();
             if ($user?.status == 'logged_in') {
                 showLoginSuccess.set(true);
                 setTimeout(() => showLoginSuccess.set(false), 2500);
