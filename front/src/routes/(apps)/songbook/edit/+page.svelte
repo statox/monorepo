@@ -5,7 +5,7 @@
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
-    import NewChordModal from './components/NewChordModal.svelte';
+    import ChordForm from './components/ChordForm.svelte';
     import type { RawChord } from '$lib/Songbook/types';
     import { uploadChords } from '$lib/Songbook/api';
 
@@ -127,10 +127,7 @@
 </h2>
 
 <AuthGuard message="Login to upload changes" requiredScope="admin">
-    <button
-        style:position="relative"
-        onclick={() => modals.open(NewChordModal, { onNewSongSubmit })}
-    >
+    <button style:position="relative" onclick={() => modals.open(ChordForm, { onNewSongSubmit })}>
         Add a song
     </button>
 </AuthGuard>
