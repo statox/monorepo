@@ -34,7 +34,7 @@
 <AuthGuard message="Login to see events" requiredScope="admin">
     <PasswordGuard>
         <div class="controls">
-            <button onclick={() => goto('/personal-tracker/add')}>Add an entry</button>
+            <button onclick={() => goto('/personal-tracker/add')}>Add Today's entry</button>
             <button onclick={toggleView} class="view-toggle">
                 {viewMode === 'calendar' ? '📋 List View' : '📅 Calendar View'}
             </button>

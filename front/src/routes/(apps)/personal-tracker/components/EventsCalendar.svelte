@@ -171,6 +171,11 @@
                                     {day.event.energy}
                                 </div>
                             {/if}
+                            {#if day.event.journal !== undefined}
+                                <div class="indicator journal" title="Journal entry">
+                                    📝
+                                </div>
+                            {/if}
                         </div>
                     {/if}
                 </div>
@@ -197,6 +202,10 @@
             <div class="legend-item">
                 <div class="indicator energy">5</div>
                 <span>Energy</span>
+            </div>
+            <div class="legend-item">
+                <div class="indicator journal">📝</div>
+                <span>Journal</span>
             </div>
         </div>
     </div>
@@ -353,6 +362,11 @@
 
     .indicator.energy {
         background-color: #00bcd4;
+        color: white;
+    }
+
+    .indicator.journal {
+        background-color: #795548;
         color: white;
     }
 

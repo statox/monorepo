@@ -55,6 +55,9 @@ export const personalTrackerDataSchema = {
             type: 'number',
             minimum: 1,
             maximum: 10
+        },
+        journal: {
+            type: 'string'
         }
     },
     additionalProperties: false

@@ -6,6 +6,7 @@
     import EventFormWeight from './components/EventFormWeight.svelte';
     import EventFormWorkplace from './components/EventFormWorkplace.svelte';
     import EventFormEnergy from './components/EventFormEnergy.svelte';
+    import EventFormJournal from './components/EventFormJournal.svelte';
     import PasswordGuard from '../../components/PasswordGuard.svelte';
     import {
         encryptAndUpload,
@@ -33,6 +34,7 @@
     let emotionSelection = new SvelteSet<string>();
     let workplaceValue = $state<'remote' | 'on site'>('remote');
     let energyValue = $state<number>(5);
+    let journalValue = $state<string>('');
 
     // Track which sections are enabled
     let moodEnabled = $state<boolean>(false);
@@ -40,6 +42,7 @@
     let emotionEnabled = $state<boolean>(false);
     let workplaceEnabled = $state<boolean>(false);
     let energyEnabled = $state<boolean>(false);
+    let journalEnabled = $state<boolean>(false);
 
     // Form refs for validation
     let weightFormRef: EventFormWeight | undefined = $state();
@@ -63,6 +66,12 @@
 
     // Check if we're in edit mode
     const isEditMode = $derived(!!page.params.timestamp);
+
+    // Format the target date for display
+    const formattedDate = $derived(() => {
+        const timestamp = getTargetTimestamp();
+        return DateTime.fromSeconds(timestamp).toFormat('EEEE, d MMMM yyyy');
+    });
 
     // Load existing event on mount
     onMount(async () => {
@@ -112,6 +121,10 @@
                     energyValue = existingEvent.energy;
                     energyEnabled = true;
                 }
+                if (existingEvent.journal !== undefined) {
+                    journalValue = existingEvent.journal;
+                    journalEnabled = true;
+                }
             }
         } catch (error) {
             console.error('Failed to load existing event:', error);
@@ -130,7 +143,8 @@
             !weightEnabled &&
             !emotionEnabled &&
             !workplaceEnabled &&
-            !energyEnabled
+            !energyEnabled &&
+            !journalEnabled
         ) {
             toast.push('Please enable at least one section to submit', {
                 theme: {
@@ -175,6 +189,10 @@
             data.energy = energyValue;
         }
 
+        if (journalEnabled && journalValue.trim() !== '') {
+            data.journal = journalValue.trim();
+        }
+
         try {
             const eventDateUnix = getTargetTimestamp();
             await encryptAndUpload(data, $personalTrackerPassword, eventDateUnix);
@@ -201,7 +219,10 @@
     <PasswordGuard>
         <div class="contents">
             <h4 class="title-bar">
-                {isEditMode ? 'Edit Entry' : "Today's Personal Metrics"}
+                <div class="title-text">
+                    <span class="title-main">{isEditMode ? 'Edit Entry' : "Today's Personal Metrics"}</span>
+                    <span class="title-date">{formattedDate()}</span>
+                </div>
                 <button
                     onclick={() => {
                         goto('/personal-tracker');
@@ -247,6 +268,7 @@
                 {/if}
             </div>
             <hr class="separator" />
+
             <div class="input-form" class:disabled={!weightEnabled}>
                 <div class="section-header">
                     <label>
@@ -273,6 +295,19 @@
             </div>
             <hr class="separator" />
 
+            <div class="input-form" class:disabled={!journalEnabled}>
+                <div class="section-header">
+                    <label>
+                        <input type="checkbox" bind:checked={journalEnabled} />
+                        <span class="section-title">Journal</span>
+                    </label>
+                </div>
+                {#if journalEnabled}
+                    <EventFormJournal bind:value={journalValue} />
+                {/if}
+            </div>
+            <hr class="separator" />
+
             <div class="submit-container">
                 <button class="form-action" onclick={handleSubmit}>
                     {isEditMode ? 'Update Entry' : 'Create Entry'}
@@ -292,6 +327,21 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
+    }
+    .title-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25em;
+    }
+    .title-main {
+        font-size: 1em;
+        font-weight: bold;
+    }
+    .title-date {
+        font-size: 0.85em;
+        opacity: 0.7;
+        font-weight: normal;
     }
     .separator {
         height: 2px;
