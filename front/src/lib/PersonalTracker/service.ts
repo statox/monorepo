@@ -46,6 +46,10 @@ export const personalTrackerDataSchema = {
             },
             required: ['emotions'],
             additionalProperties: false
+        },
+        workplace: {
+            type: 'string',
+            enum: ['remote', 'on site']
         }
     },
     additionalProperties: false

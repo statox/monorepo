@@ -158,6 +158,14 @@
                                     E
                                 </div>
                             {/if}
+                            {#if day.event.workplace !== undefined}
+                                <div
+                                    class="indicator workplace"
+                                    title="Workplace: {day.event.workplace}"
+                                >
+                                    {day.event.workplace === 'remote' ? '🏠' : '🏢'}
+                                </div>
+                            {/if}
                         </div>
                     {/if}
                 </div>
@@ -176,6 +184,10 @@
             <div class="legend-item">
                 <div class="indicator emotions">E</div>
                 <span>Emotions</span>
+            </div>
+            <div class="legend-item">
+                <div class="indicator workplace">🏠</div>
+                <span>Workplace</span>
             </div>
         </div>
     </div>
@@ -322,6 +334,11 @@
 
     .indicator.emotions {
         background-color: #ff9800;
+        color: white;
+    }
+
+    .indicator.workplace {
+        background-color: #9c27b0;
         color: white;
     }
 

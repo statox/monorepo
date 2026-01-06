@@ -4,6 +4,7 @@
     import EventFormEmotion from './components/EventFormEmotion.svelte';
     import EventFormMood from './components/EventFormMood.svelte';
     import EventFormWeight from './components/EventFormWeight.svelte';
+    import EventFormWorkplace from './components/EventFormWorkplace.svelte';
     import PasswordGuard from '../../components/PasswordGuard.svelte';
     import {
         encryptAndUpload,
@@ -29,11 +30,13 @@
     let moodValue = $state<number>(5);
     let weightValue = $state<number>(100);
     let emotionSelection = new SvelteSet<string>();
+    let workplaceValue = $state<'remote' | 'on site'>('remote');
 
     // Track which sections are enabled
     let moodEnabled = $state<boolean>(false);
     let weightEnabled = $state<boolean>(false);
     let emotionEnabled = $state<boolean>(false);
+    let workplaceEnabled = $state<boolean>(false);
 
     // Form refs for validation
     let weightFormRef: EventFormWeight | undefined = $state();
@@ -98,6 +101,10 @@
                     newSelection.forEach((v) => emotionSelection.add(v));
                     emotionEnabled = true;
                 }
+                if (existingEvent.workplace !== undefined) {
+                    workplaceValue = existingEvent.workplace;
+                    workplaceEnabled = true;
+                }
             }
         } catch (error) {
             console.error('Failed to load existing event:', error);
@@ -111,7 +118,7 @@
 
     const handleSubmit = async () => {
         // Check if at least one section is enabled
-        if (!moodEnabled && !weightEnabled && !emotionEnabled) {
+        if (!moodEnabled && !weightEnabled && !emotionEnabled && !workplaceEnabled) {
             toast.push('Please enable at least one section to submit', {
                 theme: {
                     '--toastBarBackground': '#FFA500'
@@ -145,6 +152,10 @@
                 return { category, subcategory, emotion, color };
             });
             data.emotionwheel = { emotions };
+        }
+
+        if (workplaceEnabled) {
+            data.workplace = workplaceValue;
         }
 
         try {
@@ -216,6 +227,19 @@
                 </div>
                 {#if weightEnabled}
                     <EventFormWeight bind:this={weightFormRef} bind:value={weightValue} />
+                {/if}
+            </div>
+            <hr class="separator" />
+
+            <div class="input-form" class:disabled={!workplaceEnabled}>
+                <div class="section-header">
+                    <label>
+                        <input type="checkbox" bind:checked={workplaceEnabled} />
+                        <span class="section-title">Workplace</span>
+                    </label>
+                </div>
+                {#if workplaceEnabled}
+                    <EventFormWorkplace bind:value={workplaceValue} />
                 {/if}
             </div>
             <hr class="separator" />
