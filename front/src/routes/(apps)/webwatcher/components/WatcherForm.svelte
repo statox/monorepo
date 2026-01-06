@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { ModalProps } from 'svelte-modals';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
@@ -8,12 +7,13 @@
     import { createWatcher } from '$lib/WebWatcher/api';
     import type { WatchType } from '$lib/WebWatcher/types';
     import { AuthGuard } from '$lib/components/AuthGuard';
+    import { goto } from '$app/navigation';
 
-    interface Props extends ModalProps {
+    interface Props {
         onUpload: () => void;
     }
 
-    let { isOpen, close, onUpload }: Props = $props();
+    let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
 
     let name: string = $state('');
@@ -76,7 +76,6 @@
                 });
             }
             onUpload();
-            close();
         } catch (error) {
             let errorMessage = (error as Error).message;
             if (error instanceof ApiError && error.code === 401) {
@@ -92,58 +91,58 @@
             });
         }
     };
+
+    const onClose = () => {
+        goto('/webwatcher');
+    };
 </script>
 
-{#if isOpen}
-    <div role="dialog" class="modal">
-        <div class="contents">
-            <h3 class="title-bar">
-                Add a new watcher
-                <button onclick={close}>Close</button>
-            </h3>
+<div class="contents">
+    <h3 class="title-bar">
+        Add a new watcher
+        <button onclick={onClose}>Back</button>
+    </h3>
 
-            <AuthGuard message="Login to upload an entry" requiredScope="admin">
-                {#each noticeMessages as item}
-                    <Notice {item} />
-                {/each}
+    <AuthGuard message="Login to upload an entry" requiredScope="admin">
+        {#each noticeMessages as item}
+            <Notice {item} />
+        {/each}
 
-                <form class="form-content">
-                    <label for="name">Name</label>
-                    <input type="text" bind:value={name} />
+        <form class="form-content">
+            <label for="name">Name</label>
+            <input type="text" bind:value={name} />
 
-                    <label for="check-interval">Check interval</label>
-                    <DurationPicker
-                        bind:valueInSeconds={checkIntervalSeconds}
-                        allowedUnits={['minutes', 'hours', 'days']}
-                        defaultDuration={{ value: 1, unit: 'hours' }}
-                    />
+            <label for="check-interval">Check interval</label>
+            <DurationPicker
+                bind:valueInSeconds={checkIntervalSeconds}
+                allowedUnits={['minutes', 'hours', 'days']}
+                defaultDuration={{ value: 1, unit: 'hours' }}
+            />
 
-                    <label for="notification-message">
-                        Notification message (the @mention is automatically added)
-                    </label>
-                    <input type="textarea" bind:value={notificationMessage} />
+            <label for="notification-message">
+                Notification message (the @mention is automatically added)
+            </label>
+            <input type="textarea" bind:value={notificationMessage} />
 
-                    <label for="watch-type"> Watcher type </label>
-                    <select id="watch-type" bind:value={watchType}>
-                        <option value="CSS">CSS</option>
-                        <option value="HASH">HASH</option>
-                    </select>
+            <label for="watch-type"> Watcher type </label>
+            <select id="watch-type" bind:value={watchType}>
+                <option value="CSS">CSS</option>
+                <option value="HASH">HASH</option>
+            </select>
 
-                    <label for="content">URL</label>
-                    <input type="textarea" bind:value={url} />
+            <label for="content">URL</label>
+            <input type="textarea" bind:value={url} />
 
-                    {#if watchType === 'CSS'}
-                        <label for="css-selector">CSS selector</label>
-                        <input type="textarea" bind:value={cssSelector} />
-                    {/if}
+            {#if watchType === 'CSS'}
+                <label for="css-selector">CSS selector</label>
+                <input type="textarea" bind:value={cssSelector} />
+            {/if}
 
-                    <br />
-                    <button class="form-action" onclick={upload}>Submit</button>
-                </form>
-            </AuthGuard>
-        </div>
-    </div>
-{/if}
+            <br />
+            <button class="form-action" onclick={upload}>Submit</button>
+        </form>
+    </AuthGuard>
+</div>
 
 <style>
     .form-action {
@@ -155,19 +154,6 @@
         grid-template-columns: auto auto;
     }
 
-    .modal {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        margin: 3em;
-        z-index: 9999;
-        max-width: 900px;
-
-        /* allow click-through to backdrop */
-        pointer-events: none;
-    }
     .contents {
         min-width: 240px;
         border-radius: 26px;
