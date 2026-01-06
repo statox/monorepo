@@ -56,11 +56,6 @@ export const utilsSection = {
             name: 'Cookbook',
             description: 'Food recipes',
             link: '/cookbook'
-        },
-        {
-            name: 'About',
-            description: 'The about section of this website',
-            link: '/about'
         }
     ]
 };
@@ -139,4 +134,20 @@ export const gameSection = {
     ]
 };
 
-export const allApps = [personalSection, utilsSection, musicSection, gameSection];
+export const siteSection = {
+    name: 'This website',
+    apps: [
+        {
+            name: 'About',
+            description: 'The about section of this website',
+            link: '/about'
+        },
+        {
+            name: 'Theme Playground',
+            description: 'Showcase different GUI elements to check CSS changes on this website',
+            link: '/playground'
+        }
+    ]
+};
+
+export const allApps = [personalSection, utilsSection, musicSection, gameSection, siteSection];
