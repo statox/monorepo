@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { ModalProps } from 'svelte-modals';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
@@ -7,12 +6,13 @@
     import { uploadToReactor } from '$lib/Reactor/api';
     import { AuthGuard } from '$lib/components/AuthGuard';
     import { Spinner } from '$lib/components/Spinner';
+    import { goto } from '$app/navigation';
 
-    interface Props extends ModalProps {
+    interface Props {
         onUpload: () => void;
     }
 
-    let { isOpen, close, onUpload }: Props = $props();
+    let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
 
     let name: string = $state('');
@@ -44,7 +44,6 @@
             await uploadToReactor({ name, commaSeparatedTags, file });
             uploading = false;
             onUpload();
-            close();
         } catch (error) {
             uploading = false;
             let errorMessage = (error as Error).message;
@@ -61,57 +60,57 @@
             });
         }
     };
+
+    const onClose = () => {
+        goto('/reactor');
+    };
 </script>
 
-{#if isOpen}
-    <div role="dialog" class="modal">
-        <div class="contents">
-            <h4 class="title-bar">
-                Add a new file
-                <button onclick={close}>Close</button>
-            </h4>
+<div class="contents">
+    <h4 class="title-bar">
+        Add a new file
+        <button onclick={onClose}>Back</button>
+    </h4>
 
-            <AuthGuard message="Login to add an entry" requiredScope="admin">
-                {#each noticeMessages as item}
-                    <Notice {item} />
-                {/each}
+    <AuthGuard message="Login to add an entry" requiredScope="admin">
+        {#each noticeMessages as item}
+            <Notice {item} />
+        {/each}
 
-                <form class="form-content">
-                    <label for="name">Name</label>
-                    <input type="text" bind:value={name} />
+        <form class="form-content">
+            <label for="name">Name</label>
+            <input type="text" bind:value={name} />
 
-                    <label for="content">Tags</label>
-                    <input type="textarea" bind:value={commaSeparatedTags} />
+            <label for="content">Tags</label>
+            <input type="textarea" bind:value={commaSeparatedTags} />
 
-                    <label for="file">File</label>
-                    <span>
-                        <input class="file-input" type="file" bind:files bind:this={fileInput} />
-                        <button
-                            aria-label="delete file"
-                            onclick={() => {
-                                if (fileInput !== undefined) {
-                                    fileInput.value = '';
-                                }
-                            }}
-                        >
-                            <i class="fas fa-times-circle"></i>
-                        </button>
-                    </span>
+            <label for="file">File</label>
+            <span>
+                <input class="file-input" type="file" bind:files bind:this={fileInput} />
+                <button
+                    aria-label="delete file"
+                    onclick={() => {
+                        if (fileInput !== undefined) {
+                            fileInput.value = '';
+                        }
+                    }}
+                >
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            </span>
 
-                    <br />
+            <br />
 
-                    <button class="form-action" onclick={upload} disabled={uploading}>
-                        {#if uploading}
-                            <Spinner size={0.5} unit="em" durationSeconds={0.5} />
-                        {:else}
-                            Submit
-                        {/if}
-                    </button>
-                </form>
-            </AuthGuard>
-        </div>
-    </div>
-{/if}
+            <button class="form-action" onclick={upload} disabled={uploading}>
+                {#if uploading}
+                    <Spinner size={0.5} unit="em" durationSeconds={0.5} />
+                {:else}
+                    Submit
+                {/if}
+            </button>
+        </form>
+    </AuthGuard>
+</div>
 
 <style>
     .form-action {
@@ -123,19 +122,6 @@
         grid-template-columns: auto auto;
     }
 
-    .modal {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        margin: 3em;
-        z-index: 9999;
-        max-width: 900px;
-
-        /* allow click-through to backdrop */
-        pointer-events: none;
-    }
     .contents {
         min-width: 240px;
         border-radius: 26px;
