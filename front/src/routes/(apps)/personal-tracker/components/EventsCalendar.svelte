@@ -407,9 +407,17 @@
         }
 
         .indicator {
-            min-width: 20px;
-            height: 20px;
-            font-size: 0.65em;
+            min-width: 8px;
+            width: 8px;
+            height: 8px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 0;
+            overflow: hidden;
+        }
+
+        .event-indicators {
+            gap: 3px;
         }
 
         .month-year {
