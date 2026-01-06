@@ -50,6 +50,11 @@ export const personalTrackerDataSchema = {
         workplace: {
             type: 'string',
             enum: ['remote', 'on site']
+        },
+        energy: {
+            type: 'number',
+            minimum: 1,
+            maximum: 10
         }
     },
     additionalProperties: false

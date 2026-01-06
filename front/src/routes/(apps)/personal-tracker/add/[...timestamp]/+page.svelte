@@ -5,6 +5,7 @@
     import EventFormMood from './components/EventFormMood.svelte';
     import EventFormWeight from './components/EventFormWeight.svelte';
     import EventFormWorkplace from './components/EventFormWorkplace.svelte';
+    import EventFormEnergy from './components/EventFormEnergy.svelte';
     import PasswordGuard from '../../components/PasswordGuard.svelte';
     import {
         encryptAndUpload,
@@ -31,12 +32,14 @@
     let weightValue = $state<number>(100);
     let emotionSelection = new SvelteSet<string>();
     let workplaceValue = $state<'remote' | 'on site'>('remote');
+    let energyValue = $state<number>(5);
 
     // Track which sections are enabled
     let moodEnabled = $state<boolean>(false);
     let weightEnabled = $state<boolean>(false);
     let emotionEnabled = $state<boolean>(false);
     let workplaceEnabled = $state<boolean>(false);
+    let energyEnabled = $state<boolean>(false);
 
     // Form refs for validation
     let weightFormRef: EventFormWeight | undefined = $state();
@@ -105,6 +108,10 @@
                     workplaceValue = existingEvent.workplace;
                     workplaceEnabled = true;
                 }
+                if (existingEvent.energy !== undefined) {
+                    energyValue = existingEvent.energy;
+                    energyEnabled = true;
+                }
             }
         } catch (error) {
             console.error('Failed to load existing event:', error);
@@ -118,7 +125,13 @@
 
     const handleSubmit = async () => {
         // Check if at least one section is enabled
-        if (!moodEnabled && !weightEnabled && !emotionEnabled && !workplaceEnabled) {
+        if (
+            !moodEnabled &&
+            !weightEnabled &&
+            !emotionEnabled &&
+            !workplaceEnabled &&
+            !energyEnabled
+        ) {
             toast.push('Please enable at least one section to submit', {
                 theme: {
                     '--toastBarBackground': '#FFA500'
@@ -156,6 +169,10 @@
 
         if (workplaceEnabled) {
             data.workplace = workplaceValue;
+        }
+
+        if (energyEnabled) {
+            data.energy = energyValue;
         }
 
         try {
@@ -218,6 +235,18 @@
             </div>
             <hr class="separator" />
 
+            <div class="input-form" class:disabled={!energyEnabled}>
+                <div class="section-header">
+                    <label>
+                        <input type="checkbox" bind:checked={energyEnabled} />
+                        <span class="section-title">Energy</span>
+                    </label>
+                </div>
+                {#if energyEnabled}
+                    <EventFormEnergy bind:value={energyValue} />
+                {/if}
+            </div>
+            <hr class="separator" />
             <div class="input-form" class:disabled={!weightEnabled}>
                 <div class="section-header">
                     <label>
