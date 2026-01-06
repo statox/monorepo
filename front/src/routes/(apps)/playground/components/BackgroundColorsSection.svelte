@@ -11,7 +11,8 @@
             <p style="color: var(--nc-tx-1)">Primary text (tx-1)</p>
             <p style="color: var(--nc-tx-2)">Secondary text (tx-2)</p>
             <p style="color: var(--nc-tx-3)">Tertiary text (tx-3)</p>
-            <a href="#bg" style="color: var(--nc-lk-1)">Link (lk-1)</a>
+            <!-- svelte-ignore a11y_missing_attribute -->
+            <a style="color: var(--nc-lk-1)">Link (lk-1)</a>
             <div class="button-row">
                 <button class="btn-accent">Accent Button</button>
                 <button class="btn-default">Default Button</button>
@@ -24,7 +25,8 @@
             <p style="color: var(--nc-tx-1)">Primary text (tx-1)</p>
             <p style="color: var(--nc-tx-2)">Secondary text (tx-2)</p>
             <p style="color: var(--nc-tx-3)">Tertiary text (tx-3)</p>
-            <a href="#bg" style="color: var(--nc-lk-1)">Link (lk-1)</a>
+            <!-- svelte-ignore a11y_missing_attribute -->
+            <a style="color: var(--nc-lk-1)">Link (lk-1)</a>
             <div class="button-row">
                 <button class="btn-accent">Accent Button</button>
                 <button class="btn-default">Default Button</button>
@@ -37,7 +39,8 @@
             <p style="color: var(--nc-tx-1)">Primary text (tx-1)</p>
             <p style="color: var(--nc-tx-2)">Secondary text (tx-2)</p>
             <p style="color: var(--nc-tx-3)">Tertiary text (tx-3)</p>
-            <a href="#bg" style="color: var(--nc-lk-1)">Link (lk-1)</a>
+            <!-- svelte-ignore a11y_missing_attribute -->
+            <a style="color: var(--nc-lk-1)">Link (lk-1)</a>
             <div class="button-row">
                 <button class="btn-accent">Accent Button</button>
                 <button class="btn-default">Default Button</button>

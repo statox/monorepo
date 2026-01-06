@@ -10,8 +10,9 @@
 
         <p>
             This is a paragraph with <strong>bold text</strong>, <em>italic text</em>, and
-            <a href="#typography">a link</a>. Lorem ipsum dolor sit amet, consectetur adipiscing
-            elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <!-- svelte-ignore a11y_missing_attribute -->
+            <a>a link</a>. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua.
         </p>
 
         <p>
