@@ -21,8 +21,23 @@ const stringToSeed = (str: string) => {
 };
 
 export const usernameToColor = (username: string | undefined) => {
+    const getComplementaryColor = (hexColor: string) => {
+        const hex = hexColor.replace('#', '');
+
+        const R = parseInt(hex.substring(0, 2), 16);
+        const G = parseInt(hex.substring(2, 4), 16);
+        const B = parseInt(hex.substring(4, 6), 16);
+
+        const compR = (255 - R).toString(16).padStart(2, '0');
+        const compG = (255 - G).toString(16).padStart(2, '0');
+        const compB = (255 - B).toString(16).padStart(2, '0');
+
+        return `#${compR}${compG}${compB}`;
+    };
+
     if (!username) {
-        return '#990000';
+        const color = '#990000';
+        return { main: color, complementary: getComplementaryColor(color) };
     }
 
     const seed = stringToSeed(username);
@@ -38,5 +53,6 @@ export const usernameToColor = (username: string | undefined) => {
         .toString(16)
         .padStart(2, '0');
 
-    return `#${R}${G}${B}`;
+    const color = `#${R}${G}${B}`;
+    return { main: color, complementary: getComplementaryColor(color) };
 };

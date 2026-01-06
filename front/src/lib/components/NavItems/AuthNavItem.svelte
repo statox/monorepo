@@ -6,6 +6,8 @@
     onMount(() => {
         checkAuth();
     });
+
+    let userColors = $derived(usernameToColor($user?.user.username));
 </script>
 
 {#if $user}
@@ -13,7 +15,7 @@
         title={$user.user.username}
         class="user-profile"
         onclick={() => goto('/auth/me')}
-        style="--user-color: {usernameToColor($user?.user.username)}"
+        style="--user-color: {userColors.main}; --user-compl-color: {userColors.complementary}"
     >
         {$user.user.username[0].toUpperCase()}
     </button>
@@ -45,8 +47,8 @@
         height: 1.8em;
         border-radius: 50%;
         background-color: var(--user-color);
-        border: 2px solid var(--nc-tx-3);
-        color: var(--nc-tx-2);
+        border: 2px solid var(--user-compl-color);
+        color: var(--user-compl-color);
         font-weight: bold;
         font-size: 1em;
     }
