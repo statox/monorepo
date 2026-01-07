@@ -3,6 +3,7 @@
         FormLayout,
         FormGrid,
         FormSubmitButton,
+        FormFileInput,
         handleFormError
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
@@ -17,7 +18,6 @@
 
     let name: string = $state('');
     let commaSeparatedTags = $state('');
-    let fileInput: HTMLInputElement | undefined = $state();
     let files: FileList | undefined = $state();
     let uploading = $state(false);
 
@@ -59,26 +59,8 @@
         <input type="textarea" bind:value={commaSeparatedTags} />
 
         <label for="file">File</label>
-        <span>
-            <input class="file-input" type="file" bind:files bind:this={fileInput} />
-            <button
-                aria-label="delete file"
-                onclick={() => {
-                    if (fileInput !== undefined) {
-                        fileInput.value = '';
-                    }
-                }}
-            >
-                <i class="fas fa-times-circle"></i>
-            </button>
-        </span>
+        <FormFileInput bind:files />
 
         <FormSubmitButton onclick={upload} loading={uploading} />
     </FormGrid>
 </FormLayout>
-
-<style>
-    .file-input {
-        flex-grow: 2;
-    }
-</style>

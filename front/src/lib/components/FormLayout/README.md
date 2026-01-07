@@ -93,6 +93,44 @@ A standardized submit button with loading state.
 <FormSubmitButton onclick={handleSubmit} loading={uploading} label="Create Item" />
 ```
 
+### FormFileInput
+
+A file input with a built-in clear button.
+
+**Features:**
+
+- File input field
+- Clear button to reset the file selection
+- Consistent styling
+- Flex layout with proper spacing
+
+**Props:**
+
+- `files?: FileList` - Bindable FileList for the selected files
+
+**Example:**
+
+```svelte
+<script>
+    let files: FileList | undefined = $state();
+
+    const upload = async () => {
+        let file: File | undefined;
+        if (files && files.length) {
+            file = files[0];
+        }
+        if (!file) {
+            // Handle no file selected
+            return;
+        }
+        // Upload the file
+    };
+</script>
+
+<label for="file">File</label>
+<FormFileInput bind:files />
+```
+
 ### Error Handler Utilities
 
 Helper functions for consistent error and success messaging.

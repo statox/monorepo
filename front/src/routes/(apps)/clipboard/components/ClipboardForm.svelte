@@ -3,6 +3,7 @@
         FormLayout,
         FormGrid,
         FormSubmitButton,
+        FormFileInput,
         handleFormError
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
@@ -18,7 +19,6 @@
 
     let name: string = $state('');
     let content: string = $state('');
-    let fileInput: HTMLInputElement | undefined = $state();
     let files: FileList | undefined = $state();
     let isPublic = $state(false);
     let ttlSeconds: number = $state(0);
@@ -72,19 +72,7 @@
         <input type="textarea" bind:value={content} />
 
         <label for="file">File</label>
-        <span>
-            <input class="file-input" type="file" bind:files bind:this={fileInput} />
-            <button
-                aria-label="delete file"
-                onclick={() => {
-                    if (fileInput !== undefined) {
-                        fileInput.value = '';
-                    }
-                }}
-            >
-                <i class="fas fa-times-circle"></i>
-            </button>
-        </span>
+        <FormFileInput bind:files />
 
         <label for="ttlSeconds">TTL</label>
         <DurationPicker
@@ -113,9 +101,6 @@
 </FormLayout>
 
 <style>
-    .file-input {
-        flex-grow: 2;
-    }
     .visibility-status {
         background-color: var(--nc-success);
         max-width: 150px;
