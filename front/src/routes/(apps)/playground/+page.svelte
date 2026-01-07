@@ -5,7 +5,6 @@
     import ColorsSection from './components/ColorsSection.svelte';
     import BackgroundColorsSection from './components/BackgroundColorsSection.svelte';
     import TypographySection from './components/TypographySection.svelte';
-    import FormElementsSection from './components/FormElementsSection.svelte';
     import ButtonsSection from './components/ButtonsSection.svelte';
     import ComponentsSection from './components/ComponentsSection.svelte';
     import SemanticStatesSection from './components/SemanticStatesSection.svelte';
@@ -29,7 +28,6 @@
     <ColorsSection />
     <BackgroundColorsSection />
     <TypographySection />
-    <FormElementsSection />
     <ButtonsSection />
     <ComponentsSection />
     <SemanticStatesSection />

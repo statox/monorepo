@@ -3,6 +3,7 @@
         FormLayout,
         FormGrid,
         FormSubmitButton,
+        FormFileInput,
         handleFormError,
         showSuccessToast
     } from '$lib/components/FormLayout';
@@ -11,10 +12,14 @@
 
     let name: string = $state('');
     let email: string = $state('');
+    let number: number = $state(42);
     let description: string = $state('');
     let category: string = $state('general');
     let durationSeconds: number = $state(600);
     let isPublic: boolean = $state(false);
+    let acceptTerms: boolean = $state(false);
+    let priority: string = $state('');
+    let files: FileList | undefined = $state();
     let uploading = $state(false);
     let noticeMessages: NoticeItem[] = $state([]);
 
@@ -55,10 +60,13 @@
             // Reset form
             name = '';
             email = '';
+            number = 42;
             description = '';
             category = 'general';
             durationSeconds = 600;
             isPublic = false;
+            acceptTerms = false;
+            priority = '';
             noticeMessages = [];
         } catch (error) {
             handleFormError(error);
@@ -70,10 +78,13 @@
     const handleReset = () => {
         name = '';
         email = '';
+        number = 42;
         description = '';
         category = 'general';
         durationSeconds = 600;
         isPublic = false;
+        acceptTerms = false;
+        priority = '';
         noticeMessages = [];
     };
 </script>
@@ -82,15 +93,21 @@
     <div class="demo-description">
         <h3>FormLayout Components Demo</h3>
         <p>
-            This demonstrates the shared <code>FormLayout</code>, <code>FormGrid</code>, and
-            <code>FormSubmitButton</code> components used across all forms.
+            This demonstrates the shared <code>FormLayout</code>, <code>FormGrid</code>,
+            <code>FormSubmitButton</code>, and <code>FormFileInput</code> components, along with all standard
+            form elements used across the application.
         </p>
         <ul class="features">
             <li><strong>Consistent styling:</strong> Title bar, back button, auth guard</li>
-            <li><strong>Responsive design:</strong> Two columns on desktop, single column on mobile</li>
+            <li>
+                <strong>Responsive design:</strong> Two columns on desktop, single column on mobile
+            </li>
             <li><strong>Loading states:</strong> Built-in spinner during submission</li>
             <li><strong>Error handling:</strong> Standardized validation and error messages</li>
-            <li><strong>Grid layout:</strong> Two-column grid (desktop) / single-column (mobile)</li>
+            <li>
+                <strong>All input types:</strong> Text, email, number, select, textarea, checkbox, radio,
+                file
+            </li>
         </ul>
         <p class="note">
             Try submitting the form to see validation, loading state, and success/error messages.
@@ -111,6 +128,9 @@
 
                 <label for="email">Email *</label>
                 <input type="email" bind:value={email} placeholder="john@example.com" />
+
+                <label for="number">Number</label>
+                <input type="number" bind:value={number} placeholder="42" />
 
                 <label for="category">Category</label>
                 <select bind:value={category}>
@@ -141,6 +161,31 @@
                     {/if}
                 </button>
 
+                <label for="file">File Upload</label>
+                <FormFileInput bind:files />
+
+                <label for="checkbox">Terms & Conditions</label>
+                <label class="checkbox-label">
+                    <input type="checkbox" bind:checked={acceptTerms} />
+                    I accept the terms and conditions
+                </label>
+
+                <label for="priority">Priority</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="priority" value="low" bind:group={priority} />
+                        Low
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="priority" value="medium" bind:group={priority} />
+                        Medium
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="priority" value="high" bind:group={priority} />
+                        High
+                    </label>
+                </div>
+
                 <label for="description">Description</label>
                 <textarea
                     bind:value={description}
@@ -158,7 +203,8 @@
 
     <div class="demo-code">
         <h4>Sample Code:</h4>
-        <pre><code>&lt;FormLayout title="Add item" backUrl="/items" {'{noticeMessages}'}&gt;
+        <pre><code
+                >&lt;FormLayout title="Add item" backUrl="/items" {'{noticeMessages}'}&gt;
     &lt;FormGrid&gt;
         &lt;label&gt;Name&lt;/label&gt;
         &lt;input type="text" bind:value={'{name}'} /&gt;
@@ -168,7 +214,8 @@
 
         &lt;FormSubmitButton onclick={'{handleSubmit}'} loading={'{uploading}'} /&gt;
     &lt;/FormGrid&gt;
-&lt;/FormLayout&gt;</code></pre>
+&lt;/FormLayout&gt;</code
+            ></pre>
     </div>
 </div>
 
@@ -235,8 +282,41 @@
     }
 
     .reset-button {
-        background-color: var(--nc-bg-3);
+        background-color: var(--nc-error);
+        margin-top: 1em;
         min-width: 120px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .checkbox-label input[type='checkbox'] {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .radio-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .radio-label input[type='radio'] {
+        margin: 0;
+        cursor: pointer;
     }
 
     .demo-code {
