@@ -1,13 +1,14 @@
 <script lang="ts">
-    import { ApiError } from '$lib/api';
-    import { UserLoggedOutError } from '$lib/auth';
-    import { toast } from '$lib/components/Toast';
-    import { Notice, type NoticeItem } from '$lib/components/Notice';
+    import {
+        FormLayout,
+        FormGrid,
+        FormSubmitButton,
+        handleFormError
+    } from '$lib/components/FormLayout';
+    import type { NoticeItem } from '$lib/components/Notice';
     import { DurationPicker } from '$lib/components/DurationPicker';
     import { createWatcher } from '$lib/WebWatcher/api';
     import type { WatchType } from '$lib/WebWatcher/types';
-    import { AuthGuard } from '$lib/components/AuthGuard';
-    import { goto } from '$app/navigation';
 
     interface Props {
         onUpload: () => void;
@@ -22,6 +23,7 @@
     let cssSelector: string = $state('');
     let checkIntervalSeconds: number = $state(0);
     let watchType: WatchType = $state('CSS');
+    let uploading = $state(false);
 
     const upload = async () => {
         noticeMessages = [];
@@ -57,6 +59,7 @@
         }
 
         try {
+            uploading = true;
             if (watchType === 'CSS') {
                 await createWatcher({
                     name,
@@ -77,97 +80,44 @@
             }
             onUpload();
         } catch (error) {
-            let errorMessage = (error as Error).message;
-            if (error instanceof ApiError && error.code === 401) {
-                errorMessage = 'Invalid logged in user';
-            } else if (error instanceof UserLoggedOutError) {
-                errorMessage = 'User is logged out';
-            }
-            const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
-            toast.push(message, {
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
+            handleFormError(error);
+        } finally {
+            uploading = false;
         }
-    };
-
-    const onClose = () => {
-        goto('/webwatcher');
     };
 </script>
 
-<div class="contents">
-    <h3 class="title-bar">
-        Add a new watcher
-        <button onclick={onClose}>Back</button>
-    </h3>
+<FormLayout title="Add a new watcher" backUrl="/webwatcher" {noticeMessages}>
+    <FormGrid>
+        <label for="name">Name</label>
+        <input type="text" bind:value={name} />
 
-    <AuthGuard message="Login to upload an entry" requiredScope="admin">
-        {#each noticeMessages as item}
-            <Notice {item} />
-        {/each}
+        <label for="check-interval">Check interval</label>
+        <DurationPicker
+            bind:valueInSeconds={checkIntervalSeconds}
+            allowedUnits={['minutes', 'hours', 'days']}
+            defaultDuration={{ value: 1, unit: 'hours' }}
+        />
 
-        <form class="form-content">
-            <label for="name">Name</label>
-            <input type="text" bind:value={name} />
+        <label for="notification-message">
+            Notification message (the @mention is automatically added)
+        </label>
+        <input type="textarea" bind:value={notificationMessage} />
 
-            <label for="check-interval">Check interval</label>
-            <DurationPicker
-                bind:valueInSeconds={checkIntervalSeconds}
-                allowedUnits={['minutes', 'hours', 'days']}
-                defaultDuration={{ value: 1, unit: 'hours' }}
-            />
+        <label for="watch-type"> Watcher type </label>
+        <select id="watch-type" bind:value={watchType}>
+            <option value="CSS">CSS</option>
+            <option value="HASH">HASH</option>
+        </select>
 
-            <label for="notification-message">
-                Notification message (the @mention is automatically added)
-            </label>
-            <input type="textarea" bind:value={notificationMessage} />
+        <label for="content">URL</label>
+        <input type="textarea" bind:value={url} />
 
-            <label for="watch-type"> Watcher type </label>
-            <select id="watch-type" bind:value={watchType}>
-                <option value="CSS">CSS</option>
-                <option value="HASH">HASH</option>
-            </select>
+        {#if watchType === 'CSS'}
+            <label for="css-selector">CSS selector</label>
+            <input type="textarea" bind:value={cssSelector} />
+        {/if}
 
-            <label for="content">URL</label>
-            <input type="textarea" bind:value={url} />
-
-            {#if watchType === 'CSS'}
-                <label for="css-selector">CSS selector</label>
-                <input type="textarea" bind:value={cssSelector} />
-            {/if}
-
-            <br />
-            <button class="form-action" onclick={upload}>Submit</button>
-        </form>
-    </AuthGuard>
-</div>
-
-<style>
-    .form-action {
-        grid-column: span 2;
-    }
-
-    .form-content {
-        display: grid;
-        grid-template-columns: auto auto;
-    }
-
-    .contents {
-        min-width: 240px;
-        border-radius: 26px;
-        padding: 16px;
-        background: var(--nc-bg-1);
-        pointer-events: auto;
-
-        max-height: 90%;
-        overflow: auto;
-    }
-    .title-bar {
-        margin-bottom: 1em;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-</style>
+        <FormSubmitButton onclick={upload} loading={uploading} />
+    </FormGrid>
+</FormLayout>

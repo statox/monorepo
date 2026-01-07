@@ -12,6 +12,7 @@
     import ToastsSection from './components/ToastsSection.svelte';
     import EmojiSliderPickerDemo from './components/EmojiSliderPickerDemo.svelte';
     import NumericSliderPickerDemo from './components/NumericSliderPickerDemo.svelte';
+    import FormLayoutDemo from './components/FormLayoutDemo.svelte';
 
     pageMetadataStore.set({ name: 'Theme Playground' });
 </script>
@@ -38,6 +39,11 @@
         <h2>Custom Picker Components</h2>
         <EmojiSliderPickerDemo />
         <NumericSliderPickerDemo />
+    </section>
+
+    <section class="demo-section">
+        <h2>Form Layout Components</h2>
+        <FormLayoutDemo />
     </section>
 </div>
 
