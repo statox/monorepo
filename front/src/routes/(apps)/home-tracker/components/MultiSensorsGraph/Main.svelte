@@ -11,12 +11,12 @@
         Tooltip,
         type ChartConfiguration
     } from 'chart.js';
-    import type {
-        HomeTrackerHistogramData,
-        HomeTrackerTimeData,
-        SensorMetadata
-    } from '$lib/HomeTracker/types';
-    import { formatRecordTimestampToHuman } from '$lib/HomeTracker/utils';
+    import {
+        formatRecordTimestampToHuman,
+        type HomeTrackerHistogramData,
+        type HomeTrackerTimeData,
+        type SensorMetadata
+    } from '$lib/HomeTracker';
     import type { GraphType } from './types';
     import { onMount } from 'svelte';
 

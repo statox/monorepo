@@ -3,7 +3,7 @@
         formatRecordTimestampToHumanWithSeconds,
         formatRecordTimestampToRelative
     } from '$lib/HomeTracker';
-    import type { SensorMetadata } from '$lib/HomeTracker/types';
+    import type { SensorMetadata } from '$lib/HomeTracker';
     import Metadata from './Metadata.svelte';
     import Readings from './Readings.svelte';
     import { DateTime } from 'luxon';
