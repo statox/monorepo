@@ -1,4 +1,6 @@
-import { PUBLIC_API_URL } from '$env/static/public';
+import { PUBLIC_API_URL_PROD, PUBLIC_API_URL_LOCAL } from '$env/static/public';
+import { get } from 'svelte/store';
+import { apiUrlTypeStore } from '$lib/api/apiUrlStore';
 
 export const alphaSort = (a: string, b: string) => {
     if (a < b) return -1;
@@ -13,5 +15,6 @@ export const alphaLowerSort = (a: string, b: string) => {
 };
 
 export const getApiUrl = () => {
-    return PUBLIC_API_URL;
+    const selectedType = get(apiUrlTypeStore);
+    return selectedType === 'local' ? PUBLIC_API_URL_LOCAL : PUBLIC_API_URL_PROD;
 };
