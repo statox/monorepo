@@ -1,6 +1,6 @@
 <script lang="ts">
     import { ButtonCopy, copyToClipboard } from '$lib/components/ButtonCopy';
-    import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
+    import type { ClipboardEntryEnriched } from '$lib/Clipboard';
     interface Props {
         entry: ClipboardEntryEnriched;
     }

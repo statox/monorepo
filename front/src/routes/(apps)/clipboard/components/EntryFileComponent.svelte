@@ -1,6 +1,6 @@
 <script lang="ts">
     import mime from 'mime';
-    import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
+    import type { ClipboardEntryEnriched } from '$lib/Clipboard';
 
     interface Props {
         entry: ClipboardEntryEnriched;

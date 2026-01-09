@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { type ClipboardEntryEnriched } from '$lib/Clipboard/types';
+    import { type ClipboardEntryEnriched } from '$lib/Clipboard';
     import EntryContentComponent from './EntryContentComponent.svelte';
     import EntryFileComponent from './EntryFileComponent.svelte';
     import EntryInfoComponent from './EntryInfoComponent.svelte';

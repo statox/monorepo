@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
+    import type { ClipboardEntryEnriched } from '$lib/Clipboard';
 
     interface Props {
         entry: ClipboardEntryEnriched;

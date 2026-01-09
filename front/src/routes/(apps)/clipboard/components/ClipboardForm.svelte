@@ -8,7 +8,7 @@
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
     import { DurationPicker } from '$lib/components/DurationPicker';
-    import { uploadToClipboard } from '$lib/Clipboard/api';
+    import { uploadToClipboard } from '$lib/Clipboard';
 
     interface Props {
         onUpload: () => void;

@@ -2,7 +2,7 @@
     import { user } from '$lib/auth';
     import { AuthGuard } from '$lib/components/AuthGuard';
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard/api';
+    import { getAllClipboard, getPublicClipboard } from '$lib/Clipboard';
     import ClipboardView from './components/ClipboardView.svelte';
     import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';

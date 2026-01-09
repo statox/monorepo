@@ -1,7 +1,6 @@
 <script lang="ts">
     import { user } from '$lib/auth';
-    import { deleteClipboardEntry } from '$lib/Clipboard/api';
-    import type { ClipboardEntryEnriched } from '$lib/Clipboard/types';
+    import { deleteClipboardEntry, type ClipboardEntryEnriched } from '$lib/Clipboard';
     import { ButtonDelete } from '$lib/components/ButtonDelete';
     import ExpirationInfo from './ExpirationInfo.svelte';
 
