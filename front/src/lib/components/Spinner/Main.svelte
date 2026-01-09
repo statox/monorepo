@@ -6,7 +6,7 @@
     }
 
     let { size = 50, unit = 'px', durationSeconds = 1 }: Props = $props();
-    const duration = `${durationSeconds}s`;
+    const duration = $derived(`${durationSeconds}s`);
 </script>
 
 <div id="loading" style="--size: {size}{unit};  --duration: {duration}"></div>
