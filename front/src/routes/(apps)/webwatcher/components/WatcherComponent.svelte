@@ -4,9 +4,9 @@
     import { ButtonSwitch } from '$lib/components/ButtonSwitch';
     import { toast } from '$lib/components/Toast';
     import { user } from '$lib/auth';
-    import type { WatchedContent } from '$lib/WebWatcher/types';
+    import type { WatchedContent } from '$lib/WebWatcher';
     import { Duration } from 'luxon';
-    import { deleteWatcherAPI, toggleWatcherEnabledAPI } from '$lib/WebWatcher/api';
+    import { deleteWatcherAPI, toggleWatcherEnabledAPI } from '$lib/WebWatcher';
 
     interface Props {
         watcher: WatchedContent;

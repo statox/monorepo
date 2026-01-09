@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getAllWatchers } from '$lib/WebWatcher/api';
+    import { getAllWatchers } from '$lib/WebWatcher';
     import WatchersView from './components/WatchersView.svelte';
     import { pageMetadataStore } from '$lib/components/Header';
     import { AuthGuard } from '$lib/components/AuthGuard';

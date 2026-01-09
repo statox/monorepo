@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { WatchedContent } from '$lib/WebWatcher/types';
+    import type { WatchedContent } from '$lib/WebWatcher';
     import WatcherComponent from './WatcherComponent.svelte';
 
     interface Props {

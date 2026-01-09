@@ -7,8 +7,7 @@
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
     import { DurationPicker } from '$lib/components/DurationPicker';
-    import { createWatcher } from '$lib/WebWatcher/api';
-    import type { WatchType } from '$lib/WebWatcher/types';
+    import { createWatcher, type WatchType } from '$lib/WebWatcher';
 
     interface Props {
         onUpload: () => void;
