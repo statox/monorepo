@@ -11,15 +11,17 @@
     type DisplayType = 'none' | 'image' | 'other';
     let type: DisplayType = $state('none');
 
-    if (entry.s3PresignedUrl) {
-        type = 'other';
-        const url = new URL(entry.s3PresignedUrl);
-        const ext = (url.pathname.match(/[^.]+$/) ?? [])[0];
-        const filetype = mime.getType(ext ?? '');
-        if (filetype?.includes('image')) {
-            type = 'image';
+    $effect(() => {
+        if (entry.s3PresignedUrl) {
+            type = 'other';
+            const url = new URL(entry.s3PresignedUrl);
+            const ext = (url.pathname.match(/[^.]+$/) ?? [])[0];
+            const filetype = mime.getType(ext ?? '');
+            if (filetype?.includes('image')) {
+                type = 'image';
+            }
         }
-    }
+    });
 </script>
 
 <div>

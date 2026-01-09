@@ -7,15 +7,15 @@
 
     let { entry }: Props = $props();
 
-    let contentUrl: URL | undefined = $state();
-    try {
-        contentUrl = new URL(entry.content);
-    } catch (_error) {
-        console.log(
-            '(Not an issue) Content of the following clipboard entry is not an URL',
-            entry.id
-        );
-    }
+    let contentUrl: URL | undefined = $derived.by(() => {
+        try {
+            return new URL(entry.content);
+        } catch {
+            // Content couldn't be parsed as an URL, this is fine content is
+            // simply not an URL
+            return;
+        }
+    });
 </script>
 
 {#if contentUrl}
