@@ -65,7 +65,7 @@
         onUpdate();
     };
 
-    let isEnabled: 'on' | 'off' = watcher.archivalDateUnix ? 'off' : 'on';
+    let isEnabled: 'on' | 'off' = $derived(watcher.archivalDateUnix ? 'off' : 'on');
 </script>
 
 {#if $user}
