@@ -1,6 +1,6 @@
 <script lang="ts">
     import NoteComponent from './components/Note.svelte';
-    import type { Note } from '$lib/Notes/types';
+    import type { Note } from '$lib/Notes';
     import { pageMetadataStore } from '$lib/components/Header';
 
     pageMetadataStore.set({ name: 'Stuff I forget' });

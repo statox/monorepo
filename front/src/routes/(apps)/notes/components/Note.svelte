@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Markdown } from '$lib/components/Markdown';
-    import type { Note } from '$lib/Notes/types';
+    import type { Note } from '$lib/Notes';
     interface Props {
         note: Note;
     }
