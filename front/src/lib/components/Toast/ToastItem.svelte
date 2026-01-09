@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
-    import { tweened } from 'svelte/motion';
+    import { tweened, type Tweened } from 'svelte/motion';
     import { linear } from 'svelte/easing';
     import { toast } from './stores.js';
     import type { SvelteToastOptions } from './stores';
@@ -13,6 +13,7 @@
 
     let next = $state<number | undefined>(undefined);
     let prev = $state<number | undefined>(undefined);
+    let progress = $state<Tweened<number>>(tweened(0));
     let paused = $state(false);
     let unlisten: () => void;
 
@@ -20,10 +21,9 @@
     $effect(() => {
         next = item.initial;
         prev = item.initial;
+        // Initialize tweened - values captured at creation time (toast items don't change props)
+        progress = tweened(item.initial ?? 0, { duration: item.duration ?? 0, easing: linear });
     });
-
-    // Initialize tweened - values captured at creation time (toast items don't change props)
-    const progress = tweened(item.initial ?? 0, { duration: item.duration ?? 0, easing: linear });
 
     function close() {
         toast.pop(item.id);
