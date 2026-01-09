@@ -67,9 +67,9 @@
             metricUnitSymbol: '%'
         }
     };
-    const { graphName, metricUnitSymbol, metricProperty } = graphsProperties[graphType];
+    const { graphName, metricUnitSymbol, metricProperty } = $derived(graphsProperties[graphType]);
 
-    const allDates = Object.keys(histogramData).sort((a, b) => Number(a) - Number(b));
+    const allDates = $derived(Object.keys(histogramData).sort((a, b) => Number(a) - Number(b)));
 
     type AlphaMode = 'dark' | 'normal' | 'light';
     const getColorString = (sensorName: string, alphaMode: AlphaMode) => {
@@ -102,42 +102,46 @@
         pointHitRadius: 10
     };
 
-    const datasets = sensorNames.reduce((datasets, sensor) => {
-        const sensorMetadata = sensorsData.find((sensorData) => sensorData.sensorName === sensor);
-        const offset = metricProperty === 'tempCelsius' ? (sensorMetadata?.tempOffset ?? 0) : 0;
+    const datasets = $derived(
+        sensorNames.reduce((datasets, sensor) => {
+            const sensorMetadata = sensorsData.find(
+                (sensorData) => sensorData.sensorName === sensor
+            );
+            const offset = metricProperty === 'tempCelsius' ? (sensorMetadata?.tempOffset ?? 0) : 0;
 
-        const data = Object.keys(histogramData)
-            .filter((ts) => {
-                const key = ts as unknown as keyof HomeTrackerHistogramData;
-                return histogramData[key]?.[metricProperty]?.[sensor];
-            })
-            .map((ts) => {
-                const key = ts as unknown as keyof HomeTrackerHistogramData;
-                return {
-                    x: ts,
-                    y: (histogramData[key]?.[metricProperty]?.[sensor] || 0) + offset
-                };
-            });
+            const data = Object.keys(histogramData)
+                .filter((ts) => {
+                    const key = ts as unknown as keyof HomeTrackerHistogramData;
+                    return histogramData[key]?.[metricProperty]?.[sensor];
+                })
+                .map((ts) => {
+                    const key = ts as unknown as keyof HomeTrackerHistogramData;
+                    return {
+                        x: ts,
+                        y: (histogramData[key]?.[metricProperty]?.[sensor] || 0) + offset
+                    };
+                });
 
-        if (data.length) {
-            // @ts-expect-error TODO Fix that
-            datasets.push({
-                label: sensor,
-                data,
-                borderColor: getColorString(sensor, 'normal'),
-                pointBorderColor: getColorString(sensor, 'normal'),
-                pointBackgroundColor: getColorString(sensor, 'light'),
-                ...commonGraphSettings
-            });
-        }
+            if (data.length) {
+                // @ts-expect-error TODO Fix that
+                datasets.push({
+                    label: sensor,
+                    data,
+                    borderColor: getColorString(sensor, 'normal'),
+                    pointBorderColor: getColorString(sensor, 'normal'),
+                    pointBackgroundColor: getColorString(sensor, 'light'),
+                    ...commonGraphSettings
+                });
+            }
 
-        return datasets;
-    }, []);
+            return datasets;
+        }, [])
+    );
 
-    const dataTemp = {
+    const dataTemp = $derived({
         labels: allDates,
         datasets
-    };
+    });
 
     const hoverLinePlugin = {
         // LLM Generated. ChartJS plugin to display a white vertical line over the mouse position
@@ -165,7 +169,7 @@
         }
     };
 
-    const config: ChartConfiguration = {
+    const config: ChartConfiguration = $derived({
         type: 'line',
         data: dataTemp,
         options: {
@@ -188,7 +192,7 @@
             }
         },
         plugins: [hoverLinePlugin]
-    };
+    });
 
     let chartElement: HTMLCanvasElement | undefined = $state();
     onMount(() => {
