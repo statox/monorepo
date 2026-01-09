@@ -10,8 +10,8 @@
     }
 
     let { nbColumns, nbRows, board, winningCells, onMove }: Props = $props();
-    const rowsIndices = Array.from({ length: nbRows }, (_, i) => i);
-    const colsIndices = Array.from({ length: nbColumns }, (_, i) => i);
+    const rowsIndices = $derived(Array.from({ length: nbRows }, (_, i) => i));
+    const colsIndices = $derived(Array.from({ length: nbColumns }, (_, i) => i));
     let selectedColumn: number | null = $state(null);
 
     const isWinningCell = (row: number, col: number) => {
