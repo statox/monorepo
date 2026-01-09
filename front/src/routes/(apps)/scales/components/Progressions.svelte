@@ -1,8 +1,7 @@
 <script lang="ts">
     import { modals } from 'svelte-modals';
     import InfoModal from './InfoModal.svelte';
-    import { progressions, type Chord } from '$lib/Scales/progressions';
-    import { degreeToRoman, notes } from '$lib/Scales/utils';
+    import { degreeToRoman, notes, progressions, type Chord } from '$lib/Scales';
 
     interface Props {
         scaleNotes?: string[];

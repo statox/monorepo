@@ -2,7 +2,7 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
-    import { degreeToRoman, notes } from '$lib/Scales/utils';
+    import { degreeToRoman, notes } from '$lib/Scales';
 
     let _p5: p5 | undefined = $state();
     type LabelMode = 'name' | 'degree';
