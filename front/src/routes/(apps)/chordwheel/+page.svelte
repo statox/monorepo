@@ -3,15 +3,15 @@
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
     import InfoModal from './components/InfoModal.svelte';
+    import { wheel } from '$lib/ChordWheel/wheel-config';
+    import type { WheelTiles } from '$lib/ChordWheel/types';
     import {
         drawShape,
         drawShapeInformation,
         drawTile,
         makeWheelTiles,
-        rotateWheel,
-        wheel,
-        type WheelTiles
-    } from '$lib/ChordWheel';
+        rotateWheel
+    } from '$lib/ChordWheel/wheel-service';
     import { pageMetadataStore } from '$lib/components/Header';
 
     pageMetadataStore.set({
