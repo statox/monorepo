@@ -7,7 +7,7 @@
 
     let { note }: Props = $props();
 
-    const formattedTags = note.tags.map((t) => `[${t}]`).join('');
+    const formattedTags = $derived(note.tags.map((t) => `[${t}]`).join(''));
 </script>
 
 <details>
