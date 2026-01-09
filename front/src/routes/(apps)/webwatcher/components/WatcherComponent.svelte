@@ -21,17 +21,21 @@
         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
     };
 
-    const lastCheckDisplay =
+    const lastCheckDisplay = $derived(
         watcher.lastCheckDateUnix === 0
             ? 'Never checked before'
-            : formatTimestamp(watcher.lastCheckDateUnix || 0);
-    const lastContentChangeDisplay =
+            : formatTimestamp(watcher.lastCheckDateUnix || 0)
+    );
+    const lastContentChangeDisplay = $derived(
         watcher.lastUpdateDateUnix === 0
             ? 'Never changed'
-            : formatTimestamp(watcher.lastUpdateDateUnix || 0);
-    const humanCheckInterval = Duration.fromMillis(watcher.checkIntervalSeconds * 1000)
-        .rescale()
-        .toHuman();
+            : formatTimestamp(watcher.lastUpdateDateUnix || 0)
+    );
+    const humanCheckInterval = $derived(
+        Duration.fromMillis(watcher.checkIntervalSeconds * 1000)
+            .rescale()
+            .toHuman()
+    );
 
     const deleteWatcher = async () => {
         if (!watcher.id) {
