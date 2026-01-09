@@ -42,7 +42,7 @@
     }
 
     let { data }: Props = $props();
-    const { chords } = data;
+    const { chords } = $derived(data);
     let noticeMessages: NoticeItem[] = $state([]);
 
     const enqueueNoticeMessage = (item: NoticeItem) => {

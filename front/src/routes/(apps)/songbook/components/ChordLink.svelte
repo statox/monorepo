@@ -26,7 +26,7 @@
         }
     });
 
-    const text = (showArtist ? chord.artist + ' - ' : '') + chord.title;
+    const text = $derived((showArtist ? chord.artist + ' - ' : '') + chord.title);
 
     const formatLink = (chord: Chord) => {
         if (chord.type === 'doc') {

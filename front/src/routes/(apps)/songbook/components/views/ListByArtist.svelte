@@ -15,26 +15,40 @@
         [artist: string]: Chord[];
     };
 
-    const chordsByArtist = chords.reduce((byArtist, chord) => {
-        const artist = chord.artist;
-        if (!byArtist[artist]) {
-            byArtist[artist] = [];
-        }
-        byArtist[artist].push(chord);
-        return byArtist;
-    }, {} as ChordsByArtist);
-
-    const tags: { letter: string; tag: string }[] = [];
-    const artistsList = Object.keys(chordsByArtist)
-        .sort(alphaLowerSort)
-        .map((artist, index, list) => {
-            if (index === 0 || artist[0].toLowerCase() != list[index - 1][0].toLowerCase()) {
-                const tag = 'anchor_letter_' + artist[0];
-                tags.push({ letter: artist[0], tag });
-                return { name: artist, tag };
+    const chordsByArtist = $derived(
+        chords.reduce((byArtist, chord) => {
+            const artist = chord.artist;
+            if (!byArtist[artist]) {
+                byArtist[artist] = [];
             }
-            return { name: artist };
-        });
+            byArtist[artist].push(chord);
+            return byArtist;
+        }, {} as ChordsByArtist)
+    );
+
+    const tags: { letter: string; tag: string }[] = $derived(
+        Object.keys(chordsByArtist)
+            .sort(alphaLowerSort)
+            .map((artist, index, list) => {
+                if (index === 0 || artist[0].toLowerCase() != list[index - 1][0].toLowerCase()) {
+                    const tag = 'anchor_letter_' + artist[0];
+                    return { letter: artist[0], tag };
+                }
+            })
+            .filter((v) => v !== undefined)
+    );
+
+    const artistsList = $derived(
+        Object.keys(chordsByArtist)
+            .sort(alphaLowerSort)
+            .map((artist, index, list) => {
+                if (index === 0 || artist[0].toLowerCase() != list[index - 1][0].toLowerCase()) {
+                    const tag = 'anchor_letter_' + artist[0];
+                    return { name: artist, tag };
+                }
+                return { name: artist };
+            })
+    );
 
     let y: number = $state(0);
     let barTop: number = $state(0);

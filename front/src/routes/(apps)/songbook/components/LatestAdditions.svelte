@@ -25,25 +25,27 @@
         { label: 'one year ago', time: now - 12 * onemonth }
     ];
 
-    const chordsWithTags: ChordWithTags[] = chords
-        .filter((c) => c.creationDate)
-        .sort((a, b) => {
-            return b.creationDate - a.creationDate;
-        })
-        .map((chord, index, chords) => {
-            const r = {
-                ...chord
-            } as ChordWithTags;
-            if (index > 0) {
-                const prev = chords[index - 1];
-                for (const { time, label } of timeSteps) {
-                    if (prev.creationDate > time && chord.creationDate < time) {
-                        r.dateTag = label;
+    const chordsWithTags: ChordWithTags[] = $derived(
+        chords
+            .filter((c) => c.creationDate)
+            .sort((a, b) => {
+                return b.creationDate - a.creationDate;
+            })
+            .map((chord, index, chords) => {
+                const r = {
+                    ...chord
+                } as ChordWithTags;
+                if (index > 0) {
+                    const prev = chords[index - 1];
+                    for (const { time, label } of timeSteps) {
+                        if (prev.creationDate > time && chord.creationDate < time) {
+                            r.dateTag = label;
+                        }
                     }
                 }
-            }
-            return r;
-        });
+                return r;
+            })
+    );
 
     let nbLatestChords = 6;
     let latestChords: ChordWithTags[] = $state([]);

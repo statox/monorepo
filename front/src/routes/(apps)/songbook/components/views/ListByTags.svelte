@@ -17,36 +17,42 @@
 
     const chordsByTags: {
         [tag: string]: Chord[];
-    } = $state({});
+    } = $derived.by(() => {
+        const chordsByTags: {
+            [tag: string]: Chord[];
+        } = {};
 
-    for (const chord of chords) {
-        const tags = chord.tags;
-        tags.forEach((tag: string) => {
-            if (!chordsByTags[tag]) {
-                chordsByTags[tag] = [];
-            }
-            chordsByTags[tag].push(chord);
-        });
-    }
+        for (const chord of chords) {
+            const tags = chord.tags;
+            tags.forEach((tag: string) => {
+                if (!chordsByTags[tag]) {
+                    chordsByTags[tag] = [];
+                }
+                chordsByTags[tag].push(chord);
+            });
+        }
 
-    Object.keys(chordsByTags).forEach((tag) => {
-        chordsByTags[tag].sort((a, b) => {
-            const artisteA = a.artist.toLowerCase();
-            const artisteB = b.artist.toLowerCase();
-            const titleA = a.title.toLowerCase();
-            const titleB = b.title.toLowerCase();
+        Object.keys(chordsByTags).forEach((tag) => {
+            chordsByTags[tag].sort((a, b) => {
+                const artisteA = a.artist.toLowerCase();
+                const artisteB = b.artist.toLowerCase();
+                const titleA = a.title.toLowerCase();
+                const titleB = b.title.toLowerCase();
 
-            if (artisteA < artisteB) {
-                return -1;
-            }
-            if (artisteA > artisteB) {
+                if (artisteA < artisteB) {
+                    return -1;
+                }
+                if (artisteA > artisteB) {
+                    return 1;
+                }
+                if (titleA < titleB) {
+                    return -1;
+                }
                 return 1;
-            }
-            if (titleA < titleB) {
-                return -1;
-            }
-            return 1;
+            });
         });
+
+        return chordsByTags;
     });
 </script>
 

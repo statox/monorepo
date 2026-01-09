@@ -16,7 +16,7 @@
     }
 
     let { data }: Props = $props();
-    let { chords } = $state(data);
+    let { chords } = $derived(data);
     let content = $derived({
         json: chords
     });
