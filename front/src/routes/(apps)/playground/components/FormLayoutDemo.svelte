@@ -38,7 +38,7 @@
             noticeMessages.push({ level: 'error', header: 'Email must be valid' });
         }
         if (!description) {
-            noticeMessages.push({ level: 'warning', header: 'Description is recommended' });
+            noticeMessages.push({ level: 'info', header: 'Description is recommended' });
         }
 
         if (noticeMessages.filter((m) => m.level === 'error').length) {
