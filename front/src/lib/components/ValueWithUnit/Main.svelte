@@ -10,11 +10,15 @@
     let intPart = $state('-');
     let floatPart = $state('');
 
-    if (value !== undefined) {
+    $effect(() => {
+        if (value === undefined) {
+            return;
+        }
+
         const valueAsString = value?.toFixed(precision);
         intPart = valueAsString.split('.')[0];
         floatPart = valueAsString.split('.')[1] || '';
-    }
+    });
 </script>
 
 <span class="value">
