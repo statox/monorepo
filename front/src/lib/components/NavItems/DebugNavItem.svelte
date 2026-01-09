@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { PUBLIC_API_URL, PUBLIC_ENVIRONMENT } from '$env/static/public';
+    import { PUBLIC_ENVIRONMENT } from '$env/static/public';
+    import { getApiUrl } from '$lib/helpers';
     import { onMount } from 'svelte';
 
-    const isLocal = PUBLIC_API_URL.includes('localhost');
+    const apiUrl = getApiUrl();
+    const isLocal = apiUrl.includes('localhost');
     const symbol = isLocal ? '💻' : '🌍';
     const label = isLocal ? 'Local' : 'Remote';
     let color = $state('#000000'); // Default in case we can't get it from the CSS

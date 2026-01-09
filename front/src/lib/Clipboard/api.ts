@@ -1,5 +1,5 @@
 import { DateTime, type DurationUnit } from 'luxon';
-import { PUBLIC_API_URL } from '$env/static/public';
+import { getApiUrl } from '$lib/helpers';
 import type { ClipboardEntryEnriched, ExpirationStatus } from './types';
 import superagent from 'superagent';
 import { client2 } from '$lib/api';
@@ -83,7 +83,7 @@ export const uploadToClipboard = async (data: {
     ttlSeconds: number;
     isPublic: boolean;
 }) => {
-    const url = PUBLIC_API_URL + '/clipboard/addEntry';
+    const url = getApiUrl() + '/clipboard/addEntry';
 
     if (data.file) {
         const request = superagent.post(url).withCredentials();

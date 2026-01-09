@@ -1,6 +1,6 @@
 <script lang="ts">
     import { toast } from '$lib/components/Toast';
-    import { PUBLIC_API_URL } from '$env/static/public';
+    import { getApiUrl } from '$lib/helpers';
     import { type ReactorEntryForPublic } from '$lib/Reactor';
 
     interface Props {
@@ -11,6 +11,8 @@
     const pageSize = 10;
     let page = $state(1);
     let searchString = $state('');
+
+    const apiUrl = getApiUrl();
 
     const filteredReactions: ReactorEntryForPublic[] = $derived(
         reactions
@@ -40,7 +42,7 @@
     };
 
     const copyEntryUrlToClipboard = (entry: ReactorEntryForPublic) => {
-        navigator.clipboard.writeText(PUBLIC_API_URL + entry.uri);
+        navigator.clipboard.writeText(apiUrl + entry.uri);
         toast.push('<i class="fas fa-check"></i> Link copied to clipboard', {
             duration: 1000,
             theme: {
@@ -63,6 +65,7 @@
 
 <div class="container">
     {#each filteredReactions as entry}
+        {@const entryUrl = apiUrl + entry.uri}
         <div>
             <div><b>{entry.name}</b></div>
             <div>
@@ -78,22 +81,13 @@
             </div>
         </div>
         <div>
-            <a
-                href={PUBLIC_API_URL + entry.uri}
-                download={entry.name}
-                rel="noopener noreferrer"
-                target="blank"
-            >
+            <a href={entryUrl} download={entry.name} rel="noopener noreferrer" target="blank">
                 {#if isVideoEntry(entry)}
                     <!-- svelte-ignore a11y_media_has_caption -->
-                    <video
-                        class="medium-margin"
-                        style="max-width: 100%"
-                        controls
-                        src={PUBLIC_API_URL + entry.uri}
+                    <video class="medium-margin" style="max-width: 100%" controls src={entryUrl}
                     ></video>
                 {:else}
-                    <img class="medium-margin" src={PUBLIC_API_URL + entry.uri} alt={entry.name} />
+                    <img class="medium-margin" src={entryUrl} alt={entry.name} />
                 {/if}
             </a>
         </div>

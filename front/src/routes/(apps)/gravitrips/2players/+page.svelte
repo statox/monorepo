@@ -2,7 +2,7 @@
     import { onDestroy } from 'svelte';
     import { type Board, BoardState } from '../gravitrips';
     import BoardComp from '../components/Board.svelte';
-    import { PUBLIC_API_URL } from '$env/static/public';
+    import { getApiUrl } from '$lib/helpers';
     import { goto } from '$app/navigation';
     import { client2 } from '$lib/api';
     import { pageMetadataStore } from '$lib/components/Header';
@@ -43,7 +43,7 @@
 
     // Note that we replace only "http" even for the "https" prod endpoint
     // because in prod we want to use wss://
-    const WS_SERVER_URL = PUBLIC_API_URL.replace(/^http?/, 'ws');
+    const WS_SERVER_URL = getApiUrl().replace(/^http?/, 'ws');
 
     onDestroy(() => {
         if (!socket) {

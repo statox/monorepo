@@ -41,7 +41,7 @@ A script in `svelte.config.js` copies the file corresponding to the environment 
 The variables can then be read from components with:
 
 ```
-import { PUBLIC_API_URL } from '$env/static/public';
+import { PUBLIC_ENVIRONMENT } from '$env/static/public';
 ```
 
 When adding a new value run `npx svelte-kit sync` to avoid errors like
