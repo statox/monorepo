@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import type { ChordData } from '$lib/Songbook/types';
+import type { ChordMetadata } from '$lib/Songbook/types';
 
-export const visitCountsStore = writable<Map<string, ChordData>>();
+export const visitCountsStore = writable<Map<string, ChordMetadata>>();
 
 /*
  * The store failedVisitCountsInitValue is updated in 2 places:

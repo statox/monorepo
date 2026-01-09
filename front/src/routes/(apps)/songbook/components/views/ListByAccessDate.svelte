@@ -1,6 +1,6 @@
 <script lang="ts">
     import { visitCountsStore } from '../../store';
-    import type { Chord, ChordData, Filters } from '$lib/Songbook/types';
+    import type { Chord, ChordMetadata, Filters } from '$lib/Songbook/types';
     import ChordLink from '../ChordLink.svelte';
 
     interface Props {
@@ -11,7 +11,7 @@
 
     let { searchString, chords = $bindable(), filters }: Props = $props();
 
-    let chordsData: Map<string, ChordData> | undefined = $state();
+    let chordsData: Map<string, ChordMetadata> | undefined = $state();
     visitCountsStore.subscribe((visitCountsMap) => {
         if (!visitCountsMap) {
             return;

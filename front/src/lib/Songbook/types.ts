@@ -14,7 +14,7 @@ export type Chord = RawChord & {
     type: FilterType;
 };
 
-export type ChordData = {
+export type ChordMetadata = {
     count: number;
     lastAccessDateUnix: number;
 };
