@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
     import { personalTrackerPassword } from '$lib/PersonalTracker';
-    import { getAllEvents } from '$lib/PersonalTracker/api';
+    import { getAllEvents } from '$lib/PersonalTracker';
     import { getUserKey, decryptData } from '$lib/encryption';
 
     let password = $state('');

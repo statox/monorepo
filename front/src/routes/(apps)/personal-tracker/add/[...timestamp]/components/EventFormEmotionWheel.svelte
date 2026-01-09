@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { emotionWheel } from '$lib/PersonalTracker/emotionWheel';
+    import { emotionWheel } from '$lib/PersonalTracker';
     import { SvelteSet } from 'svelte/reactivity';
 
     interface Props {
