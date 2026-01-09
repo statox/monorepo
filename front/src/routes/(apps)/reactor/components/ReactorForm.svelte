@@ -7,7 +7,7 @@
         handleFormError
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
-    import { uploadToReactor } from '$lib/Reactor/api';
+    import { uploadToReactor } from '$lib/Reactor';
 
     interface Props {
         onUpload: () => void;

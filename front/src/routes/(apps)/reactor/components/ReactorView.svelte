@@ -1,7 +1,7 @@
 <script lang="ts">
     import { toast } from '$lib/components/Toast';
     import { PUBLIC_API_URL } from '$env/static/public';
-    import { type ReactorEntryForPublic } from '$lib/Reactor/types';
+    import { type ReactorEntryForPublic } from '$lib/Reactor';
 
     interface Props {
         reactions: ReactorEntryForPublic[];

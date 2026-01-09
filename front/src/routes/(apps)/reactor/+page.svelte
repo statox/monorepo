@@ -1,7 +1,7 @@
 <script lang="ts">
     import { AuthGuard } from '$lib/components/AuthGuard';
     import { HeadIOS } from '$lib/components/HeadIOS';
-    import { getReactionsForPublic } from '$lib/Reactor/api';
+    import { getReactionsForPublic } from '$lib/Reactor';
     import ReactorView from './components/ReactorView.svelte';
     import { pageMetadataStore } from '$lib/components/Header';
     import { goto } from '$app/navigation';
