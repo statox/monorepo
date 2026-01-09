@@ -10,13 +10,14 @@
 
     let { oldValue, newValue, oldTimestamp, newTimestamp }: Props = $props();
 
-    const trendValue = newValue - oldValue;
-    const trendValueStr = trendValue.toFixed(1);
-    const trendDuration = Duration.fromMillis(newTimestamp - oldTimestamp);
-    const trendDurationStr =
+    const trendValue = $derived(newValue - oldValue);
+    const trendValueStr = $derived(trendValue.toFixed(1));
+    const trendDuration = $derived(Duration.fromMillis(newTimestamp - oldTimestamp));
+    const trendDurationStr = $derived(
         trendDuration.as('hours') < 2
             ? trendDuration.toFormat("m'm'")
-            : trendDuration.toFormat("hh'h'mm'm'");
+            : trendDuration.toFormat("hh'h'mm'm'")
+    );
 
     const getTrendIconClass = () => {
         if (Math.abs(trendValue) < 0.2) {
