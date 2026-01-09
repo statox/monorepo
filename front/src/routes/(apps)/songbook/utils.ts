@@ -1,4 +1,4 @@
-import type { FilterType } from '$lib/Songbook/types';
+import type { FilterType } from '$lib/Songbook';
 
 export const getTypeIconClass = (type: FilterType) => {
     if (type === 'doc') {

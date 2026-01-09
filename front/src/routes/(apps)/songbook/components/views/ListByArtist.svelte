@@ -1,7 +1,7 @@
 <script lang="ts">
     import { alphaLowerSort } from '$lib/helpers';
     import ChordLink from '../ChordLink.svelte';
-    import type { Chord, Filters } from '$lib/Songbook/types';
+    import type { Chord, Filters } from '$lib/Songbook';
 
     interface Props {
         searchString?: string;

@@ -7,8 +7,7 @@
         showSuccessToast
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
-    import type { RawChord } from '$lib/Songbook/types';
-    import { uploadNewChord } from '$lib/Songbook/service';
+    import { uploadNewChord, type RawChord } from '$lib/Songbook';
 
     interface Props {
         onUpload: () => void;

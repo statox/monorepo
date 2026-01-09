@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { ChordMetadata } from '$lib/Songbook/types';
+import type { ChordMetadata } from '$lib/Songbook';
 
 export const visitCountsStore = writable<Map<string, ChordMetadata>>();
 

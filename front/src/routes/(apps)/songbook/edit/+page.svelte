@@ -4,8 +4,7 @@
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
-    import type { RawChord } from '$lib/Songbook/types';
-    import { uploadChords } from '$lib/Songbook/api';
+    import { uploadChords, type RawChord } from '$lib/Songbook';
 
     import { goto } from '$app/navigation';
     import { Notice } from '$lib/components/Notice';

@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { getLinksChecks } from '$lib/Songbook/api';
-    import type { LinksChecks } from '$lib/Songbook/types';
+    import { getLinksChecks, type LinksChecks } from '$lib/Songbook';
     import type { ModalProps } from 'svelte-modals';
 
     let { isOpen, close }: ModalProps = $props();

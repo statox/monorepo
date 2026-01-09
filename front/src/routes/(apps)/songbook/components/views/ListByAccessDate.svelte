@@ -1,6 +1,6 @@
 <script lang="ts">
     import { visitCountsStore } from '../../store';
-    import type { Chord, ChordMetadata, Filters } from '$lib/Songbook/types';
+    import type { Chord, ChordMetadata, Filters } from '$lib/Songbook';
     import ChordLink from '../ChordLink.svelte';
 
     interface Props {

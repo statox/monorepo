@@ -1,5 +1,12 @@
 <script lang="ts">
-    import { getLinksVisitsCount, uploadLinkVisit } from '$lib/Songbook/api';
+    import {
+        getLinksVisitsCount,
+        uploadLinkVisit,
+        type Chord,
+        type ChordVisitItem,
+        type Filters,
+        type FilterType
+    } from '$lib/Songbook';
     import { modals } from 'svelte-modals';
     import { BackToTop } from '$lib/components/BackToTop';
     import { HeadIOS } from '$lib/components/HeadIOS';
@@ -14,7 +21,6 @@
     import ChordsChecks from './components/ChordsChecks.svelte';
     import LatestAdditions from './components/LatestAdditions.svelte';
     import RandomSongs from './components/RandomSongs.svelte';
-    import type { Chord, ChordVisitItem, Filters, FilterType } from '$lib/Songbook/types';
     import { onMount } from 'svelte';
     import { visitCountsStore, failedVisitCounts } from './store';
     import { getTypeIconClass } from './utils';

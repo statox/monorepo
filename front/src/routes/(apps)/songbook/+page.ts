@@ -1,5 +1,4 @@
-import { getSongbook } from '$lib/Songbook/api';
-import type { Chord } from '$lib/Songbook/types';
+import { getSongbook, type Chord } from '$lib/Songbook';
 import type { PageLoad } from './$types';
 
 export const ssr = false; // Avoid calling API's /chords/getAll at build time

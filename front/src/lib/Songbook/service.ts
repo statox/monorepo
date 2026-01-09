@@ -2,7 +2,7 @@ import Ajv from 'ajv';
 import type { FromSchema } from 'json-schema-to-ts';
 import { ApiError } from '$lib/api';
 import { toast } from '$lib/components/Toast';
-import { getChords, uploadChords } from '$lib/Songbook/api';
+import { getChords, uploadChords } from '$lib/Songbook';
 
 const chordSchema = {
     type: 'object',

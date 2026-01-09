@@ -4,10 +4,9 @@
     import { get } from 'svelte/store';
     import { toast } from '$lib/components/Toast';
     import { getTypeIconClass } from '../utils';
-    import type { Chord } from '$lib/Songbook/types';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
-    import { uploadLinkVisit } from '$lib/Songbook/api';
+    import { uploadLinkVisit, type Chord } from '$lib/Songbook';
     interface Props {
         chord: Chord;
         showArtist?: boolean;
