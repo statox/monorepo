@@ -16,7 +16,7 @@
 
     let { sensor }: Props = $props();
 
-    const isInAlert = sensor.lastAlertDateUnix != null;
+    const isInAlert = $derived(sensor.lastAlertDateUnix != null);
 
     let displayMode: 'readings' | 'metadata' = $state('readings');
     const changeDisplayMode = () => {
@@ -31,9 +31,9 @@
     let formatedLastLogTimestamp = $state('NA');
     let formatedLastAlertTimestamp = $state('NA');
 
-    const expectedNextLogTimestamp = sensor.lastSyncDateUnix + sensor.sleepTimeSec;
+    const expectedNextLogTimestamp = $derived(sensor.lastSyncDateUnix + sensor.sleepTimeSec);
     let nowSec = DateTime.now().toSeconds();
-    let nextLogProgress = $state(1 - (expectedNextLogTimestamp - nowSec) / sensor.sleepTimeSec);
+    let nextLogProgress = $derived(1 - (expectedNextLogTimestamp - nowSec) / sensor.sleepTimeSec);
 
     let nextLogProgressInterval = setInterval(() => {
         nowSec = DateTime.now().toSeconds();
