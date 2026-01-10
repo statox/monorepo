@@ -1,0 +1,71 @@
+# Basic workflow to automatically build and deploy it to GitHub Pages
+#
+# Generate a new token to deploy:
+# Account: Settings > Developer settings > Personal access tokens > Fine grained tokens
+# Name: project-name-deploy
+# Expiration: Don't do dumb things
+# Repository access: only select repositories
+# Repository permissions:
+#   Read access to metadata
+#   Read and Write access to pages
+#
+# Add the ACCESS_TOKEN to the github repo:
+# Repository: Settings > Secrets and variables > action > New repository secret
+#
+# Change the base url in svelte.config.js
+#
+# In the repository enable pages
+# Settings > Pages
+# Deploy from a branch: gh-pages, directory: / (root)
+
+name: Deploy to GitHub Pages
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Cache node and npm
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
+          cache: 'npm'
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v5
+        env:
+          cache-name: cache-node-modules
+        with:
+          # caching node_modules
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install Dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+        env:
+          ENV: prod
+          PUBLIC_GITHUB_COMMIT_SHA: ${{ github.event.head_commit.id }}
+          PUBLIC_GITHUB_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          PUBLIC_GITHUB_COMMIT_URL: ${{ github.event.head_commit.url }}
+          PUBLIC_GITHUB_RUN_ID: ${{ github.run_id }}
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          BRANCH: gh-pages
+          FOLDER: docs
