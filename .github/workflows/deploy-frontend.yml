@@ -66,7 +66,6 @@ jobs:
         working-directory: front
         run: |
           npm install
-          npm run build # This is dumb but the first time we run build we don't have .svelte-kit
           npm run build
         env:
           ENV: prod
