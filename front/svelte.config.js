@@ -26,8 +26,6 @@ const config = {
             assets: 'docs',
             precompress: false,
             fallback: '404.html',
-            domain: '',
-            jekyll: false
         }),
         alias: {
             $config: 'src/config',
