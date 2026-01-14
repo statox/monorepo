@@ -1,8 +1,0 @@
-{
-    "spec": "dist/tests/framework/**/*.test.js",
-    "require": "dist/tests/helpers/mocha/frameworkMochaWrapper.js",
-    "exit": true,
-    "timeout": 5000,
-    "parallel": false,
-    "jobs": 1
-}

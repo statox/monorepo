@@ -1,0 +1,1 @@
+export const env={"PUBLIC_API_URL_PROD":"https://api.statox.fr","PUBLIC_API_URL_LOCAL":"https://api.statox.fr","PUBLIC_BLOG_URL":"https://statox.fr","PUBLIC_ENVIRONMENT":"prod","PUBLIC_GITHUB_RUN_ID":"21005113849","PUBLIC_GITHUB_COMMIT_URL":"","PUBLIC_GITHUB_COMMIT_MESSAGE":"","PUBLIC_GITHUB_COMMIT_SHA":""}

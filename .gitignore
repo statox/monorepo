@@ -1,9 +1,0 @@
-# Backup directories
-*.backup/
-
-# Claude CLI
-.claude/
-
-# Docker environment files
-back/.env.docker
-front/.env.docker
