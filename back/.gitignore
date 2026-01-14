@@ -1,0 +1,18 @@
+# Node build artifacts
+node_modules
+npm-debug.log
+
+# Tests reports directory
+ctrf
+
+# Local development
+*.env
+*.dev
+.DS_Store
+
+# This file is regenerated at each app restart
+src/views/openapi_json.mustache
+
+index-test.ts
+chords_check_results.json
+src/tools/tmp.sql

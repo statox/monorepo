@@ -1,0 +1,38 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build output (will be generated during build)
+docs
+
+# Development files
+.git
+.gitignore
+githooks
+.svelte-kit
+
+# IDE
+.vscode
+.idea
+
+# Environment files (will be copied during build)
+.env
+
+# Documentation
+README.md
+CLAUDE.md
+
+# CI/CD
+.github
+
+# Misc
+.prettierignore
+.prettierrc
+eslint.config.js
+tsconfig.json
+vite.config.ts
+svelte.config.js
+
+# Development certificates
+localhost.crt
+localhost.key

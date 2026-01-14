@@ -1,0 +1,52 @@
+import { FromSchema } from 'json-schema-to-ts';
+import { EmptyInput, GetRoute } from '../types.js';
+import { getWatchedContent } from '../../modules/webWatcher/index.js';
+
+const handler = async () => {
+    return getWatchedContent();
+};
+
+const outputSchema = {
+    type: 'array',
+    items: {
+        type: 'object',
+        properties: {
+            id: { type: 'number' },
+            name: { type: 'string' },
+            notificationMessage: { type: 'string' },
+            url: { type: 'string' },
+            watchType: { type: 'string', enum: ['CSS', 'HASH'] },
+            cssSelector: { type: 'string' },
+            lastContent: { type: 'string' },
+            lastCheckDateUnix: { type: ['number', 'null'] },
+            lastUpdateDateUnix: { type: ['number', 'null'] },
+            archivalDateUnix: { type: ['number', 'null'] },
+            checkIntervalSeconds: { type: 'number' },
+            lastErrorDateUnix: { type: ['number', 'null'] },
+            lastErrorMessage: { type: ['string', 'null'] }
+        },
+        required: [
+            'id',
+            'name',
+            'notificationMessage',
+            'url',
+            'watchType',
+            'lastContent',
+            'lastCheckDateUnix',
+            'lastUpdateDateUnix',
+            'archivalDateUnix',
+            'checkIntervalSeconds',
+            'lastErrorDateUnix',
+            'lastErrorMessage'
+        ],
+        additionalProperties: false
+    }
+} as const;
+
+export const route: GetRoute<EmptyInput, FromSchema<typeof outputSchema>> = {
+    method: 'get',
+    path: '/webWatcher/getAllWatchers',
+    handler,
+    authentication: 'none',
+    outputSchema
+};

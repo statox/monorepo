@@ -1,0 +1,150 @@
+import request from 'supertest';
+import { app } from '../../../src/app.js';
+import { assert } from 'chai';
+import { th } from '../../helpers/index.js';
+
+describe('reactor/addEntry', () => {
+    it('should fail on duplicate entry', async () => {
+        await th.mysql.fixture({
+            Reactor: [
+                {
+                    id: 1,
+                    name: 'A cool entry',
+                    tags: 'tag1,tag2',
+                    creationDateUnix: 10,
+                    linkId: 'aabbccdd',
+                    s3Key: 'aabbccdd_A cool entry'
+                }
+            ]
+        });
+
+        await request(app)
+            .post('/reactor/addEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('content-type', 'multipart/form-data')
+            .field('name', 'A cool entry')
+            .field('commaSeparatedTags', 'tag1,tag2')
+            .attach('file', 'tests/assets/glider.png')
+            .expect(400)
+            .then((response) => {
+                assert.equal(response.text, '{"message":"ITEM_ALREADY_EXISTS"}');
+            });
+
+        await th.mysql.checkContains({
+            Reactor: [
+                {
+                    name: 'A cool entry',
+                    tags: 'tag1,tag2',
+                    creationDateUnix: 10,
+                    linkId: 'aabbccdd',
+                    s3Key: 'aabbccdd_A cool entry'
+                }
+            ]
+        });
+
+        th.s3.checkNbCalls({ nbCalls: 0 });
+    });
+
+    it('Failing S3 command should not commit changes in the DB', async () => {
+        await th.mysql.fixture({
+            Reactor: []
+        });
+
+        await request(app)
+            .post('/reactor/addEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('content-type', 'multipart/form-data')
+            .field('name', 'should_fail')
+            .field('commaSeparatedTags', 'tag1,tag2')
+            .attach('file', 'tests/assets/glider.png')
+            .expect(500)
+            .then((response) => {
+                assert.equal(response.text, '{"message":"Internal Server Error"}');
+            });
+
+        th.s3.checkNbCalls({ nbCalls: 1 });
+        await th.mysql.checkTableLength('Reactor', 0);
+        await th.mysql.checkTableLength('S3Files', 0);
+    });
+
+    it('should create new entry and upload the file to S3', async () => {
+        await request(app)
+            .post('/reactor/addEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('content-type', 'multipart/form-data')
+            .field('name', 'entry name')
+            .field('commaSeparatedTags', 'tag1,tag2')
+            .attach('file', 'tests/assets/glider.png')
+            .expect(200);
+
+        th.s3.checkNbCalls({ nbCalls: 1 });
+        th.s3.checkCall({
+            commandType: 'PutObject',
+            input: {
+                Bucket: 'reactor',
+                ContentType: 'image/png'
+            }
+        });
+
+        await th.mysql.checkContains({
+            Reactor: [
+                {
+                    name: 'entry name',
+                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    tags: (value: string) => {
+                        const parsedTags = JSON.parse(value);
+                        assert.deepEqual(parsedTags, ['tag1', 'tag2']);
+                        return true;
+                    }
+                }
+            ],
+            S3Files: [
+                {
+                    bucket: 'reactor',
+                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    creationDateUnix: th.mysql.aroundNowSec
+                }
+            ]
+        });
+    });
+
+    it('should create entry with empty tags array if no tags are provided', async () => {
+        await request(app)
+            .post('/reactor/addEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('content-type', 'multipart/form-data')
+            .field('name', 'entry name')
+            .field('commaSeparatedTags', '')
+            .attach('file', 'tests/assets/glider.png')
+            .expect(200);
+
+        th.s3.checkNbCalls({ nbCalls: 1 });
+        th.s3.checkCall({
+            commandType: 'PutObject',
+            input: {
+                Bucket: 'reactor',
+                ContentType: 'image/png'
+            }
+        });
+
+        await th.mysql.checkContains({
+            Reactor: [
+                {
+                    name: 'entry name',
+                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    tags: (value: string) => {
+                        assert.equal(value, '[]');
+                        return true;
+                    }
+                }
+            ],
+            S3Files: [
+                {
+                    bucket: 'reactor',
+                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    creationDateUnix: th.mysql.aroundNowSec
+                }
+            ]
+        });
+    });
+});

@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - ENV=production
+      - TZ=UTC
+      - NODE_ENV=production
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=db
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - SESSION_SECRET=local-dev-secret-change-in-prod
+      # LocalStack S3
+      - R2_ENDPOINT=http://localstack:4566
+      # Elasticsearch
+      - ELK_HOST=elk
+      - ELK_PORT=9200
+    env_file:
+      - ./back/.env.docker
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+      elk:
+        condition: service_started
+    networks:
+      - statox-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - statox-network
+    restart: unless-stopped
+
+  # MySQL database (from back/src/tools/docker-compose.yml)
+  db:
+    container_name: apistatox.mysql
+    image: mysql:8.0.33
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - '127.0.0.1:23306:3306'
+    volumes:
+      - ./back/src/tools/tables:/docker-entrypoint-initdb.d:ro
+    # Store the data in memory for faster development (comment out for persistent data)
+    tmpfs:
+      - /var/lib/mysql:rw
+    networks:
+      - statox-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # LocalStack S3 (from back/src/tools/docker-compose.yml)
+  localstack:
+    container_name: apistatox.localstack
+    image: docker.io/localstack/localstack
+    ports:
+      - '127.0.0.1:24566:4566'
+      - '127.0.0.1:24571:4571'
+    environment:
+      - SERVICES=s3
+    networks:
+      - statox-network
+    restart: unless-stopped
+
+  # Elasticsearch (from back/src/tools/docker-compose.yml)
+  elk:
+    container_name: apistatox.elk
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.2
+    tmpfs:
+      - /usr/share/elasticsearch/data:rw
+    ports:
+      - '127.0.0.1:29200:9200'
+    environment:
+      - node.name=es01
+      - cluster.name=apistatox
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=foo
+      - bootstrap.memory_lock=true
+      - xpack.ml.enabled=false
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - xpack.license.self_generated.type=basic
+    mem_limit: 1g
+    networks:
+      - statox-network
+    restart: unless-stopped
+
+networks:
+  statox-network:
+    driver: bridge
