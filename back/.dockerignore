@@ -1,0 +1,51 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build output (will be generated during build)
+dist
+
+# Tests
+tests
+*.test.ts
+*.test.js
+.mocha
+
+# Development files
+.git
+.gitignore
+githooks
+Session.vim
+
+# IDE
+.vscode
+.idea
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Documentation
+README.md
+DEV.md
+CLAUDE.md
+
+# Test data
+chords_check_results.json
+index-test.ts
+test-suncalc.ts
+ctrf
+
+# CI/CD
+.github
+
+# Heroku specific
+Procfile
+app.json
+
+# Misc
+.prettierignore
+.prettierrc
+eslint.config.mjs
+tsconfig.json

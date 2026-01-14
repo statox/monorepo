@@ -1,0 +1,90 @@
+<script lang="ts">
+    import { getMoonPhasePictureURL } from '$lib/HomeTracker';
+
+    let { moonState, sunState } = $props();
+</script>
+
+<div class="container">
+    <div class="content">
+        <div class="data">
+            <span><i class="fas fa-moon" aria-hidden="true"></i></span>
+            <span></span>
+
+            <span>Moon phase</span>
+            <span>{moonState.moonPhaseFr}</span>
+
+            <span>Moon age</span>
+            <span>
+                {moonState.lunarAge.toFixed(1)} days ({(moonState.lunarAgePercent * 100).toFixed(
+                    0
+                )}%)
+            </span>
+
+            <span>Moon visible</span>
+            <span>
+                {moonState.moonVisibilityWindow[0]} - {moonState.moonVisibilityWindow[1]}
+            </span>
+
+            <span><i class="fas fa-sun" aria-hidden="true"></i></span>
+            <span></span>
+
+            <span>Sun rise/set</span>
+            <span>
+                {sunState.sunrise.toFormat('HH:mm')} - {sunState.sunset.toFormat('HH:mm')}
+            </span>
+
+            <span>DayLength</span>
+            <span>
+                {sunState.dayLength.toFormat('h:m')}
+                ({sunState.dayLengthDiff > 0 ? '+' : ''}{sunState.dayLengthDiff.toFormat('m:s')})
+            </span>
+
+            <span>Solar noon</span>
+            <span>
+                {sunState.solarNoon.toFormat('HH:mm')}
+            </span>
+
+            <span>Golden hour</span>
+            <span>
+                {sunState.goldenHour.toFormat('HH:mm')}
+            </span>
+        </div>
+        <img
+            class="phase-img"
+            alt={moonState.moonPhase}
+            src={getMoonPhasePictureURL(moonState.moonPhase)}
+        />
+    </div>
+</div>
+
+<style>
+    .container {
+        padding: 0.3em;
+
+        display: flex;
+        flex-flow: column;
+        gap: 1em;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        gap: 1em;
+    }
+
+    .data {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(8, 2em);
+
+        /* row-gap: 1em; */
+    }
+
+    .phase-img {
+        max-width: 20vw;
+        min-width: 200px;
+        border-radius: 10px;
+    }
+</style>

@@ -1,0 +1,72 @@
+/* overrides of newcss which should probably be merged in the original file */
+body {
+    max-width: 2000px;
+}
+
+@media screen and (max-width: 600px) {
+    /* Experiment started when working on p5-terrain
+     * TODO: Make sure it doesn't break anything
+     */
+    body {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+}
+
+/* Remove underline added by newcss under links */
+a {
+    text-decoration: none;
+}
+
+/* Limit the size of code snippets */
+pre {
+    max-height: 50rem;
+}
+
+/* Center all images */
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul {
+    list-style-type: circle;
+}
+
+header {
+    padding-bottom: 0.1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+button.selected {
+    background: var(--nc-lk-2);
+    color: var(--nc-lk-tx);
+}
+
+.button:focus,
+.button:enabled:hover,
+button:focus,
+button:enabled:hover,
+input[type='submit']:focus,
+input[type='submit']:enabled:hover,
+input[type='reset']:focus,
+input[type='reset']:enabled:hover,
+input[type='button']:focus,
+input[type='button']:enabled:hover {
+    background: var(--nc-lk-2);
+    color: var(--nc-lk-tx);
+}
+
+input {
+    /* On iOS Safari zooms the page if the font-size is smaller than 16px */
+    font-size: 16px;
+}
+
+select {
+    /* On iOS Safari zooms the page if the font-size is smaller than 16px */
+    font-size: 16px;
+}

@@ -1,0 +1,45 @@
+<script lang="ts">
+    import { user } from '$lib/auth';
+    import { AuthGuard } from '$lib/components/AuthGuard';
+    import { HeadIOS } from '$lib/components/HeadIOS';
+    import { pageMetadataStore } from '$lib/components/Header';
+    import { listRecipes } from '$lib/Cookbook';
+    import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
+
+    pageMetadataStore.set({ name: 'Cookbook', showAuthInHeader: true });
+
+    const getRecipes = () => {
+        if ($user) {
+            return listRecipes();
+        }
+        return { recipes: [] };
+    };
+    let recipesApi = $state(getRecipes());
+
+    const fetchData = () => (recipesApi = getRecipes());
+    onMount(() => {
+        fetchData();
+    });
+</script>
+
+<HeadIOS title="Cookbook" description="Recipes and food" />
+
+<AuthGuard message="Login to access the recipes" requiredScope="admin">
+    <button onclick={() => goto('/cookbook/add')}> Add a new recipe </button>
+
+    <div>
+        {#await recipesApi}
+            <p>Loading data</p>
+        {:then { recipes }}
+            <ul>
+                {#each recipes as recipe}
+                    <li><a href={'/cookbook/recipe/' + recipe.id}>{recipe.name}</a></li>
+                {/each}
+            </ul>
+        {:catch error}
+            <p>Something went wrong</p>
+            <p>{JSON.stringify(error)}</p>
+        {/await}
+    </div>
+</AuthGuard>
