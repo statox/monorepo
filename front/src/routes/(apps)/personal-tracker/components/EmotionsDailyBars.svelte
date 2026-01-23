@@ -4,9 +4,11 @@
 
     interface Props {
         events: PersonalTrackerEvent[];
+        hoveredTimestamp: number | null;
+        onHoverChange: (timestamp: number | null) => void;
     }
 
-    let { events }: Props = $props();
+    let { events, hoveredTimestamp, onHoverChange }: Props = $props();
 
     // Chart dimensions - responsive
     let containerWidth = $state(600);
@@ -224,6 +226,69 @@
             }))
             .sort((a, b) => b.total - a.total);
     });
+
+    // Monday vertical lines
+    let mondayLines = $derived.by(() => {
+        if (dailyData.length === 0) return [];
+
+        const minDate = dailyData[0].dateUnix;
+        const maxDate = dailyData[dailyData.length - 1].dateUnix;
+
+        // Find the first Monday on or after minDate
+        let current = DateTime.fromSeconds(minDate).startOf('day');
+        const daysUntilMonday = (8 - current.weekday) % 7;
+        current = current.plus({
+            days: daysUntilMonday === 0 && current.weekday !== 1 ? 7 : daysUntilMonday
+        });
+
+        const mondays: { x: number; label: string }[] = [];
+        const endDate = DateTime.fromSeconds(maxDate);
+
+        while (current <= endDate) {
+            const timestamp = current.toSeconds();
+            mondays.push({
+                x: xScale(timestamp),
+                label: current.toFormat('dd/MM')
+            });
+            current = current.plus({ weeks: 1 });
+        }
+
+        return mondays;
+    });
+
+    // Hover state - using shared timestamp
+    const handleMouseMove = (e: MouseEvent) => {
+        if (dailyData.length === 0) return;
+
+        const svg = e.currentTarget as SVGSVGElement;
+        const rect = svg.getBoundingClientRect();
+        const svgX = ((e.clientX - rect.left) / rect.width) * width;
+        const chartX = svgX - padding.left;
+
+        if (chartX >= 0 && chartX <= chartWidth) {
+            // Convert x position back to timestamp
+            const minDate = dailyData[0].dateUnix;
+            const maxDate = dailyData[dailyData.length - 1].dateUnix;
+            const range = maxDate - minDate || 1;
+            const timestamp = minDate + (chartX / chartWidth) * range;
+            onHoverChange(timestamp);
+        } else {
+            onHoverChange(null);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        onHoverChange(null);
+    };
+
+    // Computed hover position from shared timestamp
+    let hoverX = $derived.by(() => {
+        if (hoveredTimestamp === null || dailyData.length === 0) return null;
+        const minDate = dailyData[0].dateUnix;
+        const maxDate = dailyData[dailyData.length - 1].dateUnix;
+        if (hoveredTimestamp < minDate || hoveredTimestamp > maxDate) return null;
+        return xScale(hoveredTimestamp);
+    });
 </script>
 
 <div class="emotions-daily-bars">
@@ -233,7 +298,12 @@
         <p class="no-data">No emotions recorded in this time period</p>
     {:else}
         <div class="chart-container" bind:clientWidth={containerWidth}>
-            <svg viewBox="0 0 {width} {height}" class="bar-chart">
+            <svg
+                viewBox="0 0 {width} {height}"
+                class="bar-chart"
+                onmousemove={handleMouseMove}
+                onmouseleave={handleMouseLeave}
+            >
                 <!-- Grid lines -->
                 <g class="grid">
                     {#each yTicks as tick}
@@ -243,6 +313,19 @@
                             x2={width - padding.right}
                             y2={padding.top + yScale(tick)}
                             class="grid-line"
+                        />
+                    {/each}
+                </g>
+
+                <!-- Monday vertical lines -->
+                <g class="monday-lines">
+                    {#each mondayLines as monday}
+                        <line
+                            x1={padding.left + monday.x}
+                            y1={padding.top}
+                            x2={padding.left + monday.x}
+                            y2={padding.top + chartHeight}
+                            class="monday-line"
                         />
                     {/each}
                 </g>
@@ -292,6 +375,27 @@
                         </text>
                     {/each}
                 </g>
+
+                <!-- Hover line -->
+                {#if hoverX !== null}
+                    <line
+                        x1={padding.left + hoverX}
+                        y1={padding.top}
+                        x2={padding.left + hoverX}
+                        y2={padding.top + chartHeight}
+                        class="hover-line"
+                    />
+                    {#if hoveredTimestamp}
+                        <text
+                            x={padding.left + hoverX}
+                            y={padding.top - 6}
+                            text-anchor="middle"
+                            class="hover-date"
+                        >
+                            {DateTime.fromSeconds(hoveredTimestamp).toFormat('dd/MM')}
+                        </text>
+                    {/if}
+                {/if}
             </svg>
 
             <div class="legend">
@@ -339,6 +443,24 @@
         stroke: var(--nc-bg-3);
         stroke-width: 1;
         stroke-dasharray: 4 4;
+    }
+
+    .monday-line {
+        stroke: var(--nc-tx-2);
+        stroke-width: 1.5;
+        opacity: 0.5;
+    }
+
+    .hover-line {
+        stroke: var(--nc-tx-2);
+        stroke-width: 1;
+        stroke-dasharray: 2 2;
+    }
+
+    .hover-date {
+        font-size: 10px;
+        fill: var(--nc-tx-2);
+        font-weight: 500;
     }
 
     .bar {

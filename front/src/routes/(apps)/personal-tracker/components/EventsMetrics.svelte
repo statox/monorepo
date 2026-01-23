@@ -22,6 +22,13 @@
             .filter((e) => e.eventDateUnix >= startDate / 1000 && e.eventDateUnix <= endDate / 1000)
             .sort((a, b) => b.eventDateUnix - a.eventDateUnix)
     );
+
+    // Shared hover state for synchronized cursor across charts
+    let hoveredTimestamp = $state<number | null>(null);
+
+    const handleHoverChange = (timestamp: number | null) => {
+        hoveredTimestamp = timestamp;
+    };
 </script>
 
 {#if $eventsStore.loading}
@@ -36,8 +43,20 @@
     />
 {:else}
     <TimeWindowPicker bind:startDate bind:endDate />
-    <MoodEnergyChart events={filteredEvents} />
-    <EmotionsStreamGraph events={filteredEvents} />
-    <EmotionsDailyBars events={filteredEvents} />
+    <MoodEnergyChart
+        events={filteredEvents}
+        {hoveredTimestamp}
+        onHoverChange={handleHoverChange}
+    />
+    <EmotionsStreamGraph
+        events={filteredEvents}
+        {hoveredTimestamp}
+        onHoverChange={handleHoverChange}
+    />
+    <EmotionsDailyBars
+        events={filteredEvents}
+        {hoveredTimestamp}
+        onHoverChange={handleHoverChange}
+    />
     <EmotionsPieChart events={filteredEvents} />
 {/if}

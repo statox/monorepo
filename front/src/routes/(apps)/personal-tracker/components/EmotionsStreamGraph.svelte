@@ -4,9 +4,11 @@
 
     interface Props {
         events: PersonalTrackerEvent[];
+        hoveredTimestamp: number | null;
+        onHoverChange: (timestamp: number | null) => void;
     }
 
-    let { events }: Props = $props();
+    let { events, hoveredTimestamp, onHoverChange }: Props = $props();
 
     // Chart dimensions - responsive
     let containerWidth = $state(600);
@@ -169,6 +171,35 @@
         return path;
     };
 
+    // Monday vertical lines
+    let mondayLines = $derived.by(() => {
+        if (dailyData.length === 0) return [];
+
+        const minDate = dailyData[0].dateUnix;
+        const maxDate = dailyData[dailyData.length - 1].dateUnix;
+
+        // Find the first Monday on or after minDate
+        let current = DateTime.fromSeconds(minDate).startOf('day');
+        const daysUntilMonday = (8 - current.weekday) % 7;
+        current = current.plus({
+            days: daysUntilMonday === 0 && current.weekday !== 1 ? 7 : daysUntilMonday
+        });
+
+        const mondays: { x: number; label: string }[] = [];
+        const endDate = DateTime.fromSeconds(maxDate);
+
+        while (current <= endDate) {
+            const timestamp = current.toSeconds();
+            mondays.push({
+                x: xScale(timestamp),
+                label: current.toFormat('dd/MM')
+            });
+            current = current.plus({ weeks: 1 });
+        }
+
+        return mondays;
+    });
+
     // X-axis ticks
     let xTicks = $derived.by(() => {
         if (weeklyData.length === 0) return [];
@@ -197,12 +228,9 @@
         return ticks;
     });
 
-    // Hover state
-    let hoverX = $state<number | null>(null);
-    let hoveredWeek = $state<WeekData | null>(null);
-
+    // Hover state - using shared timestamp
     const handleMouseMove = (e: MouseEvent) => {
-        if (weeklyData.length === 0) return;
+        if (dailyData.length === 0) return;
 
         const svg = e.currentTarget as SVGSVGElement;
         const rect = svg.getBoundingClientRect();
@@ -210,31 +238,47 @@
         const chartX = svgX - padding.left;
 
         if (chartX >= 0 && chartX <= chartWidth) {
-            hoverX = chartX;
-
-            // Find closest week
-            let closestWeek = weeklyData[0];
-            let closestDist = Math.abs(xScale(closestWeek.weekStartUnix) - chartX);
-
-            for (const week of weeklyData) {
-                const dist = Math.abs(xScale(week.weekStartUnix) - chartX);
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closestWeek = week;
-                }
-            }
-
-            hoveredWeek = closestWeek;
+            // Convert x position back to timestamp
+            const minDate = dailyData[0].dateUnix;
+            const maxDate = dailyData[dailyData.length - 1].dateUnix;
+            const range = maxDate - minDate || 1;
+            const timestamp = minDate + (chartX / chartWidth) * range;
+            onHoverChange(timestamp);
         } else {
-            hoverX = null;
-            hoveredWeek = null;
+            onHoverChange(null);
         }
     };
 
     const handleMouseLeave = () => {
-        hoverX = null;
-        hoveredWeek = null;
+        onHoverChange(null);
     };
+
+    // Computed hover position from shared timestamp
+    let hoverX = $derived.by(() => {
+        if (hoveredTimestamp === null || dailyData.length === 0) return null;
+        const minDate = dailyData[0].dateUnix;
+        const maxDate = dailyData[dailyData.length - 1].dateUnix;
+        if (hoveredTimestamp < minDate || hoveredTimestamp > maxDate) return null;
+        return xScale(hoveredTimestamp);
+    });
+
+    let hoveredWeek = $derived.by(() => {
+        if (hoveredTimestamp === null || weeklyData.length === 0) return null;
+
+        // Find closest week
+        let closestWeek = weeklyData[0];
+        let closestDist = Math.abs(closestWeek.weekStartUnix - hoveredTimestamp);
+
+        for (const week of weeklyData) {
+            const dist = Math.abs(week.weekStartUnix - hoveredTimestamp);
+            if (dist < closestDist) {
+                closestDist = dist;
+                closestWeek = week;
+            }
+        }
+
+        return closestWeek;
+    });
 
     // Daily emotion counts for the overlay line (uses same xScale as stream)
     interface DayData {
@@ -334,6 +378,19 @@
                 onmousemove={handleMouseMove}
                 onmouseleave={handleMouseLeave}
             >
+                <!-- Monday vertical lines -->
+                <g class="monday-lines">
+                    {#each mondayLines as monday}
+                        <line
+                            x1={padding.left + monday.x}
+                            y1={padding.top}
+                            x2={padding.left + monday.x}
+                            y2={padding.top + chartHeight}
+                            class="monday-line"
+                        />
+                    {/each}
+                </g>
+
                 <!-- Stream layers -->
                 <g transform="translate({padding.left}, {padding.top})">
                     {#each streamLayers as layer}
@@ -373,22 +430,24 @@
                 </g>
 
                 <!-- Hover line and tooltip -->
-                {#if hoverX !== null && hoveredWeek}
+                {#if hoverX !== null}
                     <line
-                        x1={padding.left + xScale(hoveredWeek.weekStartUnix)}
+                        x1={padding.left + hoverX}
                         y1={padding.top}
-                        x2={padding.left + xScale(hoveredWeek.weekStartUnix)}
+                        x2={padding.left + hoverX}
                         y2={padding.top + chartHeight}
                         class="hover-line"
                     />
-                    <g
-                        class="tooltip"
-                        transform="translate({padding.left + xScale(hoveredWeek.weekStartUnix)}, {padding.top - 5})"
-                    >
-                        <text x="0" y="0" text-anchor="middle" class="tooltip-date">
-                            Week of {hoveredWeek.weekStart.toFormat('dd MMM')}
-                        </text>
-                    </g>
+                    {#if hoveredTimestamp}
+                        <g
+                            class="tooltip"
+                            transform="translate({padding.left + hoverX}, {padding.top - 5})"
+                        >
+                            <text x="0" y="0" text-anchor="middle" class="tooltip-date">
+                                {DateTime.fromSeconds(hoveredTimestamp).toFormat('dd/MM')}
+                            </text>
+                        </g>
+                    {/if}
                 {/if}
             </svg>
 
@@ -438,6 +497,12 @@
         height: auto;
         background: var(--nc-bg-2);
         border-radius: 8px;
+    }
+
+    .monday-line {
+        stroke: var(--nc-tx-2);
+        stroke-width: 1.5;
+        opacity: 0.5;
     }
 
     .stream-layer {

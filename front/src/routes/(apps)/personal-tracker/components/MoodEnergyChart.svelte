@@ -4,9 +4,11 @@
 
     interface Props {
         events: PersonalTrackerEvent[];
+        hoveredTimestamp: number | null;
+        onHoverChange: (timestamp: number | null) => void;
     }
 
-    let { events }: Props = $props();
+    let { events, hoveredTimestamp, onHoverChange }: Props = $props();
 
     // Labels for mood and energy values
     const moodLabels: Record<number, string> = {
@@ -182,9 +184,6 @@
     });
 
     // Mouse hover state for cursor line
-    let hoverX = $state<number | null>(null);
-    let hoverDate = $state<DateTime | null>(null);
-
     const handleMouseMove = (e: MouseEvent) => {
         if (sortedEvents.length === 0) return;
 
@@ -194,24 +193,33 @@
         const chartX = svgX - padding.left;
 
         if (chartX >= 0 && chartX <= chartWidth) {
-            hoverX = chartX;
-
-            // Convert x position back to date
+            // Convert x position back to timestamp
             const minDate = sortedEvents[0].eventDateUnix;
             const maxDate = sortedEvents[sortedEvents.length - 1].eventDateUnix;
             const range = maxDate - minDate || 1;
             const timestamp = minDate + (chartX / chartWidth) * range;
-            hoverDate = DateTime.fromSeconds(timestamp).startOf('day');
+            onHoverChange(timestamp);
         } else {
-            hoverX = null;
-            hoverDate = null;
+            onHoverChange(null);
         }
     };
 
     const handleMouseLeave = () => {
-        hoverX = null;
-        hoverDate = null;
+        onHoverChange(null);
     };
+
+    // Computed hover position from shared timestamp
+    let hoverX = $derived.by(() => {
+        if (hoveredTimestamp === null || sortedEvents.length === 0) return null;
+        const minDate = sortedEvents[0].eventDateUnix;
+        const maxDate = sortedEvents[sortedEvents.length - 1].eventDateUnix;
+        if (hoveredTimestamp < minDate || hoveredTimestamp > maxDate) return null;
+        return xScale(hoveredTimestamp);
+    });
+
+    let hoverDate = $derived(
+        hoveredTimestamp !== null ? DateTime.fromSeconds(hoveredTimestamp).startOf('day') : null
+    );
 
     // Tooltip state
     let hoveredPoint = $state<{
