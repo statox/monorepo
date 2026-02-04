@@ -6,17 +6,19 @@
 # git hook to run a command after `git pull` if a specified file was changed
 changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
 
-check_run() {
-    echo "$changed_files" | grep --quiet -E "$1" && $2
+check_changed() {
+    echo "$changed_files" | grep --quiet -E "$1"
 }
 
 install_action() {
+    local dir="$1"
     tput setaf 3
-    echo 'package.json or package-lock.yaml changed, packages probably need updating.'
-    echo 'running "npm install"'
+    echo "$dir/package.json or $dir/package-lock.json changed, packages probably need updating."
+    echo "running \"npm install\" in $dir/"
     tput sgr0
 
-    npm install
+    npm --prefix "$dir" install
 }
 
-check_run 'package.json|package-lock.json' install_action
+check_changed 'back/package\.json|back/package-lock\.json' && install_action back
+check_changed 'front/package\.json|front/package-lock\.json' && install_action front
