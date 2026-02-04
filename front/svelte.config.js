@@ -25,7 +25,7 @@ const config = {
             pages: 'docs',
             assets: 'docs',
             precompress: false,
-            fallback: '404.html',
+            fallback: '404.html'
         }),
         alias: {
             $config: 'src/config',

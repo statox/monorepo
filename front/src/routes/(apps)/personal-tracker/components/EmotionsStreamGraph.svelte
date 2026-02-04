@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { PersonalTrackerEvent } from '$lib/PersonalTracker';
     import { DateTime } from 'luxon';
+    import { SvelteMap } from 'svelte/reactivity';
 
     interface Props {
         events: PersonalTrackerEvent[];
@@ -27,7 +28,7 @@
 
     // Get unique categories and assign colors
     let categoryColors = $derived.by(() => {
-        const colors = new Map<string, string>();
+        const colors = new SvelteMap<string, string>();
         for (const event of sortedEvents) {
             if (event.emotionwheel?.emotions) {
                 for (const emotion of event.emotionwheel.emotions) {
@@ -53,7 +54,7 @@
     let weeklyData = $derived.by(() => {
         if (sortedEvents.length === 0) return [];
 
-        const weeks = new Map<string, WeekData>();
+        const weeks = new SvelteMap<string, WeekData>();
 
         for (const event of sortedEvents) {
             const date = DateTime.fromSeconds(event.eventDateUnix);
@@ -290,7 +291,7 @@
     let dailyData = $derived.by(() => {
         if (sortedEvents.length === 0) return [];
 
-        const days = new Map<string, DayData>();
+        const days = new SvelteMap<string, DayData>();
 
         for (const event of sortedEvents) {
             const date = DateTime.fromSeconds(event.eventDateUnix).startOf('day');
@@ -349,7 +350,7 @@
 
     // Legend data sorted by total count
     let legendData = $derived.by(() => {
-        const totals = new Map<string, number>();
+        const totals = new SvelteMap<string, number>();
         for (const week of weeklyData) {
             for (const [cat, count] of week.counts) {
                 totals.set(cat, (totals.get(cat) || 0) + count);
@@ -409,7 +410,9 @@
                         <path d={dailyLinePath} class="daily-line" />
                         {#each dailyLinePoints as point}
                             <circle cx={point.x} cy={point.y} r="3" class="daily-point">
-                                <title>{point.date.toFormat('dd MMM')}: {point.count} emotions</title>
+                                <title
+                                    >{point.date.toFormat('dd MMM')}: {point.count} emotions</title
+                                >
                             </circle>
                         {/each}
                     {/if}
@@ -461,7 +464,9 @@
                         <span class="legend-color" style="background-color: {item.color}"></span>
                         <span class="legend-label">{item.category}</span>
                         {#if hoveredWeek}
-                            <span class="legend-count">{hoveredWeek.counts.get(item.category) || 0}</span>
+                            <span class="legend-count"
+                                >{hoveredWeek.counts.get(item.category) || 0}</span
+                            >
                         {/if}
                     </div>
                 {/each}

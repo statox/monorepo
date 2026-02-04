@@ -43,11 +43,7 @@
     />
 {:else}
     <TimeWindowPicker bind:startDate bind:endDate />
-    <MoodEnergyChart
-        events={filteredEvents}
-        {hoveredTimestamp}
-        onHoverChange={handleHoverChange}
-    />
+    <MoodEnergyChart events={filteredEvents} {hoveredTimestamp} onHoverChange={handleHoverChange} />
     <EmotionsStreamGraph
         events={filteredEvents}
         {hoveredTimestamp}

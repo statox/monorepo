@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PersonalTrackerEvent } from '$lib/PersonalTracker';
+    import { SvelteMap } from 'svelte/reactivity';
 
     interface Props {
         events: PersonalTrackerEvent[];
@@ -17,7 +18,7 @@
     }
 
     let emotionCounts = $derived.by(() => {
-        const counts = new Map<string, EmotionCount>();
+        const counts = new SvelteMap<string, EmotionCount>();
 
         for (const event of events) {
             if (event.emotionwheel?.emotions) {
@@ -119,14 +120,8 @@
         return slices;
     });
 
-    // Group emotions by category for the legend
-    interface CategoryGroup {
-        category: string;
-        emotions: EmotionCount[];
-    }
-
     let groupedByCategory = $derived.by(() => {
-        const groups = new Map<string, EmotionCount[]>();
+        const groups = new SvelteMap<string, EmotionCount[]>();
 
         for (const item of emotionCounts) {
             const existing = groups.get(item.category);
@@ -191,7 +186,9 @@
                         <div class="category-items">
                             {#each group.emotions as item}
                                 <div class="legend-item">
-                                    <span class="legend-color" style="background-color: {item.color}"
+                                    <span
+                                        class="legend-color"
+                                        style="background-color: {item.color}"
                                     ></span>
                                     <span class="legend-label">{item.emotion}</span>
                                     <span class="legend-count">{item.count}</span>

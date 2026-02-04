@@ -229,8 +229,6 @@
         value: number;
         date: number;
     } | null>(null);
-
-    const formatDate = (unix: number) => DateTime.fromSeconds(unix).toFormat('dd MMM yyyy');
 </script>
 
 <div class="mood-energy-chart">

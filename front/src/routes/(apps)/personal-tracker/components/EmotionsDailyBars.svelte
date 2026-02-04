@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { PersonalTrackerEvent } from '$lib/PersonalTracker';
     import { DateTime } from 'luxon';
+    import { SvelteMap } from 'svelte/reactivity';
 
     interface Props {
         events: PersonalTrackerEvent[];
@@ -27,7 +28,7 @@
 
     // Get unique categories and assign colors
     let categoryColors = $derived.by(() => {
-        const colors = new Map<string, string>();
+        const colors = new SvelteMap<string, string>();
         for (const event of sortedEvents) {
             if (event.emotionwheel?.emotions) {
                 for (const emotion of event.emotionwheel.emotions) {
@@ -53,7 +54,7 @@
     let dailyData = $derived.by(() => {
         if (sortedEvents.length === 0) return [];
 
-        const days = new Map<string, DayData>();
+        const days = new SvelteMap<string, DayData>();
 
         for (const event of sortedEvents) {
             const date = DateTime.fromSeconds(event.eventDateUnix).startOf('day');
@@ -104,7 +105,8 @@
     // Calculate bar width based on minimum gap between consecutive days
     let barWidth = $derived.by(() => {
         if (dailyData.length === 0) return 20;
-        if (dailyData.length === 1) return Math.min(20, chartWidth * 0.8 / Math.max(categories.length, 1));
+        if (dailyData.length === 1)
+            return Math.min(20, (chartWidth * 0.8) / Math.max(categories.length, 1));
 
         // Find minimum pixel gap between consecutive days
         let minGap = Infinity;
@@ -212,7 +214,7 @@
 
     // Legend data sorted by total count
     let legendData = $derived.by(() => {
-        const totals = new Map<string, number>();
+        const totals = new SvelteMap<string, number>();
         for (const day of dailyData) {
             for (const [cat, count] of day.counts) {
                 totals.set(cat, (totals.get(cat) || 0) + count);
