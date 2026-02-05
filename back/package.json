@@ -35,8 +35,8 @@
         "user:create:prod": "npx heroku@latest run node dist/src/tools/auth/createUser.js"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.982.0",
-        "@aws-sdk/s3-request-presigner": "^3.982.0",
+        "@aws-sdk/client-s3": "^3.983.0",
+        "@aws-sdk/s3-request-presigner": "^3.983.0",
         "@elastic/elasticsearch": "^8.17.1",
         "@slack/webhook": "^7.0.6",
         "@types/passport": "^1.0.17",
