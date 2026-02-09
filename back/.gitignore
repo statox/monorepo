@@ -6,7 +6,6 @@ npm-debug.log
 ctrf
 
 # Local development
-*.env
 *.dev
 .DS_Store
 
