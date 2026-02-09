@@ -1,2 +1,2 @@
-release: node dist/src/tools/release/index.js
+release: npx dotenvx run -- node dist/src/tools/release/index.js
 web: npx dotenvx run -- node dist/index.js

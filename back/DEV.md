@@ -20,6 +20,26 @@ The content of the cookie is 2 parts, one is the session id urlencoded and the o
 
 `auth/logout` removes the user session and notices the browser to do the same.
 
+# Secrets and Environment Variables
+
+Secrets used to be stored in environment variables on Heroku. In 02/2026 we are starting to use [dotenvx](https://dotenvx.com/) to store the secrets in a `.env` file committed with the code.
+
+- The private key is stored in the Dashlane secure note "api.statox.fr env variables"
+    - In prod we need to define the environment variable `DOTENV_PRIVATE_KEY=xxx...`
+    - Locally we can create `.env.keys` defining this same env variable
+
+- To start the application we need to have `node index.js` as a subprocess of the `dotenvx` process.
+    - For Heroku the `Procfile` defined `web: npx dotenvx run -- node dist/index.js`, relying on `DOTENV_PRIVATE_KEY` being available on the heroku stack
+
+- To access the values locally we use the `dotenvx` cli provided by the npm package. Both commands rely on having the `.env.keys` file locally:
+    - Get a value: `npx dotenvx get DUMMY`
+    - Set a value: `npx dotenvx set DUMMY "encrypted dummy prod"`
+
+- Once the app runs as a subprocess of `dotenvx`, the environment variable defined in `.env` are available to the `node` process in clear text.
+- The package in `src/packages/config` is then responsible for reading the environment variable and populating the `config` object that the rest of the code should use to access an env variable.
+
+`dotenvx` also provides convenient commands to encrypt/decrypt the whole file and supports having some non-encrypted values in the file.
+
 # Monorepo
 
 Notes from migrating api.statox.fr and apps.statox.fr to this monorepo.
