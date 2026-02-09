@@ -13,6 +13,10 @@ export const configSchema = {
         'timeouts'
     ],
     properties: {
+        dummy: {
+            type: 'string',
+            description: 'This is a dummy env variable to test dotenvx. TO BE REMOVED'
+        },
         mysql: {
             type: 'object',
             additionalProperties: false,

@@ -10,8 +10,10 @@ import { SLACK_USERID, SLACK_WEBHOOK_URL } from '../sources/slack.js';
 import { NTFY_SH_URL } from '../sources/ntfy_sh.js';
 import { HEADERS_TIMEOUT, REQUEST_TIMEOUT, SOCKET_TIMEOUT } from '../sources/timeouts.js';
 import { EXPRESS_SESSION_SECRET } from '../sources/expressSessionSecret.js';
+import { DUMMY } from '../sources/dummy.js';
 
 export const config: Config = {
+    dummy: DUMMY,
     mysql: {
         connectionUrl: MYSQL_CONNECTION_URL
     },
