@@ -8,5 +8,8 @@
     "timeout": 5000,
     "parallel": false,
     "jobs": 1,
-    "slow": 2
+    "slow": 2,
+    "node-option": [
+        "unhandled-rejections=strict"
+    ]
 }
