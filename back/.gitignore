@@ -15,3 +15,5 @@ src/views/openapi_json.mustache
 index-test.ts
 chords_check_results.json
 src/tools/tmp.sql
+
+.env.keys
