@@ -1,6 +1,5 @@
 import { browser } from '$app/environment';
 import { writable, get } from 'svelte/store';
-import { logout } from '$lib/auth/api';
 
 export type ApiUrlType = 'prod' | 'local';
 
@@ -47,7 +46,9 @@ export const toggleApiUrl = async () => {
     apiUrlTypeStore.set(newType);
 
     // Logout to clear any auth state
+    // Dynamic import to avoid circular dependency: apiUrlStore -> auth/api -> PersonalTracker -> api/client2 -> helpers -> apiUrlStore
     try {
+        const { logout } = await import('$lib/auth/api');
         await logout();
     } catch (error) {
         // Ignore logout errors, we're switching APIs anyway
