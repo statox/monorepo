@@ -16,6 +16,7 @@ import { route as Cookbook_addRecipe } from './cookbook/addRecipe.js';
 import { route as Cookbook_getRecipe } from './cookbook/getRecipe.js';
 import { route as Cookbook_listIngredients } from './cookbook/listIngredients.js';
 import { route as Cookbook_listRecipes } from './cookbook/listRecipes.js';
+import { route as Ephemerides_getRange } from './ephemerides/getRange.js';
 import { route as Ephemerides_getToday } from './ephemerides/getToday.js';
 import { route as Gravitrips_getNewGame } from './gravitrips/getNewGame.js';
 import { route as Health_GetRemoteTime } from './health/getRemoteTime.js';
@@ -72,6 +73,7 @@ export const routes: {
         Cookbook_getRecipe,
         Cookbook_listIngredients,
         Cookbook_listRecipes,
+        Ephemerides_getRange,
         Ephemerides_getToday,
         Gravitrips_getNewGame,
         Health_GetRemoteTime,

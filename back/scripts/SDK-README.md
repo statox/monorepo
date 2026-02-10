@@ -15,13 +15,13 @@ This script automatically generates a fully-typed TypeScript SDK for the api.sta
 ### 1. Generate the SDK
 
 ```bash
-npm run generate:sdk <output-directory>
+npx tsx scripts/generateSDK.ts ../front/src/vendor/statox-api
 ```
 
-**Example:** Generate SDK to SvelteKit frontend:
+**Example:** Generate SDK to SvelteKit frontend (We have a dedicated npm script with the right path)
 
 ```bash
-npmr generate:sdk ../apps.statox.fr/src/vendor/statox-api
+npmr generate:sdk
 ```
 
 This creates `verdor/statox-api/index.ts` in the specified directory.

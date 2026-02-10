@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { getEphemerides } from '$lib/HomeTracker';
+    import { getTodayEphemerides } from '$lib/HomeTracker';
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { pageMetadataStore } from '$lib/components/Header';
     import { Notice } from '$lib/components/Notice';
-    import Ephemerides from './components/Ephemerides.svelte';
+    import TodayEphemerides from './components/TodayEphemerides.svelte';
     import LunarCycle from './components/LunarCycle.svelte';
+    import YearEphemerides from './components/YearEphemerides.svelte';
 
     const pageMetadata = {
         name: 'Ephemerides',
@@ -21,10 +22,10 @@
 />
 
 <div class="content">
-    {#await getEphemerides()}
+    {#await getTodayEphemerides()}
         <p>Loading ephemerides data</p>
     {:then { moonState, sunState, upcomingLunarStates }}
-        <Ephemerides {moonState} {sunState} />
+        <TodayEphemerides {moonState} {sunState} />
         <div class="separator"></div>
         <LunarCycle {upcomingLunarStates} />
         <div class="separator"></div>
@@ -38,6 +39,8 @@
             }}
         />
     {/await}
+
+    <YearEphemerides />
 </div>
 
 <style>

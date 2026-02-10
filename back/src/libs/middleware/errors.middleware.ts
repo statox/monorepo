@@ -17,6 +17,7 @@ import {
     Auth_UnauthorizedError
 } from '../modules/auth/index.js';
 import { slog } from '../modules/logging/slog.js';
+import { RangeInvalid, RangeTooLargeError } from '../modules/ephemerides/index.js';
 
 export const errorHandler = async (
     error: Error,
@@ -48,7 +49,9 @@ export const errorHandler = async (
         error instanceof ItemNotFoundError ||
         error instanceof DuplicateIngredientError ||
         error instanceof RecipeNotFoundError ||
-        error instanceof SensorDoesNotExistError
+        error instanceof SensorDoesNotExistError ||
+        error instanceof RangeTooLargeError ||
+        error instanceof RangeInvalid
     ) {
         status = 400;
         message = error.message;

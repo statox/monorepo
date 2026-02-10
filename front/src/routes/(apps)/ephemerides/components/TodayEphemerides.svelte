@@ -1,10 +1,12 @@
 <script lang="ts">
+    import { DateTime } from 'luxon';
     import { getMoonPhasePictureURL } from '$lib/HomeTracker';
 
     let { moonState, sunState } = $props();
 </script>
 
 <div class="container">
+    <h2><span>Today's Ephemerides</span><span>{DateTime.now().toFormat('dd LLL yyyy')}</span></h2>
     <div class="content">
         <div class="data">
             <span><i class="fas fa-moon" aria-hidden="true"></i></span>
@@ -58,6 +60,12 @@
 </div>
 
 <style>
+    h2 {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 1em;
+    }
+
     .container {
         padding: 0.3em;
 

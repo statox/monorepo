@@ -6,7 +6,7 @@ export const getHistogramData = client2.homeTracker.histogramData;
 
 export const getWeatherForecast = client2.homeTracker.getWeatherForecast;
 
-export const getEphemeridesAPI = async () => {
+export const getTodayEphemeridesAPI = async () => {
     const res = await client2.ephemerides.getToday();
 
     const validLunarPhases = Object.values(LunarPhase);
@@ -55,6 +55,10 @@ export const getEphemeridesAPI = async () => {
             upcomingLunarStates
         }
     };
+};
+
+export const getRangeEphemeridesAPI = async (params: { from: number; to: number }) => {
+    return client2.ephemerides.getRange(params);
 };
 
 export const getSensorsMetadata = async () => {

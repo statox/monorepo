@@ -1,5 +1,5 @@
 import { LunarPhase } from 'lunarphase-js';
-import { getEphemeridesAPI } from './api';
+import { getRangeEphemeridesAPI, getTodayEphemeridesAPI } from './api';
 import { DateTime, Duration } from 'luxon';
 
 export const getMoonPhasePictureURL = (phase: LunarPhase) => {
@@ -60,8 +60,8 @@ export const getMoonPhaseIconURL = (phase: LunarPhase) => {
     throw new Error('UNKOWN_LUNAR_PHASE');
 };
 
-export const getEphemerides = async () => {
-    const { ephemerides } = await getEphemeridesAPI();
+export const getTodayEphemerides = async () => {
+    const { ephemerides } = await getTodayEphemeridesAPI();
     const { moonState, sunState, upcomingLunarStates } = ephemerides;
 
     return {
@@ -84,4 +84,11 @@ export const getEphemerides = async () => {
             };
         })
     };
+};
+
+export const getYearlyEphemerides = async () => {
+    const from = DateTime.now().toUTC().minus({ days: 150 }).toMillis();
+    const to = DateTime.now().toUTC().plus({ days: 150 }).toMillis();
+    const { ephemerides } = await getRangeEphemeridesAPI({ from, to });
+    return ephemerides;
 };
