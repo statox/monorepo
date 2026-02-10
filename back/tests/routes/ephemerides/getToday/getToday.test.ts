@@ -3,14 +3,14 @@ import { app } from '../../../../src/app.js';
 import { assert } from 'chai';
 import { th } from '../../../helpers/index.js';
 
-describe('/homeTracker/getEphemerides', () => {
+describe('/ephemerides/getToday', () => {
     /*
      * We consider that the libraries we are using to get lunar and sun data are
      * already well tested so we just need to validate the shape of our response
      */
     it('Known date', async () => {
         th.time.fakeSinonDateTimeNow(2208992460);
-        const response = await request(app).get('/homeTracker/getEphemerides').expect(200);
+        const response = await request(app).get('/ephemerides/getToday').expect(200);
 
         const { ephemerides } = response.body;
 

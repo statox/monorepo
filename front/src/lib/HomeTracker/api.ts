@@ -7,7 +7,7 @@ export const getHistogramData = client2.homeTracker.histogramData;
 export const getWeatherForecast = client2.homeTracker.getWeatherForecast;
 
 export const getEphemeridesAPI = async () => {
-    const res = await client2.homeTracker.getEphemerides();
+    const res = await client2.ephemerides.getToday();
 
     const validLunarPhases = Object.values(LunarPhase);
     const validLunarPhasesFr = Object.values(LunarPhaseFrench);

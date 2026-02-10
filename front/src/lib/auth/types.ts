@@ -1,5 +1,6 @@
 // List of possible scopes
-export type Scope = 'admin' | 'public' | 'homeTracker';
+// TODO Extract that directly from src/vendor/statox-api/index.ts
+export type Scope = 'admin' | 'public' | 'homeTracker' | 'personalTracker';
 
 export type User = {
     id: number;

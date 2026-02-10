@@ -83,7 +83,7 @@ const outputSchema = {
 
 export const route: GetRoute<EmptyInput, FromSchema<typeof outputSchema>> = {
     method: 'get',
-    path: '/homeTracker/getEphemerides',
+    path: '/ephemerides/getToday',
     handler,
     authentication: 'none',
     outputSchema
