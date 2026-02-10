@@ -28,8 +28,6 @@
         <TodayEphemerides {moonState} {sunState} />
         <div class="separator"></div>
         <LunarCycle {upcomingLunarStates} />
-        <div class="separator"></div>
-        <Notice item={{ level: 'info', message: 'All data is computed for Paris, France' }} />
     {:catch error}
         <Notice
             item={{
@@ -40,7 +38,11 @@
         />
     {/await}
 
+    <div class="separator"></div>
     <YearEphemerides />
+
+    <div class="separator"></div>
+    <Notice item={{ level: 'info', message: 'All data is computed for Paris, France' }} />
 </div>
 
 <style>
