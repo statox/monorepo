@@ -6,6 +6,7 @@
 
     // TODO Rework ButtonSwitch to avoid this weird mechanic
     let utcDisplay: 'UTC' | 'Europe/Paris' = $state('UTC');
+    let showMoonOverlay: 'on' | 'off' = $state('off');
 
     let hoveredDayTs = $state<number | null>(null);
     let hoveredDay = $state<YearlyEphemerisDay | null>(null);
@@ -59,6 +60,11 @@
         design="multi"
         options={['UTC', 'Europe/Paris']}
     />
+    <ButtonSwitch bind:value={showMoonOverlay} label="Moon visibility" design="slider" />
+    <span
+        >The moon visibillity is only approximate to the hours, that's why it looks weird. I will
+        update the data source to compute the actual times.</span
+    >
 
     <div class="container">
         <div class="year-chart">
@@ -114,6 +120,14 @@
                             style="width: {day.sunsetPercent - day.sunrisePercent}%"
                         ></div>
                         <div class="night-segment" style="width: {100 - day.sunsetPercent}%"></div>
+                        {#if showMoonOverlay === 'on'}
+                            {#each day.moonVisibilitySegments as seg}
+                                <div
+                                    class="moon-overlay"
+                                    style="left: {seg.startPercent}%; width: {seg.widthPercent}%"
+                                ></div>
+                            {/each}
+                        {/if}
                     </div>
 
                     <div class="diff-col">
@@ -154,22 +168,24 @@
         <div class="tooltip" bind:this={tooltipEl} style="left: {tooltipX}px; top: {tooltipY}px;">
             <div class="tooltip-date">{hoveredDay.dateFormatted}</div>
             <div class="tooltip-row">
-                <span class="tooltip-muted">Lever</span>
+                <span class="tooltip-icon"><i class="fas fa-sun" aria-hidden="true"></i></span>
                 <span>{hoveredDay.sunriseFormatted}</span>
                 <span class="tooltip-muted">-</span>
-                <span class="tooltip-muted">Coucher</span>
                 <span>{hoveredDay.sunsetFormatted}</span>
-            </div>
-            <div class="tooltip-row">
-                <span class="tooltip-muted">Dur&#233;e</span>
-                <span>{hoveredDay.dayLengthFormatted}</span>
+                <span class="tooltip-muted">({hoveredDay.dayLengthFormatted})</span>
                 <span
                     class="tooltip-diff"
                     class:positive={hoveredDay.dayLengthDiffMs >= 0}
                     class:negative={hoveredDay.dayLengthDiffMs < 0}
                 >
-                    ({hoveredDay.dayLengthDiffFormatted})
+                    {hoveredDay.dayLengthDiffFormatted}
                 </span>
+            </div>
+            <div class="tooltip-row">
+                <span class="tooltip-icon"><i class="fas fa-moon" aria-hidden="true"></i></span>
+                <span>{hoveredDay.moonriseFormatted}</span>
+                <span class="tooltip-muted">-</span>
+                <span>{hoveredDay.moonsetFormatted}</span>
             </div>
             {#if hoveredDay.moonIconURL}
                 <div class="tooltip-moon">
@@ -347,6 +363,14 @@
         background-color: #d6cf13;
     }
 
+    .moon-overlay {
+        position: absolute;
+        top: 0;
+        height: 20%;
+        background-color: rgba(255, 255, 255, 0.35);
+        pointer-events: none;
+    }
+
     /* Diff column */
     .diff-bar {
         display: flex;
@@ -410,6 +434,12 @@
         display: flex;
         gap: 6px;
         line-height: 1.6;
+    }
+
+    .tooltip-icon {
+        width: 1.2em;
+        text-align: center;
+        color: var(--nc-tx-3);
     }
 
     .tooltip-muted {

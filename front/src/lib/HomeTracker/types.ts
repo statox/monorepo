@@ -115,6 +115,11 @@ export type SolarEvent =
     | 'Équinoxe de printemps'
     | "Équinoxe d'automne";
 
+export interface MoonVisibilitySegment {
+    startPercent: number;
+    widthPercent: number;
+}
+
 export interface YearlyEphemerisDay {
     dateMs: number;
     dateFormatted: string;
@@ -129,6 +134,9 @@ export interface YearlyEphemerisDay {
     showMoonIcon: boolean;
     moonIconURL: string;
     moonPhaseFr: string;
+    moonVisibilitySegments: MoonVisibilitySegment[];
+    moonriseFormatted: string;
+    moonsetFormatted: string;
     isFirstOfMonth: boolean;
     monthLabel: string;
     isToday: boolean;
