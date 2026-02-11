@@ -33,7 +33,11 @@
         design?: string;
         options?: string[]; // Two options to display around the switch
         fontSize?: number;
-        value?: 'on' | 'off';
+        // IMPORTANT: I added the "string" option while
+        // developing the utcDisplay button in YearEphemerides
+        // to avoid weird stuff with on/off
+        // TODO Fix this component to be more universal on options
+        value?: 'on' | 'off' | string;
         onchange?: (value: 'on' | 'off') => void;
     }
 

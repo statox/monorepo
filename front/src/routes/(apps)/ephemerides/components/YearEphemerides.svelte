@@ -1,6 +1,7 @@
 <script lang="ts">
     import { DateTime, Duration } from 'luxon';
     import { Notice } from '$lib/components/Notice';
+    import ButtonSwitch from '$lib/components/ButtonSwitch/Main.svelte';
     import { getYearlyEphemerides, getMoonPhaseIconURL } from '$lib/HomeTracker';
 
     const FRENCH_MONTHS = [
@@ -45,6 +46,9 @@
         solarEvent: SolarEvent | null;
     }
 
+    // TODO Rework ButtonSwitch to avoid this weird mechanic
+    let utcDisplay: 'UTC' | 'Europe/Paris' = $state('UTC');
+
     const formatDiffMs = (ms: number): string => {
         const sign = ms >= 0 ? '+' : '-';
         const dur = Duration.fromMillis(Math.abs(ms));
@@ -56,7 +60,8 @@
     const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000;
 
     const processEphemerides = (
-        rawData: Awaited<ReturnType<typeof getYearlyEphemerides>>
+        rawData: Awaited<ReturnType<typeof getYearlyEphemerides>>,
+        utcDisplay: 'UTC' | 'Europe/Paris'
     ): ProcessedDay[] => {
         const maxAbsDiff = rawData.reduce(
             (max, entry) => Math.max(max, Math.abs(entry.ephemeride.sunState.dayLengthDiffMs)),
@@ -71,8 +76,9 @@
             const date = DateTime.fromMillis(entry.day, { zone: 'Europe/Paris' });
             const { sunState, moonState } = entry.ephemeride;
 
-            const sunrise = DateTime.fromMillis(sunState.sunrise, { zone: 'Europe/Paris' });
-            const sunset = DateTime.fromMillis(sunState.sunset, { zone: 'Europe/Paris' });
+            const zone = utcDisplay;
+            const sunrise = DateTime.fromMillis(sunState.sunrise, { zone });
+            const sunset = DateTime.fromMillis(sunState.sunset, { zone });
             const sunriseHours = sunrise.hour + sunrise.minute / 60;
             const sunsetHours = sunset.hour + sunset.minute / 60;
             const sunrisePercent = (sunriseHours / 24) * 100;
@@ -195,8 +201,15 @@
 </script>
 
 {#await getYearlyEphemerides() then rawEphemerides}
-    {@const days = processEphemerides(rawEphemerides)}
+    {@const days = processEphemerides(rawEphemerides, utcDisplay)}
     <h2>Yearly ephemerides</h2>
+    <ButtonSwitch
+        bind:value={utcDisplay}
+        label="Display mode"
+        design="multi"
+        options={['UTC', 'Europe/Paris']}
+    />
+
     <div class="container">
         <div class="year-chart">
             <div class="time-header">
@@ -413,25 +426,25 @@
     }
 
     .today-line {
-        background-color: var(--nc-error);
+        background-color: #1690f4;
     }
 
     .hovered-line {
-        background-color: green;
+        background-color: #5a90bc;
     }
 
     .solar-event-line {
-        background-color: var(--nc-lk-1);
+        background-color: #c97097;
         opacity: 0.6;
         height: 1px;
     }
 
     .solar-event-label {
         position: absolute;
-        right: 4px;
-        top: -8px;
-        font-size: 9px;
-        color: var(--nc-lk-1);
+        left: 50px;
+        top: -15px;
+        font-size: 11px;
+        color: #c97097;
         line-height: 1;
         white-space: nowrap;
         z-index: 4;
@@ -485,12 +498,14 @@
 
     .night-segment {
         height: 100%;
-        background-color: var(--nc-bg-2);
+        /* background-color: var(--nc-bg-2); */
+        background-color: #323575;
     }
 
     .day-segment {
         height: 100%;
-        background-color: var(--nc-lk-2);
+        /* background-color: var(--nc-lk-2); */
+        background-color: #d6cf13;
     }
 
     .diff-col {
