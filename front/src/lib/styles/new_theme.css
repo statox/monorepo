@@ -14,8 +14,11 @@
     --nc-light-tx-2: #3d2b5a;
     --nc-light-tx-3: #837a72;
     --nc-light-bg-1: #f6f2ee;
+    --nc-light-bg-1-rgb: 246, 242, 238;
     --nc-light-bg-2: #e4dcd4;
+    --nc-light-bg-2-rgb: 228, 220, 212;
     --nc-light-bg-3: #dbd1dd;
+    --nc-light-bg-3-rgb: 219, 209, 221;
     --nc-light-lk-1: #2848a9;
     --nc-light-lk-2: #287980;
     --nc-light-lk-tx: #dbd1dd;
@@ -32,8 +35,11 @@
     --nc-dark-tx-2: #aeafb0;
     --nc-dark-tx-3: #738091;
     --nc-dark-bg-1: #192330;
+    --nc-dark-bg-1-rgb: 25, 35, 48;
     --nc-dark-bg-2: #131a24;
+    --nc-dark-bg-2-rgb: 19, 26, 36;
     --nc-dark-bg-3: #212e3f;
+    --nc-dark-bg-3-rgb: 33, 46, 63;
     --nc-dark-lk-1: #719cd6;
     --nc-dark-lk-2: #63cdcf;
     --nc-dark-lk-tx: #212e3f;
@@ -60,10 +66,13 @@ html {
     --nc-ac-tx: var(--nc-light-ac-tx);
     --nc-success: var(--nc-light-success);
     --nc-info: var(--nc-light-info);
-    /* --nc-error-rgb is used when I need to add transparency with rgba(var(--nc-error-rgb), 0.1) */
-    --nc-error-rgb: var(--nc-light-error-rgb);
     --nc-error: var(--nc-light-error);
     --nc-white: var(--nc-light-white);
+    /* --nc-error-rgb is used when I need to add transparency with rgba(var(--nc-error-rgb), 0.1) */
+    --nc-error-rgb: var(--nc-light-error-rgb);
+    --nc-bg-1-rgb: var(--nc-light-bg-1-rgb);
+    --nc-bg-2-rgb: var(--nc-light-bg-2-rgb);
+    --nc-bg-3-rgb: var(--nc-light-bg-3-rgb);
 }
 
 html[data-theme='dark'] {
@@ -80,9 +89,13 @@ html[data-theme='dark'] {
     --nc-ac-tx: var(--nc-dark-ac-tx);
     --nc-success: var(--nc-dark-success);
     --nc-info: var(--nc-dark-info);
-    --nc-error-rgb: var(--nc-dark-error-rgb);
     --nc-error: var(--nc-dark-error);
     --nc-white: var(--nc-dark-white);
+
+    --nc-error-rgb: var(--nc-dark-error-rgb);
+    --nc-bg-1-rgb: var(--nc-dark-bg-1-rgb);
+    --nc-bg-2-rgb: var(--nc-dark-bg-2-rgb);
+    --nc-bg-3-rgb: var(--nc-dark-bg-3-rgb);
 }
 
 /* TODO See if that works */

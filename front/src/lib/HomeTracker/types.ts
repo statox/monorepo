@@ -141,6 +141,7 @@ export interface YearlyEphemerisDay {
     monthLabel: string;
     isToday: boolean;
     solarEvent: SolarEvent | null;
+    lunarDistance: number;
 }
 
 export interface Ephemerides {

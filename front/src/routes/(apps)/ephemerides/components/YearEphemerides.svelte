@@ -159,6 +159,12 @@
                             <img class="moon-icon" src={day.moonIconURL} alt="moon phase" />
                         {/if}
                     </div>
+
+                    <div class="distance-col">
+                        {#if day.showMoonIcon && day.moonIconURL}
+                            <span>{day.lunarDistance}</span>
+                        {/if}
+                    </div>
                 </div>
             {/each}
         </div>
@@ -186,6 +192,8 @@
                 <span>{hoveredDay.moonriseFormatted}</span>
                 <span class="tooltip-muted">-</span>
                 <span>{hoveredDay.moonsetFormatted}</span>
+                <span class="tooltip-muted">distance</span>
+                <span>{hoveredDay.lunarDistance}</span>
             </div>
             {#if hoveredDay.moonIconURL}
                 <div class="tooltip-moon">
@@ -215,6 +223,7 @@
         --label-w: 40px;
         --diff-w: 50px;
         --moon-w: 20px;
+        --distance-w: 50px;
         --moon-icon-size: 14px;
 
         width: 100%;
@@ -242,6 +251,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .distance-col {
+        width: var(--distance-w);
+        flex-shrink: 0;
+        font-size: 10px;
+        display: flex;
     }
 
     .bar-col {
@@ -413,7 +429,7 @@
     .tooltip {
         position: fixed;
         z-index: 100;
-        background: var(--nc-bg-1);
+        background: rgba(var(--nc-bg-3-rgb), 0.9);
         border: 1px solid var(--nc-tx-3);
         border-radius: 4px;
         padding: 8px 12px;

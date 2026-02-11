@@ -193,7 +193,8 @@ export const processYearlyEphemerides = (
             isFirstOfMonth,
             monthLabel: isFirstOfMonth ? FRENCH_MONTHS[currentMonth] : '',
             isToday: date.hasSame(now, 'day'),
-            solarEvent: null
+            solarEvent: null,
+            lunarDistance: moonState.lunarDistance.toFixed(2)
         };
     });
 
