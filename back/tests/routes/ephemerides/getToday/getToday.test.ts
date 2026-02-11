@@ -18,6 +18,7 @@ describe('/ephemerides/getToday', () => {
             moonState: {
                 lunarAge: 16.332034465381327,
                 lunarAgePercent: 0.5530548402257409,
+                lunarDistance: 63.48951888633156,
                 moonPhase: 'Full',
                 moonPhaseFr: 'Pleine lune',
                 moonVisibilityWindow: ['18:00', '06:00']
@@ -36,6 +37,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 16.332034465381327,
                         lunarAgePercent: 0.5530548402257409,
+                        lunarDistance: 63.48951888633156,
                         moonPhase: 'Full',
                         moonPhaseFr: 'Pleine lune',
                         moonVisibilityWindow: ['18:00', '06:00']
@@ -46,6 +48,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 17.332034465381543,
                         lunarAgePercent: 0.5869180335344595,
+                        lunarDistance: 63.18679239586197,
                         moonPhase: 'Waning Gibbous',
                         moonPhaseFr: 'Gibeuse décroissante',
                         moonVisibilityWindow: ['21:00', '09:00']
@@ -56,6 +59,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 18.332034465381764,
                         lunarAgePercent: 0.620781226843178,
+                        lunarDistance: 62.77617272929196,
                         moonPhase: 'Waning Gibbous',
                         moonPhaseFr: 'Gibeuse décroissante',
                         moonVisibilityWindow: ['21:00', '09:00']
@@ -66,6 +70,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 19.33203446538198,
                         lunarAgePercent: 0.6546444201518966,
+                        lunarDistance: 62.252448172947254,
                         moonPhase: 'Waning Gibbous',
                         moonPhaseFr: 'Gibeuse décroissante',
                         moonVisibilityWindow: ['21:00', '09:00']
@@ -76,6 +81,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 20.3320344653822,
                         lunarAgePercent: 0.6885076134606152,
+                        lunarDistance: 61.61540932389658,
                         moonPhase: 'Last Quarter',
                         moonPhaseFr: 'Dernier quartier',
                         moonVisibilityWindow: ['00:00', '12:00']
@@ -86,6 +92,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 21.332034465382417,
                         lunarAgePercent: 0.7223708067693337,
+                        lunarDistance: 60.87460360776774,
                         moonPhase: 'Last Quarter',
                         moonPhaseFr: 'Dernier quartier',
                         moonVisibilityWindow: ['00:00', '12:00']
@@ -96,6 +103,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 22.332034465382637,
                         lunarAgePercent: 0.7562340000780523,
+                        lunarDistance: 60.05286023698238,
                         moonPhase: 'Last Quarter',
                         moonPhaseFr: 'Dernier quartier',
                         moonVisibilityWindow: ['00:00', '12:00']
@@ -106,6 +114,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 23.332034465382854,
                         lunarAgePercent: 0.7900971933867709,
+                        lunarDistance: 59.18769245832981,
                         moonPhase: 'Last Quarter',
                         moonPhaseFr: 'Dernier quartier',
                         moonVisibilityWindow: ['00:00', '12:00']
@@ -116,6 +125,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 24.332034465381398,
                         lunarAgePercent: 0.8239603866954326,
+                        lunarDistance: 58.33005075067435,
                         moonPhase: 'Waning Crescent',
                         moonPhaseFr: 'Dernier croissant',
                         moonVisibilityWindow: ['03:00', '15:00']
@@ -126,6 +136,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 25.332034465381614,
                         lunarAgePercent: 0.8578235800041512,
+                        lunarDistance: 57.54037534798036,
                         moonPhase: 'Waning Crescent',
                         moonPhaseFr: 'Dernier croissant',
                         moonVisibilityWindow: ['03:00', '15:00']
@@ -136,6 +147,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 26.332034465381835,
                         lunarAgePercent: 0.8916867733128697,
+                        lunarDistance: 56.882394266138434,
                         moonPhase: 'Waning Crescent',
                         moonPhaseFr: 'Dernier croissant',
                         moonVisibilityWindow: ['03:00', '15:00']
@@ -146,6 +158,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 27.33203446538205,
                         lunarAgePercent: 0.9255499666215883,
+                        lunarDistance: 56.4155442660008,
                         moonPhase: 'Waning Crescent',
                         moonPhaseFr: 'Dernier croissant',
                         moonVisibilityWindow: ['03:00', '15:00']
@@ -156,6 +169,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 28.33203446538227,
                         lunarAgePercent: 0.9594131599303068,
+                        lunarDistance: 56.18717845886349,
                         moonPhase: 'New',
                         moonPhaseFr: 'Nouvelle lune',
                         moonVisibilityWindow: ['06:00', '18:00']
@@ -166,6 +180,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 29.33203446538249,
                         lunarAgePercent: 0.9932763532390254,
+                        lunarDistance: 56.22581239916559,
                         moonPhase: 'New',
                         moonPhaseFr: 'Nouvelle lune',
                         moonVisibilityWindow: ['06:00', '18:00']
@@ -176,6 +191,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 0.8014467596227095,
                         lunarAgePercent: 0.027139546547743976,
+                        lunarDistance: 56.536532221483554,
                         moonPhase: 'New',
                         moonPhaseFr: 'Nouvelle lune',
                         moonVisibilityWindow: ['06:00', '18:00']
@@ -186,6 +202,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 1.8014467596212496,
                         lunarAgePercent: 0.0610027398564057,
+                        lunarDistance: 57.09936363324192,
                         moonPhase: 'New',
                         moonPhaseFr: 'Nouvelle lune',
                         moonVisibilityWindow: ['06:00', '18:00']
@@ -196,6 +213,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 2.8014467596214683,
                         lunarAgePercent: 0.09486593316512426,
+                        lunarDistance: 57.870934186120785,
                         moonPhase: 'Waxing Crescent',
                         moonPhaseFr: 'Premier croissant',
                         moonVisibilityWindow: ['09:00', '21:00']
@@ -206,6 +224,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 3.8014467596216868,
                         lunarAgePercent: 0.12872912647384283,
+                        lunarDistance: 58.7892332619783,
                         moonPhase: 'Waxing Crescent',
                         moonPhaseFr: 'Premier croissant',
                         moonVisibilityWindow: ['09:00', '21:00']
@@ -216,6 +235,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 4.801446759621905,
                         lunarAgePercent: 0.1625923197825614,
+                        lunarDistance: 59.78077578006869,
                         moonPhase: 'Waxing Crescent',
                         moonPhaseFr: 'Premier croissant',
                         moonVisibilityWindow: ['09:00', '21:00']
@@ -226,6 +246,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 5.801446759622125,
                         lunarAgePercent: 0.19645551309127995,
+                        lunarDistance: 60.76909292532063,
                         moonPhase: 'First Quarter',
                         moonPhaseFr: 'Premier quartier',
                         moonVisibilityWindow: ['12:00', '00:00']
@@ -236,6 +257,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 6.801446759622343,
                         lunarAgePercent: 0.23031870639999852,
+                        lunarDistance: 61.683272154654304,
                         moonPhase: 'First Quarter',
                         moonPhaseFr: 'Premier quartier',
                         moonVisibilityWindow: ['12:00', '00:00']
@@ -246,6 +268,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 7.801446759622562,
                         lunarAgePercent: 0.2641818997087171,
+                        lunarDistance: 62.46528343527763,
                         moonPhase: 'First Quarter',
                         moonPhaseFr: 'Premier quartier',
                         moonVisibilityWindow: ['12:00', '00:00']
@@ -256,6 +279,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 8.801446759622781,
                         lunarAgePercent: 0.29804509301743565,
+                        lunarDistance: 63.07505532738676,
                         moonPhase: 'First Quarter',
                         moonPhaseFr: 'Premier quartier',
                         moonVisibilityWindow: ['12:00', '00:00']
@@ -266,6 +290,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 9.80144675962132,
                         lunarAgePercent: 0.33190828632609737,
+                        lunarDistance: 63.492662242360744,
                         moonPhase: 'Waxing Gibbous',
                         moonPhaseFr: 'Gibeuse croissante',
                         moonVisibilityWindow: ['15:00', '03:00']
@@ -276,6 +301,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 10.80144675962154,
                         lunarAgePercent: 0.36577147963481593,
+                        lunarDistance: 63.717482280320574,
                         moonPhase: 'Waxing Gibbous',
                         moonPhaseFr: 'Gibeuse croissante',
                         moonVisibilityWindow: ['15:00', '03:00']
@@ -286,6 +312,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 11.801446759621758,
                         lunarAgePercent: 0.3996346729435345,
+                        lunarDistance: 63.76469556463527,
                         moonPhase: 'Waxing Gibbous',
                         moonPhaseFr: 'Gibeuse croissante',
                         moonVisibilityWindow: ['15:00', '03:00']
@@ -296,6 +323,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 12.801446759621976,
                         lunarAgePercent: 0.43349786625225306,
+                        lunarDistance: 63.659926456388995,
                         moonPhase: 'Waxing Gibbous',
                         moonPhaseFr: 'Gibeuse croissante',
                         moonVisibilityWindow: ['15:00', '03:00']
@@ -306,6 +334,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 13.801446759622195,
                         lunarAgePercent: 0.4673610595609716,
+                        lunarDistance: 63.43311426389811,
                         moonPhase: 'Full',
                         moonPhaseFr: 'Pleine lune',
                         moonVisibilityWindow: ['18:00', '06:00']
@@ -316,6 +345,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 14.801446759622413,
                         lunarAgePercent: 0.5012242528696902,
+                        lunarDistance: 63.11277847929563,
                         moonPhase: 'Full',
                         moonPhaseFr: 'Pleine lune',
                         moonVisibilityWindow: ['18:00', '06:00']
@@ -326,6 +356,7 @@ describe('/ephemerides/getToday', () => {
                     lunarState: {
                         lunarAge: 15.801446759622632,
                         lunarAgePercent: 0.5350874461784088,
+                        lunarDistance: 62.721714551138845,
                         moonPhase: 'Full',
                         moonPhaseFr: 'Pleine lune',
                         moonVisibilityWindow: ['18:00', '06:00']

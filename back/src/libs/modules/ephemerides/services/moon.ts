@@ -48,6 +48,7 @@ export const getLunarState = (date: Date) => {
 
     const lunarAge = Moon.lunarAge(date);
     const lunarAgePercent = Moon.lunarAgePercent(date);
+    const lunarDistance = Moon.lunarDistance(date);
 
     const moonPhase = Moon.lunarPhase(date, options);
     const phaseDetails = lunarPhasesDetails[moonPhase];
@@ -57,6 +58,7 @@ export const getLunarState = (date: Date) => {
     return {
         lunarAge,
         lunarAgePercent,
+        lunarDistance,
         moonPhase,
         moonPhaseFr,
         moonVisibilityWindow: visibility

@@ -12,6 +12,11 @@ const lunarStateSchema = {
     properties: {
         lunarAge: { type: 'number' },
         lunarAgePercent: { type: 'number' },
+        lunarDistance: {
+            type: 'number',
+            description:
+                'Distance to the moon measured in units of Earth radii, with perigee at 56 and apogee at 63.8'
+        },
         moonPhase: { type: 'string' },
         moonPhaseFr: { type: 'string' },
         moonVisibilityWindow: {
@@ -21,7 +26,14 @@ const lunarStateSchema = {
             minItems: 2
         }
     },
-    required: ['lunarAge', 'lunarAgePercent', 'moonPhase', 'moonPhaseFr', 'moonVisibilityWindow'],
+    required: [
+        'lunarAge',
+        'lunarAgePercent',
+        'lunarDistance',
+        'moonPhase',
+        'moonPhaseFr',
+        'moonVisibilityWindow'
+    ],
     additionalProperties: false
 } as const;
 
