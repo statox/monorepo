@@ -1,6 +1,8 @@
 import { LunarPhase } from 'lunarphase-js';
 import { getRangeEphemeridesAPI, getTodayEphemeridesAPI } from './api';
 import { DateTime, Duration } from 'luxon';
+import type { Ephemerides_GetRange_Output } from '$vendor/statox-api';
+import type { YearlyEphemerisDay } from './types';
 
 export const getMoonPhasePictureURL = (phase: LunarPhase) => {
     if (phase === LunarPhase.NEW) {
@@ -84,6 +86,111 @@ export const getTodayEphemerides = async () => {
             };
         })
     };
+};
+
+const FRENCH_MONTHS = [
+    '',
+    'Jan',
+    'Fév',
+    'Mar',
+    'Avr',
+    'Mai',
+    'Juin',
+    'Juil',
+    'Aoû',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Déc'
+];
+
+const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000;
+
+const formatDiffMs = (ms: number): string => {
+    const sign = ms >= 0 ? '+' : '-';
+    const dur = Duration.fromMillis(Math.abs(ms));
+    const mins = Math.floor(dur.as('minutes'));
+    const secs = Math.floor(dur.as('seconds')) % 60;
+    return `${sign}${mins}m${secs.toString().padStart(2, '0')}s`;
+};
+
+export const processYearlyEphemerides = (
+    rawData: Ephemerides_GetRange_Output['ephemerides'],
+    zone: string
+): YearlyEphemerisDay[] => {
+    const maxAbsDiff = rawData.reduce(
+        (max, entry) => Math.max(max, Math.abs(entry.ephemeride.sunState.dayLengthDiffMs)),
+        1
+    );
+
+    const now = DateTime.now();
+    let prevMoonPhase: string | undefined;
+    let prevMonth: number | undefined;
+
+    const days: YearlyEphemerisDay[] = rawData.map((entry) => {
+        const date = DateTime.fromMillis(entry.day, { zone: 'Europe/Paris' });
+        const { sunState, moonState } = entry.ephemeride;
+
+        const sunrise = DateTime.fromMillis(sunState.sunrise, { zone });
+        const sunset = DateTime.fromMillis(sunState.sunset, { zone });
+        const sunriseHours = sunrise.hour + sunrise.minute / 60;
+        const sunsetHours = sunset.hour + sunset.minute / 60;
+
+        const showMoonIcon = prevMoonPhase !== undefined && moonState.moonPhase !== prevMoonPhase;
+        let moonIconURL = '';
+        try {
+            moonIconURL = getMoonPhaseIconURL(moonState.moonPhase as LunarPhase);
+        } catch {
+            // ignore unknown phases
+        }
+        prevMoonPhase = moonState.moonPhase;
+
+        const currentMonth = date.month;
+        const isFirstOfMonth = prevMonth !== undefined && currentMonth !== prevMonth;
+        prevMonth = currentMonth;
+
+        const dayLengthDur = Duration.fromMillis(sunState.dayLengthMs);
+        const dayLengthH = Math.floor(dayLengthDur.as('hours'));
+        const dayLengthM = Math.floor(dayLengthDur.as('minutes')) % 60;
+
+        return {
+            dateMs: entry.day,
+            dateFormatted: date.toFormat('cccc dd MMMM yyyy', { locale: 'fr' }),
+            sunrisePercent: (sunriseHours / 24) * 100,
+            sunsetPercent: (sunsetHours / 24) * 100,
+            sunriseFormatted: sunrise.toFormat('HH:mm'),
+            sunsetFormatted: sunset.toFormat('HH:mm'),
+            dayLengthFormatted: `${dayLengthH}h${dayLengthM.toString().padStart(2, '0')}`,
+            dayLengthDiffNormalized: sunState.dayLengthDiffMs / maxAbsDiff,
+            dayLengthDiffMs: sunState.dayLengthDiffMs,
+            dayLengthDiffFormatted: formatDiffMs(sunState.dayLengthDiffMs),
+            showMoonIcon,
+            moonIconURL,
+            moonPhaseFr: moonState.moonPhaseFr,
+            isFirstOfMonth,
+            monthLabel: isFirstOfMonth ? FRENCH_MONTHS[currentMonth] : '',
+            isToday: date.hasSame(now, 'day'),
+            solarEvent: null
+        };
+    });
+
+    // Detect solstices (dayLengthDiff crosses zero) and equinoxes (dayLength crosses 12h)
+    for (let i = 1; i < days.length; i++) {
+        const prev = rawData[i - 1].ephemeride.sunState;
+        const curr = rawData[i].ephemeride.sunState;
+        if (prev.dayLengthDiffMs > 0 && curr.dayLengthDiffMs <= 0) {
+            days[i].solarEvent = 'Solstice d\u2019été';
+        } else if (prev.dayLengthDiffMs < 0 && curr.dayLengthDiffMs >= 0) {
+            days[i].solarEvent = 'Solstice d\u2019hiver';
+        }
+        if (prev.dayLengthMs < TWELVE_HOURS_MS && curr.dayLengthMs >= TWELVE_HOURS_MS) {
+            days[i].solarEvent = 'Équinoxe de printemps';
+        } else if (prev.dayLengthMs > TWELVE_HOURS_MS && curr.dayLengthMs <= TWELVE_HOURS_MS) {
+            days[i].solarEvent = 'Équinoxe d\u2019automne';
+        }
+    }
+
+    return days;
 };
 
 export const getYearlyEphemerides = async () => {
