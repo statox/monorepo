@@ -194,7 +194,7 @@ export const processYearlyEphemerides = (
             monthLabel: isFirstOfMonth ? FRENCH_MONTHS[currentMonth] : '',
             isToday: date.hasSame(now, 'day'),
             solarEvent: null,
-            lunarDistance: moonState.lunarDistance.toFixed(2)
+            lunarDistance: Number(moonState.lunarDistance.toFixed(2))
         };
     });
 
