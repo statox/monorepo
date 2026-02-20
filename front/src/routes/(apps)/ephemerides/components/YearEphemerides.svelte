@@ -4,6 +4,9 @@
     import { getYearlyEphemerides, processYearlyEphemerides } from '$lib/HomeTracker';
     import type { YearlyEphemerisDay } from '$lib/HomeTracker';
 
+    const LUNAR_DISTANCE_MIN = 55;
+    const LUNAR_DISTANCE_MAX = 64;
+
     // TODO Rework ButtonSwitch to avoid this weird mechanic
     let utcDisplay: 'UTC' | 'Europe/Paris' = $state('UTC');
     let showMoonOverlay: 'on' | 'off' = $state('off');
@@ -161,9 +164,10 @@
                     </div>
 
                     <div class="distance-col">
-                        {#if day.showMoonIcon && day.moonIconURL}
-                            <span>{day.lunarDistance}</span>
-                        {/if}
+                        <div
+                            class="distance-fill"
+                            style="width: {((day.lunarDistance - LUNAR_DISTANCE_MIN) / (LUNAR_DISTANCE_MAX - LUNAR_DISTANCE_MIN)) * 100}%"
+                        ></div>
                     </div>
                 </div>
             {/each}
@@ -256,8 +260,15 @@
     .distance-col {
         width: var(--distance-w);
         flex-shrink: 0;
-        font-size: 10px;
+        height: 100%;
+        padding-left: 4px;
         display: flex;
+        align-items: center;
+    }
+
+    .distance-fill {
+        height: 100%;
+        background-color: #6e82a8;
     }
 
     .bar-col {
