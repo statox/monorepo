@@ -62,7 +62,7 @@
         checked = state === 'true' ? false : true;
 
         value = checked === true ? 'on' : 'off';
-        onchange(value);
+        onchange(value as 'on' | 'off');
     }
 
     onMount(() => {
