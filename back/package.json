@@ -21,6 +21,7 @@
         "heroku:force-deploy": "npm run check && npm run tests:all && cd .. && git push heroku $(git subtree split --prefix back):master --force",
         "heroku:force-deploy:skip-tests": "npm run check && cd .. && git push heroku $(git subtree split --prefix back):master --force",
         "heroku:ssh": "npx heroku@latest run bash",
+        "prod:deploy": ". ./src/tools/release/deploy.sh",
         "postinstall": "tsc",
         "env": "./src/tools/containers-env.sh up",
         "env:stop": "./src/tools/containers-env.sh down",

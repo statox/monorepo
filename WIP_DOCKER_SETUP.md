@@ -31,8 +31,9 @@ We want to tackle the following items in order:
     # Local version of apps.statox.fr plugged on this backend will discuss with the prod infra
     ```
 
-- [ ] **Publish the container** Find a way to have the container available to the prod server and manually start it on the server
+- ~[ ] **Publish the container** Find a way to have the container available to the prod server and manually start it on the server~
 - [ ] **Integrate the deployment process into current setup** Find the right amount of tooling with `docker buildx bake`, `docker compose`, the publication mechanism from previous step and my current ansible playbooks to deploy the infra. We want to automate the deployment as close as possible to Heroku (Just pushing a branch from dev machine deploys a new version), while keeping things simple. Have a setup flexible enough so that adding new components like frontend will be low friction.
+    - [x] **Quick and dirty solution** For now we created `npm run prod:deploy` which calls a bash script responsible for ssh-ing to panda, pulling the changes, building the container and deploying it on the prod machine.
 
 
 ## Step 2: Dockerize only the front end

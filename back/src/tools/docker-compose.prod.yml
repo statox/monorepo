@@ -12,7 +12,6 @@ services:
         restart: unless-stopped
         container_name: apistatox.api
         environment:
-            # DOTENV_PRIVATE_KEY: TODO
             ENV: prod
         expose:
             - 3000
@@ -20,6 +19,6 @@ services:
             - reverse-proxy
         labels:
             - 'traefik.enable=true'
-            - 'traefik.http.routers.apistatox.rule=Host(`api2.statox.fr`)'
+            - 'traefik.http.routers.apistatox.rule=Host(`api.statox.fr`)'
             - 'traefik.http.routers.apistatox.entrypoints=websecure'
             - 'traefik.http.routers.apistatox.tls=true'

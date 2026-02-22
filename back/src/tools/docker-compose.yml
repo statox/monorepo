@@ -46,6 +46,7 @@ services:
             - xpack.license.self_generated.type=basic
         mem_limit: 1g
 
+    # TODO: Use a container to run the server for local development?
     # api:
     #     container_name: apistatox.api
     #     build:
