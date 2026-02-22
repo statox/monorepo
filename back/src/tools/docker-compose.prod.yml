@@ -1,0 +1,25 @@
+---
+networks:
+    # Used by traefik to expose the public services
+    reverse-proxy:
+        external: true
+
+services:
+    api:
+        build:
+            context: ../../
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        container_name: apistatox.api
+        environment:
+            # DOTENV_PRIVATE_KEY: TODO
+            ENV: prod
+        expose:
+            - 3000
+        networks:
+            - reverse-proxy
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.apistatox.rule=Host(`api2.statox.fr`)'
+            - 'traefik.http.routers.apistatox.entrypoints=websecure'
+            - 'traefik.http.routers.apistatox.tls=true'

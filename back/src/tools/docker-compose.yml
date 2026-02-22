@@ -46,6 +46,18 @@ services:
             - xpack.license.self_generated.type=basic
         mem_limit: 1g
 
+    # api:
+    #     container_name: apistatox.api
+    #     build:
+    #         context: ../../
+    #         dockerfile: Dockerfile
+    #     ports:
+    #         - '127.0.0.1:3000:3000'
+    #     depends_on:
+    #         - db
+    #         - localstack
+    #         - elk
+
     # Uncomment if a Kibana is needed to inspect local ELK
     # Use http://localhost:25601, no password required
     # The data view must be recreated manually until I implement automatically recreating it
