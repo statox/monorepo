@@ -103,7 +103,7 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
                     : `params: ${pathParamsType}`;
             }
 
-            const path = route.path;
+            const routePath = route.path;
             // pathParamsTransform is only used for route with a path parameter like /r/:linkId
             const pathParamsTransform = pathParams.length
                 ? pathParams.map((p) => `.replace(':${p}', params.${p})`).join('\n        ')
@@ -111,14 +111,14 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
 
             const methodImplementation = `
     /**
-     * ${route.method.toUpperCase()} ${route.path}
+     * ${route.method.toUpperCase()} ${routePath}
      * Authentication: ${route.authentication}
      */
     ${route.name}: async (${params}): Promise<${outputType}> => {
       ${hasInput ? `validateInput(schemas.${inputSchemaName}, input, '${module}.${route.name}');` : ''}
 
       const response = await this.fetch(
-        '${path}'${pathParamsTransform},
+        '${routePath}'${pathParamsTransform},
         ${
             hasInput
                 ? `{
