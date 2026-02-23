@@ -22,3 +22,6 @@ services:
             - 'traefik.http.routers.apistatox.rule=Host(`api.statox.fr`)'
             - 'traefik.http.routers.apistatox.entrypoints=websecure'
             - 'traefik.http.routers.apistatox.tls=true'
+            # For environment sensors which don't use https for now
+            - 'traefik.http.routers.apistatox-nonsecure.rule=Host(`api.statox.fr`)'
+            - 'traefik.http.routers.apistatox-nonsecure.entrypoints=webnonsecure'
