@@ -69,14 +69,6 @@ function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, Grouped
     return grouped;
 }
 
-// Generate TypeScript type from schema
-// TODO Remove the schema argument
-function generateTypeFromSchema(_schema: ApiJsonSchema, name: string): string {
-    // For simple schemas, generate inline types
-    // For complex ones, we'll use the schema directly with FromSchema
-    return `FromSchema<typeof schemas.${name}>`;
-}
-
 // Generate the SDK client code
 function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string {
     const moduleImplementations: string[] = [];
@@ -97,10 +89,8 @@ function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string {
 
             // Generate method signature
             const hasInput = route.method === 'post' && route.inputSchema;
-            const inputType = hasInput
-                ? generateTypeFromSchema(route.inputSchema!, inputSchemaName)
-                : 'void';
-            const outputType = generateTypeFromSchema(route.outputSchema, outputSchemaName);
+            const inputType = hasInput ? generateNamedType(module, route.name, 'Input') : 'void';
+            const outputType = generateNamedType(module, route.name, 'Output');
 
             const inputParam = hasInput ? `input: ${inputType}` : '';
             const pathParams = extractPathParams(route.path);
@@ -239,11 +229,11 @@ ${Array.from(groupedRoutes.entries())
             const types = [];
             if (route.inputSchema) {
                 types.push(
-                    `export type ${capitalizeFirst(module)}_${capitalizeFirst(route.name)}_Input = FromSchema<typeof schemas.${module}_${route.name}_Input>;`
+                    `export type ${generateNamedType(module, route.name, 'Input')} = FromSchema<typeof schemas.${module}_${route.name}_Input>;`
                 );
             }
             types.push(
-                `export type ${capitalizeFirst(module)}_${capitalizeFirst(route.name)}_Output = FromSchema<typeof schemas.${module}_${route.name}_Output>;`
+                `export type ${generateNamedType(module, route.name, 'Output')} = FromSchema<typeof schemas.${module}_${route.name}_Output>;`
             );
             return types;
         })
@@ -259,6 +249,10 @@ function extractPathParams(path: string): string[] {
 
 function capitalizeFirst(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function generateNamedType(module: string, name: string, kind: 'Input' | 'Output'): string {
+    return `${capitalizeFirst(module)}_${capitalizeFirst(name)}_${kind}`;
 }
 
 // Main execution
