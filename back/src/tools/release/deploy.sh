@@ -42,4 +42,21 @@ $SSH "$COMPOSE down"
 echo "Starting new deployment..."
 $SSH "$COMPOSE up --build api -d"
 
-echo "Deploy complete."
+# Validate the deployment by polling the health endpoint
+echo "Validating deployment..."
+HEALTH_URL='https://api.statox.fr/health/getRemoteTime'
+MAX_ATTEMPTS=10
+SLEEP_SECONDS=3
+
+for i in $(seq 1 $MAX_ATTEMPTS); do
+    HTTP_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" "$HEALTH_URL")
+    if [ "$HTTP_STATUS" -eq 200 ]; then
+        echo "Deploy complete. API is up (attempt $i/$MAX_ATTEMPTS)."
+        exit 0
+    fi
+    echo "Attempt $i/$MAX_ATTEMPTS: got HTTP $HTTP_STATUS, retrying in ${SLEEP_SECONDS}s..."
+    sleep $SLEEP_SECONDS
+done
+
+echo "ERROR: API did not respond with HTTP 200 after $MAX_ATTEMPTS attempts." >&2
+exit 1
