@@ -271,7 +271,10 @@ describe('scripts/generateSDK', () => {
             await client.homeTracker.addEntry({ name: 'test' });
 
             assert.isTrue(fetchStub.calledOnce);
-            const [url, options] = fetchStub.firstCall.args as [string, RequestInit & { headers: Record<string, string> }];
+            const [url, options] = fetchStub.firstCall.args as [
+                string,
+                RequestInit & { headers: Record<string, string> }
+            ];
             assert.include(url, '/homeTracker/addEntry');
             assert.equal(options.method, 'POST');
             assert.equal(options.headers['Content-Type'], 'application/json');
