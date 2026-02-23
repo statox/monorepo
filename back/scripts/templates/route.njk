@@ -1,0 +1,18 @@
+    /**
+     * {{ method }} {{ routePath }}
+     * Authentication: {{ authentication }}
+     */
+    {{ name }}: async ({{ params }}): Promise<{{ outputType }}> => {
+      {% if hasInput %}validateInput(schemas.{{ inputSchemaName }}, input, '{{ module }}.{{ name }}');{% endif %}
+      const response = await this.fetch(
+        '{{ routePath }}'{{ pathParamsTransform }},
+        {% if hasInput %}{
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(input)
+        }{% else %}{ method: 'GET' }{% endif %}
+      );
+      const output = await response.json();
+      validateOutput(schemas.{{ outputSchemaName }}, output, '{{ module }}.{{ name }}');
+      return output as {{ outputType }};
+    },

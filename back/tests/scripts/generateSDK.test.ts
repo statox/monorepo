@@ -1,4 +1,6 @@
 import { assert } from 'chai';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import vm from 'node:vm';
 import { createRequire } from 'node:module';
@@ -58,6 +60,19 @@ const statusRoute = {
 // ---------------------------------------------------------------------------
 
 describe('scripts/generateSDK', () => {
+    before(() => {
+        // generateSDK uses a nunjucks FileSystemLoader relative to its compiled location
+        // (dist/scripts/templates/). Copy source templates there so tests don't depend on
+        // postinstall having been run since the templates were last modified.
+        const srcTemplates = fileURLToPath(
+            new URL('../../../scripts/templates', import.meta.url)
+        );
+        const destTemplates = fileURLToPath(
+            new URL('../../../dist/scripts/templates', import.meta.url)
+        );
+        fs.cpSync(srcTemplates, destTemplates, { recursive: true });
+    });
+
     // -----------------------------------------------------------------------
     // Category 1 — groupRoutes unit tests
     // -----------------------------------------------------------------------
