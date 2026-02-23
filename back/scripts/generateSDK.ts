@@ -117,10 +117,8 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
     ${route.name}: async (${params}): Promise<${outputType}> => {
         ${hasInput ? `validateInput(schemas.${inputSchemaName}, input, '${module}.${route.name}');` : ''}
 
-        const path = '${path}'${pathParamsTransform};
-
         const response = await this.fetch(
-            path,
+            '${path}'${pathParamsTransform},
             ${
                 hasInput
                     ? `{
@@ -136,12 +134,16 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
         validateOutput(schemas.${outputSchemaName}, output, '${module}.${route.name}');
         return output as ${outputType};
     }`;
-            // Generate method implementation
-            methods.push(methodImplementation);
+            // Remove lines that are blank or whitespace-only (artifacts from empty interpolations)
+            const cleanedImplementation = methodImplementation
+                .split('\n')
+                .filter((line) => line.trim() !== '')
+                .join('\n');
+            methods.push(cleanedImplementation);
         }
 
         moduleImplementations.push(`
-  ${module} = {${methods.join(',\n')}
+  ${module} = {\n${methods.join(',\n')}
   };`);
     }
 
