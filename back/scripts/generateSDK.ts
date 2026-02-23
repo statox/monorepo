@@ -14,7 +14,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { routes } from '../src/libs/routes/index.js';
+import { fileURLToPath } from 'url';
 import type { ApiJsonSchema, Route } from '../src/libs/routes/types.js';
 
 interface GroupedRoute {
@@ -28,7 +28,7 @@ interface GroupedRoute {
 }
 
 // Group routes by module (first part of path)
-function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, GroupedRoute[]> {
+export function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, GroupedRoute[]> {
     const grouped = new Map<string, GroupedRoute[]>();
 
     for (const route of routesList) {
@@ -70,7 +70,7 @@ function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, Grouped
 }
 
 // Generate the SDK client code
-function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string {
+export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string {
     const moduleImplementations: string[] = [];
     const allSchemas: { [key: string]: ApiJsonSchema } = {};
 
@@ -256,7 +256,8 @@ function generateNamedType(module: string, name: string, kind: 'Input' | 'Output
 }
 
 // Main execution
-function main() {
+async function main() {
+    const { routes } = await import('../src/libs/routes/index.js');
     const outputDir = process.argv[2] || './generated';
     const outputFile = path.join(outputDir, 'index.ts');
 
@@ -282,4 +283,6 @@ function main() {
     }
 }
 
-main();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    main();
+}

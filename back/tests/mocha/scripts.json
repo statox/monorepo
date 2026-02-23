@@ -1,0 +1,10 @@
+{
+    "spec": "dist/tests/scripts/**/*.test.js",
+    "exit": true,
+    "timeout": 10000,
+    "parallel": false,
+    "jobs": 1,
+    "node-option": [
+        "unhandled-rejections=strict"
+    ]
+}
