@@ -115,24 +115,24 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
      * Authentication: ${route.authentication}
      */
     ${route.name}: async (${params}): Promise<${outputType}> => {
-        ${hasInput ? `validateInput(schemas.${inputSchemaName}, input, '${module}.${route.name}');` : ''}
+      ${hasInput ? `validateInput(schemas.${inputSchemaName}, input, '${module}.${route.name}');` : ''}
 
-        const response = await this.fetch(
-            '${path}'${pathParamsTransform},
-            ${
-                hasInput
-                    ? `{
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(input)
-            }`
-                    : `{ method: 'GET' }`
-            }
-        );
+      const response = await this.fetch(
+        '${path}'${pathParamsTransform},
+        ${
+            hasInput
+                ? `{
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(input)
+        }`
+                : `{ method: 'GET' }`
+        }
+      );
 
-        const output = await response.json();
-        validateOutput(schemas.${outputSchemaName}, output, '${module}.${route.name}');
-        return output as ${outputType};
+      const output = await response.json();
+      validateOutput(schemas.${outputSchemaName}, output, '${module}.${route.name}');
+      return output as ${outputType};
     }`;
             // Remove lines that are blank or whitespace-only (artifacts from empty interpolations)
             const cleanedImplementation = methodImplementation
