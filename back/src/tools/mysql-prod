@@ -7,7 +7,10 @@ DATA_STR=$(echo "$URL" | sed -E 's;mysql://(.*):(.*)@(.*):(.*)/(.*);\1 \2 \3 \4 
 
 user=$(echo "$DATA_STR" | cut -d ' ' -f1)
 password=$(echo "$DATA_STR" | cut -d ' ' -f2)
-host=$(echo "$DATA_STR" | cut -d ' ' -f3)
+#host=$(echo "$DATA_STR" | cut -d ' ' -f3)
+# TODO Temporary hack, on the server the hostname is api-db because the container uses the Docker DNS name
+# For now force the url here
+host="api-db.statox.fr"
 port=$(echo "$DATA_STR" | cut -d ' ' -f4)
 db=$(echo "$DATA_STR" | cut -d ' ' -f5)
 
