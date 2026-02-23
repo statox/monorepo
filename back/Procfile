@@ -1,2 +1,6 @@
 release: npx dotenvx run -- node dist/src/tools/release/index.js
+# 2026/02/23 scaled down web dyno to zero to test docker deployment
+# Commands
+# npx heroky ps
+# npx heroku ps:scale web=0
 web: npx dotenvx run -- node dist/index.js
