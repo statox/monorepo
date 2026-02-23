@@ -99,9 +99,7 @@
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Alert {formatedLastAlertTimestamp}</span>
             </div>
-        {/if}
-
-        {#if displayMode === 'readings'}
+        {:else if displayMode === 'readings'}
             <Readings {sensor} />
         {:else}
             <Metadata {sensor} />
@@ -126,6 +124,8 @@
 
     .is-in-alert {
         background-color: rgba(var(--nc-error-rgb), 0.1);
+        /* Make alert divs a bit smaller with zoom  */
+        zoom: 0.7;
     }
 
     .sensor-alert-notice {
