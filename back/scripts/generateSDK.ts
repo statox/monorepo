@@ -103,8 +103,13 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
                     : `params: ${pathParamsType}`;
             }
 
-            // Generate method implementation
-            methods.push(`
+            const path = route.path;
+            // pathParamsTransform is only used for route with a path parameter like /r/:linkId
+            const pathParamsTransform = pathParams.length
+                ? pathParams.map((p) => `.replace(':${p}', params.${p})`).join('\n        ')
+                : '';
+
+            const methodImplementation = `
     /**
      * ${route.method.toUpperCase()} ${route.path}
      * Authentication: ${route.authentication}
@@ -112,7 +117,7 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
     ${route.name}: async (${params}): Promise<${outputType}> => {
         ${hasInput ? `validateInput(schemas.${inputSchemaName}, input, '${module}.${route.name}');` : ''}
 
-        const path = '${route.path}'${pathParams.length > 0 ? pathParams.map((p) => `.replace(':${p}', params.${p});`).join('\n        ') : ''};
+        const path = '${path}'${pathParamsTransform};
 
         const response = await this.fetch(
             path,
@@ -130,7 +135,9 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
         const output = await response.json();
         validateOutput(schemas.${outputSchemaName}, output, '${module}.${route.name}');
         return output as ${outputType};
-    }`);
+    }`;
+            // Generate method implementation
+            methods.push(methodImplementation);
         }
 
         moduleImplementations.push(`
