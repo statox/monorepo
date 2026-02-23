@@ -1,30 +1,40 @@
 # Deploying in production
 
-I am transitioning the deployment of this API from heroku to my own production server.
+The API used to be deployed on heroku on a single dyno which costed ~7€/month. Now it is deployed on my own VPS (panda) with a Docker container
 
-## Before (Heroku)
+## Deployment process
 
-Deployment on heroku is done by simply pushing main to the heroku remote. The npm scripts allow to do that
+1. Make sure you have SSH configured to login as `ubunu` on panda (TODO Change that to version the credentials)
+1. Deploy with the npm script. This will pull `main` from origin and deploy it.
+    ```bash
+    npm run prod:deploy
+    ```
+1. It's possible to skip tests ran locally before pushing
+    ```bash
+    npm run prod:deploy:skip-tests
+    ```
 
-```
-npm run heroku:login
-npm run heroku:deploy
-```
+> [!TODO]
+> I might need to create a `force-deploy` version of this for when the main branch has been rebased
 
-## After (panda)
+## Under the hood
 
-This is still a work in progress. For now the process is as follow:
+This is still a work in progress.
 
-1. SSH to panda
-1. In `~/monorepo` git pull the latest changes
-1. In `~/monorepo` rebuild and restart the container `sudo docker compose -f back/src/tools/docker-compose.prod.yml up --build api`
+The `src/tools/release/deploy.sh` script is responsible for controlling the deployment on the remote server. What it does:
+
+1. SSH to prod server to make sure the repo is cloned and up to date on the server.
+1. Run `docker compose down` in the repo directory using our [`docker-compose.prod.yml`](./src/tools/docker-compose.prod.yml)
+1. Run `docker compose up -d`
+1. Poll the API healtcheck endpoint to validate the deployment
+
+This process creates a small down time because after `docker compose down` the container doesn't serves requests anymore and `docker compose up` triggers the build of the container which takes some time during we don't have a container running.
+
+> [!TODO]
+> This downtime could be reduced by building the container before the shutdown
+
+## The container
+
+The docker compose we have in this repo is responsible for building a container with the sources of the app and running the server process. It also references the `reverse-proxy` network we define on panda in my setup repository to let traefik route the requests to the different applications.
 
 The file `.env.keys` is alreaady copied in the directory to be included in the container and allow `dotenvx` to decrypt the env file.
-
-This is not ideal and should be more automatised but I want to keep things simple.
-
-We created an shell script at `src/tools/release/deploy.sh` to handle these steps and an npm script to make it simple to access:
-
-```
-npm run prod:deploy
-```

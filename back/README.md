@@ -6,7 +6,6 @@
 # At clone time
 npm install
 npm run setup-githooks # Setup a post-merge githook to be alerted when dependabot merged a PR
-npx heroku git:remote -a statox-backend # Add the heroku git remote to be able to deploy
 
 # Working locally
 npm run env # Start the docker environment
@@ -17,12 +16,15 @@ npm run serve # Start the server locally on port 3000
 # Testing
 npm run tests:all # Run all the test suites including the functional ones and the ones for the framework
 
-# Deploying (Done from dev machine for now)
-npm run heroku:login
-npm run heroku:deploy
+# Deploying (Done from dev machine for now, see DEPLOY.md for details, requires SSH to prod)
+npm run prod:deploy
 ```
 
 ## Environment
+
+### API server
+
+- Prod: The server runs on my own VPS (See [DEPLOY.md](./DEPLOY.md))
 
 ### Mysql
 
