@@ -64,9 +64,7 @@ describe('scripts/generateSDK', () => {
         // generateSDK uses a nunjucks FileSystemLoader relative to its compiled location
         // (dist/scripts/templates/). Copy source templates there so tests don't depend on
         // postinstall having been run since the templates were last modified.
-        const srcTemplates = fileURLToPath(
-            new URL('../../../scripts/templates', import.meta.url)
-        );
+        const srcTemplates = fileURLToPath(new URL('../../../scripts/templates', import.meta.url));
         const destTemplates = fileURLToPath(
             new URL('../../../dist/scripts/templates', import.meta.url)
         );
