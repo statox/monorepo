@@ -166,7 +166,9 @@
                     <div class="distance-col">
                         <div
                             class="distance-fill"
-                            style="width: {((day.lunarDistance - LUNAR_DISTANCE_MIN) / (LUNAR_DISTANCE_MAX - LUNAR_DISTANCE_MIN)) * 100}%"
+                            style="width: {((day.lunarDistance - LUNAR_DISTANCE_MIN) /
+                                (LUNAR_DISTANCE_MAX - LUNAR_DISTANCE_MIN)) *
+                                100}%"
                         ></div>
                     </div>
                 </div>
