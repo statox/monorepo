@@ -37,7 +37,7 @@ const getSearchParams = (
     window: '30m' | '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1M' | '2M' | '6M' | 'alltime'
 ) => {
     let earliestTS: number;
-    let nbBuckets: number | undefined = undefined;
+    let nbBuckets: number;
 
     const oneHour = 60 * 60 * 1000;
     const oneDay = 24 * oneHour;

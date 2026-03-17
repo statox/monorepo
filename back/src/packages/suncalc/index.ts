@@ -312,7 +312,7 @@ export const getMoonTimes = function (
         const a = (h0 + h2) / 2 - h1;
         const b = (h2 - h0) / 2;
         const xe = -b / (2 * a);
-        const ye = (a * xe + b) * xe + h1;
+        ye = (a * xe + b) * xe + h1;
         const d = b * b - 4 * a * h1;
         let roots = 0;
 
