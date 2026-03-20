@@ -18,7 +18,7 @@
 # Settings > Pages
 # Deploy from a branch: gh-pages, directory: / (root)
 
-name: Deploy Frontend to GitHub Pages
+name: (front) Deploy to GitHub Pages
 
 permissions:
   contents: write

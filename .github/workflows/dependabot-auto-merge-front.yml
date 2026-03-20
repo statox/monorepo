@@ -9,7 +9,7 @@
 # TODO:
 # - Maybe restrict the types for the pull_request event
 
-name: Test and AutoMerge PRs
+name: (front) AutoMerge Dependabot PRs
 
 on:
   pull_request:
