@@ -16,7 +16,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: calebevans/gha-failure-analysis@v0.1.9
+      - uses: calebevans/gha-failure-analysis@v0.2.0
         with:
           run-id: ${{ github.event.workflow_run.id }}
           llm-provider: anthropic
