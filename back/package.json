@@ -50,7 +50,7 @@
         "aws-sdk-client-mock": "^4.1.0",
         "cors": "^2.8.6",
         "express": "^5.2.1",
-        "express-json-validator-middleware": "^3.0.1",
+        "express-json-validator-middleware": "^4.0.0",
         "express-mysql-session": "^3.0.3",
         "express-session": "^1.19.0",
         "formidable": "^3.5.4",
