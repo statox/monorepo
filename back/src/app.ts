@@ -52,7 +52,11 @@ export const initApp = () => {
     app.use(
         cors({
             // TODO have a proper local setup to avoid localhost in prod
-            origin: ['https://apps.statox.fr', 'https://localhost:8080'],
+            origin: [
+                'https://apps.statox.fr',
+                'https://localhost:8080',
+                'https://lifestudio.statox.fr'
+            ],
             credentials: true // Required to let client send creds via the session cookie for passport auth
         })
     );
