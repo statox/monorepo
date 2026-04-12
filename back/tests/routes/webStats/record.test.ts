@@ -6,7 +6,8 @@ const validPayload = {
     clientTimestamp: 1700000000,
     app: 'my-app',
     path: '/some/path',
-    action: 'click'
+    action: 'click',
+    clientId: 'abc-123'
 };
 
 describe('webStats/record', () => {
@@ -25,6 +26,7 @@ describe('webStats/record', () => {
                     app: 'my-app',
                     path: '/some/path',
                     action: 'click',
+                    clientId: 'abc-123',
                     createdAtUnix: th.mysql.aroundNowSec
                 }
             ]

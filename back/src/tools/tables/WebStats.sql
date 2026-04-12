@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `WebStats` (
     `app` varchar(100) NOT NULL,
     `path` varchar(500) NOT NULL,
     `action` varchar(100) NOT NULL,
+    `clientId` varchar(100) NOT NULL,
     `createdAtUnix` int(11) unsigned NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

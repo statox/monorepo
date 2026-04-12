@@ -21,11 +21,12 @@ export type LoggableProperties = {
     authError?: Error;
     authType?: string;
     authUserScopes?: string[];
-    authValidatedSession?: boolean;
     authValidatedScope?: boolean;
+    authValidatedSession?: boolean;
     bucket?: string;
     cfGeoInfo?: CloudflareGeoInfo;
     cfRay?: string;
+    clientId?: string;
     code?: number;
     cookbook_duplicateIngredient?: string;
     cookbook_nbIngredients?: number;
