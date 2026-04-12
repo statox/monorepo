@@ -103,7 +103,11 @@ export const sessionStore = new MySQLStore(
     await getSessionDBConnection()
 ) as unknown as session.Store;
 
-const allowedOrigins = ['https://apps.statox.fr', 'https://localhost:8080'];
+const allowedOrigins = [
+    'https://apps.statox.fr',
+    'https://localhost:8080',
+    'https://lifestudio.statox.fr/'
+];
 
 export const setPassportHeaders = (req: Request, res: Response, next: NextFunction) => {
     // To send the creds alongside the request, the client need to use `credentials: 'include'`
