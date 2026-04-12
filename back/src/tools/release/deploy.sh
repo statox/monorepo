@@ -29,8 +29,9 @@ $SSH "
 "
 
 # Pull the latest changes of the main branch and checkout on remote
+# Use reset --hard instead of pull so force-pushed histories don't cause failures
 echo "Pulling latest changes on remote..."
-$SSH "cd $REPO_DIRECTORY && git fetch origin && git checkout $BRANCH_TO_DEPLOY && git pull origin $BRANCH_TO_DEPLOY"
+$SSH "cd $REPO_DIRECTORY && git fetch origin && git checkout $BRANCH_TO_DEPLOY && git reset --hard origin/$BRANCH_TO_DEPLOY"
 
 echo "Checking last commits"
 $SSH "git log --oneline | head -n 5"
