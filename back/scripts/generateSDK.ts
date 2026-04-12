@@ -45,6 +45,9 @@ export function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, 
             name = pathParts[0];
         }
 
+        // Convert kebab-case module to camelCase so hyphens never appear in identifiers
+        module = module.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+
         // Remove special characters (dots, hyphens, etc) and replace with underscores
         name = name.replace(/[^a-zA-Z0-9_]/g, '_');
 
@@ -100,8 +103,11 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
 
             const inputParam = hasInput ? `input: ${inputType}` : '';
             const pathParams = extractPathParams(route.path);
+            const isApiKeyAuth =
+                route.authentication === 'apikey' || route.authentication === 'apikey-iot';
 
-            let params = inputParam;
+            let params = isApiKeyAuth ? 'apiKey: string' : '';
+            if (inputParam) params = params ? `${params}, ${inputParam}` : inputParam;
             if (pathParams.length > 0) {
                 const pathParamsType = `{ ${pathParams.map((p) => `${p}: string`).join(', ')} }`;
                 params = params
@@ -125,7 +131,8 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
                 inputSchemaName,
                 outputSchemaName,
                 module,
-                pathParamsTransform
+                pathParamsTransform,
+                requiresApiKey: isApiKeyAuth
             });
 
             methods.push(methodImplementation);
@@ -167,7 +174,11 @@ function extractPathParams(path: string): string[] {
 }
 
 function capitalizeFirst(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    // Convert kebab-case to PascalCase (e.g. "web-stats" -> "WebStats")
+    return str
+        .split('-')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join('');
 }
 
 function generateNamedType(module: string, name: string, kind: 'Input' | 'Output'): string {

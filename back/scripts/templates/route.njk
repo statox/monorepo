@@ -8,9 +8,9 @@
         '{{ routePath }}'{{ pathParamsTransform }},
         {% if hasInput %}{
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json'{% if requiresApiKey %}, 'Authorization': `Bearer ${apiKey}`{% endif %} },
           body: JSON.stringify(input)
-        }{% else %}{ method: 'GET' }{% endif %}
+        }{% else %}{ method: 'GET'{% if requiresApiKey %}, headers: { 'Authorization': `Bearer ${apiKey}` }{% endif %} }{% endif %}
       );
       const output = await response.json();
       validateOutput(schemas.{{ outputSchemaName }}, output, '{{ module }}.{{ name }}');
