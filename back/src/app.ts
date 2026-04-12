@@ -12,6 +12,7 @@ import { routes } from './libs/routes/index.js';
 import { slog } from './libs/modules/logging/index.js';
 import { startPeriodicTasks } from './libs/PeriodicTasks/index.js';
 import { validateAPIKeyHeader } from './libs/middleware/authIOT.middleware.js';
+import { validateAPIKey } from './libs/middleware/authAPIKey.middleware.js';
 import { apiPipeline } from './libs/middleware/apiPipeline.middleware.js';
 import { WebSocketServer } from 'ws';
 import { initWsServer } from './app-ws.js';
@@ -72,6 +73,8 @@ export const initApp = () => {
 
         if (route.authentication === 'apikey-iot') {
             pipeline.push(validateAPIKeyHeader);
+        } else if (route.authentication === 'apikey') {
+            pipeline.push(validateAPIKey);
         } else if (route.authentication === 'user2') {
             pipeline.push(setPassportHeaders);
             // First configure how the sessions will be stored

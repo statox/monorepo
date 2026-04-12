@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'express-json-validator-middleware';
 import { slackNotifier } from '../modules/notifier/slack.js';
 import { EntryAlreadyExistsError } from '../modules/webWatcher/index.js';
-import { ApiKeyError } from './authIOT.middleware.js';
+import { ApiKeyError } from './authAPIKey.middleware.js';
 import {
     FileOrContentRequiredError,
     ItemAlreadyExistsError,

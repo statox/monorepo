@@ -29,6 +29,6 @@ export const route: PostRoute<Input, EmptyOutput> = {
     path: '/web-stats/record',
     inputSchema,
     handler,
-    authentication: 'apikey-iot',
+    authentication: 'apikey',
     outputSchema: emptyObjectSchema
 };

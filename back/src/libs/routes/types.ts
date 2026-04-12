@@ -38,7 +38,7 @@ type BaseRouteUser2<Input, Output> = BaseRouteCommon<Input, Output> & {
 
 type BaseRouteNotUser2<Input, Output> = BaseRouteCommon<Input, Output> & {
     // Routes with authentication type different than user2 must not have a scope
-    authentication: 'none' | 'user' | 'apikey-iot';
+    authentication: 'none' | 'user' | 'apikey-iot' | 'apikey';
     scope?: never;
 };
 
