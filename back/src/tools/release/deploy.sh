@@ -32,6 +32,9 @@ $SSH "
 echo "Pulling latest changes on remote..."
 $SSH "cd $REPO_DIRECTORY && git fetch origin && git checkout $BRANCH_TO_DEPLOY && git pull origin $BRANCH_TO_DEPLOY"
 
+echo "Checking last commits"
+$SSH "git log --oneline | head -n 5"
+
 # TODO Find a way to avoid downtime
 
 # Stop the current deployment
