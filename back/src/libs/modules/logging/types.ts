@@ -16,6 +16,8 @@ type xRequestInfo = {
 export type LoggableProperties = {
     context?: LoggableProperties;
 
+    action?: string;
+    app?: string;
     authError?: Error;
     authType?: string;
     authUserScopes?: string[];
@@ -109,6 +111,7 @@ export type AppLogComponent =
     | 'reactor'
     | 's3Files'
     | 'weather-forecast'
+    | 'web-stats'
     | 'web-watcher'
     | 'ws';
 

@@ -36,6 +36,7 @@ import { route as WebWatcher_createWatcher } from './webWatcher/createWatcher.js
 import { route as WebWatcher_deleteWatcher } from './webWatcher/deleteWatcher.js';
 import { route as WebWatcher_getAllWatcher } from './webWatcher/getAllWatchers.js';
 import { route as WebWatcher_toggleWatcherEnabled } from './webWatcher/toggleWatcherEnabled.js';
+import { route as WebStats_record } from './webStats/record.js';
 
 import { route as Gravitrips_WSGame } from './gravitrips/ws_game.js';
 
@@ -92,7 +93,8 @@ export const routes: {
         WebWatcher_createWatcher,
         WebWatcher_deleteWatcher,
         WebWatcher_getAllWatcher,
-        WebWatcher_toggleWatcherEnabled
+        WebWatcher_toggleWatcherEnabled,
+        WebStats_record
     ]
 };
 
