@@ -95,7 +95,6 @@
             p5.background(240, 240, 240);
 
             const center = new Vector(p5.width / 2, p5.height / 3);
-            let position = center.clone();
             const branchDirection = new Vector(branchDirectionX, branchDirectionY);
             const upwardForce = new Vector(upwardForceX, upwardForceY);
 
@@ -106,7 +105,7 @@
                     continue;
                 }
 
-                position = center.clone();
+                const position = center.clone();
                 p5.stroke(color);
                 for (let i = 0; i < 10; i++) {
                     p5.circle(position.x, p5.height - position.y, 20);

@@ -156,9 +156,6 @@
 
             for (let i = 0; i < MAX_NB_POINTS / 10; i++) {
                 let r = Math.random();
-                let xn = 0;
-                let yn = 0;
-
                 let fw;
                 if (r < coefs.f1.p) {
                     fw = coefs.f1;
@@ -170,8 +167,8 @@
                     fw = coefs.f4;
                 }
                 const { a, b, c, d, e, f } = fw;
-                xn = a * x + b * y + e;
-                yn = c * x + d * y + f;
+                const xn = a * x + b * y + e;
+                const yn = c * x + d * y + f;
 
                 const xScreen = xn * 60 + 300;
                 const yScreen = 600 - yn * 60;

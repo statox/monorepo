@@ -3,7 +3,6 @@ import eslintPrettier from 'eslint-config-prettier';
 import eslintSvelte from 'eslint-plugin-svelte';
 import eslintTS from 'typescript-eslint';
 import globals from 'globals';
-import pluginImport from 'eslint-plugin-import';
 import svelteConfig from './svelte.config.js';
 import svelteParser from 'svelte-eslint-parser';
 import { defineConfig } from 'eslint/config';
@@ -85,8 +84,7 @@ export default defineConfig(
     },
     {
         plugins: {
-            '@typescript-eslint': eslintTS.plugin,
-            import: pluginImport
+            '@typescript-eslint': eslintTS.plugin
         },
         rules: {
             // 'svelte/sort-attributes': 'warn' // Check if it's worth enabling

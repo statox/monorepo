@@ -23,6 +23,7 @@
             value: 10,
             unit: allowedUnits[0]
         },
+        // eslint-disable-next-line no-useless-assignment
         valueInSeconds = $bindable()
     }: Props = $props();
 
