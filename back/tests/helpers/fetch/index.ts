@@ -18,16 +18,12 @@ class TestHelper_Fetch extends TestHelper {
         });
     }
 
-    respondWithHtml = (html: string) => {
-        fetchStub.resolves({
-            ok: true,
-            status: 200,
-            text: async () => html
-        } as unknown as Response);
+    respondWithHtmlForUrl = (url: string, html: string) => {
+        fetchStub.withArgs(url).resolves(new Response(html));
     };
 
-    respondWithNetworkError = (message = 'Network error') => {
-        fetchStub.rejects(new Error(message));
+    respondWithNetworkErrorForUrl = (url: string, message = 'Network error') => {
+        fetchStub.withArgs(url).rejects(new Error(message));
     };
 }
 

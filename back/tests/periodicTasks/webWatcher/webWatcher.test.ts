@@ -3,17 +3,12 @@ import { doWebWatcher } from '../../../src/libs/modules/webWatcher/index.js';
 import { th } from '../../helpers/index.js';
 
 describe('periodic task - webWatcher', () => {
-    let stub: sinon.SinonStub;
     beforeEach(() => {
-        stub = sinon.stub(globalThis, 'fetch');
         const body =
             '<html><head><title id="the-title">Example Page</title></head><body><h1>A header</h1></body></html>';
-        stub.withArgs('https://foo.com').resolves(new Response(body));
-        stub.withArgs('https://bar.com').resolves(new Response(body));
-        stub.withArgs('https://fizz.com').resolves(new Response('foobar'));
-    });
-    afterEach(() => {
-        stub.restore();
+        th.fetch.respondWithHtmlForUrl('https://foo.com', body);
+        th.fetch.respondWithHtmlForUrl('https://bar.com', body);
+        th.fetch.respondWithHtmlForUrl('https://fizz.com', 'foobar');
     });
 
     it('should detect a change, notify and record the change - for CSS Watchers', async () => {

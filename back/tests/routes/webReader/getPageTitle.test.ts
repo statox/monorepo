@@ -43,7 +43,8 @@ describe('webReader/getPageTitle', () => {
 
     describe('should succeed', () => {
         it('returning the page title when the page has a title tag', async () => {
-            th.fetch.respondWithHtml(
+            th.fetch.respondWithHtmlForUrl(
+                'https://example.com',
                 '<html><head><title>My Cool Page</title></head><body></body></html>'
             );
 
@@ -59,7 +60,10 @@ describe('webReader/getPageTitle', () => {
         });
 
         it('returning an empty title when the page has no title tag', async () => {
-            th.fetch.respondWithHtml('<html><body><p>No title here</p></body></html>');
+            th.fetch.respondWithHtmlForUrl(
+                'https://example.com',
+                '<html><body><p>No title here</p></body></html>'
+            );
 
             await request(app)
                 .post('/webReader/getPageTitle')
@@ -73,7 +77,7 @@ describe('webReader/getPageTitle', () => {
         });
 
         it('returning a 500 when the page cannot be fetched', async () => {
-            th.fetch.respondWithNetworkError('Connection refused');
+            th.fetch.respondWithNetworkErrorForUrl('https://example.com', 'Connection refused');
 
             await request(app)
                 .post('/webReader/getPageTitle')
