@@ -18,6 +18,7 @@ import {
 } from '../modules/auth/index.js';
 import { slog } from '../modules/logging/slog.js';
 import { RangeInvalid, RangeTooLargeError } from '../modules/ephemerides/index.js';
+import { InvalidUrlError } from '../modules/webReader/index.js';
 
 export const errorHandler = async (
     error: Error,
@@ -51,7 +52,8 @@ export const errorHandler = async (
         error instanceof RecipeNotFoundError ||
         error instanceof SensorDoesNotExistError ||
         error instanceof RangeTooLargeError ||
-        error instanceof RangeInvalid
+        error instanceof RangeInvalid ||
+        error instanceof InvalidUrlError
     ) {
         status = 400;
         message = error.message;

@@ -1,6 +1,7 @@
 import { testHelper_Auth2 } from './auth2/index.js';
 import { testHelper_Crypto } from './crypto/index.js';
 import { testHelper_ELK } from './elk/index.js';
+import { testHelper_Fetch } from './fetch/index.js';
 import { testHelper_Mysql } from './mysql/index.js';
 import { testHelper_PushNotifier } from './notifier/push.js';
 import { testHelper_SlackNotifier } from './notifier/slack.js';
@@ -12,6 +13,7 @@ export const th = {
     auth2: testHelper_Auth2,
     crypto: testHelper_Crypto,
     elk: testHelper_ELK,
+    fetch: testHelper_Fetch,
     mysql: testHelper_Mysql,
     s3: testHelper_S3,
     slack: testHelper_SlackNotifier,
