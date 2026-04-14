@@ -80,20 +80,20 @@
 </script>
 
 <FormLayout title="Add a new clipboard entry" backUrl="/clipboard" {noticeMessages}>
-    <FormGrid>
+    <FormGrid onsubmit={upload}>
         <label for="content">Content</label>
-        <input type="textarea" bind:value={content} />
+        <textarea id="content" bind:value={content} rows="3"></textarea>
 
         {#if extractedTitle}
             <label>Page title</label>
             <div class="extracted-title">
                 <span>{extractedTitle}</span>
-                <button onclick={() => (name = extractedTitle)}>Use as name</button>
+                <button type="button" onclick={() => (name = extractedTitle)}>Use as name</button>
             </div>
         {/if}
 
         <label for="name">Name</label>
-        <input type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} />
 
         <label for="file">File</label>
         <FormFileInput bind:files />
@@ -107,6 +107,7 @@
 
         <label for="isPublic">Access</label>
         <button
+            type="button"
             class="visibility-status"
             class:visibility-public={isPublic}
             onclick={() => (isPublic = !isPublic)}
@@ -120,7 +121,7 @@
             {/if}
         </button>
 
-        <FormSubmitButton onclick={upload} loading={uploading} />
+        <FormSubmitButton loading={uploading} />
     </FormGrid>
 </FormLayout>
 

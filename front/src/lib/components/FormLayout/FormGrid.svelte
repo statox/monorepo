@@ -1,12 +1,13 @@
 <script lang="ts">
     interface Props {
         children: import('svelte').Snippet;
+        onsubmit?: () => void | Promise<void>;
     }
 
-    let { children }: Props = $props();
+    let { children, onsubmit }: Props = $props();
 </script>
 
-<form class="form-grid">
+<form class="form-grid" onsubmit={(e) => { e.preventDefault(); onsubmit?.(); }}>
     {@render children()}
 </form>
 

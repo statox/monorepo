@@ -17,7 +17,7 @@
     let noticeMessages: NoticeItem[] = $state([]);
 
     let name: string = $state('');
-    let commaSeparatedTags = $state('');
+    let tags = $state('');
     let files: FileList | undefined = $state();
     let uploading = $state(false);
 
@@ -40,7 +40,7 @@
 
         try {
             uploading = true;
-            await uploadToReactor({ name, commaSeparatedTags, file });
+            await uploadToReactor({ name, commaSeparatedTags: tags, file });
             onUpload();
         } catch (error) {
             handleFormError(error);
@@ -51,16 +51,16 @@
 </script>
 
 <FormLayout title="Add a new file" backUrl="/reactor" {noticeMessages}>
-    <FormGrid>
+    <FormGrid onsubmit={upload}>
         <label for="name">Name</label>
-        <input type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} />
 
-        <label for="content">Tags</label>
-        <input type="textarea" bind:value={commaSeparatedTags} />
+        <label for="tags">Tags</label>
+        <textarea id="tags" bind:value={tags} rows="2"></textarea>
 
         <label for="file">File</label>
         <FormFileInput bind:files />
 
-        <FormSubmitButton onclick={upload} loading={uploading} />
+        <FormSubmitButton loading={uploading} />
     </FormGrid>
 </FormLayout>

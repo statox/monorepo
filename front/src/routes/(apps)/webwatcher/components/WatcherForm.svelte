@@ -87,9 +87,9 @@
 </script>
 
 <FormLayout title="Add a new watcher" backUrl="/webwatcher" {noticeMessages}>
-    <FormGrid>
+    <FormGrid onsubmit={upload}>
         <label for="name">Name</label>
-        <input type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} />
 
         <label for="check-interval">Check interval</label>
         <DurationPicker
@@ -101,22 +101,22 @@
         <label for="notification-message">
             Notification message (the @mention is automatically added)
         </label>
-        <input type="textarea" bind:value={notificationMessage} />
+        <textarea id="notification-message" bind:value={notificationMessage} rows="2"></textarea>
 
-        <label for="watch-type"> Watcher type </label>
+        <label for="watch-type">Watcher type</label>
         <select id="watch-type" bind:value={watchType}>
             <option value="CSS">CSS</option>
             <option value="HASH">HASH</option>
         </select>
 
-        <label for="content">URL</label>
-        <input type="textarea" bind:value={url} />
+        <label for="url">URL</label>
+        <textarea id="url" bind:value={url} rows="2"></textarea>
 
         {#if watchType === 'CSS'}
             <label for="css-selector">CSS selector</label>
-            <input type="textarea" bind:value={cssSelector} />
+            <textarea id="css-selector" bind:value={cssSelector} rows="2"></textarea>
         {/if}
 
-        <FormSubmitButton onclick={upload} loading={uploading} />
+        <FormSubmitButton loading={uploading} />
     </FormGrid>
 </FormLayout>

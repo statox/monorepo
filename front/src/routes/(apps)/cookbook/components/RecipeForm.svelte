@@ -68,23 +68,23 @@
 </script>
 
 <FormLayout title="Add a new recipe" backUrl="/cookbook" {noticeMessages}>
-    <FormGrid>
+    <FormGrid onsubmit={upload}>
         <label for="name">Name</label>
-        <input type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} />
 
-        <label for="ingredients">New ingredient</label>
-        <div>
+        <label for="new-ingredient">New ingredient</label>
+        <div id="new-ingredient">
             <IngredientInput onAdd={addIngredient} />
         </div>
 
-        <label for="ingredients">List of ingredients</label>
-        <div>
+        <label for="ingredients-list">List of ingredients</label>
+        <div id="ingredients-list">
             <IngredientsList {ingredients} editable={true} />
         </div>
 
         <label for="content">Instructions</label>
-        <textarea bind:value={content} rows="10" cols="50"></textarea>
+        <textarea id="content" bind:value={content} rows="10" cols="50"></textarea>
 
-        <FormSubmitButton onclick={upload} loading={uploading} />
+        <FormSubmitButton loading={uploading} />
     </FormGrid>
 </FormLayout>

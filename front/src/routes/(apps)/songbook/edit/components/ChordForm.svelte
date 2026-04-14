@@ -18,7 +18,7 @@
     let title: string = $state('');
     let artist: string = $state('');
     let url: string = $state('');
-    let tagsStr: string = $state('');
+    let tags: string = $state('');
     let uploading = $state(false);
     let noticeMessages: NoticeItem[] = $state([]);
 
@@ -28,11 +28,16 @@
         if (!title) noticeMessages.push({ level: 'error', header: 'Title must be defined' });
         if (!artist) noticeMessages.push({ level: 'error', header: 'Artist must be defined' });
         if (!url) noticeMessages.push({ level: 'error', header: 'URL must be defined' });
+        try {
+            new URL(url);
+        } catch {
+            noticeMessages.push({ level: 'error', header: 'URL must be valid' });
+        }
 
         if (noticeMessages.length) return;
 
-        const tags = tagsStr ? tagsStr.replaceAll(' ', '').split(',') : [];
-        const newChord: RawChord = { title, artist, url, tags, creationDate: Date.now() };
+        const tagList = tags ? tags.replaceAll(' ', '').split(',') : [];
+        const newChord: RawChord = { title, artist, url, tags: tagList, creationDate: Date.now() };
 
         try {
             uploading = true;
@@ -53,19 +58,19 @@
     authMessage="Login to add a new song"
     {noticeMessages}
 >
-    <FormGrid>
+    <FormGrid onsubmit={upload}>
         <label for="artist">Artist</label>
-        <input type="text" bind:value={artist} />
+        <input id="artist" type="text" bind:value={artist} />
 
         <label for="title">Title</label>
-        <input type="text" bind:value={title} />
+        <input id="title" type="text" bind:value={title} />
 
         <label for="url">URL</label>
-        <input type="text" bind:value={url} />
+        <input id="url" type="text" bind:value={url} />
 
         <label for="tags">Tags</label>
-        <input type="text" bind:value={tagsStr} />
+        <input id="tags" type="text" bind:value={tags} />
 
-        <FormSubmitButton onclick={upload} loading={uploading} />
+        <FormSubmitButton loading={uploading} />
     </FormGrid>
 </FormLayout>

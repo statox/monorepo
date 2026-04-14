@@ -2,7 +2,7 @@
     import { Spinner } from '$lib/components/Spinner';
 
     interface Props {
-        onclick: () => void | Promise<void>;
+        onclick?: () => void | Promise<void>;
         loading?: boolean;
         disabled?: boolean;
         label?: string;
@@ -21,6 +21,7 @@
 <button
     class="form-submit-button"
     class:span-two={spanTwoColumns}
+    type="submit"
     {onclick}
     disabled={disabled || loading}
 >
