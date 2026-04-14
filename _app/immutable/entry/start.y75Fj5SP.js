@@ -1,0 +1,1 @@
+import{c as e,r as t}from"../chunks/BG-BelVO.js";export{e as load_css,t as start};
