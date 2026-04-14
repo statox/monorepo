@@ -9,6 +9,7 @@
     import type { NoticeItem } from '$lib/components/Notice';
     import { DurationPicker } from '$lib/components/DurationPicker';
     import { uploadToClipboard } from '$lib/Clipboard';
+    import { getPageTitle } from '$lib/pageTitle';
 
     interface Props {
         onUpload: () => void;
@@ -23,6 +24,21 @@
     let isPublic = $state(false);
     let ttlSeconds: number = $state(0);
     let uploading = $state(false);
+    let extractedTitle: string = $state('');
+
+    // Debounce the API call: the cleanup function returned from $effect is called by Svelte
+    // before each re-run, cancelling the previous timer. The API is only called once the
+    // user has stopped typing for 500ms.
+    $effect(() => {
+        const currentContent = content;
+        const timer = setTimeout(() => {
+            getPageTitle(currentContent)
+                .then((title) => (extractedTitle = title))
+                .catch(() => (extractedTitle = ''));
+        }, 500);
+
+        return () => clearTimeout(timer);
+    });
 
     const upload = async () => {
         noticeMessages = [];
@@ -65,11 +81,19 @@
 
 <FormLayout title="Add a new clipboard entry" backUrl="/clipboard" {noticeMessages}>
     <FormGrid>
-        <label for="name">Name</label>
-        <input type="text" bind:value={name} />
-
         <label for="content">Content</label>
         <input type="textarea" bind:value={content} />
+
+        {#if extractedTitle}
+            <label>Page title</label>
+            <div class="extracted-title">
+                <span>{extractedTitle}</span>
+                <button onclick={() => (name = extractedTitle)}>Use as name</button>
+            </div>
+        {/if}
+
+        <label for="name">Name</label>
+        <input type="text" bind:value={name} />
 
         <label for="file">File</label>
         <FormFileInput bind:files />
@@ -107,5 +131,21 @@
     }
     .visibility-public {
         background-color: var(--nc-error);
+    }
+
+    .extracted-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        span {
+            flex: 1;
+            font-style: italic;
+            color: var(--nc-tx-2);
+        }
+
+        button {
+            white-space: nowrap;
+        }
     }
 </style>
