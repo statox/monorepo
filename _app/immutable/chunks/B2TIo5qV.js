@@ -1,0 +1,1 @@
+import{Ut as e}from"./C3NlllA5.js";import"./CR5CWXk_.js";var t=e({name:`My apps`,iconPath:`/favicon.png`,showAuthInHeader:!0}),n=e(!1);export{n,t};

@@ -1,0 +1,1 @@
+var e=`https://api.statox.fr`,t=`https://api.statox.fr`,n=`https://statox.fr`,r=`prod`;export{r as i,t as n,n as r,e as t};
