@@ -17,6 +17,7 @@
 
     let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
+    let fieldErrors: Record<string, string> = $state({});
 
     let name: string = $state('');
     let content: string = $state('');
@@ -40,17 +41,21 @@
         return () => clearTimeout(timer);
     });
 
+    const validateName = () => {
+        fieldErrors.name = name?.length ? '' : 'Name is required';
+    };
+
     const upload = async () => {
         noticeMessages = [];
-        if (!name?.length) {
-            noticeMessages.push({ level: 'error', header: 'name must be defined' });
-        }
+        validateName();
 
         if (ttlSeconds < 0) {
-            noticeMessages.push({ level: 'error', header: 'TTL must be positive' });
+            fieldErrors.ttl = 'TTL must be positive';
+        } else {
+            fieldErrors.ttl = '';
         }
 
-        if (noticeMessages.length) {
+        if (Object.values(fieldErrors).some((e) => e)) {
             return;
         }
 
@@ -93,7 +98,10 @@
         {/if}
 
         <label for="name">Name</label>
-        <input id="name" type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} onblur={validateName} />
+        {#if fieldErrors.name}
+            <span class="field-error">{fieldErrors.name}</span>
+        {/if}
 
         <label for="file">File</label>
         <FormFileInput bind:files />

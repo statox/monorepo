@@ -38,6 +38,8 @@
 <style>
     .form-layout {
         min-width: 240px;
+        max-width: 600px;
+        margin: 0 auto;
         padding: 16px;
         background: var(--nc-bg-1);
         border-radius: 26px;

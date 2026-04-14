@@ -17,6 +17,7 @@
 
     let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
+    let fieldErrors: Record<string, string> = $state({});
     let uploading = $state(false);
 
     type IngredientForApi = {
@@ -42,16 +43,20 @@
         ingredients.push(params);
     };
 
+    const validateName = () => {
+        fieldErrors.name = name?.length ? '' : 'Name is required';
+    };
+
+    const validateContent = () => {
+        fieldErrors.content = content?.length ? '' : 'Instructions are required';
+    };
+
     const upload = async () => {
         noticeMessages = [];
-        if (!name?.length) {
-            noticeMessages.push({ level: 'error', header: 'Name must be defined' });
-        }
-        if (!content?.length) {
-            noticeMessages.push({ level: 'error', header: 'Content must be defined' });
-        }
+        validateName();
+        validateContent();
 
-        if (noticeMessages.length) {
+        if (Object.values(fieldErrors).some((e) => e)) {
             return;
         }
 
@@ -70,7 +75,10 @@
 <FormLayout title="Add a new recipe" backUrl="/cookbook" {noticeMessages}>
     <FormGrid onsubmit={upload}>
         <label for="name">Name</label>
-        <input id="name" type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} onblur={validateName} />
+        {#if fieldErrors.name}
+            <span class="field-error">{fieldErrors.name}</span>
+        {/if}
 
         <label for="new-ingredient">New ingredient</label>
         <div id="new-ingredient">
@@ -83,7 +91,11 @@
         </div>
 
         <label for="content">Instructions</label>
-        <textarea id="content" bind:value={content} rows="10" cols="50"></textarea>
+        <textarea id="content" bind:value={content} rows="10" cols="50" onblur={validateContent}
+        ></textarea>
+        {#if fieldErrors.content}
+            <span class="field-error">{fieldErrors.content}</span>
+        {/if}
 
         <FormSubmitButton loading={uploading} />
     </FormGrid>

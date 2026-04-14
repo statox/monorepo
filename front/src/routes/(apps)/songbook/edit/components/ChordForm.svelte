@@ -15,6 +15,7 @@
 
     let { onUpload }: Props = $props();
 
+    let fieldErrors: Record<string, string> = $state({});
     let title: string = $state('');
     let artist: string = $state('');
     let url: string = $state('');
@@ -22,19 +23,30 @@
     let uploading = $state(false);
     let noticeMessages: NoticeItem[] = $state([]);
 
-    const upload = async () => {
-        noticeMessages = [];
+    const validateTitle = () => {
+        fieldErrors.title = title ? '' : 'Title is required';
+    };
 
-        if (!title) noticeMessages.push({ level: 'error', header: 'Title must be defined' });
-        if (!artist) noticeMessages.push({ level: 'error', header: 'Artist must be defined' });
-        if (!url) noticeMessages.push({ level: 'error', header: 'URL must be defined' });
+    const validateArtist = () => {
+        fieldErrors.artist = artist ? '' : 'Artist is required';
+    };
+
+    const validateUrl = () => {
         try {
             new URL(url);
+            fieldErrors.url = '';
         } catch {
-            noticeMessages.push({ level: 'error', header: 'URL must be valid' });
+            fieldErrors.url = url ? 'URL is invalid' : 'URL is required';
         }
+    };
 
-        if (noticeMessages.length) return;
+    const upload = async () => {
+        noticeMessages = [];
+        validateTitle();
+        validateArtist();
+        validateUrl();
+
+        if (Object.values(fieldErrors).some((e) => e)) return;
 
         const tagList = tags ? tags.replaceAll(' ', '').split(',') : [];
         const newChord: RawChord = { title, artist, url, tags: tagList, creationDate: Date.now() };
@@ -60,13 +72,22 @@
 >
     <FormGrid onsubmit={upload}>
         <label for="artist">Artist</label>
-        <input id="artist" type="text" bind:value={artist} />
+        <input id="artist" type="text" bind:value={artist} onblur={validateArtist} />
+        {#if fieldErrors.artist}
+            <span class="field-error">{fieldErrors.artist}</span>
+        {/if}
 
         <label for="title">Title</label>
-        <input id="title" type="text" bind:value={title} />
+        <input id="title" type="text" bind:value={title} onblur={validateTitle} />
+        {#if fieldErrors.title}
+            <span class="field-error">{fieldErrors.title}</span>
+        {/if}
 
         <label for="url">URL</label>
-        <input id="url" type="text" bind:value={url} />
+        <input id="url" type="text" bind:value={url} onblur={validateUrl} />
+        {#if fieldErrors.url}
+            <span class="field-error">{fieldErrors.url}</span>
+        {/if}
 
         <label for="tags">Tags</label>
         <input id="tags" type="text" bind:value={tags} />

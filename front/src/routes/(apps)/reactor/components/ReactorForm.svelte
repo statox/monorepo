@@ -15,26 +15,30 @@
 
     let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
+    let fieldErrors: Record<string, string> = $state({});
 
     let name: string = $state('');
     let tags = $state('');
     let files: FileList | undefined = $state();
     let uploading = $state(false);
 
+    const validateName = () => {
+        fieldErrors.name = name?.length ? '' : 'Name is required';
+    };
+
     const upload = async () => {
         noticeMessages = [];
-        if (!name?.length) {
-            noticeMessages.push({ level: 'error', header: 'name must be defined' });
-        }
+        validateName();
+
         let file: File | undefined;
         if (files && files.length) {
             file = files[0];
         }
         if (!file) {
-            noticeMessages.push({ level: 'error', header: 'a file must be uploaded' });
+            noticeMessages.push({ level: 'error', header: 'A file must be uploaded' });
         }
 
-        if (noticeMessages.length || !file) {
+        if (Object.values(fieldErrors).some((e) => e) || !file) {
             return;
         }
 
@@ -53,7 +57,10 @@
 <FormLayout title="Add a new file" backUrl="/reactor" {noticeMessages}>
     <FormGrid onsubmit={upload}>
         <label for="name">Name</label>
-        <input id="name" type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} onblur={validateName} />
+        {#if fieldErrors.name}
+            <span class="field-error">{fieldErrors.name}</span>
+        {/if}
 
         <label for="tags">Tags</label>
         <textarea id="tags" bind:value={tags} rows="2"></textarea>

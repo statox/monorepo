@@ -15,6 +15,7 @@
 
     let { onUpload }: Props = $props();
     let noticeMessages: NoticeItem[] = $state([]);
+    let fieldErrors: Record<string, string> = $state({});
 
     let name: string = $state('');
     let notificationMessage: string = $state('');
@@ -24,21 +25,41 @@
     let watchType: WatchType = $state('CSS');
     let uploading = $state(false);
 
+    const validateName = () => {
+        fieldErrors.name = name?.length ? '' : 'Name is required';
+    };
+
+    const validateNotificationMessage = () => {
+        fieldErrors.notificationMessage = notificationMessage
+            ? ''
+            : 'Notification message is required';
+    };
+
+    const validateUrl = () => {
+        try {
+            new URL(url);
+            fieldErrors.url = '';
+        } catch {
+            fieldErrors.url = url ? 'URL is invalid' : 'URL is required';
+        }
+    };
+
+    const validateCssSelector = () => {
+        if (watchType === 'CSS') {
+            fieldErrors.cssSelector = cssSelector
+                ? ''
+                : 'CSS selector is required for CSS watchers';
+        } else {
+            fieldErrors.cssSelector = '';
+        }
+    };
+
     const upload = async () => {
         noticeMessages = [];
-        if (!name?.length) {
-            noticeMessages.push({ level: 'error', header: 'name must be defined' });
-        }
-        if (!notificationMessage) {
-            noticeMessages.push({ level: 'error', header: 'notification message must be defined' });
-        }
-
-        if (watchType === 'CSS' && !cssSelector) {
-            noticeMessages.push({
-                level: 'error',
-                header: 'A CSS watcher must have a css selector defined'
-            });
-        }
+        validateName();
+        validateNotificationMessage();
+        validateUrl();
+        validateCssSelector();
 
         if (checkIntervalSeconds < 15 * 60) {
             noticeMessages.push({
@@ -47,13 +68,7 @@
             });
         }
 
-        try {
-            new URL(url);
-        } catch (_error) {
-            noticeMessages.push({ level: 'error', header: 'The URL is invalid' });
-        }
-
-        if (noticeMessages.length) {
+        if (Object.values(fieldErrors).some((e) => e) || noticeMessages.length) {
             return;
         }
 
@@ -89,7 +104,10 @@
 <FormLayout title="Add a new watcher" backUrl="/webwatcher" {noticeMessages}>
     <FormGrid onsubmit={upload}>
         <label for="name">Name</label>
-        <input id="name" type="text" bind:value={name} />
+        <input id="name" type="text" bind:value={name} onblur={validateName} />
+        {#if fieldErrors.name}
+            <span class="field-error">{fieldErrors.name}</span>
+        {/if}
 
         <label for="check-interval">Check interval</label>
         <DurationPicker
@@ -101,7 +119,15 @@
         <label for="notification-message">
             Notification message (the @mention is automatically added)
         </label>
-        <textarea id="notification-message" bind:value={notificationMessage} rows="2"></textarea>
+        <textarea
+            id="notification-message"
+            bind:value={notificationMessage}
+            rows="2"
+            onblur={validateNotificationMessage}
+        ></textarea>
+        {#if fieldErrors.notificationMessage}
+            <span class="field-error">{fieldErrors.notificationMessage}</span>
+        {/if}
 
         <label for="watch-type">Watcher type</label>
         <select id="watch-type" bind:value={watchType}>
@@ -110,11 +136,22 @@
         </select>
 
         <label for="url">URL</label>
-        <textarea id="url" bind:value={url} rows="2"></textarea>
+        <textarea id="url" bind:value={url} rows="2" onblur={validateUrl}></textarea>
+        {#if fieldErrors.url}
+            <span class="field-error">{fieldErrors.url}</span>
+        {/if}
 
         {#if watchType === 'CSS'}
             <label for="css-selector">CSS selector</label>
-            <textarea id="css-selector" bind:value={cssSelector} rows="2"></textarea>
+            <textarea
+                id="css-selector"
+                bind:value={cssSelector}
+                rows="2"
+                onblur={validateCssSelector}
+            ></textarea>
+            {#if fieldErrors.cssSelector}
+                <span class="field-error">{fieldErrors.cssSelector}</span>
+            {/if}
         {/if}
 
         <FormSubmitButton loading={uploading} />
