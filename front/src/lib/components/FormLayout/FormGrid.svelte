@@ -22,6 +22,7 @@
         display: grid;
         grid-template-columns: minmax(80px, 120px) 1fr;
         grid-row-gap: 1em;
+        grid-column-gap: 1em;
     }
 
     .form-grid :global(label) {
