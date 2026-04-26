@@ -33,7 +33,8 @@ export const apiPipeline = (route: Route<unknown, unknown>) => {
                 (await route.handler({
                     input,
                     loggableContext: res.locals.loggableContext,
-                    authenticatedUser: req.user as User // req.user is populated by the passport authentication middleware
+                    authenticatedUser: req.user as User, // req.user is populated by the passport authentication middleware
+                    googleAccessToken: res.locals.googleAccessToken as string | undefined
                 })) || {};
 
             // Only do output validation if we are not in prod

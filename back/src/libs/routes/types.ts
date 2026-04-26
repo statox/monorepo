@@ -9,6 +9,7 @@ export type RouteHandler<Input> = (params: {
     input: Input;
     loggableContext: LoggableContext;
     authenticatedUser?: User;
+    googleAccessToken?: string;
 }) => Promise<unknown>;
 
 export type ApiJsonSchema = JSONSchema;
@@ -38,7 +39,7 @@ type BaseRouteUser2<Input, Output> = BaseRouteCommon<Input, Output> & {
 
 type BaseRouteNotUser2<Input, Output> = BaseRouteCommon<Input, Output> & {
     // Routes with authentication type different than user2 must not have a scope
-    authentication: 'none' | 'user' | 'apikey-iot' | 'apikey';
+    authentication: 'none' | 'user' | 'apikey-iot' | 'apikey' | 'google';
     scope?: never;
 };
 
