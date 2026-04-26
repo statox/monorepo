@@ -1,0 +1,86 @@
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { NextFunction, Request, Response } from 'express';
+import { config } from '../../packages/config/index.js';
+import { Auth_UnauthorizedError } from '../modules/auth/index.js';
+
+// Augment express-session so req.session.googleAccessToken is typed
+declare module 'express-session' {
+    interface SessionData {
+        googleAccessToken?: string;
+    }
+}
+
+export const setupGoogleStrategy = () => {
+    passport.use(
+        'google',
+        new GoogleStrategy(
+            {
+                clientID: config.google.clientId,
+                clientSecret: config.google.clientSecret,
+                callbackURL: config.google.callbackUrl
+            },
+            (_accessToken, _refreshToken, _profile, done) => {
+                // Only the access token matters; no user record is created
+                done(null, { accessToken: _accessToken });
+            }
+        )
+    );
+};
+
+// Redirects the browser to Google's consent screen. Does NOT call next() — Passport
+// issues the 302 itself, ending the request before apiPipeline runs.
+export const doGoogleOAuthStart = passport.authenticate('google', {
+    scope: ['https://www.googleapis.com/auth/youtube.readonly']
+});
+
+// Validates the OAuth callback (state check + code exchange).
+// session: false is critical — prevents Passport from calling serializeUser, which
+// would overwrite req.session.passport.user set by the existing local auth strategy.
+// On failure redirects to frontend; on success sets req.user = { accessToken } and
+// calls next() so storeGoogleTokenAndRedirect can run.
+export const doGoogleOAuthCallback = passport.authenticate('google', {
+    session: false,
+    failureRedirect: `${config.google.frontendRedirectUrl}?error=auth_failed`
+});
+
+// Stores the access token in our own session key and redirects to the frontend.
+// Does NOT call next() — issues the 302, ending the request before apiPipeline runs.
+export const storeGoogleTokenAndRedirect = (req: Request, res: Response, next: NextFunction) => {
+    const { accessToken } = req.user as { accessToken: string };
+    req.session.googleAccessToken = accessToken;
+    // Explicit save required: saveUninitialized is false, so new data won't persist
+    // automatically before the redirect.
+    req.session.save((err) => {
+        if (err) return next(err);
+        res.redirect(config.google.frontendRedirectUrl);
+    });
+};
+
+// Soft session check for authStatus: always calls next(), sets res.locals.googleAccessToken
+// when a token is present. The handler decides what { authenticated: bool } to return.
+export const checkGoogleSession = (req: Request, res: Response, next: NextFunction) => {
+    res.locals.googleAccessToken = req.session.googleAccessToken;
+    next();
+};
+
+// Clears the token from session, then calls next() so apiPipeline runs and the
+// handler returns {}.
+export const clearGoogleSession = (req: Request, res: Response, next: NextFunction) => {
+    delete req.session.googleAccessToken;
+    req.session.save((err) => {
+        if (err) return next(err);
+        next();
+    });
+};
+
+// Hard session check for data routes: passes Auth_UnauthorizedError to the error
+// middleware (which returns 401 { message: 'UNAUTHORIZED' }) if no token is present.
+export const validateGoogleSession = (req: Request, res: Response, next: NextFunction) => {
+    const token = req.session.googleAccessToken;
+    if (!token) {
+        return next(new Auth_UnauthorizedError());
+    }
+    res.locals.googleAccessToken = token;
+    next();
+};
