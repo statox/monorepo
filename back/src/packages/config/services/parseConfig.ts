@@ -10,6 +10,12 @@ import { SLACK_USERID, SLACK_WEBHOOK_URL } from '../sources/slack.js';
 import { NTFY_SH_URL } from '../sources/ntfy_sh.js';
 import { HEADERS_TIMEOUT, REQUEST_TIMEOUT, SOCKET_TIMEOUT } from '../sources/timeouts.js';
 import { EXPRESS_SESSION_SECRET } from '../sources/expressSessionSecret.js';
+import {
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    GOOGLE_CALLBACK_URL,
+    GOOGLE_FRONTEND_REDIRECT_URL
+} from '../sources/google.js';
 
 export const config: Config = {
     mysql: {
@@ -48,6 +54,12 @@ export const config: Config = {
         requestTimeout: REQUEST_TIMEOUT,
         headersTimeout: HEADERS_TIMEOUT,
         socketTimeout: SOCKET_TIMEOUT
+    },
+    google: {
+        clientId: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackUrl: GOOGLE_CALLBACK_URL,
+        frontendRedirectUrl: GOOGLE_FRONTEND_REDIRECT_URL
     }
 };
 

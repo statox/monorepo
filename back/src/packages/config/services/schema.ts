@@ -10,7 +10,8 @@ export const configSchema = {
         'meteofrance',
         'r2',
         'slack',
-        'timeouts'
+        'timeouts',
+        'google'
     ],
     properties: {
         mysql: {
@@ -161,6 +162,30 @@ export const configSchema = {
                     description:
                         'Limit the inactivity period (no data sent or received) on an established socket connection',
                     type: 'number'
+                }
+            }
+        },
+        google: {
+            description: 'Google OAuth2 credentials for YouTube API access',
+            type: 'object',
+            additionalProperties: false,
+            required: ['clientId', 'clientSecret', 'callbackUrl', 'frontendRedirectUrl'],
+            properties: {
+                clientId: { description: 'Google OAuth2 client ID', type: 'string', minLength: 2 },
+                clientSecret: {
+                    description: 'Google OAuth2 client secret',
+                    type: 'string',
+                    minLength: 2
+                },
+                callbackUrl: {
+                    description: 'OAuth2 callback URL registered in Google Cloud Console',
+                    type: 'string',
+                    pattern: '^https?://.+'
+                },
+                frontendRedirectUrl: {
+                    description: 'Frontend URL to redirect to after successful OAuth',
+                    type: 'string',
+                    pattern: '^https?://.+'
                 }
             }
         }
