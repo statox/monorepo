@@ -38,6 +38,11 @@ import { route as WebWatcher_createWatcher } from './webWatcher/createWatcher.js
 import { route as WebWatcher_deleteWatcher } from './webWatcher/deleteWatcher.js';
 import { route as WebWatcher_getAllWatcher } from './webWatcher/getAllWatchers.js';
 import { route as WebWatcher_toggleWatcherEnabled } from './webWatcher/toggleWatcherEnabled.js';
+import { route as Youtube_authStart } from './youtube/authStart.js';
+import { route as Youtube_authCallback } from './youtube/authCallback.js';
+import { route as Youtube_authStatus } from './youtube/authStatus.js';
+import { route as Youtube_authLogout } from './youtube/authLogout.js';
+import { route as Youtube_getSubscriptions } from './youtube/getSubscriptions.js';
 
 import { route as Gravitrips_WSGame } from './gravitrips/ws_game.js';
 
@@ -96,7 +101,12 @@ export const routes: {
         WebWatcher_createWatcher,
         WebWatcher_deleteWatcher,
         WebWatcher_getAllWatcher,
-        WebWatcher_toggleWatcherEnabled
+        WebWatcher_toggleWatcherEnabled,
+        Youtube_authStart,
+        Youtube_authCallback,
+        Youtube_authStatus,
+        Youtube_authLogout,
+        Youtube_getSubscriptions
     ]
 };
 
