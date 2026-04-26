@@ -1,3 +1,4 @@
+import assert from 'assert';
 import request from 'supertest';
 import { app } from '../../src/app.js';
 import { th } from '../helpers/index.js';
@@ -55,6 +56,17 @@ describe('authentication middlewares', () => {
                 .get('/apiiotAuthenticatedGetRoute')
                 .set('Authorization', 'Bearer fakeaccesskeyfortests')
                 .expect(200);
+        });
+    });
+
+    describe('google auth', () => {
+        it('should return 401 when no Google session token is present', async () => {
+            await request(app)
+                .get('/googleauthenticatedgetroute')
+                .expect(401)
+                .then((response) => {
+                    assert.equal(response.body.message, 'UNAUTHORIZED');
+                });
         });
     });
 });

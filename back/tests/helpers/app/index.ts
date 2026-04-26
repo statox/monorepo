@@ -112,6 +112,14 @@ const apiiotAuthenticatedGetRoute: GetRoute<EmptyInput, EmptyOutput> = {
     outputSchema: emptyObjectSchema
 };
 
+const googleAuthenticatedGetRoute: GetRoute<EmptyInput, EmptyOutput> = {
+    method: 'get',
+    authentication: 'google',
+    path: '/googleauthenticatedgetroute',
+    handler: async () => {},
+    outputSchema: emptyObjectSchema
+};
+
 const postRouteInputSchema = {
     type: 'object',
     required: ['param1'],
@@ -166,6 +174,7 @@ const postRouteScopeAdmin: PostRoute<FromSchema<typeof postRouteInputSchema>, Em
 const testRoutes = [
     ...routesAuth.list,
     apiiotAuthenticatedGetRoute,
+    googleAuthenticatedGetRoute,
     getRoute,
     getRouteThatThrows,
     getRouteWithCustomOutputHandler,
