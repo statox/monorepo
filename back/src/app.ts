@@ -24,6 +24,15 @@ import {
     validatePassportAuth,
     validatePassportSession
 } from './libs/middleware/auth_passport.middleware.js';
+import {
+    setupGoogleStrategy,
+    doGoogleOAuthStart,
+    doGoogleOAuthCallback,
+    storeGoogleTokenAndRedirect,
+    checkGoogleSession,
+    clearGoogleSession,
+    validateGoogleSession
+} from './libs/middleware/auth_google.middleware.js';
 import { initOpenapi } from './libs/modules/openapi/index.js';
 
 const { validate } = new Validator({ allowUnionTypes: true });
@@ -69,6 +78,8 @@ export const initApp = () => {
     app.set('view engine', 'mustache');
     app.engine('mustache', mustacheExpress());
 
+    setupGoogleStrategy();
+
     app.use(loggingHandler);
     app.use(multipartHandler);
 
@@ -79,6 +90,27 @@ export const initApp = () => {
             pipeline.push(validateAPIKeyHeader);
         } else if (route.authentication === 'apikey') {
             pipeline.push(validateAPIKey);
+        } else if (route.authentication === 'google') {
+            pipeline.push(doPassportSession);
+            if (route.path === '/youtube/auth/start') {
+                // Passport issues the 302 to Google; apiPipeline never runs
+                pipeline.push(doGoogleOAuthStart);
+            } else if (route.path === '/youtube/auth/callback') {
+                // On success: sets req.user = { accessToken }, calls next()
+                // On failure: redirects to frontend with ?error=auth_failed
+                pipeline.push(doGoogleOAuthCallback);
+                // Issues 302 to frontend; apiPipeline never runs
+                pipeline.push(storeGoogleTokenAndRedirect);
+            } else if (route.path === '/youtube/auth/status') {
+                // Soft check: always calls next(), handler reads googleAccessToken from params
+                pipeline.push(checkGoogleSession);
+            } else if (route.path === '/youtube/auth/logout') {
+                // Clears token from session, calls next() so handler can return {}
+                pipeline.push(clearGoogleSession);
+            } else {
+                // All other google-authenticated routes require a valid token
+                pipeline.push(validateGoogleSession);
+            }
         } else if (route.authentication === 'user2') {
             pipeline.push(setPassportHeaders);
             // First configure how the sessions will be stored
