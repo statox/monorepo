@@ -1,4 +1,4 @@
-import { PUBLIC_YOUTUBE_CLIENT_ID } from '$env/static/public';
+import { PUBLIC_YOUTUBE_CLIENT_ID, PUBLIC_YOUTUBE_CLIENT_SECRET } from '$env/static/public';
 import { authStore } from './store';
 import type { TokenResponse } from './types';
 
@@ -57,6 +57,7 @@ export async function exchangeCodeForToken(code: string): Promise<string> {
             grant_type: 'authorization_code',
             code,
             client_id: PUBLIC_YOUTUBE_CLIENT_ID,
+            client_secret: PUBLIC_YOUTUBE_CLIENT_SECRET,
             redirect_uri: `${window.location.origin}/yt-helper`,
             code_verifier: verifier
         })
