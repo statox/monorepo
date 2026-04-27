@@ -10,6 +10,7 @@ import {
     RouteWS
 } from '../../../src/libs/routes/types.js';
 import { routesAuth } from '../../../src/libs/routes/index.js';
+import { route as Youtube_authStart } from '../../../src/libs/routes/youtube/authStart.js';
 import { initApp } from '../../../src/app.js';
 import { emptyObjectSchema } from '../../../src/libs/routes/helpers.js';
 
@@ -173,6 +174,7 @@ const postRouteScopeAdmin: PostRoute<FromSchema<typeof postRouteInputSchema>, Em
 
 const testRoutes = [
     ...routesAuth.list,
+    Youtube_authStart,
     apiiotAuthenticatedGetRoute,
     googleAuthenticatedGetRoute,
     getRoute,

@@ -68,5 +68,26 @@ describe('authentication middlewares', () => {
                     assert.equal(response.body.message, 'UNAUTHORIZED');
                 });
         });
+
+        it('should redirect to Google OAuth with youtube.readonly scope on auth start', async () => {
+            const response = await request(app)
+                .get('/youtube/auth/start')
+                .expect(302);
+
+            const location = response.headers['location'] as string;
+            assert.ok(location, 'Expected a Location header');
+            assert.ok(
+                location.startsWith('https://accounts.google.com/o/oauth2/v2/auth'),
+                `Expected redirect to Google auth URL, got: ${location}`
+            );
+            assert.ok(
+                location.includes('youtube.readonly'),
+                `Expected youtube.readonly scope in redirect URL, got: ${location}`
+            );
+            assert.ok(
+                !location.includes('profile') && !location.includes('openid') && !location.includes('email'),
+                `Expected NO profile/openid/email scope in redirect URL, got: ${location}`
+            );
+        });
     });
 });
