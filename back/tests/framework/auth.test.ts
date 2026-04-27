@@ -70,9 +70,7 @@ describe('authentication middlewares', () => {
         });
 
         it('should redirect to Google OAuth with youtube.readonly scope on auth start', async () => {
-            const response = await request(app)
-                .get('/youtube/auth/start')
-                .expect(302);
+            const response = await request(app).get('/youtube/auth/start').expect(302);
 
             const location = response.headers['location'] as string;
             assert.ok(location, 'Expected a Location header');
@@ -85,7 +83,9 @@ describe('authentication middlewares', () => {
                 `Expected youtube.readonly scope in redirect URL, got: ${location}`
             );
             assert.ok(
-                !location.includes('profile') && !location.includes('openid') && !location.includes('email'),
+                !location.includes('profile') &&
+                    !location.includes('openid') &&
+                    !location.includes('email'),
                 `Expected NO profile/openid/email scope in redirect URL, got: ${location}`
             );
         });

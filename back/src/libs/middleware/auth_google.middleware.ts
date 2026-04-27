@@ -23,7 +23,12 @@ export const setupGoogleStrategy = () => {
                 callbackURL: config.google.callbackUrl,
                 skipUserProfile: true
             },
-            (_accessToken: string, _refreshToken: string, _profile: unknown, done: OAuth2Strategy.VerifyCallback) => {
+            (
+                _accessToken: string,
+                _refreshToken: string,
+                _profile: unknown,
+                done: OAuth2Strategy.VerifyCallback
+            ) => {
                 // Only the access token matters; no user record is created
                 done(null, { accessToken: _accessToken });
             }
