@@ -3,7 +3,6 @@ import type { AuthState } from './types';
 
 const initialState: AuthState = {
     status: 'unauthenticated',
-    token: null,
     subscriptions: [],
     error: null
 };
