@@ -1,6 +1,6 @@
 # YT Helper
 
-A POC for authenticating with Google via OAuth 2.0 PKCE and fetching a user's YouTube subscriptions using the YouTube Data API v3.
+A tool for authenticating with Google via a server-side OAuth 2.0 flow and fetching a user's YouTube subscriptions using the YouTube Data API v3.
 
 ## Route
 
@@ -10,90 +10,62 @@ The `(yt-helper)` route group has its own minimal layout (`+layout.svelte`) that
 
 ## How it works
 
-### 1. OAuth 2.0 PKCE flow (`src/lib/YtHelper/auth.ts`)
+Authentication is handled entirely by the backend. The frontend holds no tokens — only a server-side session cookie keeps the user authenticated.
 
-The page uses the Authorization Code flow with PKCE (Proof Key for Code Exchange), which is the correct pattern for browser-based clients.
+### OAuth flow
 
-**On "Connect to YouTube" click → `startOAuthFlow()`:**
+**1. User clicks "Connect to YouTube"**
 
-1. Generates a random code verifier (32 bytes, base64url-encoded) using `crypto.getRandomValues`
-2. Derives a SHA-256 code challenge from the verifier using `crypto.subtle.digest`
-3. Stores the verifier in `sessionStorage` (survives the redirect, cleared on tab close)
-4. Redirects the browser to `https://accounts.google.com/o/oauth2/v2/auth` with:
-    - `response_type=code`
-    - `scope=https://www.googleapis.com/auth/youtube.readonly`
-    - `code_challenge_method=S256`
-    - `code_challenge` (the SHA-256 hash)
+`startGoogleOAuthFlow()` (`src/lib/YtHelper/googleAuth.ts`) navigates the browser to `GET /youtube/auth/start`. The server (passport-oauth2) immediately issues a 302 to Google's consent screen. This must be a real browser navigation, not a fetch, so the session cookie can be set on the redirect back.
 
-**On redirect back to `/yt-helper?code=...` → `exchangeCodeForToken(code)`:**
+**2. Google redirects back**
 
-1. Reads the verifier from `sessionStorage` and removes it
-2. POSTs to `https://oauth2.googleapis.com/token` with the code, verifier, client ID, and client secret
-3. Returns the access token from the response
+After the user grants consent, Google redirects to `GET /youtube/auth/callback?code=...`. The server exchanges the authorization code for an access token, stores it in the server-side session under `req.session.googleAccessToken`, and redirects the browser back to `/yt-helper`.
 
-> **Note:** Google's "Web application" credential type requires `client_secret` in the token exchange even when PKCE is used. This is a Google-specific requirement that deviates from the OAuth 2.1 spec (which treats PKCE as sufficient for public clients). In a production app, this token exchange must happen server-side to keep the secret out of the browser bundle.
+**3. Page loads, checks session**
 
-**On "Disconnect" click → `clearAuth()`:**
+`onMount` in `+page.svelte` calls `GET /youtube/auth/status` via `client2.youtube.authStatus()`. The server reads the session and returns `{ authenticated: true/false }`. If authenticated, the page immediately fetches subscriptions.
 
-- Clears the verifier from `sessionStorage`
-- Resets the auth store to `unauthenticated`
+**4. Fetching subscriptions**
 
-### 2. Auth state (`src/lib/YtHelper/store.ts`)
+`fetchSubscriptions()` (`src/lib/YtHelper/api.ts`) calls `GET /youtube/subscriptions`. The server reads the access token from the session and forwards the request to the YouTube Data API — the token never reaches the browser.
 
-A single Svelte writable store holds the entire auth state:
+**5. Disconnect**
+
+`logoutGoogle()` calls `POST /youtube/auth/logout`. The server deletes `googleAccessToken` from the session. The store is reset to `unauthenticated`.
+
+### Error handling
+
+If step 2 fails (Google rejects the code exchange), the server redirects to `/yt-helper?error=auth_failed`. `onMount` detects this parameter, strips it from the URL, and shows an error message.
+
+---
+
+## Module overview
+
+| File | Responsibility |
+|---|---|
+| `src/lib/YtHelper/googleAuth.ts` | `startGoogleOAuthFlow` (browser navigation to auth start) and `logoutGoogle` (API call) |
+| `src/lib/YtHelper/api.ts` | `fetchSubscriptions` — wraps `client2.youtube.subscriptions()` |
+| `src/lib/YtHelper/store.ts` | Svelte writable store holding `AuthState` |
+| `src/lib/YtHelper/types.ts` | `AuthState` and `AuthStatus` types |
+| `src/routes/(yt-helper)/yt-helper/+page.svelte` | Page component — drives state transitions on mount and user interaction |
+
+### Auth state (`AuthState`)
 
 ```typescript
 type AuthState = {
     status: 'unauthenticated' | 'loading' | 'authenticated';
-    token: string | null; // access token, in-memory only
-    subscriptions: string[]; // channel titles
+    subscriptions: Subscription[]; // populated once authenticated
     error: string | null;
 };
 ```
 
-The token is intentionally kept in-memory (not persisted to `localStorage`) — it is lost on page refresh, which is the safe default.
+The token is never stored client-side. Session state lives in the backend (MySQL sessions table) and is accessed via the session cookie.
 
-### 3. YouTube API (`src/lib/YtHelper/api.ts`)
+### Page UI states
 
-`fetchSubscriptions(token)` calls the YouTube Data API v3 subscriptions endpoint:
-
-```
-GET https://www.googleapis.com/youtube/v3/subscriptions
-    ?part=snippet&mine=true&maxResults=50
-Authorization: Bearer <access_token>
-```
-
-Returns a `string[]` of channel titles from `items[].snippet.title`.
-
-### 4. Page component (`+page.svelte`)
-
-`onMount` checks for a `?code=` URL parameter (the OAuth callback). If found:
-
-- Strips it from the URL immediately via `history.replaceState` (so it's not visible or reusable)
-- Checks `sessionStorage` for the PKCE verifier — if missing (e.g. the user refreshed mid-flow), shows an error instead of attempting the exchange
-- Calls `exchangeCodeForToken` then `fetchSubscriptions` in sequence
-- Updates the store with the result or an error message
-
-The UI renders one of three states driven by `$authStore.status`:
-
-| Status            | UI                                                       |
-| ----------------- | -------------------------------------------------------- |
+| Status | UI |
+|---|---|
 | `unauthenticated` | "Connect to YouTube" button (+ error message if present) |
-| `loading`         | "Loading..." text                                        |
-| `authenticated`   | Subscription list + "Disconnect" button                  |
-
-## Environment variables
-
-| Variable                       | File                    | Purpose                                                              |
-| ------------------------------ | ----------------------- | -------------------------------------------------------------------- |
-| `PUBLIC_YOUTUBE_CLIENT_ID`     | `env.local`, `env.prod` | OAuth client ID from Google Cloud Console                            |
-| `PUBLIC_YOUTUBE_CLIENT_SECRET` | `env.local`, `env.prod` | OAuth client secret (POC only — must move server-side in production) |
-
-See `superpowers/specs/2026-04-26-yt-helper-google-setup-guide.md` for full setup instructions.
-
-## Known limitations (POC)
-
-- No refresh token — the access token expires after 1 hour
-- No `state` parameter — production must add this for CSRF protection
-- `client_secret` is in the browser bundle — production must proxy the token exchange through a backend
-- Only fetches the first 50 subscriptions — production should paginate via `nextPageToken`
+| `loading` | "Loading..." text |
+| `authenticated` | Subscription list + "Disconnect" button |

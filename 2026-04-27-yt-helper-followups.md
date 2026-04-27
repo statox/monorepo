@@ -4,6 +4,8 @@
 
 ## 1. Update `front/src/routes/(yt-helper)/README.md`
 
+DONE
+
 The README still describes the old PKCE flow (`auth.ts`, `sessionStorage`, `exchangeCodeForToken`, `PUBLIC_YOUTUBE_CLIENT_SECRET` in the browser bundle, etc.). The entire "How it works" section needs to be rewritten to reflect the current server-side OAuth flow:
 
 - Step 1: frontend navigates to `GET /youtube/auth/start` → server redirects to Google
@@ -89,3 +91,10 @@ window.location.href = `${client2.baseURL}/youtube/auth/start`;
 Pros: minimal change, removes the `getApiUrl()` duplication. Cons: `baseURL` may not be a public field on the client.
 
 **Recommendation:** Option A is the cleanest — a URL accessor keeps the SDK as the single source of truth for the API surface without introducing side effects. This would require either a manual addition to the SDK or a change to the SDK generator to emit URL accessors for redirect-based routes. Worth deciding whether the generator should be extended before implementing.
+
+
+---
+
+## 4. `front/src/lib/YtHelper/types.t` - Remove `subscriptions` from `AuthState`
+
+The auth should be standalone, retrieved user data should be stored independently. Probably in another store.
