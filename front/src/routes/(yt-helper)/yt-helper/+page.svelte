@@ -1,38 +1,34 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { startOAuthFlow, exchangeCodeForToken, clearAuth } from '$lib/YtHelper/auth';
+    import { startGoogleOAuthFlow, logoutGoogle } from '$lib/YtHelper/googleAuth';
     import { fetchSubscriptions } from '$lib/YtHelper/api';
     import { authStore } from '$lib/YtHelper/store';
+    import { client2 } from '$lib/api';
 
     onMount(async () => {
         const params = new URLSearchParams(window.location.search);
-        const code = params.get('code');
-
-        if (!code) return;
-
-        // Clean the code from the URL immediately
-        const cleanUrl = window.location.pathname;
-        history.replaceState(null, '', cleanUrl);
-
-        const verifier = sessionStorage.getItem('yt_pkce_verifier');
-        if (!verifier) {
+        if (params.get('error') === 'auth_failed') {
+            history.replaceState(null, '', window.location.pathname);
             authStore.update((s) => ({
                 ...s,
                 status: 'unauthenticated',
-                error: 'OAuth flow interrupted — please try again.'
+                error: 'Google authentication failed — please try again.'
             }));
             return;
         }
 
         authStore.update((s) => ({ ...s, status: 'loading' }));
         try {
-            const token = await exchangeCodeForToken(code);
-            const subscriptions = await fetchSubscriptions(token);
-            authStore.set({ status: 'authenticated', token, subscriptions, error: null });
+            const { authenticated } = await client2.youtube.authStatus();
+            if (!authenticated) {
+                authStore.update((s) => ({ ...s, status: 'unauthenticated' }));
+                return;
+            }
+            const subscriptions = await fetchSubscriptions();
+            authStore.set({ status: 'authenticated', subscriptions, error: null });
         } catch (e) {
             authStore.set({
                 status: 'unauthenticated',
-                token: null,
                 subscriptions: [],
                 error: e instanceof Error ? e.message : 'An unknown error occurred'
             });
@@ -47,15 +43,20 @@
         {#if $authStore.error}
             <p class="error">{$authStore.error}</p>
         {/if}
-        <button onclick={startOAuthFlow}>Connect to YouTube</button>
+        <button onclick={startGoogleOAuthFlow}>Connect to YouTube</button>
     {:else if $authStore.status === 'loading'}
         <p>Loading...</p>
     {:else if $authStore.status === 'authenticated'}
-        <button onclick={clearAuth}>Disconnect</button>
+        <button onclick={logoutGoogle}>Disconnect</button>
         <h2>Subscriptions ({$authStore.subscriptions.length})</h2>
         <ul>
-            {#each $authStore.subscriptions as name}
-                <li>{name}</li>
+            {#each $authStore.subscriptions as sub (sub.id)}
+                <li>
+                    {#if sub.thumbnailUrl}
+                        <img src={sub.thumbnailUrl} alt={sub.title} width="36" height="36" />
+                    {/if}
+                    {sub.title}
+                </li>
             {/each}
         </ul>
     {/if}
@@ -70,5 +71,15 @@
 
     .error {
         color: var(--color-error, red);
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    img {
+        border-radius: 50%;
     }
 </style>
