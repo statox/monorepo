@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import OAuth2Strategy from 'passport-oauth2';
 import { NextFunction, Request, Response } from 'express';
 import { config } from '../../packages/config/index.js';
 import { Auth_UnauthorizedError } from '../modules/auth/index.js';
@@ -14,13 +14,16 @@ declare module 'express-session' {
 export const setupGoogleStrategy = () => {
     passport.use(
         'google',
-        new GoogleStrategy(
+        new OAuth2Strategy(
             {
+                authorizationURL: 'https://accounts.google.com/o/oauth2/v2/auth',
+                tokenURL: 'https://oauth2.googleapis.com/token',
                 clientID: config.google.clientId,
                 clientSecret: config.google.clientSecret,
-                callbackURL: config.google.callbackUrl
+                callbackURL: config.google.callbackUrl,
+                skipUserProfile: true
             },
-            (_accessToken, _refreshToken, _profile, done) => {
+            (_accessToken: string, _refreshToken: string, _profile: unknown, done: OAuth2Strategy.VerifyCallback) => {
                 // Only the access token matters; no user record is created
                 done(null, { accessToken: _accessToken });
             }
