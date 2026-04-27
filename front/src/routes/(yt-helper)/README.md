@@ -15,16 +15,18 @@ The `(yt-helper)` route group has its own minimal layout (`+layout.svelte`) that
 The page uses the Authorization Code flow with PKCE (Proof Key for Code Exchange), which is the correct pattern for browser-based clients.
 
 **On "Connect to YouTube" click → `startOAuthFlow()`:**
+
 1. Generates a random code verifier (32 bytes, base64url-encoded) using `crypto.getRandomValues`
 2. Derives a SHA-256 code challenge from the verifier using `crypto.subtle.digest`
 3. Stores the verifier in `sessionStorage` (survives the redirect, cleared on tab close)
 4. Redirects the browser to `https://accounts.google.com/o/oauth2/v2/auth` with:
-   - `response_type=code`
-   - `scope=https://www.googleapis.com/auth/youtube.readonly`
-   - `code_challenge_method=S256`
-   - `code_challenge` (the SHA-256 hash)
+    - `response_type=code`
+    - `scope=https://www.googleapis.com/auth/youtube.readonly`
+    - `code_challenge_method=S256`
+    - `code_challenge` (the SHA-256 hash)
 
 **On redirect back to `/yt-helper?code=...` → `exchangeCodeForToken(code)`:**
+
 1. Reads the verifier from `sessionStorage` and removes it
 2. POSTs to `https://oauth2.googleapis.com/token` with the code, verifier, client ID, and client secret
 3. Returns the access token from the response
@@ -32,6 +34,7 @@ The page uses the Authorization Code flow with PKCE (Proof Key for Code Exchange
 > **Note:** Google's "Web application" credential type requires `client_secret` in the token exchange even when PKCE is used. This is a Google-specific requirement that deviates from the OAuth 2.1 spec (which treats PKCE as sufficient for public clients). In a production app, this token exchange must happen server-side to keep the secret out of the browser bundle.
 
 **On "Disconnect" click → `clearAuth()`:**
+
 - Clears the verifier from `sessionStorage`
 - Resets the auth store to `unauthenticated`
 
@@ -42,10 +45,10 @@ A single Svelte writable store holds the entire auth state:
 ```typescript
 type AuthState = {
     status: 'unauthenticated' | 'loading' | 'authenticated';
-    token: string | null;       // access token, in-memory only
-    subscriptions: string[];    // channel titles
+    token: string | null; // access token, in-memory only
+    subscriptions: string[]; // channel titles
     error: string | null;
-}
+};
 ```
 
 The token is intentionally kept in-memory (not persisted to `localStorage`) — it is lost on page refresh, which is the safe default.
@@ -65,6 +68,7 @@ Returns a `string[]` of channel titles from `items[].snippet.title`.
 ### 4. Page component (`+page.svelte`)
 
 `onMount` checks for a `?code=` URL parameter (the OAuth callback). If found:
+
 - Strips it from the URL immediately via `history.replaceState` (so it's not visible or reusable)
 - Checks `sessionStorage` for the PKCE verifier — if missing (e.g. the user refreshed mid-flow), shows an error instead of attempting the exchange
 - Calls `exchangeCodeForToken` then `fetchSubscriptions` in sequence
@@ -72,17 +76,17 @@ Returns a `string[]` of channel titles from `items[].snippet.title`.
 
 The UI renders one of three states driven by `$authStore.status`:
 
-| Status | UI |
-|---|---|
+| Status            | UI                                                       |
+| ----------------- | -------------------------------------------------------- |
 | `unauthenticated` | "Connect to YouTube" button (+ error message if present) |
-| `loading` | "Loading..." text |
-| `authenticated` | Subscription list + "Disconnect" button |
+| `loading`         | "Loading..." text                                        |
+| `authenticated`   | Subscription list + "Disconnect" button                  |
 
 ## Environment variables
 
-| Variable | File | Purpose |
-|---|---|---|
-| `PUBLIC_YOUTUBE_CLIENT_ID` | `env.local`, `env.prod` | OAuth client ID from Google Cloud Console |
+| Variable                       | File                    | Purpose                                                              |
+| ------------------------------ | ----------------------- | -------------------------------------------------------------------- |
+| `PUBLIC_YOUTUBE_CLIENT_ID`     | `env.local`, `env.prod` | OAuth client ID from Google Cloud Console                            |
 | `PUBLIC_YOUTUBE_CLIENT_SECRET` | `env.local`, `env.prod` | OAuth client secret (POC only — must move server-side in production) |
 
 See `superpowers/specs/2026-04-26-yt-helper-google-setup-guide.md` for full setup instructions.
