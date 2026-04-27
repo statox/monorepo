@@ -1,3 +1,24 @@
+// Google OAuth2 flow (server-side, session-backed)
+//
+// Step 1 — Start:    GET /youtube/auth/start
+//   doGoogleOAuthStart redirects the browser to Google's consent screen.
+//   The apiPipeline handler never runs; passport issues the 302 directly.
+//
+// Step 2 — Callback: GET /youtube/auth/callback?code=...&scope=...
+//   Google redirects back here after the user grants consent.
+//   doGoogleOAuthCallback exchanges the code for an access token via
+//   passport-oauth2 (skipUserProfile: true avoids calling the UserInfo
+//   endpoint, which would fail because only youtube.readonly scope was granted).
+//   On success req.user = { accessToken }; storeGoogleTokenAndRedirect saves
+//   the token in req.session.googleAccessToken and redirects to the frontend.
+//
+// Step 3 — Authenticated requests (e.g. GET /youtube/subscriptions):
+//   validateGoogleSession reads req.session.googleAccessToken and injects it
+//   into res.locals so the route handler can use it without touching the session.
+//
+// Step 4 — Logout: POST /youtube/auth/logout
+//   clearGoogleSession deletes req.session.googleAccessToken and saves the session.
+
 import passport from 'passport';
 import OAuth2Strategy from 'passport-oauth2';
 import { NextFunction, Request, Response } from 'express';
