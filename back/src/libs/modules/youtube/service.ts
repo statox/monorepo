@@ -17,8 +17,14 @@ type YouTubeApiResponse = {
 };
 
 export const fetchSubscriptions = async (accessToken: string): Promise<Subscription[]> => {
-    const url =
-        'https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&maxResults=50&order=alphabetical';
+    const url = new URL('https://www.googleapis.com/youtube/v3/subscriptions');
+
+    url.search = new URLSearchParams({
+        part: 'snippet',
+        mine: 'true',
+        maxResults: '1000',
+        order: 'alphabetical'
+    }).toString();
 
     const response = await fetch(url, {
         headers: { Authorization: `Bearer ${accessToken}` }
