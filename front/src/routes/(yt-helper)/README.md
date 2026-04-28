@@ -42,13 +42,13 @@ If step 2 fails (Google rejects the code exchange), the server redirects to `/yt
 
 ## Module overview
 
-| File | Responsibility |
-|---|---|
-| `src/lib/YtHelper/googleAuth.ts` | `startGoogleOAuthFlow` (browser navigation to auth start) and `logoutGoogle` (API call) |
-| `src/lib/YtHelper/api.ts` | `fetchSubscriptions` — wraps `client2.youtube.subscriptions()` |
-| `src/lib/YtHelper/store.ts` | Svelte writable store holding `AuthState` |
-| `src/lib/YtHelper/types.ts` | `AuthState` and `AuthStatus` types |
-| `src/routes/(yt-helper)/yt-helper/+page.svelte` | Page component — drives state transitions on mount and user interaction |
+| File                                            | Responsibility                                                                          |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `src/lib/YtHelper/googleAuth.ts`                | `startGoogleOAuthFlow` (browser navigation to auth start) and `logoutGoogle` (API call) |
+| `src/lib/YtHelper/api.ts`                       | `fetchSubscriptions` — wraps `client2.youtube.subscriptions()`                          |
+| `src/lib/YtHelper/store.ts`                     | Svelte writable store holding `AuthState`                                               |
+| `src/lib/YtHelper/types.ts`                     | `AuthState` and `AuthStatus` types                                                      |
+| `src/routes/(yt-helper)/yt-helper/+page.svelte` | Page component — drives state transitions on mount and user interaction                 |
 
 ### Auth state (`AuthState`)
 
@@ -64,8 +64,8 @@ The token is never stored client-side. Session state lives in the backend (MySQL
 
 ### Page UI states
 
-| Status | UI |
-|---|---|
+| Status            | UI                                                       |
+| ----------------- | -------------------------------------------------------- |
 | `unauthenticated` | "Connect to YouTube" button (+ error message if present) |
-| `loading` | "Loading..." text |
-| `authenticated` | Subscription list + "Disconnect" button |
+| `loading`         | "Loading..." text                                        |
+| `authenticated`   | Subscription list + "Disconnect" button                  |
