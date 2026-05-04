@@ -1,29 +1,31 @@
-export class FileOrContentRequiredError extends Error {
+import { AppError } from '../errors/AppError.js';
+
+export class FileOrContentRequiredError extends AppError {
     constructor() {
-        super('FILE_OR_CONTENT_REQUIRED');
+        super({ code: 'FILE_OR_CONTENT_REQUIRED', httpStatus: 400 });
     }
 }
 
-export class ItemAlreadyExistsError extends Error {
+export class ItemAlreadyExistsError extends AppError {
     constructor() {
-        super('ITEM_ALREADY_EXISTS');
+        super({ code: 'ITEM_ALREADY_EXISTS', httpStatus: 400 });
     }
 }
 
-export class ItemNotFoundError extends Error {
+export class ItemNotFoundError extends AppError {
     constructor() {
-        super('ITEM_NOT_FOUND');
+        super({ code: 'ITEM_NOT_FOUND', httpStatus: 400 });
     }
 }
 
-export class ExpiredItemError extends Error {
+export class ExpiredItemError extends AppError {
     constructor() {
-        super('ITEM_IS_EXPIRED');
+        super({ code: 'ITEM_IS_EXPIRED', httpStatus: 400 });
     }
 }
 
-export class TooManyEntriesError extends Error {
+export class TooManyEntriesError extends AppError {
     constructor() {
-        super('TOO_MANY_ENTRIES');
+        super({ code: 'TOO_MANY_ENTRIES', httpStatus: 400 });
     }
 }

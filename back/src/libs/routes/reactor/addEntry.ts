@@ -43,5 +43,6 @@ export const route: PostRoute<Input, EmptyOutput> = {
     handler,
     authentication: 'user2',
     scope: 'admin',
+    clientErrors: ['ITEM_ALREADY_EXISTS'],
     outputSchema: emptyObjectSchema
 };
