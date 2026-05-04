@@ -1,6 +1,6 @@
-import { OkPacket, QueryError, RowDataPacket } from 'mysql2';
+import { OkPacket, RowDataPacket } from 'mysql2';
 import { db } from '../../../databases/db.js';
-import { ItemAlreadyExistsError } from '../../../routes/errors.js';
+import { handleDuplicateEntry } from '../../../errors/dbHelpers.js';
 import { DuplicateIngredientError } from '../errors.js';
 import { LoggableContext } from '../../logging/index.js';
 
@@ -87,10 +87,7 @@ VALUES (?, ?, ?, ?)
         return conn.commit();
     } catch (error) {
         await conn.rollback();
-        if ((error as QueryError).code === 'ER_DUP_ENTRY') {
-            throw new ItemAlreadyExistsError();
-        }
-        throw error;
+        handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
     } finally {
         conn.release();
     }
