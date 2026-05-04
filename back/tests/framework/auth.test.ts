@@ -13,9 +13,8 @@ describe('authentication middlewares', () => {
             await request(app).get('/apiiotAuthenticatedGetRoute').expect(401);
             th.slog.checkLog('auth', 'authIOT rejected', {
                 error: {
-                    statusCode: 401,
-                    status: 401,
-                    code: 'unauthorized'
+                    httpStatus: 401,
+                    code: 'MISSING_API_KEY'
                 }
             });
         });
@@ -28,9 +27,8 @@ describe('authentication middlewares', () => {
 
             th.slog.checkLog('auth', 'authIOT rejected', {
                 error: {
-                    statusCode: 401,
-                    status: 401,
-                    code: 'unauthorized'
+                    httpStatus: 401,
+                    code: 'INVALID_AUTH_HEADER'
                 }
             });
         });
@@ -43,9 +41,8 @@ describe('authentication middlewares', () => {
 
             th.slog.checkLog('auth', 'authIOT rejected', {
                 error: {
-                    statusCode: 403,
-                    status: 403,
-                    code: 'forbidden'
+                    httpStatus: 403,
+                    code: 'UNKNOWN_API_KEY'
                 }
             });
         });

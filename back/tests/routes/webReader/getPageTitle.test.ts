@@ -21,10 +21,7 @@ describe('webReader/getPageTitle', () => {
                 .send({})
                 .expect(400)
                 .then((response) => {
-                    assert.match(
-                        JSON.stringify(response.body),
-                        new RegExp("must have required property 'url'")
-                    );
+                    assert.match(response.body.reason, /must have required property 'url'/);
                 });
         });
 
@@ -36,7 +33,7 @@ describe('webReader/getPageTitle', () => {
                 .send({ url: 'not-a-valid-url' })
                 .expect(400)
                 .then((response) => {
-                    assert.deepEqual(response.body, { message: 'INVALID_URL' });
+                    assert.deepEqual(response.body, { httpStatus: 400, code: 'INVALID_URL' });
                 });
         });
     });

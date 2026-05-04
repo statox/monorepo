@@ -27,7 +27,7 @@ describe('reactor/addEntry', () => {
             .attach('file', 'tests/assets/glider.png')
             .expect(400)
             .then((response) => {
-                assert.equal(response.text, '{"message":"ITEM_ALREADY_EXISTS"}');
+                assert.deepEqual(response.body, { httpStatus: 400, code: 'ITEM_ALREADY_EXISTS' });
             });
 
         await th.mysql.checkContains({
@@ -59,7 +59,7 @@ describe('reactor/addEntry', () => {
             .attach('file', 'tests/assets/glider.png')
             .expect(500)
             .then((response) => {
-                assert.equal(response.text, '{"message":"Internal Server Error"}');
+                assert.deepEqual(response.body, { httpStatus: 500, code: 'INTERNAL_SERVER_ERROR' });
             });
 
         th.s3.checkNbCalls({ nbCalls: 1 });

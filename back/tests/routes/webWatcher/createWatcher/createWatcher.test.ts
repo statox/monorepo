@@ -37,7 +37,10 @@ describe('webWatcher/createWatcher', () => {
                 })
                 .expect(400)
                 .then((response) => {
-                    assert.deepEqual(response.body, { message: 'ENTRY_ALREADY_EXISTS' });
+                    assert.deepEqual(response.body, {
+                        httpStatus: 400,
+                        code: 'ENTRY_ALREADY_EXISTS'
+                    });
                 });
 
             await th.mysql.checkTableLength('WebWatcher', 1);

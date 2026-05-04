@@ -26,7 +26,7 @@ describe('clipboard/getAllEntries', () => {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .then((response) => {
-                    assert.equal(response.text, '{"message":"ITEM_NOT_FOUND"}');
+                    assert.deepEqual(response.body, { httpStatus: 400, code: 'ITEM_NOT_FOUND' });
                 });
         });
 
@@ -59,7 +59,10 @@ describe('clipboard/getAllEntries', () => {
                 .set('Accept', 'application/json')
                 .expect(500)
                 .then((response) => {
-                    assert.equal(response.text, '{"message":"Internal Server Error"}');
+                    assert.deepEqual(response.body, {
+                        httpStatus: 500,
+                        code: 'INTERNAL_SERVER_ERROR'
+                    });
                 });
         });
     });

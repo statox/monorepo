@@ -119,7 +119,8 @@ describe('auth-passport', () => {
             const res = await request(app).post('/auth/me').send({}).expect(401);
 
             assert.deepEqual(res.body, {
-                message: 'UNAUTHORIZED'
+                httpStatus: 401,
+                code: 'UNAUTHORIZED'
             });
         });
 

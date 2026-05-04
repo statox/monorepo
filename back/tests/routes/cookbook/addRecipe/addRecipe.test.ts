@@ -20,7 +20,10 @@ describe('cookbook/addRecipe', () => {
                 })
                 .expect(400)
                 .then((response) => {
-                    assert.equal(response.text, '{"message":"ITEM_ALREADY_EXISTS"}');
+                    assert.deepEqual(response.body, {
+                        httpStatus: 400,
+                        code: 'ITEM_ALREADY_EXISTS'
+                    });
                 });
 
             await th.mysql.checkTableLength('Cookbook_Recipe', 3);
@@ -55,7 +58,11 @@ describe('cookbook/addRecipe', () => {
                 })
                 .expect(400)
                 .then((response) => {
-                    assert.equal(response.text, '{"message":"INGREDIENT_INCLUDED_MORE_THAN_ONCE"}');
+                    assert.deepEqual(response.body, {
+                        httpStatus: 400,
+                        code: 'DUPLICATE_INGREDIENT',
+                        reason: 'Ingredient "carot" appears more than once'
+                    });
                 });
 
             await th.mysql.checkTableLength('Cookbook_Recipe', 3);
