@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import mustacheExpress from 'mustache-express';
 import { DateTime } from 'luxon';
 import { Server } from 'http';
@@ -74,6 +74,11 @@ export const initApp = () => {
 
     for (const route of routes.list) {
         const pipeline = [];
+
+        pipeline.push((_req: Request, res: Response, next: NextFunction) => {
+            res.locals.route = route;
+            next();
+        });
 
         if (route.authentication === 'apikey-iot') {
             pipeline.push(validateAPIKeyHeader);
