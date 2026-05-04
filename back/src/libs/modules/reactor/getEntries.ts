@@ -2,7 +2,7 @@ import { RowDataPacket } from 'mysql2/promise';
 import { db } from '../../databases/db.js';
 import { slog } from '../logging/index.js';
 import { getPresignedURLForKey } from '../s3files/index.js';
-import { ItemNotFoundError, TooManyEntriesError } from '../../routes/errors.js';
+import { ItemNotFoundError, TooManyEntriesError } from '../s3files/errors.js';
 
 interface DBReactorEntryForPublic extends RowDataPacket {
     name: string;

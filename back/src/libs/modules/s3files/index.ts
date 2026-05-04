@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { PoolConnection, RowDataPacket } from 'mysql2/promise';
 import { getPresignedUrl, S3 } from '../../databases/s3.js';
 import { db } from '../../databases/db.js';
-import { ExpiredItemError, ItemNotFoundError, TooManyEntriesError } from '../../routes/errors.js';
+import { ExpiredItemError, ItemNotFoundError, TooManyEntriesError } from './errors.js';
 import { slog } from '../logging/index.js';
 
 type ManagedBuckets = 'clipboard' | 'reactor';
