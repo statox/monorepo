@@ -27,6 +27,7 @@
         "postinstall": "tsc",
         "env": "./src/tools/containers-env.sh up",
         "env:stop": "./src/tools/containers-env.sh down",
+        "build": "rm -fr dist/ && tsc",
         "serve": "TZ=UTC node --watch dist/index.js",
         "watch": "rm -fr dist/ && tsc -w",
         "tests": "src/tools/init-db.sh --tests && TZ=UTC PORT=3001 ENV=tests mocha --config tests/mocha/routes.json",
