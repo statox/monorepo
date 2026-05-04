@@ -1,18 +1,21 @@
-// This is a prototype of my future custom error class
-class CustomError extends Error {
-    constructor(message?: string) {
-        super(message ?? 'NO_ERROR_MESSAGE');
+import { AppError } from '../../errors/AppError.js';
+
+export class DuplicateIngredientError extends AppError {
+    readonly ingredient: string;
+    constructor(ingredient: string) {
+        super({
+            code: 'DUPLICATE_INGREDIENT',
+            httpStatus: 400,
+            reason: `Ingredient "${ingredient}" appears more than once`
+        });
+        this.ingredient = ingredient;
     }
 }
 
-export class DuplicateIngredientError extends CustomError {
-    constructor(readonly ingredient: string) {
-        super('INGREDIENT_INCLUDED_MORE_THAN_ONCE');
-    }
-}
-
-export class RecipeNotFoundError extends CustomError {
-    constructor(readonly id: number) {
-        super('RECIPE_ID_NOT_FOUND');
+export class RecipeNotFoundError extends AppError {
+    readonly id: number;
+    constructor(id: number) {
+        super({ code: 'RECIPE_ID_NOT_FOUND', httpStatus: 400 });
+        this.id = id;
     }
 }
