@@ -120,5 +120,6 @@ export const route: PostRoute<FromSchema<typeof inputSchema>, FromSchema<typeof 
     handler,
     authentication: 'none',
     outputSchema,
-    inputSchema
+    inputSchema,
+    clientErrors: ['RANGE_TOO_LARGE', 'RANGE_IS_INVALID']
 };

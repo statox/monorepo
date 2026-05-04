@@ -42,5 +42,6 @@ export const route: PostRoute<Input, Output> = {
     outputSchema,
     handler,
     authentication: 'user2',
-    scope: 'admin'
+    scope: 'admin',
+    clientErrors: ['INVALID_URL']
 };
