@@ -1,88 +1,87 @@
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'express-json-validator-middleware';
+import { AppError } from '../errors/AppError.js';
+import { ErrorCode } from '../errors/codes.js';
+import { Route } from '../routes/types.js';
 import { slackNotifier } from '../modules/notifier/slack.js';
-import { EntryAlreadyExistsError } from '../modules/webWatcher/index.js';
-import { ApiKeyError } from './authAPIKey.middleware.js';
-import {
-    FileOrContentRequiredError,
-    ItemAlreadyExistsError,
-    ItemNotFoundError
-} from '../routes/errors.js';
-import { OutputValidationError } from './apiPipeline.middleware.js';
-import { DuplicateIngredientError, RecipeNotFoundError } from '../modules/cookbook/index.js';
-import { SensorDoesNotExistError } from '../modules/homeTracker/services/sensorMetaData.js';
-import {
-    Auth_ForbiddenForUserError,
-    Auth_InvalidScopeError,
-    Auth_UnauthorizedError
-} from '../modules/auth/index.js';
 import { slog } from '../modules/logging/slog.js';
-import { RangeInvalid, RangeTooLargeError } from '../modules/ephemerides/index.js';
-import { InvalidUrlError } from '../modules/webReader/index.js';
+
+// Auth and API key errors are always forwarded to the client — they come from
+// infrastructure middleware that runs before route handlers, so routes cannot
+// (and should not need to) whitelist them individually.
+const ALWAYS_CLIENT_ERRORS = new Set<ErrorCode>([
+    'UNAUTHORIZED',
+    'FORBIDDEN_FOR_USER',
+    'INVALID_SCOPE',
+    'MISSING_API_KEY',
+    'INVALID_AUTH_HEADER',
+    'UNKNOWN_API_KEY'
+]);
+
+type ErrorResponse = {
+    httpStatus: number;
+    code: ErrorCode;
+    reason?: string;
+};
 
 export const errorHandler = async (
     error: Error,
     request: Request,
     response: Response,
     next: NextFunction
-) => {
+): Promise<void> => {
+    const route = response.locals.route as Route<unknown, unknown> | undefined;
+
     response.locals.loggableContext?.addData('error', error);
-    // This slog shouldn't be needed since we are adding error to the loggable context
-    // but it doesn't seem to work properly
-    slog.log('app', 'Error caught by middleware', { error, url: request.url });
 
-    // This flag is here to avoid spamming slack with failed calls to /auth/me
-    // TODO: Rework this logic when reworking the error handling mechanism and
-    // add tests.
-    let logToSlack = true;
-
-    let status = 500;
-    let message = 'Internal Server Error';
-
-    if (error instanceof OutputValidationError) {
-        response.status(500).json({ message: 'Failed output validation' });
-        status = 500;
-        message = 'Failed output validation';
-    } else if (
-        error instanceof ItemAlreadyExistsError ||
-        error instanceof FileOrContentRequiredError ||
-        error instanceof EntryAlreadyExistsError ||
-        error instanceof ItemNotFoundError ||
-        error instanceof DuplicateIngredientError ||
-        error instanceof RecipeNotFoundError ||
-        error instanceof SensorDoesNotExistError ||
-        error instanceof RangeTooLargeError ||
-        error instanceof RangeInvalid ||
-        error instanceof InvalidUrlError
-    ) {
-        status = 400;
-        message = error.message;
-    } else if (
-        error instanceof Auth_UnauthorizedError ||
-        error instanceof Auth_ForbiddenForUserError ||
-        error instanceof Auth_InvalidScopeError
-    ) {
-        status = 401;
-        message = error.message;
-
-        if (request.url === '/auth/me') {
-            logToSlack = false;
-        }
-    } else if (error instanceof ApiKeyError) {
-        status = error.httpStatus;
-        message = error.message;
-    } else if (error instanceof ValidationError) {
-        status = 400;
-        message = JSON.stringify(error.validationErrors);
+    // Input validation errors from express-json-validator-middleware
+    if (error instanceof ValidationError) {
+        slog.log('middleware', 'Input validation error', { url: request.url });
+        const body: ErrorResponse = {
+            httpStatus: 400,
+            code: 'INPUT_VALIDATION_FAILED',
+            reason: JSON.stringify(error.validationErrors)
+        };
+        response.status(400).json(body);
+        return;
     }
 
-    if (logToSlack) {
-        slackNotifier.notifySlack({
+    // All AppErrors (business, auth, system)
+    if (error instanceof AppError) {
+        const isAlwaysForwarded = ALWAYS_CLIENT_ERRORS.has(error.code);
+        const isDeclaredByRoute = Boolean(route?.clientErrors?.includes(error.code));
+        const isClientError = isAlwaysForwarded || isDeclaredByRoute;
+
+        slog.log('middleware', isClientError ? 'Client error' : 'Unexpected AppError', {
+            url: request.url,
             error,
-            message: `Error on url ${request.url}`
+            errorCode: error.code
         });
+
+        if (!isClientError) {
+            slackNotifier.notifySlack({
+                error,
+                message: `Unexpected AppError ${error.code} on ${request.url}`
+            });
+            response.status(500).json({
+                httpStatus: 500,
+                code: 'INTERNAL_SERVER_ERROR'
+            } satisfies ErrorResponse);
+            return;
+        }
+
+        const body: ErrorResponse = { httpStatus: error.httpStatus, code: error.code };
+        if (error.reason) body.reason = error.reason;
+        response.status(error.httpStatus).json(body);
+        return;
     }
 
-    response.status(status).json({ message });
+    // Unrecognized error — unexpected failure
+    slog.log('middleware', 'Unexpected error', { url: request.url, error });
+    slackNotifier.notifySlack({ error, message: `Unexpected error on ${request.url}` });
+    response.status(500).json({
+        httpStatus: 500,
+        code: 'INTERNAL_SERVER_ERROR'
+    } satisfies ErrorResponse);
     next();
 };
