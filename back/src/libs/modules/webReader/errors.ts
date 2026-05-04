@@ -1,5 +1,7 @@
-export class InvalidUrlError extends Error {
+import { AppError } from '../../errors/AppError.js';
+
+export class InvalidUrlError extends AppError {
     constructor() {
-        super('INVALID_URL');
+        super({ code: 'INVALID_URL', httpStatus: 400 });
     }
 }

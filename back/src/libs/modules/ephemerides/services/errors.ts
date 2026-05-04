@@ -1,11 +1,13 @@
-export class RangeTooLargeError extends Error {
+import { AppError } from '../../../errors/AppError.js';
+
+export class RangeTooLargeError extends AppError {
     constructor() {
-        super('RANGE_TOO_LARGE');
+        super({ code: 'RANGE_TOO_LARGE', httpStatus: 400 });
     }
 }
 
-export class RangeInvalid extends Error {
+export class RangeInvalid extends AppError {
     constructor() {
-        super('RANGE_IS_INVALID');
+        super({ code: 'RANGE_IS_INVALID', httpStatus: 400 });
     }
 }
