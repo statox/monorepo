@@ -76,7 +76,7 @@ describe('homeTracker/updateSensorMetadata', () => {
             .send(newMetaData)
             .expect(400);
 
-        assert.deepEqual(res.body, { httpStatus: 400, code: 'SENSOR_NAME_DOES_NOT_EXISTS' });
+        assert.deepEqual(res.body, { httpStatus: 400, code: 'SENSOR_NOT_FOUND' });
 
         th.slog.checkLog('app', 'access-log', {
             path: '/homeTracker/updateSensorMetadata',

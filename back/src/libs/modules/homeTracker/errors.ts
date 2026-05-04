@@ -1,7 +1,7 @@
 import { AppError } from '../../errors/AppError.js';
 
-export class SensorDoesNotExistError extends AppError {
+export class SensorNotFoundError extends AppError {
     constructor() {
-        super({ code: 'SENSOR_NAME_DOES_NOT_EXISTS', httpStatus: 400 });
+        super({ code: 'SENSOR_NOT_FOUND', httpStatus: 400 });
     }
 }
