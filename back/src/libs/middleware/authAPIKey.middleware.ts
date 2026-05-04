@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { db } from '../databases/db.js';
 import { RowDataPacket } from 'mysql2/promise';
 import { slog } from '../modules/logging/index.js';
+import { AppError } from '../errors/AppError.js';
 
 /*
  * Generic API Key authentication middleware.
@@ -51,32 +52,22 @@ export const validateAPIKey = async (req: Request, _res: Response, next: NextFun
     return next(error);
 };
 
-export class ApiKeyError extends Error {
-    statusCode: number;
-    status: number;
-    code: string;
-    constructor(message: string, code: string, status: number) {
-        super(message);
-        this.code = code;
-        this.status = status;
-        this.statusCode = status;
-    }
-}
+export class ApiKeyError extends AppError {}
 
 export class MissingApiKeyError extends ApiKeyError {
     constructor() {
-        super('API Key required', 'unauthorized', 401);
+        super({ code: 'MISSING_API_KEY', httpStatus: 401 });
     }
 }
 
 export class InvalidAuthHeaderError extends ApiKeyError {
     constructor() {
-        super('Invalid authorization scheme', 'unauthorized', 401);
+        super({ code: 'INVALID_AUTH_HEADER', httpStatus: 401 });
     }
 }
 
 export class UnknownApiKeyError extends ApiKeyError {
     constructor() {
-        super('Invalid API key', 'forbidden', 403);
+        super({ code: 'UNKNOWN_API_KEY', httpStatus: 403 });
     }
 }

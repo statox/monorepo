@@ -69,7 +69,7 @@ export const errorHandler = async (
             logToSlack = false;
         }
     } else if (error instanceof ApiKeyError) {
-        status = error.status;
+        status = error.httpStatus;
         message = error.message;
     } else if (error instanceof ValidationError) {
         status = 400;
