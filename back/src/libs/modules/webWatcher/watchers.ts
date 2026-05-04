@@ -1,6 +1,7 @@
 import { db } from '../../databases/db.js';
 import { QueryError } from 'mysql2/promise';
 import { WatchedContent, WatchType } from './types.js';
+import { EntryAlreadyExistsError } from './errors.js';
 
 export const getWatchedContent = async () => {
     const [content] = await db.query<WatchedContent[]>(
@@ -47,12 +48,6 @@ export const getEnabledWatchedContent = async () => {
     );
     return content;
 };
-
-export class EntryAlreadyExistsError extends Error {
-    constructor() {
-        super('ENTRY_ALREADY_EXISTS');
-    }
-}
 
 interface NewWatcherParams {
     name: string;

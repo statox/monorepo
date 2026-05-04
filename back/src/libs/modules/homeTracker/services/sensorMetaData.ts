@@ -1,6 +1,7 @@
 import { OkPacket, RowDataPacket } from 'mysql2';
 import { db } from '../../../databases/db.js';
 import { slog } from '../../logging/index.js';
+import { SensorDoesNotExistError } from '../errors.js';
 
 type SensorMetaData = {
     sqlId: number;
@@ -69,12 +70,6 @@ export const getSensorSleepTimeSec = async (params: { sensorName: string }): Pro
 
     return rows[0].sleepTimeSec;
 };
-
-export class SensorDoesNotExistError extends Error {
-    constructor() {
-        super('SENSOR_NAME_DOES_NOT_EXISTS');
-    }
-}
 
 export const updateSensorMetadata = async (params: {
     sensorName: string;

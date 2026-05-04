@@ -31,5 +31,6 @@ export const route: PostRoute<Input, EmptyOutput> = {
     handler,
     authentication: 'user2',
     scope: 'admin',
+    clientErrors: ['SENSOR_NAME_DOES_NOT_EXISTS'],
     outputSchema: emptyObjectSchema
 };
