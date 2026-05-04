@@ -75,7 +75,7 @@ export const createWatcher = async (newWatcherParams: NewWatcherParams) => {
             [name, notificationMessage, url, watchType, cssSelector, checkIntervalSeconds]
         );
     } catch (error) {
-        handleDuplicateEntry(error, 'ENTRY_ALREADY_EXISTS');
+        handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
     }
 };
 

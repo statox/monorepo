@@ -27,8 +27,6 @@ export const ERROR_CODES = [
     'INVALID_URL',
     // HomeTracker
     'SENSOR_NAME_DOES_NOT_EXISTS',
-    // WebWatcher
-    'ENTRY_ALREADY_EXISTS',
     // System (not forwarded to client)
     'OUTPUT_VALIDATION_FAILED',
     'INTERNAL_SERVER_ERROR',

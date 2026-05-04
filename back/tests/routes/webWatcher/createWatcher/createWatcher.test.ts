@@ -39,7 +39,7 @@ describe('webWatcher/createWatcher', () => {
                 .then((response) => {
                     assert.deepEqual(response.body, {
                         httpStatus: 400,
-                        code: 'ENTRY_ALREADY_EXISTS'
+                        code: 'ITEM_ALREADY_EXISTS'
                     });
                 });
 
