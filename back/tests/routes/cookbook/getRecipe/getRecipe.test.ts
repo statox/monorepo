@@ -17,7 +17,7 @@ describe('/cookbook/getRecipe', () => {
             .then((response) => {
                 assert.deepEqual(response.body, {
                     httpStatus: 400,
-                    code: 'RECIPE_ID_NOT_FOUND',
+                    code: 'ITEM_NOT_FOUND',
                     reason: 'Recipe 99 not found'
                 });
             });

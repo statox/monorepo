@@ -19,7 +19,6 @@ export const ERROR_CODES = [
     'TOO_MANY_ENTRIES',
     // Cookbook
     'DUPLICATE_INGREDIENT',
-    'RECIPE_ID_NOT_FOUND',
     // Ephemerides
     'RANGE_TOO_LARGE',
     'RANGE_IS_INVALID',
