@@ -37,6 +37,7 @@ export type LoggableProperties = {
     enabled?: boolean;
     entryName?: string;
     error?: Error;
+    errorCode?: string;
     eventTS?: number;
     eventType?: string;
     eventValue?: number;

@@ -4,6 +4,7 @@ import { WebSocket } from 'ws';
 import { emptyObjectSchema } from './helpers.js';
 import { LoggableContext } from '../modules/logging/index.js';
 import { User } from '../modules/auth/types.js';
+import { ErrorCode } from '../errors/codes.js';
 
 export type RouteHandler<Input> = (params: {
     input: Input;
@@ -28,6 +29,7 @@ type BaseRouteCommon<Input, Output> = {
     outputSchema: ApiJsonSchema;
     // TODO at one point we might want to wrap the response in a custom object
     customResponseHandler?: (output: Output, res: Response) => void;
+    clientErrors?: ErrorCode[];
 };
 
 type BaseRouteUser2<Input, Output> = BaseRouteCommon<Input, Output> & {
