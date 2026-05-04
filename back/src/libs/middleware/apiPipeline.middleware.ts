@@ -4,12 +4,13 @@ import { Route } from '../routes/types.js';
 import { AllowedSchema, isAjvError, validateAgainstJsonSchema } from '../modules/ajv/index.js';
 import { slog } from '../modules/logging/index.js';
 import { User } from '../modules/auth/types.js';
+import { AppError } from '../errors/AppError.js';
 
 const { isDebug, isProd } = config.env;
 
-export class OutputValidationError extends Error {
+export class OutputValidationError extends AppError {
     constructor() {
-        super('OUTPUT_VALIDATION_FAILED');
+        super({ code: 'OUTPUT_VALIDATION_FAILED', httpStatus: 500 });
     }
 }
 
