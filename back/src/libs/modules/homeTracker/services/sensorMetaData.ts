@@ -1,7 +1,7 @@
 import { OkPacket, RowDataPacket } from 'mysql2';
 import { db } from '../../../databases/db.js';
 import { slog } from '../../logging/index.js';
-import { SensorDoesNotExistError } from '../errors.js';
+import { SensorNotFoundError } from '../errors.js';
 
 type SensorMetaData = {
     sqlId: number;
@@ -88,6 +88,6 @@ export const updateSensorMetadata = async (params: {
     );
 
     if ((result as OkPacket).affectedRows === 0) {
-        throw new SensorDoesNotExistError();
+        throw new SensorNotFoundError();
     }
 };
