@@ -29,6 +29,7 @@ export const route: GetRoute<Input, Output> = {
     path: '/r/:linkId',
     handler,
     authentication: 'none',
+    clientErrors: ['ITEM_NOT_FOUND'],
     outputSchema,
     customResponseHandler
 };
