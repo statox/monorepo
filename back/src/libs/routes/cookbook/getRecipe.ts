@@ -73,5 +73,6 @@ export const route: PostRoute<Input, FromSchema<typeof outputSchema>> = {
     handler,
     authentication: 'user2',
     scope: 'admin',
-    outputSchema
+    outputSchema,
+    clientErrors: ['RECIPE_ID_NOT_FOUND']
 };
