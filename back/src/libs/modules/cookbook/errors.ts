@@ -13,9 +13,7 @@ export class DuplicateIngredientError extends AppError {
 }
 
 export class RecipeNotFoundError extends AppError {
-    readonly id: number;
     constructor(id: number) {
-        super({ code: 'RECIPE_ID_NOT_FOUND', httpStatus: 400 });
-        this.id = id;
+        super({ code: 'RECIPE_ID_NOT_FOUND', httpStatus: 400, reason: `Recipe ${id} not found` });
     }
 }

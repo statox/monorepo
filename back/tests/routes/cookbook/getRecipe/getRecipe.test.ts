@@ -15,7 +15,11 @@ describe('/cookbook/getRecipe', () => {
             .send({ recipeId: 99 })
             .expect(400)
             .then((response) => {
-                assert.deepEqual(response.body, { httpStatus: 400, code: 'RECIPE_ID_NOT_FOUND' });
+                assert.deepEqual(response.body, {
+                    httpStatus: 400,
+                    code: 'RECIPE_ID_NOT_FOUND',
+                    reason: 'Recipe 99 not found'
+                });
             });
     });
     it('Should retrieve the recipe when without ingredients', async () => {

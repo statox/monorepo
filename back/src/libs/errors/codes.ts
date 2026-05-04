@@ -1,3 +1,7 @@
+// TODO: ErrorCode is currently a manually maintained list. Ideally it would be
+// derived automatically from the AppError subclasses defined across the codebase,
+// but that requires a registration pattern to avoid circular dependencies.
+// For now, every new AppError subclass must add its code string here.
 export const ERROR_CODES = [
     // Auth / session
     'UNAUTHORIZED',
@@ -32,3 +36,15 @@ export const ERROR_CODES = [
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];
+
+// Auth and API key errors are always forwarded to the client regardless of route
+// declarations — they come from infrastructure middleware that runs before route
+// handlers, so individual routes cannot (and should not need to) whitelist them.
+export const ALWAYS_CLIENT_ERRORS = new Set<ErrorCode>([
+    'UNAUTHORIZED',
+    'FORBIDDEN_FOR_USER',
+    'INVALID_SCOPE',
+    'MISSING_API_KEY',
+    'INVALID_AUTH_HEADER',
+    'UNKNOWN_API_KEY'
+]);

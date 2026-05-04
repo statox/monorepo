@@ -1,22 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'express-json-validator-middleware';
 import { AppError } from '../errors/AppError.js';
-import { ErrorCode } from '../errors/codes.js';
+import { ALWAYS_CLIENT_ERRORS, ErrorCode } from '../errors/codes.js';
 import { Route } from '../routes/types.js';
 import { slackNotifier } from '../modules/notifier/slack.js';
 import { slog } from '../modules/logging/slog.js';
-
-// Auth and API key errors are always forwarded to the client — they come from
-// infrastructure middleware that runs before route handlers, so routes cannot
-// (and should not need to) whitelist them individually.
-const ALWAYS_CLIENT_ERRORS = new Set<ErrorCode>([
-    'UNAUTHORIZED',
-    'FORBIDDEN_FOR_USER',
-    'INVALID_SCOPE',
-    'MISSING_API_KEY',
-    'INVALID_AUTH_HEADER',
-    'UNKNOWN_API_KEY'
-]);
 
 type ErrorResponse = {
     httpStatus: number;
