@@ -46,7 +46,7 @@ describe('r/:linkId', () => {
             .set('Accept', 'application/json')
             .expect(400)
             .then((response) => {
-                assert.equal(response.text, '{"message":"ITEM_NOT_FOUND"}');
+                assert.deepEqual(response.body, { httpStatus: 400, code: 'ITEM_NOT_FOUND' });
             });
     });
 
@@ -69,7 +69,7 @@ describe('r/:linkId', () => {
             .set('Accept', 'application/json')
             .expect(400)
             .then((response) => {
-                assert.equal(response.text, '{"message":"ITEM_NOT_FOUND"}');
+                assert.deepEqual(response.body, { httpStatus: 400, code: 'ITEM_NOT_FOUND' });
             });
     });
 });

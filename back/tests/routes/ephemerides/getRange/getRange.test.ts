@@ -49,7 +49,7 @@ describe('/ephemerides/getRange', () => {
             })
             .expect(400);
 
-        assert.equal(response.text, '{"message":"RANGE_IS_INVALID"}');
+        assert.deepEqual(response.body, { httpStatus: 400, code: 'RANGE_IS_INVALID' });
     });
 
     it('Invalid range - Too large', async () => {
@@ -63,6 +63,6 @@ describe('/ephemerides/getRange', () => {
             })
             .expect(400);
 
-        assert.equal(response.text, '{"message":"RANGE_TOO_LARGE"}');
+        assert.deepEqual(response.body, { httpStatus: 400, code: 'RANGE_TOO_LARGE' });
     });
 });

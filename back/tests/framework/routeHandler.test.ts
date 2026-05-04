@@ -27,7 +27,7 @@ describe('route handler', () => {
             .get('/getroutethatthrows')
             .expect(500)
             .then((response) => {
-                assert.deepEqual(response.body, { message: 'Internal Server Error' });
+                assert.deepEqual(response.body, { httpStatus: 500, code: 'INTERNAL_SERVER_ERROR' });
             });
     });
 
@@ -36,7 +36,7 @@ describe('route handler', () => {
             .get('/getroutewithinvalidoutput')
             .expect(500)
             .then((response) => {
-                assert.deepEqual(response.body, { message: 'Failed output validation' });
+                assert.deepEqual(response.body, { httpStatus: 500, code: 'INTERNAL_SERVER_ERROR' });
                 th.slog.checkLog('middleware', 'Failed output validation', {
                     error: [
                         {
