@@ -2,8 +2,7 @@ import { File } from 'formidable';
 import mime from 'mime-types';
 import { generate4BytesHex } from '../random.js';
 import { db } from '../../databases/db.js';
-import { ItemAlreadyExistsError } from '../../routes/errors.js';
-import { QueryError } from 'mysql2/promise';
+import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
 import { createS3FileInTransaction } from '../s3files/index.js';
 
 type NewEntryParams = {
@@ -35,10 +34,7 @@ export const addEntry = async (newEntry: NewEntryParams) => {
         return conn.commit();
     } catch (error) {
         await conn.rollback();
-        if ((error as QueryError).code === 'ER_DUP_ENTRY') {
-            throw new ItemAlreadyExistsError();
-        }
-        throw error;
+        handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
     } finally {
         conn.release();
     }

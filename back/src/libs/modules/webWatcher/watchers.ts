@@ -1,7 +1,6 @@
 import { db } from '../../databases/db.js';
-import { QueryError } from 'mysql2/promise';
 import { WatchedContent, WatchType } from './types.js';
-import { EntryAlreadyExistsError } from './errors.js';
+import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
 
 export const getWatchedContent = async () => {
     const [content] = await db.query<WatchedContent[]>(
@@ -76,10 +75,7 @@ export const createWatcher = async (newWatcherParams: NewWatcherParams) => {
             [name, notificationMessage, url, watchType, cssSelector, checkIntervalSeconds]
         );
     } catch (error) {
-        if ((error as QueryError).code === 'ER_DUP_ENTRY') {
-            throw new EntryAlreadyExistsError();
-        }
-        throw error;
+        handleDuplicateEntry(error, 'ENTRY_ALREADY_EXISTS');
     }
 };
 
