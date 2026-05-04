@@ -2,8 +2,8 @@ import { File } from 'formidable';
 import { FromSchema } from 'json-schema-to-ts';
 import { EmptyOutput, PostRoute, RouteHandler } from '../types.js';
 import { addEntry } from '../../modules/clipboard/index.js';
-import { FileOrContentRequiredError } from '../errors.js';
 import { emptyObjectSchema } from '../helpers.js';
+import { FileOrContentRequiredError } from '../../modules/clipboard/errors.js';
 
 const handler: RouteHandler<Input> = async (params) => {
     const { name, content, isPublic: isPublicInput } = params.input;
