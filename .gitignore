@@ -1,2 +1,5 @@
 # Claude CLI
 .claude/
+
+# Include superpowers generated plans
+!superpowers/
