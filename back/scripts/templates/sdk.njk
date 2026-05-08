@@ -40,32 +40,66 @@ function validateOutput(schema: any, data: unknown, endpoint: string): void {
     }
 }
 
+type AuthType = 'none' | 'user2' | 'apikey-iot' | 'apikey';
+
+interface Endpoint<TOutput, TBody = null> {
+    output: TOutput;
+    body: TBody;
+}
+
 // API Client
 export interface APIClientConfig {
     baseURL: string;
-    credentials?: RequestCredentials;
+    apiKey?: string;
     onError?: (error: Error, endpoint: string) => void;
 }
 
 export class APIClient {
     private baseURL: string;
-    private credentials: RequestCredentials;
+    private apiKey?: string;
     private onError?: (error: Error, endpoint: string) => void;
 
     constructor(config: APIClientConfig) {
         this.baseURL = config.baseURL.replace(/\/$/, ''); // Remove trailing slash
-        this.credentials = config.credentials || 'include';
+        this.apiKey = config.apiKey;
         this.onError = config.onError;
     }
 
-    private async fetch(path: string, options: RequestInit = {}): Promise<Response> {
+    private async fetch<TEndpoint extends Endpoint<unknown, unknown>>(
+        path: string,
+        body: TEndpoint['body'],
+        validation: { inputSchema?: any; outputSchema: any; endpoint: string },
+        options: { method: 'GET' | 'POST' },
+        auth: { type: AuthType }
+    ): Promise<TEndpoint['output']> {
+        const bodyIsDefined = body !== null && body !== undefined;
+        if (bodyIsDefined) {
+            if (!validation.inputSchema) {
+                throw new Error("Missing input schema");
+            }
+            validateInput(validation.inputSchema, body, validation.endpoint);
+        }
+
         const url = `${this.baseURL}${path}`;
+        const headers: Record<string, string> = {};
+
+        if (bodyIsDefined) {
+            headers['Content-Type'] = 'application/json';
+        }
+        if ((auth.type === 'apikey' || auth.type === 'apikey-iot') && this.apiKey) {
+            headers['Authorization'] = `Bearer ${this.apiKey}`;
+        }
 
         try {
             const response = await fetch(url, {
-                ...options,
+                method: options.method,
+                headers,
+                body: bodyIsDefined ? JSON.stringify(body) : undefined,
                 mode: 'cors',
-                credentials: this.credentials
+                // Only send the session cookie for user2 endpoints — those are the only ones that
+                // need it. Using 'omit' elsewhere avoids attaching credentials to endpoints that
+                // don't expect them, reducing CSRF surface area on cross-origin requests.
+                credentials: auth.type === 'user2' ? 'include' : 'omit'
             });
 
             if (!response.ok) {
@@ -74,7 +108,9 @@ export class APIClient {
                 throw error;
             }
 
-            return response;
+            const output = await response.json();
+            validateOutput(validation.outputSchema, output, validation.endpoint);
+            return output as TEndpoint['output'];
         } catch (error) {
             const err = error instanceof Error ? error : new Error(String(error));
             this.onError?.(err, path);

@@ -163,8 +163,8 @@ describe('scripts/generateSDK', () => {
             assert.include(sdk, ".replace(':id', params.id)");
         });
 
-        it('POST method calls validateInput', () => {
-            assert.include(sdk, 'validateInput(schemas.homeTracker_addEntry_Input');
+        it('POST method passes inputSchema in validation object', () => {
+            assert.include(sdk, 'inputSchema: schemas.homeTracker_addEntry_Input');
         });
 
         it('GET method does not call validateInput', () => {
@@ -187,6 +187,24 @@ describe('scripts/generateSDK', () => {
         it('authentication value appears in JSDoc for each route', () => {
             assert.include(sdk, '* Authentication: user2');
             assert.include(sdk, '* Authentication: apikey-iot');
+        });
+
+        it('exports a bundle type for POST routes', () => {
+            assert.include(
+                sdk,
+                'export type HomeTracker_AddEntry = Endpoint<HomeTracker_AddEntry_Output, HomeTracker_AddEntry_Input>'
+            );
+        });
+
+        it('exports a bundle type for GET routes (body defaults to null)', () => {
+            assert.include(
+                sdk,
+                'export type HomeTracker_GetDashboard = Endpoint<HomeTracker_GetDashboard_Output>'
+            );
+        });
+
+        it('apikey-iot route does not include apiKey in method params', () => {
+            assert.notInclude(sdk, 'apiKey: string');
         });
     });
 
@@ -320,6 +338,41 @@ describe('scripts/generateSDK', () => {
             } finally {
                 warnStub.restore();
             }
+        });
+
+        it('apikey-iot method sends Authorization header when apiKey configured in client', async () => {
+            fetchStub.resolves({
+                ok: true,
+                json: async () => ({ result: 'test' })
+            });
+
+            const client = new APIClient({
+                baseURL: 'http://localhost:3000',
+                apiKey: 'my-secret-key'
+            });
+            await client.sensor.data({ id: 'sensor-1' });
+
+            const [, options] = fetchStub.firstCall.args as [
+                string,
+                RequestInit & { headers: Record<string, string> }
+            ];
+            assert.equal(options.headers['Authorization'], 'Bearer my-secret-key');
+        });
+
+        it('apikey-iot method omits Authorization header when apiKey not configured', async () => {
+            fetchStub.resolves({
+                ok: true,
+                json: async () => ({ result: 'test' })
+            });
+
+            const client = new APIClient({ baseURL: 'http://localhost:3000' });
+            await client.sensor.data({ id: 'sensor-1' });
+
+            const [, options] = fetchStub.firstCall.args as [
+                string,
+                RequestInit & { headers: Record<string, string> }
+            ];
+            assert.isUndefined(options.headers['Authorization']);
         });
     });
 });
