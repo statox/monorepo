@@ -2,17 +2,11 @@
      * {{ method }} {{ routePath }}
      * Authentication: {{ authentication }}
      */
-    {{ name }}: async ({{ params }}): Promise<{{ outputType }}> => {
-      {% if hasInput %}validateInput(schemas.{{ inputSchemaName }}, input, '{{ module }}.{{ name }}');{% endif %}
-      const response = await this.fetch(
-        '{{ routePath }}'{{ pathParamsTransform }},
-        {% if hasInput %}{
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json'{% if requiresApiKey %}, 'Authorization': `Bearer ${apiKey}`{% endif %} },
-          body: JSON.stringify(input)
-        }{% else %}{ method: 'GET'{% if requiresApiKey %}, headers: { 'Authorization': `Bearer ${apiKey}` }{% endif %} }{% endif %}
-      );
-      const output = await response.json();
-      validateOutput(schemas.{{ outputSchemaName }}, output, '{{ module }}.{{ name }}');
-      return output as {{ outputType }};
-    },
+    {{ name }}: async ({{ params }}): Promise<{{ outputType }}> =>
+        this.fetch<{{ endpointBundleType }}>(
+            '{{ routePath }}'{{ pathParamsTransform }},
+            {{ bodyArg }},
+            { {% if hasInput %}inputSchema: schemas.{{ inputSchemaName }}, {% endif %}outputSchema: schemas.{{ outputSchemaName }}, endpoint: '{{ module }}.{{ name }}' },
+            { method: '{{ method }}' },
+            { type: '{{ authentication }}' }
+        ),

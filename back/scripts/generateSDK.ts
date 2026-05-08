@@ -103,22 +103,20 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
 
             const inputParam = hasInput ? `input: ${inputType}` : '';
             const pathParams = extractPathParams(route.path);
-            const isApiKeyAuth =
-                route.authentication === 'apikey' || route.authentication === 'apikey-iot';
+            const bundleType = generateBundleType(module, route.name);
 
-            let params = isApiKeyAuth ? 'apiKey: string' : '';
-            if (inputParam) params = params ? `${params}, ${inputParam}` : inputParam;
+            let params = inputParam || '';
             if (pathParams.length > 0) {
                 const pathParamsType = `{ ${pathParams.map((p) => `${p}: string`).join(', ')} }`;
-                params = params
-                    ? `${params}, params: ${pathParamsType}`
-                    : `params: ${pathParamsType}`;
+                params = params ? `${params}, params: ${pathParamsType}` : `params: ${pathParamsType}`;
             }
 
             // pathParamsTransform is only used for routes with a path parameter like /r/:linkId
             const pathParamsTransform = pathParams.length
-                ? pathParams.map((p) => `.replace(':${p}', params.${p})`).join('\n        ')
+                ? pathParams.map((p) => `.replace(':${p}', params.${p})`).join('')
                 : '';
+
+            const bodyArg = hasInput ? 'input' : 'null';
 
             const methodImplementation = nunjucksEnv.render('route.njk', {
                 method: route.method.toUpperCase(),
@@ -132,7 +130,8 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
                 outputSchemaName,
                 module,
                 pathParamsTransform,
-                requiresApiKey: isApiKeyAuth
+                endpointBundleType: bundleType,
+                bodyArg
             });
 
             methods.push(methodImplementation);
@@ -147,14 +146,24 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
         .flatMap(([module, routes]) =>
             routes.flatMap((route) => {
                 const types: string[] = [];
+                const outputType = generateNamedType(module, route.name, 'Output');
+                const bundleType = generateBundleType(module, route.name);
+
                 if (route.inputSchema) {
+                    const inputType = generateNamedType(module, route.name, 'Input');
                     types.push(
-                        `export type ${generateNamedType(module, route.name, 'Input')} = FromSchema<typeof schemas.${module}_${route.name}_Input>;`
+                        `export type ${inputType} = FromSchema<typeof schemas.${module}_${route.name}_Input>;`
                     );
+                    types.push(
+                        `export type ${outputType} = FromSchema<typeof schemas.${module}_${route.name}_Output>;`
+                    );
+                    types.push(`export type ${bundleType} = Endpoint<${outputType}, ${inputType}>;`);
+                } else {
+                    types.push(
+                        `export type ${outputType} = FromSchema<typeof schemas.${module}_${route.name}_Output>;`
+                    );
+                    types.push(`export type ${bundleType} = Endpoint<${outputType}>;`);
                 }
-                types.push(
-                    `export type ${generateNamedType(module, route.name, 'Output')} = FromSchema<typeof schemas.${module}_${route.name}_Output>;`
-                );
                 return types;
             })
         )
@@ -183,6 +192,10 @@ function capitalizeFirst(str: string): string {
 
 function generateNamedType(module: string, name: string, kind: 'Input' | 'Output'): string {
     return `${capitalizeFirst(module)}_${capitalizeFirst(name)}_${kind}`;
+}
+
+function generateBundleType(module: string, name: string): string {
+    return `${capitalizeFirst(module)}_${capitalizeFirst(name)}`;
 }
 
 // Main execution
