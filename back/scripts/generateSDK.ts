@@ -18,6 +18,8 @@ import { fileURLToPath } from 'url';
 import nunjucks from 'nunjucks';
 import type { ApiJsonSchema, Route } from '../src/libs/routes/types.js';
 
+type RouteAuth = Route<unknown, unknown>['authentication'];
+
 interface GroupedRoute {
     module: string;
     name: string;
@@ -25,7 +27,7 @@ interface GroupedRoute {
     path: string;
     inputSchema?: ApiJsonSchema;
     outputSchema: ApiJsonSchema;
-    authentication: string;
+    authentication: RouteAuth;
     clientErrors: string[];
 }
 
@@ -75,8 +77,9 @@ export function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, 
     return grouped;
 }
 
-const AUTH_ERRORS: Record<string, string[]> = {
+const AUTH_ERRORS: Record<RouteAuth, string[]> = {
     user2: ['UNAUTHORIZED', 'FORBIDDEN_FOR_USER', 'INVALID_SCOPE'],
+    user: ['UNAUTHORIZED', 'FORBIDDEN_FOR_USER', 'INVALID_SCOPE'],
     apikey: ['MISSING_API_KEY', 'INVALID_AUTH_HEADER', 'UNKNOWN_API_KEY'],
     'apikey-iot': ['MISSING_API_KEY', 'INVALID_AUTH_HEADER', 'UNKNOWN_API_KEY'],
     none: []
@@ -177,7 +180,8 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
                 const errorType = generateErrorType(module, route.name);
                 const errorCodes = [
                     ...route.clientErrors,
-                    ...(AUTH_ERRORS[route.authentication] ?? []),
+                    ...AUTH_ERRORS[route.authentication],
+                    ...(route.inputSchema ? ['INPUT_VALIDATION_FAILED'] : []),
                     'INTERNAL_SERVER_ERROR',
                     'NETWORK_ERROR'
                 ];
