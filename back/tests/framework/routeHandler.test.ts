@@ -31,6 +31,16 @@ describe('route handler', () => {
             });
     });
 
+    it('should return generic 500 for an AppError whose code is not in clientErrors', async () => {
+        await request(app)
+            .get('/getroutethatthrowsunwhitelistedapperror')
+            .expect(500)
+            .then((response) => {
+                assert.deepEqual(response.body, { httpStatus: 500, code: 'INTERNAL_SERVER_ERROR' });
+            });
+        th.slack.checkNbNotifications(1);
+    });
+
     it('should validate output schema', async () => {
         await request(app)
             .get('/getroutewithinvalidoutput')

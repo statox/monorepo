@@ -14,7 +14,7 @@ export class Auth_UnauthorizedError extends AppError {
  */
 export class Auth_ForbiddenForUserError extends AppError {
     constructor() {
-        super({ code: 'FORBIDDEN_FOR_USER', httpStatus: 401 });
+        super({ code: 'FORBIDDEN_FOR_USER', httpStatus: 403 });
     }
 }
 

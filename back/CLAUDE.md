@@ -430,6 +430,16 @@ const helpers: TestHelper[] = [
 5. Run `npm run generate:sdk` to update frontend SDK
 6. Create test file in `tests/routes/[module]/[endpoint].test.ts`
 
+### Adding a New AppError
+
+When adding a new `AppError` subclass that a route can throw intentionally:
+
+1. Add the error code string to `ERROR_CODES` in `src/libs/errors/codes.ts`
+2. Define the subclass in the module's `errors.ts` file (e.g. `src/libs/modules/myModule/errors.ts`)
+3. Add the code to `clientErrors` on **every route** that can throw it intentionally
+
+**`clientErrors` is the forwarding whitelist.** An AppError whose code is absent from the throwing route's `clientErrors` (and not in `ALWAYS_CLIENT_ERRORS`) is treated as an unexpected failure: the client receives a generic `{ httpStatus: 500, code: 'INTERNAL_SERVER_ERROR' }` and a Slack alert fires. This is intentional — it prevents accidental information leakage — but it means forgetting to declare an error in `clientErrors` produces a silent 500 that looks like a server crash to the client.
+
 ### Adding Database Tables
 
 1. Create SQL file in `src/tools/tables/[table-name].sql`

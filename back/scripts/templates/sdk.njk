@@ -6,7 +6,7 @@
  * Run: npm run generate:sdk
  */
 
-import Ajv, { type ValidateFunction } from 'ajv';
+import Ajv, { type AnySchema, type ValidateFunction } from 'ajv';
 import type { FromSchema } from 'json-schema-to-ts';
 
 // Schemas
@@ -19,21 +19,21 @@ export const schemas = {{ schemasJson }} as const;
 const ajv = new Ajv();
 const validators: Map<string, ValidateFunction> = new Map();
 
-function getValidator(schema: any, key: string): ValidateFunction {
+function getValidator(schema: AnySchema, key: string): ValidateFunction {
     if (!validators.has(key)) {
         validators.set(key, ajv.compile(schema));
     }
     return validators.get(key)!;
 }
 
-function validateInput(schema: any, data: unknown, endpoint: string): void {
+function validateInput(schema: AnySchema, data: unknown, endpoint: string): void {
     const validator = getValidator(schema, `input_${endpoint}`);
     if (!validator(data)) {
         throw new Error(`Invalid input for ${endpoint}: ${ajv.errorsText(validator.errors)}`);
     }
 }
 
-function validateOutput(schema: any, data: unknown, endpoint: string): void {
+function validateOutput(schema: AnySchema, data: unknown, endpoint: string): void {
     const validator = getValidator(schema, `output_${endpoint}`);
     if (!validator(data)) {
         console.warn(`Invalid output for ${endpoint}: ${ajv.errorsText(validator.errors)}`);
@@ -42,6 +42,12 @@ function validateOutput(schema: any, data: unknown, endpoint: string): void {
 
 type AuthType = 'none' | 'user2' | 'apikey-iot' | 'apikey';
 
+// Type-bundle pattern: Endpoint<TOutput, TBody> is used as a named container for
+// the type parameters of a single endpoint. The generic fetch<TEndpoint>() method
+// extracts TEndpoint['output'] and TEndpoint['body'] from a single type argument,
+// keeping call sites concise. Each route exports its own Endpoint alias (e.g.
+// `export type Auth_Login = Endpoint<..., ...>`).
+// TODO: explore whether a more idiomatic TypeScript pattern exists for this.
 interface Endpoint<TOutput, TBody = null> {
     output: TOutput;
     body: TBody;
@@ -68,11 +74,11 @@ export class APIClient {
     private async fetch<TEndpoint extends Endpoint<unknown, unknown>>(
         path: string,
         body: TEndpoint['body'],
-        validation: { inputSchema?: any; outputSchema: any; endpoint: string },
+        validation: { inputSchema?: AnySchema; outputSchema: AnySchema; endpoint: string },
         options: { method: 'GET' | 'POST' },
         auth: { type: AuthType }
     ): Promise<TEndpoint['output']> {
-        const bodyIsDefined = body !== null && body !== undefined;
+        const bodyIsDefined = body !== null;
         if (bodyIsDefined) {
             if (!validation.inputSchema) {
                 throw new Error("Missing input schema");
