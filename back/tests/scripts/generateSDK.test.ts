@@ -301,6 +301,8 @@ describe('scripts/generateSDK', () => {
     describe('Runtime instantiation', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let APIClient: any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let ApiError: any;
         let fetchStub: sinon.SinonStub;
 
         before(() => {
@@ -329,6 +331,8 @@ describe('scripts/generateSDK', () => {
             vm.runInContext(jsCode, sandbox);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             APIClient = (moduleObj.exports as any).APIClient;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ApiError = (moduleObj.exports as any).ApiError;
         });
 
         beforeEach(() => {
@@ -463,6 +467,88 @@ describe('scripts/generateSDK', () => {
 
             const [, options] = fetchStub.firstCall.args as [string, RequestInit];
             assert.equal(options.credentials, 'omit');
+        });
+
+        it('throws ApiError with parsed code and httpStatus on HTTP error', async () => {
+            fetchStub.resolves({
+                ok: false,
+                status: 404,
+                statusText: 'Not Found',
+                json: async () => ({
+                    httpStatus: 404,
+                    code: 'ITEM_NOT_FOUND',
+                    reason: 'No such item'
+                })
+            });
+
+            const client = new APIClient({ baseURL: 'http://localhost:3000' });
+            try {
+                await client.homeTracker.getDashboard();
+                assert.fail('Expected an error to be thrown');
+            } catch (err) {
+                assert.instanceOf(err, ApiError);
+                assert.propertyVal(err as object, 'httpStatus', 404);
+                assert.propertyVal(err as object, 'code', 'ITEM_NOT_FOUND');
+                assert.propertyVal(err as object, 'reason', 'No such item');
+            }
+        });
+
+        it('throws ApiError with INTERNAL_SERVER_ERROR when body has no code', async () => {
+            fetchStub.resolves({
+                ok: false,
+                status: 500,
+                statusText: 'Internal Server Error',
+                json: async () => ({})
+            });
+
+            const client = new APIClient({ baseURL: 'http://localhost:3000' });
+            try {
+                await client.homeTracker.getDashboard();
+                assert.fail('Expected an error to be thrown');
+            } catch (err) {
+                assert.instanceOf(err, ApiError);
+                assert.propertyVal(err as object, 'httpStatus', 500);
+                assert.propertyVal(err as object, 'code', 'INTERNAL_SERVER_ERROR');
+                assert.propertyVal(err as object, 'reason', undefined);
+            }
+        });
+
+        it('throws ApiError with NETWORK_ERROR code when fetch itself rejects', async () => {
+            fetchStub.rejects(new Error('Network failure'));
+
+            const client = new APIClient({ baseURL: 'http://localhost:3000' });
+            try {
+                await client.homeTracker.getDashboard();
+                assert.fail('Expected an error to be thrown');
+            } catch (err) {
+                assert.instanceOf(err, ApiError);
+                assert.propertyVal(err as object, 'code', 'NETWORK_ERROR');
+                assert.propertyVal(err as object, 'httpStatus', 0);
+            }
+        });
+
+        it('calls onError callback with ApiError on HTTP error', async () => {
+            fetchStub.resolves({
+                ok: false,
+                status: 401,
+                statusText: 'Unauthorized',
+                json: async () => ({ httpStatus: 401, code: 'UNAUTHORIZED' })
+            });
+
+            const onErrorStub = sinon.stub();
+            const client = new APIClient({
+                baseURL: 'http://localhost:3000',
+                onError: onErrorStub
+            });
+            try {
+                await client.homeTracker.getDashboard();
+            } catch {
+                /* expected */
+            }
+            assert.isTrue(onErrorStub.calledOnce);
+            const firstArg = onErrorStub.firstCall.args[0];
+            assert.instanceOf(firstArg, ApiError);
+            assert.propertyVal(firstArg as object, 'code', 'UNAUTHORIZED');
         });
     });
 });
