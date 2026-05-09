@@ -26,6 +26,7 @@ interface GroupedRoute {
     inputSchema?: ApiJsonSchema;
     outputSchema: ApiJsonSchema;
     authentication: string;
+    clientErrors: string[];
 }
 
 // Group routes by module (first part of path)
@@ -61,7 +62,8 @@ export function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, 
             path: route.path,
             inputSchema: route.method === 'post' ? route.inputSchema : undefined,
             outputSchema: route.outputSchema,
-            authentication: route.authentication
+            authentication: route.authentication,
+            clientErrors: route.clientErrors ?? []
         };
 
         if (!grouped.has(module)) {
