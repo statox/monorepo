@@ -109,7 +109,7 @@ export const encryptAndUpload = async (
         });
     } catch (error) {
         let errorMessage = (error as Error).message;
-        if (error instanceof ApiError && error.code === 401) {
+        if (error instanceof ApiError && error.code === 'UNAUTHORIZED') {
             errorMessage = 'Invalid logged in user';
         }
         const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
