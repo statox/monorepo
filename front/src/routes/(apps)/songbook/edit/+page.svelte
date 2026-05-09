@@ -9,6 +9,7 @@
     import { goto } from '$app/navigation';
     import { Notice } from '$lib/components/Notice';
     import { AuthGuard } from '$lib/components/AuthGuard';
+    import type { Chords_UpdateAll_Errors } from '$vendor/statox-api';
 
     interface Props {
         // From +page.ts load() function
@@ -73,8 +74,19 @@
             toast.push('<i class="fas fa-check"></i> Uploaded');
         } catch (error) {
             let errorMessage = (error as Error).message;
-            if (error instanceof ApiError && error.code === 401) {
-                errorMessage = 'Invalid logged in user';
+            if (error instanceof ApiError) {
+                const e = error as ApiError<Chords_UpdateAll_Errors>;
+                if (e.code === 'UNAUTHORIZED') {
+                    errorMessage = 'Invalid logged in user';
+                } else if (e.code === 'INVALID_SCOPE') {
+                    errorMessage = 'Invalid scope';
+                } else if (e.code === 'FORBIDDEN_FOR_USER') {
+                    errorMessage = 'Forbidden for user';
+                } else if (e.code === 'NETWORK_ERROR') {
+                    errorMessage = 'API unreachable';
+                } else if (e.code === 'INTERNAL_SERVER_ERROR') {
+                    errorMessage = 'Server error';
+                }
             } else if (error instanceof UserLoggedOutError) {
                 errorMessage = 'User is logged out';
             }
