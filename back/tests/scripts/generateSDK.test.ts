@@ -128,6 +128,26 @@ describe('scripts/generateSDK', () => {
             const addEntry = routes.find((r) => r.name === 'addEntry')!;
             assert.isDefined(addEntry.inputSchema);
         });
+
+        it('preserves clientErrors from route definition', () => {
+            const route = {
+                method: 'get',
+                path: '/homeTracker/getDashboard',
+                authentication: 'user2',
+                scope: 'admin',
+                outputSchema,
+                clientErrors: ['ITEM_NOT_FOUND', 'ITEM_ALREADY_EXISTS']
+            } as unknown as Route<unknown, unknown>;
+            const grouped = groupRoutes([route]);
+            const r = grouped.get('homeTracker')![0];
+            assert.deepEqual(r.clientErrors, ['ITEM_NOT_FOUND', 'ITEM_ALREADY_EXISTS']);
+        });
+
+        it('defaults clientErrors to empty array when route has none', () => {
+            const grouped = groupRoutes([getDashboardRoute]); // getDashboardRoute has no clientErrors
+            const r = grouped.get('homeTracker')![0];
+            assert.deepEqual(r.clientErrors, []);
+        });
     });
 
     // -----------------------------------------------------------------------
