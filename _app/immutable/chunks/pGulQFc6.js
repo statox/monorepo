@@ -1,0 +1,1 @@
+import{Ut as e}from"./BIMcxlE9.js";import"./BYyLxFRa.js";var t=e({name:`My apps`,iconPath:`/favicon.png`,showAuthInHeader:!0}),n=e(!1);export{n,t};
