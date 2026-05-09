@@ -5,7 +5,7 @@ import { UserLoggedOutError } from '$lib/auth';
 export function handleFormError(error: unknown, action: string = 'created') {
     let errorMessage = (error as Error).message;
 
-    if (error instanceof ApiError && error.code === 401) {
+    if (error instanceof ApiError && error.code === 'UNAUTHORIZED') {
         errorMessage = 'Invalid logged in user';
     } else if (error instanceof UserLoggedOutError) {
         errorMessage = 'User is logged out';
