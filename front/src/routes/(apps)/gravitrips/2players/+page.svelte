@@ -31,14 +31,20 @@
     let pageState: PageState = $state('initial');
 
     let gameId = $state('');
+    let getGameError: string | null = $state(null);
 
     const getNewGameId = async () => {
-        const res = await client2.gravitrips.getNewGame();
-        if (!res.gameId) {
-            throw new Error("Couldn't start the game");
+        getGameError = null;
+        try {
+            const res = await client2.gravitrips.getNewGame();
+            if (!res.gameId) {
+                throw new Error("Couldn't start the game");
+            }
+            gameId = res.gameId;
+            startGame();
+        } catch (error) {
+            getGameError = (error as Error).message;
         }
-        gameId = res.gameId;
-        startGame();
     };
 
     // Note that we replace only "http" even for the "https" prod endpoint
@@ -109,6 +115,7 @@
 
 {#if ['initial', 'waiting_for_opponent', 'game_over', 'disconnected'].includes(pageState)}
     <button onclick={getNewGameId}>Start a new game</button>
+    {#if getGameError}<p style="color: red">{getGameError}</p>{/if}
     <br />
     <input bind:value={gameId} type="string" />
     <button onclick={startGame}>Join Game</button>
