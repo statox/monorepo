@@ -12,11 +12,14 @@ type ErrorResponse = {
     reason?: string;
 };
 
+// Express identifies error-handling middleware by its 4-parameter signature.
+// _next must remain even though it is never called.
 export const errorHandler = async (
     error: Error,
     request: Request,
     response: Response,
-    next: NextFunction
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _next: NextFunction
 ): Promise<void> => {
     const route = response.locals.route as Route<unknown, unknown> | undefined;
 
@@ -71,5 +74,4 @@ export const errorHandler = async (
         httpStatus: 500,
         code: 'INTERNAL_SERVER_ERROR'
     } satisfies ErrorResponse);
-    next();
 };

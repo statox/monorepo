@@ -1,6 +1,7 @@
 import { FromSchema } from 'json-schema-to-ts';
 import sinon from 'sinon';
 import { TestHelper } from '../TestHelper.js';
+import { AppError } from '../../../src/libs/errors/AppError.js';
 import { routes, routesWS } from '../../../src/libs/routes/index.js';
 import {
     EmptyInput,
@@ -72,6 +73,18 @@ const getRouteThatThrows: GetRoute<EmptyInput, EmptyOutput> = {
         throw new Error('The route threw');
     },
     outputSchema: emptyObjectSchema
+};
+
+// Route throws a known AppError whose code is NOT in clientErrors — must return generic 500
+const getRouteThatThrowsUnwhitelistedAppError: GetRoute<EmptyInput, EmptyOutput> = {
+    method: 'get',
+    authentication: 'none',
+    path: '/getroutethatthrowsunwhitelistedapperror',
+    handler: async () => {
+        throw new AppError({ code: 'ITEM_NOT_FOUND', httpStatus: 404 });
+    },
+    outputSchema: emptyObjectSchema
+    // clientErrors intentionally omitted — ITEM_NOT_FOUND should not reach the client
 };
 
 const getRouteWithInvalidOutputOutputSchema = {
@@ -168,6 +181,7 @@ const testRoutes = [
     apiiotAuthenticatedGetRoute,
     getRoute,
     getRouteThatThrows,
+    getRouteThatThrowsUnwhitelistedAppError,
     getRouteWithCustomOutputHandler,
     getRouteWithInvalidOutput,
     getRouteWithLoggedContext,

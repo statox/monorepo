@@ -21,7 +21,7 @@ describe('auth-passport', () => {
                     username: 'carmensandiego',
                     password: 'bar'
                 })
-                .expect(401);
+                .expect(403);
         });
 
         it('User exists - Wrong password', async () => {
@@ -32,7 +32,7 @@ describe('auth-passport', () => {
                     username: 'user',
                     password: 'nottherightpassword'
                 })
-                .expect(401);
+                .expect(403);
         });
 
         it('User exists - Correct password', async () => {
@@ -81,7 +81,7 @@ describe('auth-passport', () => {
             await request(app)
                 .post('/auth/login')
                 .send({ username: 'carmensandiego', password: 'passwd' })
-                .expect(401);
+                .expect(403);
         });
 
         it('logout existing user', async () => {
@@ -229,7 +229,7 @@ describe('auth-passport', () => {
                     .post('/post/scope-public')
                     .send({})
                     .set('Cookie', th.auth2.getPassportSessionCookie('user-no-scope'))
-                    .expect(401);
+                    .expect(403);
 
                 th.slog.checkLog('auth', 'User has no allowed scope', {
                     userId: noScopeUserId,
@@ -262,7 +262,7 @@ describe('auth-passport', () => {
                     .post('/post/scope-admin')
                     .send({})
                     .set('Cookie', th.auth2.getPassportSessionCookie('user-public'))
-                    .expect(401);
+                    .expect(403);
 
                 th.slog.checkLog('auth', 'User has no allowed scope', {
                     userId: publicUserId,
@@ -280,7 +280,7 @@ describe('auth-passport', () => {
                     .post('/post/scope-admin')
                     .send({})
                     .set('Cookie', th.auth2.getPassportSessionCookie('user-no-scope'))
-                    .expect(401);
+                    .expect(403);
 
                 th.slog.checkLog('auth', 'User has no allowed scope', {
                     userId: noScopeUserId,

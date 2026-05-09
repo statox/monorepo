@@ -167,7 +167,10 @@ describe('scripts/generateSDK', () => {
             assert.include(sdk, 'inputSchema: schemas.homeTracker_addEntry_Input');
         });
 
-        it('GET method does not call validateInput', () => {
+        it('GET method passes null as body (skipping inline validation)', () => {
+            // GET routes pass null as body to fetch(); the bodyIsDefined guard inside
+            // fetch() then skips validation and Content-Type header — there is no
+            // inline validateInput call generated for the method itself.
             assert.notInclude(sdk, 'validateInput(schemas.homeTracker_getDashboard_');
         });
 
@@ -373,6 +376,32 @@ describe('scripts/generateSDK', () => {
                 RequestInit & { headers: Record<string, string> }
             ];
             assert.isUndefined(options.headers['Authorization']);
+        });
+
+        it('user2 endpoint sends credentials: include', async () => {
+            fetchStub.resolves({
+                ok: true,
+                json: async () => ({ result: 'test' })
+            });
+
+            const client = new APIClient({ baseURL: 'http://localhost:3000' });
+            await client.homeTracker.getDashboard();
+
+            const [, options] = fetchStub.firstCall.args as [string, RequestInit];
+            assert.equal(options.credentials, 'include');
+        });
+
+        it('apikey-iot endpoint sends credentials: omit', async () => {
+            fetchStub.resolves({
+                ok: true,
+                json: async () => ({ result: 'test' })
+            });
+
+            const client = new APIClient({ baseURL: 'http://localhost:3000' });
+            await client.sensor.data({ id: 'sensor-1' });
+
+            const [, options] = fetchStub.firstCall.args as [string, RequestInit];
+            assert.equal(options.credentials, 'omit');
         });
     });
 });
