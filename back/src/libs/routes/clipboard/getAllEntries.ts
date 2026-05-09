@@ -32,6 +32,5 @@ export const route: GetRoute<EmptyInput, FromSchema<typeof outputSchema>> = {
     handler,
     authentication: 'user2',
     scope: 'admin',
-    clientErrors: ['ITEM_NOT_FOUND'],
     outputSchema
 };

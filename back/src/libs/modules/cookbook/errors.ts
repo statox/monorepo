@@ -1,14 +1,12 @@
 import { AppError } from '../../errors/AppError.js';
 
 export class DuplicateIngredientError extends AppError {
-    readonly ingredient: string;
-    constructor(ingredient: string) {
+    constructor(readonly ingredient: string) {
         super({
             code: 'DUPLICATE_INGREDIENT',
             httpStatus: 400,
             reason: `Ingredient "${ingredient}" appears more than once`
         });
-        this.ingredient = ingredient;
     }
 }
 
