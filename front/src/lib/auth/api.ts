@@ -1,5 +1,6 @@
 import { client2 } from '$lib/api';
 import { personalTrackerPassword } from '$lib/PersonalTracker';
+import { toast } from '$lib/components/Toast';
 import { user } from './store';
 
 export const getProfile = client2.auth.me;
@@ -30,5 +31,9 @@ export const updateProfile = async () => {
         logoutCleanup();
     } catch (error) {
         logoutCleanup();
+        toast.push(`<strong>Profile update failed</strong><br/> ${(error as Error).message}`, {
+            duration: 0,
+            theme: { '--toastBarBackground': '#FF0000' }
+        });
     }
 };
