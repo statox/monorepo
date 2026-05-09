@@ -75,6 +75,13 @@ export function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, 
     return grouped;
 }
 
+const AUTH_ERRORS: Record<string, string[]> = {
+    user2: ['UNAUTHORIZED', 'FORBIDDEN_FOR_USER', 'INVALID_SCOPE'],
+    apikey: ['MISSING_API_KEY', 'INVALID_AUTH_HEADER', 'UNKNOWN_API_KEY'],
+    'apikey-iot': ['MISSING_API_KEY', 'INVALID_AUTH_HEADER', 'UNKNOWN_API_KEY'],
+    none: []
+};
+
 // Generate the SDK client code
 export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string {
     const templatesDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates');
@@ -166,6 +173,17 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
                     );
                     types.push(`export type ${bundleType} = Endpoint<${outputType}>;`);
                 }
+
+                const errorType = generateErrorType(module, route.name);
+                const errorCodes = [
+                    ...route.clientErrors,
+                    ...(AUTH_ERRORS[route.authentication] ?? []),
+                    'INTERNAL_SERVER_ERROR',
+                    'NETWORK_ERROR'
+                ];
+                const errorUnion = errorCodes.map((c) => `'${c}'`).join(' | ');
+                types.push(`export type ${errorType} = ${errorUnion};`);
+
                 return types;
             })
         )
@@ -198,6 +216,10 @@ function generateNamedType(module: string, name: string, kind: 'Input' | 'Output
 
 function generateBundleType(module: string, name: string): string {
     return `${capitalizeFirst(module)}_${capitalizeFirst(name)}`;
+}
+
+function generateErrorType(module: string, name: string): string {
+    return `${capitalizeFirst(module)}_${capitalizeFirst(name)}_Errors`;
 }
 
 // Main execution

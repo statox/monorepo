@@ -229,6 +229,47 @@ describe('scripts/generateSDK', () => {
         it('apikey-iot route does not include apiKey in method params', () => {
             assert.notInclude(sdk, 'apiKey: string');
         });
+
+        it('exports an _Errors union type for every endpoint', () => {
+            assert.include(sdk, 'export type HomeTracker_GetDashboard_Errors =');
+            assert.include(sdk, 'export type HomeTracker_AddEntry_Errors =');
+            assert.include(sdk, 'export type Sensor_Data_Errors =');
+        });
+
+        it('user2 _Errors type includes UNAUTHORIZED, FORBIDDEN_FOR_USER, INVALID_SCOPE', () => {
+            // getDashboardRoute and addEntryRoute are user2
+            assert.include(sdk, "'UNAUTHORIZED'");
+            assert.include(sdk, "'FORBIDDEN_FOR_USER'");
+            assert.include(sdk, "'INVALID_SCOPE'");
+        });
+
+        it('apikey-iot _Errors type includes MISSING_API_KEY, INVALID_AUTH_HEADER, UNKNOWN_API_KEY', () => {
+            // sensorDataRoute is apikey-iot
+            assert.include(sdk, "'MISSING_API_KEY'");
+            assert.include(sdk, "'INVALID_AUTH_HEADER'");
+            assert.include(sdk, "'UNKNOWN_API_KEY'");
+        });
+
+        it('all _Errors types include INTERNAL_SERVER_ERROR and NETWORK_ERROR', () => {
+            assert.include(sdk, "'INTERNAL_SERVER_ERROR'");
+            assert.include(sdk, "'NETWORK_ERROR'");
+        });
+
+        it('clientErrors codes appear in _Errors union', () => {
+            const routeWithErrors = {
+                method: 'post',
+                path: '/homeTracker/addEntry',
+                authentication: 'user2',
+                scope: 'admin',
+                inputSchema,
+                outputSchema,
+                clientErrors: ['ITEM_NOT_FOUND', 'ITEM_ALREADY_EXISTS']
+            } as unknown as Route<unknown, unknown>;
+            const grouped = groupRoutes([routeWithErrors]);
+            const sdkWithErrors = generateSDK(grouped);
+            assert.include(sdkWithErrors, "'ITEM_NOT_FOUND'");
+            assert.include(sdkWithErrors, "'ITEM_ALREADY_EXISTS'");
+        });
     });
 
     // -----------------------------------------------------------------------
