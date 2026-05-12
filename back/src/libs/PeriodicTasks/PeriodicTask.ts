@@ -5,13 +5,13 @@ import { slackNotifier } from '../modules/notifier/slack.js';
 export class PeriodicTask {
     intervalMs: number;
     notifyOnFailure: boolean;
-    task: () => Promise<void>;
+    task: () => Promise<void> | void;
     taskName: string;
 
     constructor(params: {
         intervalMinutes: number;
         notifyOnFailure?: boolean;
-        task: () => Promise<void>;
+        task: () => Promise<void> | void;
         taskName: string;
     }) {
         this.intervalMs = params.intervalMinutes * 60 * 1000;

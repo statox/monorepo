@@ -8,7 +8,7 @@ import { PeriodicTask } from './PeriodicTask.js';
 const tasks = [
     new PeriodicTask({
         taskName: 'health check',
-        task: async () => {
+        task: () => {
             slog.log('app', 'Health check');
         },
         intervalMinutes: 60
