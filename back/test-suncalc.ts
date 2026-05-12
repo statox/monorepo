@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { getSolarState } from './src/libs/modules/ephemerides/services/sun.js';
 
-const main = async () => {
+const main = () => {
     const now = DateTime.now();
     for (let daysOffset = 0; daysOffset < 365 * 3; daysOffset++) {
         const then = now.plus({ day: daysOffset });

@@ -4,7 +4,7 @@ import { hrtime } from 'node:process';
 import { LoggableContext, slog } from '../modules/logging/index.js';
 import { config } from '../../packages/config/index.js';
 
-export const loggingHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const loggingHandler = (req: Request, res: Response, next: NextFunction) => {
     const path = req.path;
     const remoteIp = req.socket.remoteAddress ?? 'N/A';
     const cfRay = req.get('cf-ray') ?? 'N/A';

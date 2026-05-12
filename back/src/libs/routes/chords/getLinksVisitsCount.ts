@@ -2,7 +2,7 @@ import { EmptyInput, GetRoute } from '../types.js';
 import { getLinksVisitsCount } from '../../modules/chords/index.js';
 import { FromSchema } from 'json-schema-to-ts';
 
-const handler = async () => {
+const handler = () => {
     return getLinksVisitsCount();
 };
 

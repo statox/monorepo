@@ -14,7 +14,7 @@ import { pushNotifier, slackNotifier } from '../notifier/index.js';
 
 const { JSDOM } = jsdom;
 
-const recordContentChanged = async (params: {
+const recordContentChanged = (params: {
     c: WatchedContent;
     previousContent: string;
     newContent: string;
@@ -50,7 +50,7 @@ const recordContentChanged = async (params: {
     );
 };
 
-const recordContentChecked = async (c: WatchedContent) => {
+const recordContentChecked = (c: WatchedContent) => {
     return db.query(
         `
         UPDATE WebWatcher
@@ -63,7 +63,7 @@ const recordContentChecked = async (c: WatchedContent) => {
     );
 };
 
-const recordContentCheckFailed = async (c: WatchedContent, error: Error) => {
+const recordContentCheckFailed = (c: WatchedContent, error: Error) => {
     slackNotifier.notifySlack({
         message: 'FAILED TO RUN WebWatcher - ' + c.name,
         directMention: true,

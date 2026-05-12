@@ -31,7 +31,7 @@ export class TestHelper {
     }
 
     hookWrapper = (step: string, hook: Hook) => {
-        return async () => {
+        return () => {
             // if (isDebug) {
             //     console.log('Helper', this.name, 'step', step);
             // }

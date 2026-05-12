@@ -30,7 +30,7 @@ passport.use(
 );
 
 passport.serializeUser(function (userId, cb) {
-    process.nextTick(async function () {
+    process.nextTick(function () {
         // Store only the user id in the session, complete user profile is retrieved in deserializeUser()
         return cb(null, userId);
     });
@@ -147,7 +147,7 @@ export const doPassportSession = session({
     cookie: cookieOptions
 });
 
-export const logoutPassportRequest = async (req: Request, res: Response, next: NextFunction) =>
+export const logoutPassportRequest = (req: Request, res: Response, next: NextFunction) =>
     passport.authenticate('session')(req, res, () => {
         // passport.authenticate('session') populates req.isUnauthenticated and req.user
         if (req.isUnauthenticated()) {
@@ -164,7 +164,7 @@ export const logoutPassportRequest = async (req: Request, res: Response, next: N
         });
     });
 
-export const validatePassportAuth = async (req: Request, res: Response, next: NextFunction) => {
+export const validatePassportAuth = (req: Request, res: Response, next: NextFunction) => {
     res.locals.loggableContext.addData('authType', 'passport-local');
     return passport.authenticate(
         'local',
@@ -192,7 +192,7 @@ export const validatePassportAuth = async (req: Request, res: Response, next: Ne
     )(req, res, next);
 };
 
-export const validatePassportSession = async (req: Request, res: Response, next: NextFunction) => {
+export const validatePassportSession = (req: Request, res: Response, next: NextFunction) => {
     res.locals.loggableContext.addData('authType', 'passport-session');
     return passport.authenticate('session')(req, res, (error: Error) => {
         if (error) {
@@ -218,7 +218,7 @@ export const validatePassportSession = async (req: Request, res: Response, next:
 };
 
 export const validateEndpointScope = (endpointRequiredScope?: string) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
+    return (req: Request, res: Response, next: NextFunction) => {
         if (!endpointRequiredScope) {
             slog.log('auth', 'Error endpoint doesnt require a scope', {
                 requestId: res.locals.requestId

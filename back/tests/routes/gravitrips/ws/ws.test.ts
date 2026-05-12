@@ -120,7 +120,7 @@ describe('gravitrips', () => {
         await client3.waitForMessage(JSON.stringify({ error: 'game_already_full' }));
     });
 
-    it('should notify a player when the other disconnects', async () => {
+    it('should notify a player when the other disconnects', () => {
         it('should work for player1', async () => {
             await setupValidGame();
 

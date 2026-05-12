@@ -4,8 +4,7 @@ import { getRangeEphemerides } from '../../modules/ephemerides/index.js';
 
 const handler: RouteHandler<Input> = async (params) => {
     const { from, to } = params.input;
-    const ephemerides = getRangeEphemerides({ from, to });
-    return ephemerides;
+    return getRangeEphemerides({ from, to });
 };
 
 const lunarStateSchema = {

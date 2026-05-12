@@ -4,7 +4,7 @@ import { slog } from '../modules/logging/index.js';
 import { config } from '../../packages/config/index.js';
 
 export let db: Pool;
-export const initDb = async () => {
+export const initDb = () => {
     slog.log('app', 'init db');
     const parsedUrl = new URL(config.mysql.connectionUrl);
 

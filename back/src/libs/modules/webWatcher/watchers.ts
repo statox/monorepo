@@ -79,17 +79,17 @@ export const createWatcher = async (newWatcherParams: NewWatcherParams) => {
     }
 };
 
-export const deleteWatcher = async (watcherId: number) => {
+export const deleteWatcher = (watcherId: number) => {
     return db.query(`DELETE FROM WebWatcher WHERE id = ?`, watcherId);
 };
 
-export const disableWatcher = async (watcherId: number) => {
+export const disableWatcher = (watcherId: number) => {
     return db.query(
         'UPDATE WebWatcher SET archivalDateUnix = UNIX_TIMESTAMP() WHERE id = ?',
         watcherId
     );
 };
 
-export const enableWatcher = async (watcherId: number) => {
+export const enableWatcher = (watcherId: number) => {
     return db.query('UPDATE WebWatcher SET archivalDateUnix = null WHERE id = ?', watcherId);
 };

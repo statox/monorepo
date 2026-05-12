@@ -35,6 +35,7 @@ export default [
         },
 
         rules: {
+            'require-await': 'warn',
             // Avoid error if the error of try...catch blocks are used but are named _something
             '@typescript-eslint/no-unused-vars': [
                 'error',

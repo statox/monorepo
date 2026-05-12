@@ -9,7 +9,7 @@ import { config } from '../../packages/config/index.js';
  *      (Make sure you deployed the script on heroku before running)
  *      npx heroku run node dist/src/tools/elk/client-cli.js
  */
-export const callELK = async (data: LogObject) => {
+export const callELK = (data: LogObject) => {
     try {
         const ingestURL = config.elk.domainEndpoint + '/api.statox.fr/_doc';
         console.log('Calling', ingestURL);

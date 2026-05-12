@@ -14,13 +14,13 @@ type ErrorResponse = {
 
 // Express identifies error-handling middleware by its 4-parameter signature.
 // _next must remain even though it is never called.
-export const errorHandler = async (
+export const errorHandler = (
     error: Error,
     request: Request,
     response: Response,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _next: NextFunction
-): Promise<void> => {
+) => {
     const route = response.locals.route as Route<unknown, unknown> | undefined;
 
     response.locals.loggableContext?.addData('error', error);

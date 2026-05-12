@@ -3,7 +3,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { GetRoute, RouteHandler } from '../types.js';
 import { getRedirectForEntry } from '../../modules/reactor/getEntries.js';
 
-const handler: RouteHandler<Input> = async (params) => {
+const handler: RouteHandler<Input> = (params) => {
     const { linkId } = params.input;
     params.loggableContext.addData('linkId', linkId);
     return getRedirectForEntry(linkId);

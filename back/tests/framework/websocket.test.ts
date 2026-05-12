@@ -5,14 +5,14 @@ import { wss } from '../../src/app.js';
 
 const WS_SERVER_URL = 'ws://localhost:3001';
 
-describe('WebSocket endpoint routing', async () => {
+describe('WebSocket endpoint routing', () => {
     let client: TestWebSocket;
     afterEach(async () => {
         client.close();
         await client.waitUntil('close');
     });
 
-    describe('WebSocket ping pong', async () => {
+    describe('WebSocket ping pong', () => {
         it('pong response should reset isAlive to true', async () => {
             client = new TestWebSocket(WS_SERVER_URL + '/valid');
             await client.waitUntil('open');

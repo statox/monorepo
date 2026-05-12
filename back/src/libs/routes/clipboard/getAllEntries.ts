@@ -2,7 +2,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { EmptyInput, GetRoute } from '../types.js';
 import { getAllEntries } from '../../modules/clipboard/index.js';
 
-const handler = async () => {
+const handler = () => {
     return getAllEntries();
 };
 

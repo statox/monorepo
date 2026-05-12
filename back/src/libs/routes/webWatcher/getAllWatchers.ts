@@ -2,7 +2,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { EmptyInput, GetRoute } from '../types.js';
 import { getWatchedContent } from '../../modules/webWatcher/index.js';
 
-const handler = async () => {
+const handler = () => {
     return getWatchedContent();
 };
 

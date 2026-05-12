@@ -11,7 +11,7 @@ import { Scope } from '../../../src/libs/routes/types.js';
  * Creates a creates a session for a given userId, store it in the session store and returns
  * the value of the cookie
  */
-const makeSessionCookie = async (sessionStore: session.Store, userId: number) => {
+const makeSessionCookie = (sessionStore: session.Store, userId: number) => {
     const sid = `sessioncookieuser${userId}`;
 
     const sessionObj = {

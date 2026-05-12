@@ -347,7 +347,7 @@ describe('scripts/generateSDK', () => {
         it('GET method calls fetch with correct URL and method', async () => {
             fetchStub.resolves({
                 ok: true,
-                json: async () => ({ result: 'test' })
+                json: () => ({ result: 'test' })
             });
 
             const client = new APIClient({ baseURL: 'http://localhost:3000' });
@@ -363,7 +363,7 @@ describe('scripts/generateSDK', () => {
         it('POST method calls fetch with correct URL, method, Content-Type and serialized body', async () => {
             fetchStub.resolves({
                 ok: true,
-                json: async () => ({ result: 'created' })
+                json: () => ({ result: 'created' })
             });
 
             const client = new APIClient({ baseURL: 'http://localhost:3000' });
@@ -395,7 +395,7 @@ describe('scripts/generateSDK', () => {
         it('output validation warns on schema mismatch without throwing', async () => {
             fetchStub.resolves({
                 ok: true,
-                json: async () => ({}) // missing required 'result' field
+                json: () => ({}) // missing required 'result' field
             });
 
             const warnStub = sinon.stub(console, 'warn');
@@ -411,7 +411,7 @@ describe('scripts/generateSDK', () => {
         it('apikey-iot method sends Authorization header when apiKey configured in client', async () => {
             fetchStub.resolves({
                 ok: true,
-                json: async () => ({ result: 'test' })
+                json: () => ({ result: 'test' })
             });
 
             const client = new APIClient({
@@ -430,7 +430,7 @@ describe('scripts/generateSDK', () => {
         it('apikey-iot method omits Authorization header when apiKey not configured', async () => {
             fetchStub.resolves({
                 ok: true,
-                json: async () => ({ result: 'test' })
+                json: () => ({ result: 'test' })
             });
 
             const client = new APIClient({ baseURL: 'http://localhost:3000' });
@@ -446,7 +446,7 @@ describe('scripts/generateSDK', () => {
         it('user2 endpoint sends credentials: include', async () => {
             fetchStub.resolves({
                 ok: true,
-                json: async () => ({ result: 'test' })
+                json: () => ({ result: 'test' })
             });
 
             const client = new APIClient({ baseURL: 'http://localhost:3000' });
@@ -459,7 +459,7 @@ describe('scripts/generateSDK', () => {
         it('apikey-iot endpoint sends credentials: omit', async () => {
             fetchStub.resolves({
                 ok: true,
-                json: async () => ({ result: 'test' })
+                json: () => ({ result: 'test' })
             });
 
             const client = new APIClient({ baseURL: 'http://localhost:3000' });
@@ -474,7 +474,7 @@ describe('scripts/generateSDK', () => {
                 ok: false,
                 status: 404,
                 statusText: 'Not Found',
-                json: async () => ({
+                json: () => ({
                     httpStatus: 404,
                     code: 'ITEM_NOT_FOUND',
                     reason: 'No such item'
@@ -498,7 +498,7 @@ describe('scripts/generateSDK', () => {
                 ok: false,
                 status: 500,
                 statusText: 'Internal Server Error',
-                json: async () => ({})
+                json: () => ({})
             });
 
             const client = new APIClient({ baseURL: 'http://localhost:3000' });
@@ -532,7 +532,7 @@ describe('scripts/generateSDK', () => {
                 ok: false,
                 status: 401,
                 statusText: 'Unauthorized',
-                json: async () => ({ httpStatus: 401, code: 'UNAUTHORIZED' })
+                json: () => ({ httpStatus: 401, code: 'UNAUTHORIZED' })
             });
 
             const onErrorStub = sinon.stub();

@@ -5,7 +5,7 @@ import { db } from '../../databases/db.js';
 import { S3 } from '../../databases/s3.js';
 import { slog } from '../logging/index.js';
 
-export const addLinkVisit = async (params: { url: string }) => {
+export const addLinkVisit = (params: { url: string }) => {
     return db.query(
         `
 INSERT INTO ChordFrequency (url, count, lastAccessDateUnix)
