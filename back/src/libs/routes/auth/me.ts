@@ -7,7 +7,7 @@ import { PostRoute, RouteHandler } from '../types.js';
  * so we can't set a messsage when !authenticatedUser for now.
  * This route should have an exception like /auth/login in the pipeline
  */
-const handler: RouteHandler<Input> = async (params) => {
+const handler: RouteHandler<Input> = (params) => {
     const { authenticatedUser } = params;
     if (!authenticatedUser) {
         return {

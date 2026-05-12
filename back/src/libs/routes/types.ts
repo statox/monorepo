@@ -10,7 +10,7 @@ export type RouteHandler<Input> = (params: {
     input: Input;
     loggableContext: LoggableContext;
     authenticatedUser?: User;
-}) => Promise<unknown>;
+}) => Promise<unknown> | unknown;
 
 export type ApiJsonSchema = JSONSchema;
 

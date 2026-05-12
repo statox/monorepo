@@ -2,7 +2,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { PostRoute, RouteHandler } from '../types.js';
 import { slog } from '../../modules/logging/index.js';
 
-const handler: RouteHandler<Input> = async (params) => {
+const handler: RouteHandler<Input> = (params) => {
     const { authenticatedUser } = params;
 
     if (!authenticatedUser) {
@@ -10,6 +10,7 @@ const handler: RouteHandler<Input> = async (params) => {
         throw new Error();
     }
 
+    // TODO Add user id to slog
     slog.log('auth', 'login success');
     return {};
 };

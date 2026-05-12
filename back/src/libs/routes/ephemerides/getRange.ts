@@ -2,7 +2,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { PostRoute, RouteHandler } from '../types.js';
 import { getRangeEphemerides } from '../../modules/ephemerides/index.js';
 
-const handler: RouteHandler<Input> = async (params) => {
+const handler: RouteHandler<Input> = (params) => {
     const { from, to } = params.input;
     return getRangeEphemerides({ from, to });
 };
