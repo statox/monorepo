@@ -31,7 +31,7 @@ export const addRecipe = async (newRecipe: NewRecipeParams, logContext: Loggable
     logContext.addData('cookbook_nbIngredients', ingredients.length);
 
     const conn = await db.getConnection();
-    conn.beginTransaction();
+    await conn.beginTransaction();
 
     try {
         /*

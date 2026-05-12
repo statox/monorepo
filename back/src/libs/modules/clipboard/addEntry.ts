@@ -31,7 +31,7 @@ export const addEntry = async (newEntry: NewEntryParams) => {
     }
 
     const conn = await db.getConnection();
-    conn.beginTransaction();
+    await conn.beginTransaction();
     try {
         await conn.query(
             `

@@ -23,7 +23,7 @@ export const addEntry = async (newEntry: NewEntryParams) => {
     }
 
     const conn = await db.getConnection();
-    conn.beginTransaction();
+    await conn.beginTransaction();
     try {
         await conn.query(
             `INSERT INTO Reactor (name, tags, linkId, s3Key, creationDateUnix) VALUES (?, ?, ?, ?, UNIX_TIMESTAMP())`,
