@@ -8,10 +8,10 @@ class TestHelper_Fetch extends TestHelper {
         super({
             name: 'Fetch',
             hooks: {
-                beforeEach: async () => {
+                beforeEach: () => {
                     fetchStub = sinon.stub(globalThis, 'fetch');
                 },
-                afterEach: async () => {
+                afterEach: () => {
                     fetchStub.restore();
                 }
             }

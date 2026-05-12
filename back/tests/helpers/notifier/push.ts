@@ -8,11 +8,11 @@ let pushStub: sinon.SinonStub;
 
 const { isDebug } = config.env;
 
-const setupNotifierPushStub = async () => {
+const setupNotifierPushStub = () => {
     pushStub = sinon.stub(pushNotifier, 'notify').resolves(undefined);
 };
 
-const restoreNotifierPushStub = async () => {
+const restoreNotifierPushStub = () => {
     pushStub.restore();
 };
 

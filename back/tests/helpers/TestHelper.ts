@@ -1,7 +1,7 @@
 const defaultHook = () => Promise.resolve();
 
 // TODO: We can probably get the same typing as sinon
-type Hook = () => Promise<void>;
+type Hook = () => Promise<void> | void;
 
 export class TestHelper {
     name: string;

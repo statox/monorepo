@@ -13,11 +13,11 @@ const { isDebug } = config.env;
 
 let slogSpy: sinon.SinonSpy;
 
-const setupSlogSpy = async () => {
+const setupSlogSpy = () => {
     slogSpy = sinon.spy(slog, 'log');
 };
 
-const restoreSlogSpy = async () => {
+const restoreSlogSpy = () => {
     slogSpy.restore();
 };
 

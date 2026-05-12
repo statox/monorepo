@@ -36,7 +36,7 @@ const getRouteWithResult: GetRoute<
     method: 'get',
     authentication: 'none',
     path: '/getroutewithresult',
-    handler: async () => {
+    handler: () => {
         return { foo: 1 };
     },
     outputSchema: getRouteWithResultOutputSchema
@@ -46,7 +46,7 @@ const getRouteWithLoggedContext: GetRoute<EmptyInput, EmptyOutput> = {
     method: 'get',
     authentication: 'none',
     path: '/getroutewithloggedcontext',
-    handler: async (params) => {
+    handler: (params) => {
         params.loggableContext.addData('livemode', true);
         params.loggableContext.addData('status', 'some data');
     },
@@ -69,7 +69,7 @@ const getRouteThatThrows: GetRoute<EmptyInput, EmptyOutput> = {
     method: 'get',
     authentication: 'none',
     path: '/getroutethatthrows',
-    handler: async () => {
+    handler: () => {
         throw new Error('The route threw');
     },
     outputSchema: emptyObjectSchema
@@ -80,7 +80,7 @@ const getRouteThatThrowsUnwhitelistedAppError: GetRoute<EmptyInput, EmptyOutput>
     method: 'get',
     authentication: 'none',
     path: '/getroutethatthrowsunwhitelistedapperror',
-    handler: async () => {
+    handler: () => {
         throw new AppError({ code: 'ITEM_NOT_FOUND', httpStatus: 404 });
     },
     outputSchema: emptyObjectSchema
@@ -103,7 +103,7 @@ const getRouteWithInvalidOutput: GetRoute<
     method: 'get',
     authentication: 'none',
     path: '/getroutewithinvalidoutput',
-    handler: async () => {
+    handler: () => {
         return { foo: 1 };
     },
     outputSchema: getRouteWithInvalidOutputOutputSchema
@@ -208,13 +208,13 @@ const testRoutesWS = [validRouteWS];
 
 let routesWSStub: sinon.SinonStub;
 
-const setupAppStub = async () => {
+const setupAppStub = () => {
     routesStub = sinon.stub(routes, 'list').value(testRoutes);
     routesWSStub = sinon.stub(routesWS, 'list').value(testRoutesWS);
     initApp();
 };
 
-const restoreAppStub = async () => {
+const restoreAppStub = () => {
     routesStub.restore();
     routesWSStub.restore();
 };

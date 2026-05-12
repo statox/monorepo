@@ -22,22 +22,22 @@ const fakeSearch = async (...args: Parameters<typeof originalSearch>) => {
     return await originalSearch.call(elk, ...args);
 };
 
-const mockELKSearch = async () => {
+const mockELKSearch = () => {
     // @ts-expect-error Type mismatch, check if using a proper sinon.wrap
     // or something similar can fix
     elk.search = fakeSearch;
 };
 
-const restoreElkSearch = async () => {
+const restoreElkSearch = () => {
     elk.search = originalSearch;
 };
 
 let elkSpy: sinon.SinonSpy;
-const setupELKSpy = async () => {
+const setupELKSpy = () => {
     elkSpy = sinon.spy(elk, 'index');
 };
 
-const restoreElkSpy = async () => {
+const restoreElkSpy = () => {
     elkSpy.restore();
 };
 

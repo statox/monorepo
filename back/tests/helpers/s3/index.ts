@@ -14,7 +14,7 @@ class TestHelper_S3 extends TestHelper {
         super({
             name: 'S3',
             hooks: {
-                beforeEach: async () => {
+                beforeEach: () => {
                     s3Mock.reset();
 
                     // TODO See if we want to have a finer way to fail calls to S3
