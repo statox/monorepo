@@ -1,9 +1,8 @@
 import { File } from 'formidable';
 import mime from 'mime-types';
-import { generate4BytesHex } from '../random.js';
 import { db } from '../../databases/db.js';
 import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
-import { createS3FileInTransaction } from '../s3files/index.js';
+import { createS3FileInTransaction, createS3Key } from '../s3files/index.js';
 
 type NewEntryParams = {
     name: string;
@@ -14,13 +13,8 @@ type NewEntryParams = {
 export const addEntry = async (newEntry: NewEntryParams) => {
     const { name, tags, file } = newEntry;
 
-    const linkId = generate4BytesHex();
-    const extension = mime.extension(file.mimetype ?? '');
-
-    let s3Key = `${linkId}_${name}`;
-    if (extension) {
-        s3Key += `.${extension}`;
-    }
+    const mimeExtension = mime.extension(file.mimetype ?? '') || undefined;
+    const { linkId, s3Key } = createS3Key({ filename: name, extension: mimeExtension });
 
     const conn = await db.getConnection();
     await conn.beginTransaction();

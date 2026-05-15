@@ -2,7 +2,7 @@ import { File } from 'formidable';
 import mime from 'mime-types';
 import { generate4BytesHex } from '../random.js';
 import { db } from '../../databases/db.js';
-import { createS3FileInTransaction } from '../s3files/index.js';
+import { createS3FileInTransaction, createS3Key } from '../s3files/index.js';
 import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
 
 type NewEntryParams = {
@@ -17,17 +17,15 @@ export const addEntry = async (newEntry: NewEntryParams) => {
     const DEFAULT_TTL = 60 * 5; // 5 MINUTES
     const { name, content, ttlSeconds = DEFAULT_TTL, isPublic = false, file } = newEntry;
 
-    const linkId = generate4BytesHex();
+    let linkId: string;
+    let s3Key: string | undefined;
 
-    let s3Key: string | undefined = undefined;
     if (file) {
-        const extension = mime.extension(file.mimetype ?? '');
-
-        s3Key = `${linkId}_${name}`;
-
-        if (extension) {
-            s3Key += `.${extension}`;
-        }
+        const mimeExtension = mime.extension(file.mimetype ?? '') || undefined;
+        ({ linkId, s3Key } = createS3Key({ filename: name, extension: mimeExtension }));
+    } else {
+        linkId = generate4BytesHex();
+        s3Key = undefined;
     }
 
     const conn = await db.getConnection();
