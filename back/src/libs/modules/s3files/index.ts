@@ -6,8 +6,23 @@ import { getPresignedUrl, S3 } from '../../databases/s3.js';
 import { db } from '../../databases/db.js';
 import { ExpiredItemError, ItemNotFoundError, TooManyEntriesError } from './errors.js';
 import { slog } from '../logging/index.js';
+import slug from 'slug';
+import { generate4BytesHex } from '../random.js';
 
 type ManagedBuckets = 'clipboard' | 'reactor';
+
+export const createS3Key = (params: { filename: string; extension?: string }): { linkId: string; s3Key: string } => {
+    const { filename, extension } = params;
+    const linkId = generate4BytesHex();
+    const cleanName = slug(filename);
+
+    let s3Key = `${linkId}_${cleanName}`;
+    if (extension) {
+        s3Key += `.${extension}`;
+    }
+
+    return { linkId, s3Key };
+};
 
 export const createS3FileInTransaction = async (
     conn: PoolConnection, //TODO probably a better way to get just a transaction
