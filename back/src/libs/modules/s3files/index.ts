@@ -16,6 +16,8 @@ export const createS3Key = (params: {
     extension?: string;
 }): { linkId: string; s3Key: string } => {
     const { filename, extension } = params;
+
+    // 4 bytes = ~4 billion possibilities. For a personal tool the probability is negligible.
     const linkId = generate4BytesHex();
     const cleanName = slug(filename);
 
