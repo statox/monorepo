@@ -24,7 +24,7 @@ class TestHelper_S3 extends TestHelper {
                             PutObjectCommand,
                             // @ts-expect-error looks like .on is not typed to expect a matcher even if it works
                             (params: Partial<PutObjectCommandInput>) => {
-                                return params.Key?.includes('should_fail');
+                                return params.Key?.includes('shouldfail');
                             }
                         )
                         .rejects(new Error('Simulated failure'));

@@ -54,7 +54,7 @@ describe('reactor/addEntry', () => {
             .post('/reactor/addEntry')
             .set('Cookie', th.auth2.getPassportSessionCookie())
             .set('content-type', 'multipart/form-data')
-            .field('name', 'should_fail')
+            .field('name', 'shouldfail')
             .field('commaSeparatedTags', 'tag1,tag2')
             .attach('file', 'tests/assets/glider.png')
             .expect(500)
@@ -90,7 +90,7 @@ describe('reactor/addEntry', () => {
             Reactor: [
                 {
                     name: 'entry name',
-                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    s3Key: (value: string) => value.match(/.*entry-name/) !== null,
                     tags: (value: string) => {
                         const parsedTags = JSON.parse(value);
                         assert.deepEqual(parsedTags, ['tag1', 'tag2']);
@@ -101,7 +101,7 @@ describe('reactor/addEntry', () => {
             S3Files: [
                 {
                     bucket: 'reactor',
-                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    s3Key: (value: string) => value.match(/.*entry-name/) !== null,
                     creationDateUnix: th.mysql.aroundNowSec
                 }
             ]
@@ -131,7 +131,7 @@ describe('reactor/addEntry', () => {
             Reactor: [
                 {
                     name: 'entry name',
-                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    s3Key: (value: string) => value.match(/.*entry-name/) !== null,
                     tags: (value: string) => {
                         assert.equal(value, '[]');
                         return true;
@@ -141,7 +141,7 @@ describe('reactor/addEntry', () => {
             S3Files: [
                 {
                     bucket: 'reactor',
-                    s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                    s3Key: (value: string) => value.match(/.*entry-name/) !== null,
                     creationDateUnix: th.mysql.aroundNowSec
                 }
             ]

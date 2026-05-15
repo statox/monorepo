@@ -120,7 +120,7 @@ describe('clipboard/addEntry', () => {
                 .post('/clipboard/addEntry')
                 .set('Cookie', th.auth2.getPassportSessionCookie())
                 .set('content-type', 'multipart/form-data')
-                .field('name', 'should_fail')
+                .field('name', 'shouldfail')
                 .field('content', 'entry content')
                 .attach('file', buffer)
                 .expect(500)
@@ -221,13 +221,13 @@ describe('clipboard/addEntry', () => {
                 Clipboard: [
                     {
                         name: 'entry name',
-                        s3Key: (value: string) => value.match(/.*entry name/) !== null
+                        s3Key: (value: string) => value.match(/.*entry-name/) !== null
                     }
                 ],
                 S3Files: [
                     {
                         bucket: 'clipboard',
-                        s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                        s3Key: (value: string) => value.match(/.*entry-name/) !== null,
                         creationDateUnix: th.mysql.aroundNowSec
                     }
                 ]
@@ -260,13 +260,13 @@ describe('clipboard/addEntry', () => {
                 Clipboard: [
                     {
                         name: 'entry name',
-                        s3Key: (value: string) => value.match(/.*entry name/) !== null
+                        s3Key: (value: string) => value.match(/.*entry-name/) !== null
                     }
                 ],
                 S3Files: [
                     {
                         bucket: 'clipboard',
-                        s3Key: (value: string) => value.match(/.*entry name/) !== null,
+                        s3Key: (value: string) => value.match(/.*entry-name/) !== null,
                         creationDateUnix: th.mysql.aroundNowSec
                     }
                 ]
@@ -330,13 +330,13 @@ describe('clipboard/addEntry', () => {
                 Clipboard: [
                     {
                         name: 'animated_image',
-                        s3Key: (value: string) => value.match(/.*animated_image.gif/) !== null
+                        s3Key: (value: string) => value.match(/.*animatedimage.gif/) !== null
                     }
                 ],
                 S3Files: [
                     {
                         bucket: 'clipboard',
-                        s3Key: (value: string) => value.match(/.*animated_image.gif/) !== null,
+                        s3Key: (value: string) => value.match(/.*animatedimage.gif/) !== null,
                         creationDateUnix: th.mysql.aroundNowSec
                     }
                 ]

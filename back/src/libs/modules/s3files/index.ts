@@ -11,7 +11,10 @@ import { generate4BytesHex } from '../random.js';
 
 type ManagedBuckets = 'clipboard' | 'reactor';
 
-export const createS3Key = (params: { filename: string; extension?: string }): { linkId: string; s3Key: string } => {
+export const createS3Key = (params: {
+    filename: string;
+    extension?: string;
+}): { linkId: string; s3Key: string } => {
     const { filename, extension } = params;
     const linkId = generate4BytesHex();
     const cleanName = slug(filename);
