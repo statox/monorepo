@@ -57,6 +57,7 @@ export type LoggableProperties = {
     livemode?: boolean;
     meanWindDirectionDegrees?: number;
     meanWindSpeedMS?: number;
+    mimetype?: string;
     nbChords?: number;
     notification?: string;
     originalError?: Error;

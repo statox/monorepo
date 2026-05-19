@@ -1,4 +1,3 @@
-import sinon from 'sinon';
 import {
     DeleteObjectCommand,
     GetObjectCommand,
@@ -55,12 +54,17 @@ class TestHelper_S3 extends TestHelper {
                 return assert.fail();
             }
 
+            // c.args[0] is the Command instance; .input holds the SDK call parameters
+            const actualInput =
+                (c.args[0] as unknown as { input?: Record<string, unknown> })?.input ?? {};
+
             for (const key of Object.keys(params.input)) {
-                const value = params.input[key];
-                // TODO allow better matching to test actual content of Body
-                sinon.assert.calledWithMatch(
-                    c,
-                    sinon.match.has('input', sinon.match.has(key, value))
+                const expectedValue = params.input[key];
+                const actualValue = actualInput[key];
+                assert.equal(
+                    actualValue,
+                    expectedValue,
+                    `S3 input mismatch for "${key}"\n  expected: ${JSON.stringify(expectedValue)}\n  actual:   ${JSON.stringify(actualValue)}\n  full input: ${JSON.stringify(actualInput, null, 2)}`
                 );
             }
         }

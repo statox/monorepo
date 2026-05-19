@@ -1,22 +1,25 @@
-import { File } from 'formidable';
 import { FromSchema } from 'json-schema-to-ts';
-import { EmptyOutput, PostRouteWithFileRoute, RouteHandler } from '../types.js';
-import { addEntry } from '../../modules/reactor/index.js';
+import { EmptyOutput, PostRouteWithFileRoute, RouteWithFileHandler } from '../types.js';
+import { addEntry, FileRequiredError } from '../../modules/reactor/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 
-const handler: RouteHandler<Input> = async (params) => {
+const handler: RouteWithFileHandler<Input> = async (params) => {
     const { name, commaSeparatedTags } = params.input;
     params.loggableContext.addData('entryName', name);
 
     const tags = commaSeparatedTags.split(',').filter((tag: string) => tag.length);
-    const file: File = params.input.file.pop() as unknown as File;
+    const file = params.file;
+
+    if (!file) {
+        throw new FileRequiredError();
+    }
 
     await addEntry({ name, file, tags });
 };
 
 const inputSchema = {
     type: 'object',
-    required: ['name', 'commaSeparatedTags', 'file'],
+    required: ['name', 'commaSeparatedTags'],
     additionalProperties: false,
     properties: {
         name: {
@@ -27,9 +30,6 @@ const inputSchema = {
         // Instead we get the tags as a big string of comma separated words
         commaSeparatedTags: {
             type: 'string'
-        },
-        file: {
-            type: 'array'
         }
     }
 } as const;

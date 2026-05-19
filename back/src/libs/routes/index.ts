@@ -1,4 +1,4 @@
-import { Route } from './types.js';
+import { Route, type ApiFile } from './types.js';
 import { route as Auth_Login } from './auth/login.js';
 import { route as Auth_Logout } from './auth/logout.js';
 import { route as Auth_Me } from './auth/me.js';
@@ -103,3 +103,5 @@ export const routes: {
 export const routesWS = {
     list: [Gravitrips_WSGame]
 };
+
+export type { ApiFile };

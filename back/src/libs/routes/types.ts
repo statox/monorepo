@@ -6,11 +6,40 @@ import { LoggableContext } from '../modules/logging/index.js';
 import { User } from '../modules/auth/types.js';
 import { ErrorCode } from '../errors/codes.js';
 
-export type RouteHandler<Input> = (params: {
+type RouteParams<Input> = {
     input: Input;
     loggableContext: LoggableContext;
     authenticatedUser?: User;
-}) => Promise<unknown> | unknown;
+};
+type RouteWithFileParams<Input> = RouteParams<Input> & {
+    file?: ApiFile;
+};
+export type RouteHandler<Input> = (params: RouteParams<Input>) => Promise<unknown> | unknown;
+
+/*
+ * The multipart handler fills the file field with the file it parsed.
+ * Originally the type is Express.Multer.File but this original type is too wide.
+ * Since we use only multer.diskStorage there are some fields (`buffer`) which
+ * are never populated, also some types are deprecated (`encoding`) so we override the
+ * type with our own.
+ */
+export interface ApiFile {
+    /** Name of the form field associated with this file. */
+    fieldname: string;
+    /** Value of the `Content-Type` header for this file. */
+    mimetype: string;
+    /** Size of the file in bytes. */
+    size: number;
+    /** `DiskStorage` only: Directory to which this file has been uploaded. */
+    destination: string;
+    /** `DiskStorage` only: Name of this file within `destination`. */
+    filename: string;
+    /** `DiskStorage` only: Full path to the uploaded file. */
+    path: string;
+}
+export type RouteWithFileHandler<Input> = (
+    params: RouteWithFileParams<Input>
+) => Promise<unknown> | unknown;
 
 export type ApiJsonSchema = JSONSchema;
 
@@ -58,6 +87,7 @@ export type PostRoute<Input, Output> = BaseRoute<Input, Output> & {
 };
 
 export type PostRouteWithFileRoute<Input, Output> = PostRoute<Input, Output> & {
+    handler: RouteWithFileHandler<Input>;
     file: {
         maxSize: number;
         allowedMimes: string[];

@@ -1,16 +1,16 @@
-import { File } from 'formidable';
 import mime from 'mime-types';
 import { generate4BytesHex } from '../random.js';
 import { db } from '../../databases/db.js';
 import { createS3FileInTransaction, createS3Key } from '../s3files/index.js';
 import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
+import { ApiFile } from '../../routes/index.js';
 
 type NewEntryParams = {
     name: string;
     content?: string;
     ttlSeconds?: number;
     isPublic?: boolean;
-    file?: File;
+    file?: ApiFile;
 };
 
 export const addEntry = async (newEntry: NewEntryParams) => {

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { config } from '../../packages/config/index.js';
-import { Route } from '../routes/types.js';
+import { isPostRouteWithFile, Route, ApiFile } from '../routes/types.js';
 import { AllowedSchema, isAjvError, validateAgainstJsonSchema } from '../modules/ajv/index.js';
 import { slog } from '../modules/logging/index.js';
 import { User } from '../modules/auth/types.js';
@@ -30,12 +30,22 @@ export const apiPipeline = (route: Route<unknown, unknown>) => {
                 input = req.params || {};
             }
 
-            routeResult =
-                (await route.handler({
-                    input,
-                    loggableContext: res.locals.loggableContext,
-                    authenticatedUser: req.user as User // req.user is populated by the passport authentication middleware
-                })) || {};
+            if (isPostRouteWithFile(route)) {
+                routeResult =
+                    (await route.handler({
+                        input,
+                        loggableContext: res.locals.loggableContext,
+                        authenticatedUser: req.user as User, // req.user is populated by the passport authentication middleware
+                        file: req.file as ApiFile | undefined
+                    })) || {};
+            } else {
+                routeResult =
+                    (await route.handler({
+                        input,
+                        loggableContext: res.locals.loggableContext,
+                        authenticatedUser: req.user as User // req.user is populated by the passport authentication middleware
+                    })) || {};
+            }
 
             // Only do output validation if we are not in prod
             if (!isProd) {

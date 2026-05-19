@@ -15,6 +15,7 @@ export const ERROR_CODES = [
     'ITEM_ALREADY_EXISTS',
     'ITEM_NOT_FOUND',
     'FILE_OR_CONTENT_REQUIRED',
+    'FILE_REQUIRED',
     'ITEM_IS_EXPIRED',
     'TOO_MANY_ENTRIES',
     // Cookbook

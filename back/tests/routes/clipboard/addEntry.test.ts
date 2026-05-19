@@ -122,7 +122,10 @@ describe('clipboard/addEntry', () => {
                 .set('content-type', 'multipart/form-data')
                 .field('name', 'shouldfail')
                 .field('content', 'entry content')
-                .attach('file', buffer)
+                .attach('file', buffer, {
+                    filename: 'file',
+                    contentType: 'text/plain'
+                })
                 .expect(500)
                 .then((response) => {
                     assert.deepEqual(response.body, {
@@ -202,9 +205,11 @@ describe('clipboard/addEntry', () => {
             await request(app)
                 .post('/clipboard/addEntry')
                 .set('Cookie', th.auth2.getPassportSessionCookie())
-                .set('content-type', 'multipart/form-data')
                 .field('name', 'entry name')
-                .attach('file', buffer)
+                .attach('file', buffer, {
+                    filename: 'file',
+                    contentType: 'text/plain'
+                })
                 .expect(200);
 
             th.s3.checkNbCalls({ nbCalls: 1 });
@@ -212,7 +217,7 @@ describe('clipboard/addEntry', () => {
                 commandType: 'PutObject',
                 input: {
                     Bucket: 'clipboard',
-                    ContentType: 'application/octet-stream'
+                    ContentType: 'text/plain'
                 }
             });
             await th.mysql.checkTableLength('S3Files', 1);
@@ -243,7 +248,10 @@ describe('clipboard/addEntry', () => {
                 .set('Cookie', th.auth2.getPassportSessionCookie())
                 .field('name', 'entry name')
                 .field('content', 'entry content')
-                .attach('file', buffer)
+                .attach('file', buffer, {
+                    filename: 'file',
+                    contentType: 'text/plain'
+                })
                 .expect(200);
 
             th.s3.checkNbCalls({ nbCalls: 1 });
@@ -251,7 +259,7 @@ describe('clipboard/addEntry', () => {
                 commandType: 'PutObject',
                 input: {
                     Bucket: 'clipboard',
-                    ContentType: 'application/octet-stream'
+                    ContentType: 'text/plain'
                 }
             });
             await th.mysql.checkTableLength('S3Files', 1);

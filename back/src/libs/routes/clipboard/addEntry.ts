@@ -1,11 +1,9 @@
-import { File } from 'formidable';
 import { FromSchema } from 'json-schema-to-ts';
-import { EmptyOutput, PostRouteWithFileRoute, RouteHandler } from '../types.js';
-import { addEntry } from '../../modules/clipboard/index.js';
+import { EmptyOutput, PostRouteWithFileRoute, RouteWithFileHandler } from '../types.js';
+import { addEntry, FileOrContentRequiredError } from '../../modules/clipboard/index.js';
 import { emptyObjectSchema } from '../helpers.js';
-import { FileOrContentRequiredError } from '../../modules/clipboard/errors.js';
 
-const handler: RouteHandler<Input> = async (params) => {
+const handler: RouteWithFileHandler<Input> = async (params) => {
     const { name, content, isPublic: isPublicInput } = params.input;
     params.loggableContext.addData('entryName', name);
 
@@ -18,7 +16,7 @@ const handler: RouteHandler<Input> = async (params) => {
     }
     const isPublic = typeof isPublicInput === 'string' ? isPublicInput === 'true' : isPublicInput;
 
-    const file: File = params.input.file?.pop() as unknown as File;
+    const file = params.file;
 
     if (!content && !file) {
         throw new FileOrContentRequiredError();
@@ -37,9 +35,6 @@ const inputSchema = {
         },
         content: {
             type: 'string'
-        },
-        file: {
-            type: 'array'
         },
         ttlSeconds: {
             type: ['number', 'string'],

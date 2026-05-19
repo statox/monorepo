@@ -1,4 +1,3 @@
-import { File } from 'formidable';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import * as fs from 'fs';
 import { PoolConnection, RowDataPacket } from 'mysql2/promise';
@@ -8,6 +7,7 @@ import { ExpiredItemError, ItemNotFoundError, TooManyEntriesError } from './erro
 import { slog } from '../logging/index.js';
 import slug from 'slug';
 import { generate4BytesHex } from '../random.js';
+import { ApiFile } from '../../routes/index.js';
 
 type ManagedBuckets = 'clipboard' | 'reactor';
 
@@ -32,13 +32,13 @@ export const createS3Key = (params: {
 export const createS3FileInTransaction = async (
     conn: PoolConnection, //TODO probably a better way to get just a transaction
     params: {
-        file: File;
+        file: ApiFile;
         bucket: ManagedBuckets;
         s3Key: string;
     }
 ) => {
     const { file, bucket, s3Key } = params;
-    const fileStream = fs.createReadStream(file.filepath);
+    const fileStream = fs.createReadStream(file.path);
 
     await S3.send(
         new PutObjectCommand({
