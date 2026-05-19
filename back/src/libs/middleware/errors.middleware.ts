@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'express-json-validator-middleware';
+import multer from 'multer';
 import { AppError } from '../errors/AppError.js';
 import { ALWAYS_CLIENT_ERRORS, ErrorCode } from '../errors/codes.js';
 import { Route } from '../routes/types.js';
@@ -34,6 +35,15 @@ export const errorHandler = (
             reason: JSON.stringify(error.validationErrors)
         };
         response.status(400).json(body);
+        return;
+    }
+
+    // Multer upload errors — all are client mistakes, return 400
+    if (error instanceof multer.MulterError) {
+        slog.log('middleware', 'File upload error', { url: request.url, error });
+        const code: ErrorCode =
+            error.code === 'LIMIT_FILE_SIZE' ? 'FILE_TOO_LARGE' : 'INPUT_VALIDATION_FAILED';
+        response.status(400).json({ httpStatus: 400, code } satisfies ErrorResponse);
         return;
     }
 

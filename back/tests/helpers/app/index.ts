@@ -8,6 +8,7 @@ import {
     EmptyOutput,
     GetRoute,
     PostRoute,
+    PostRouteWithFileRoute,
     RouteWS
 } from '../../../src/libs/routes/types.js';
 import { routesAuth } from '../../../src/libs/routes/index.js';
@@ -176,6 +177,19 @@ const postRouteScopeAdmin: PostRoute<FromSchema<typeof postRouteInputSchema>, Em
     outputSchema: emptyObjectSchema
 };
 
+const postRouteWithFile: PostRouteWithFileRoute<EmptyInput, EmptyOutput> = {
+    method: 'post',
+    authentication: 'none',
+    path: '/postroutewithfile',
+    inputSchema: emptyObjectSchema,
+    handler: async () => {},
+    outputSchema: emptyObjectSchema,
+    file: {
+        maxSize: 200,
+        allowedMimes: []
+    }
+};
+
 const testRoutes = [
     ...routesAuth.list,
     apiiotAuthenticatedGetRoute,
@@ -190,6 +204,7 @@ const testRoutes = [
     postRouteInvalidNoScope,
     postRouteScopeAdmin,
     postRouteScopePublic,
+    postRouteWithFile,
     userAuthenticatedGetRoute
 ];
 

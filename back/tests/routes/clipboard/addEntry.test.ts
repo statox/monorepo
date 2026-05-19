@@ -110,6 +110,23 @@ describe('clipboard/addEntry', () => {
             await th.mysql.checkTableLength('S3Files', 0);
         });
 
+        it('should return 400 when file exceeds 5 MB', async () => {
+            const largeBuffer = Buffer.alloc(5 * 1024 * 1024 + 1); // 5 MB + 1 byte
+
+            await request(app)
+                .post('/clipboard/addEntry')
+                .set('Cookie', th.auth2.getPassportSessionCookie())
+                .field('name', 'entry name')
+                .attach('file', largeBuffer, { filename: 'large.txt', contentType: 'text/plain' })
+                .expect(400)
+                .then((response) => {
+                    assert.deepEqual(response.body, { httpStatus: 400, code: 'FILE_TOO_LARGE' });
+                });
+
+            th.s3.checkNbCalls({ nbCalls: 0 });
+            await th.mysql.checkTableLength('Clipboard', 0);
+        });
+
         it('Failing S3 command should not commit changes in the DB', async () => {
             const buffer = Buffer.from('some data');
             await th.mysql.fixture({

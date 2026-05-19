@@ -124,6 +124,28 @@ describe('reactor/addEntry', () => {
         await th.mysql.checkTableLength('Reactor', 0);
     });
 
+    it('should return 400 when file is sent with wrong field name', async () => {
+        await request(app)
+            .post('/reactor/addEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .field('name', 'entry name')
+            .field('commaSeparatedTags', 'tag1,tag2')
+            .attach('attachment', Buffer.from('some data'), {
+                filename: 'file.txt',
+                contentType: 'text/plain'
+            })
+            .expect(400)
+            .then((response) => {
+                assert.deepEqual(response.body, {
+                    httpStatus: 400,
+                    code: 'INPUT_VALIDATION_FAILED'
+                });
+            });
+
+        th.s3.checkNbCalls({ nbCalls: 0 });
+        await th.mysql.checkTableLength('Reactor', 0);
+    });
+
     it('should create entry with empty tags array if no tags are provided', async () => {
         await request(app)
             .post('/reactor/addEntry')
