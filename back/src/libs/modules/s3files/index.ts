@@ -40,18 +40,24 @@ export const createS3FileInTransaction = async (
     const { file, bucket, s3Key } = params;
     const fileStream = fs.createReadStream(file.path);
 
-    await S3.send(
-        new PutObjectCommand({
-            Bucket: bucket,
-            Key: s3Key,
-            Body: fileStream,
-            ContentType: file.mimetype ?? undefined
-        })
-    );
-    await conn.query(
-        `INSERT INTO S3Files (bucket, s3Key, creationDateUnix) VALUES (?, ?, UNIX_TIMESTAMP())`,
-        [bucket, s3Key]
-    );
+    try {
+        await S3.send(
+            new PutObjectCommand({
+                Bucket: bucket,
+                Key: s3Key,
+                Body: fileStream,
+                ContentType: file.mimetype ?? undefined
+            })
+        );
+        await conn.query(
+            `INSERT INTO S3Files (bucket, s3Key, creationDateUnix) VALUES (?, ?, UNIX_TIMESTAMP())`,
+            [bucket, s3Key]
+        );
+    } finally {
+        await fs.promises.unlink(file.path).catch((err: Error) => {
+            slog.log('s3Files', 'Failed to delete temp file', { error: err });
+        });
+    }
 };
 
 // TODO: Decide if we want to use a transaction or not
