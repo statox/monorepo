@@ -43,7 +43,7 @@ export const route: PostRouteWithFileRoute<Input, EmptyOutput> = {
     handler,
     authentication: 'user2',
     scope: 'admin',
-    clientErrors: ['ITEM_ALREADY_EXISTS'],
+    clientErrors: ['ITEM_ALREADY_EXISTS', 'FILE_REQUIRED'],
     outputSchema: emptyObjectSchema,
     file: {
         maxSize: 200,

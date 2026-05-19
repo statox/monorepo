@@ -108,6 +108,22 @@ describe('reactor/addEntry', () => {
         });
     });
 
+    it('should return 400 when no file is provided', async () => {
+        await request(app)
+            .post('/reactor/addEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .field('name', 'entry name')
+            .field('commaSeparatedTags', 'tag1,tag2')
+            // no .attach() call — req.file will be undefined
+            .expect(400)
+            .then((response) => {
+                assert.deepEqual(response.body, { httpStatus: 400, code: 'FILE_REQUIRED' });
+            });
+
+        th.s3.checkNbCalls({ nbCalls: 0 });
+        await th.mysql.checkTableLength('Reactor', 0);
+    });
+
     it('should create entry with empty tags array if no tags are provided', async () => {
         await request(app)
             .post('/reactor/addEntry')
