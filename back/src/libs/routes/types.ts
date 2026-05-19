@@ -97,7 +97,10 @@ export type PostRouteWithFileRoute<Input, Output> = PostRoute<Input, Output> & {
 export const isPostRouteWithFile = (
     route: Route<unknown, unknown>
 ): route is PostRouteWithFileRoute<unknown, unknown> => {
-    return typeof route === 'object' && 'file' in route;
+    return (
+        'file' in route &&
+        typeof (route as PostRouteWithFileRoute<unknown, unknown>).file === 'object'
+    );
 };
 
 export type Route<Input, Output> =
