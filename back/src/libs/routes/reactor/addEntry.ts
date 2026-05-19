@@ -1,6 +1,6 @@
 import { File } from 'formidable';
 import { FromSchema } from 'json-schema-to-ts';
-import { EmptyOutput, PostRoute, RouteHandler } from '../types.js';
+import { EmptyOutput, PostRouteWithFileRoute, RouteHandler } from '../types.js';
 import { addEntry } from '../../modules/reactor/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 
@@ -36,7 +36,7 @@ const inputSchema = {
 
 type Input = FromSchema<typeof inputSchema>;
 
-export const route: PostRoute<Input, EmptyOutput> = {
+export const route: PostRouteWithFileRoute<Input, EmptyOutput> = {
     method: 'post',
     path: '/reactor/addEntry',
     inputSchema,
@@ -44,5 +44,9 @@ export const route: PostRoute<Input, EmptyOutput> = {
     authentication: 'user2',
     scope: 'admin',
     clientErrors: ['ITEM_ALREADY_EXISTS'],
-    outputSchema: emptyObjectSchema
+    outputSchema: emptyObjectSchema,
+    file: {
+        maxSize: 200,
+        allowedMimes: ['image']
+    }
 };

@@ -1,6 +1,6 @@
 import { File } from 'formidable';
 import { FromSchema } from 'json-schema-to-ts';
-import { EmptyOutput, PostRoute, RouteHandler } from '../types.js';
+import { EmptyOutput, PostRouteWithFileRoute, RouteHandler } from '../types.js';
 import { addEntry } from '../../modules/clipboard/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 import { FileOrContentRequiredError } from '../../modules/clipboard/errors.js';
@@ -53,7 +53,7 @@ const inputSchema = {
 
 type Input = FromSchema<typeof inputSchema>;
 
-export const route: PostRoute<Input, EmptyOutput> = {
+export const route: PostRouteWithFileRoute<Input, EmptyOutput> = {
     method: 'post',
     path: '/clipboard/addEntry',
     inputSchema,
@@ -61,5 +61,9 @@ export const route: PostRoute<Input, EmptyOutput> = {
     authentication: 'user2',
     scope: 'admin',
     clientErrors: ['FILE_OR_CONTENT_REQUIRED', 'ITEM_ALREADY_EXISTS'],
-    outputSchema: emptyObjectSchema
+    outputSchema: emptyObjectSchema,
+    file: {
+        maxSize: 200,
+        allowedMimes: ['image']
+    }
 };

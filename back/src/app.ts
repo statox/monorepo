@@ -25,6 +25,7 @@ import {
     validatePassportSession
 } from './libs/middleware/auth_passport.middleware.js';
 import { initOpenapi } from './libs/modules/openapi/index.js';
+import { isPostRouteWithFile } from './libs/routes/types.js';
 
 const { validate } = new Validator({ allowUnionTypes: true });
 export let app: express.Express;
@@ -70,7 +71,6 @@ export const initApp = () => {
     app.engine('mustache', mustacheExpress());
 
     app.use(loggingHandler);
-    app.use(multipartHandler);
 
     for (const route of routes.list) {
         const pipeline = [];
@@ -79,6 +79,10 @@ export const initApp = () => {
             res.locals.route = route;
             next();
         });
+
+        if (isPostRouteWithFile(route)) {
+            pipeline.push(multipartHandler);
+        }
 
         if (route.authentication === 'apikey-iot') {
             pipeline.push(validateAPIKeyHeader);

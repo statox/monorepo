@@ -57,7 +57,23 @@ export type PostRoute<Input, Output> = BaseRoute<Input, Output> & {
     inputSchema: ApiJsonSchema;
 };
 
-export type Route<Input, Output> = GetRoute<Input, Output> | PostRoute<Input, Output>;
+export type PostRouteWithFileRoute<Input, Output> = PostRoute<Input, Output> & {
+    file: {
+        maxSize: number;
+        allowedMimes: string[];
+    };
+};
+
+export const isPostRouteWithFile = (
+    route: Route<unknown, unknown>
+): route is PostRouteWithFileRoute<unknown, unknown> => {
+    return typeof route === 'object' && 'file' in route;
+};
+
+export type Route<Input, Output> =
+    | GetRoute<Input, Output>
+    | PostRoute<Input, Output>
+    | PostRouteWithFileRoute<Input, Output>;
 
 export type RouteWS = {
     onConnection: (ws: WebSocket, gameId: string) => void;
