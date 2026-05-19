@@ -38,14 +38,17 @@ export const createS3FileInTransaction = async (
     }
 ) => {
     const { file, bucket, s3Key } = params;
-    const fileStream = fs.createReadStream(file.path);
+
+    // Read the file into a buffer before the try/finally so the temp file can
+    // be safely deleted in finally without racing against a lazy ReadStream open.
+    const fileBuffer = await fs.promises.readFile(file.path);
 
     try {
         await S3.send(
             new PutObjectCommand({
                 Bucket: bucket,
                 Key: s3Key,
-                Body: fileStream,
+                Body: fileBuffer,
                 ContentType: file.mimetype ?? undefined
             })
         );
