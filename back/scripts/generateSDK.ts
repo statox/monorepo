@@ -1,17 +1,5 @@
 #!/usr/bin/env tsx
 
-/**
- *  Generate a typescript source file to be added to my frontend codebase.
- *
- *  11/2025 This whole tool is my first serious try at agentic code generation.
- *  I have already refined the output and fixed various typing issues.
- *  The README is largely LLM generated, I'm curious to see how it ages.
- *
- *  To be used with the npm helper:
- *
- *      npmr generate:sdk ../apps.statox.fr/src/vendor/statox-api
- */
-
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
