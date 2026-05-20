@@ -29,7 +29,6 @@ const config = {
         }),
         alias: {
             $config: 'src/config',
-            $packages: 'src/packages',
             $vendor: 'src/vendor'
         },
         paths: {

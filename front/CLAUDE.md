@@ -223,7 +223,6 @@ Configured in `svelte.config.js`:
 
 - `$lib` → `src/lib` (SvelteKit default)
 - `$config` → `src/config`
-- `$packages` → `src/packages`
 - `$vendor` → `src/vendor`
 
 ### Markdown Support
