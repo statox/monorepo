@@ -54,6 +54,15 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
+      # packages/sdk is consumed by front/ as a file: symlink. Vite resolves its
+      # TypeScript source directly, which means the SDK's own dependencies (ajv,
+      # json-schema-to-ts) must be installed separately - front/'s npm install
+      # does not descend into linked packages. A proper npm workspaces setup at
+      # the repo root would handle this automatically in the future.
+      - name: Install SDK dependencies
+        working-directory: packages/sdk
+        run: npm ci
+
       - name: Install Dependencies
         working-directory: front
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
@@ -98,6 +107,15 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
+      # packages/sdk is consumed by front/ as a file: symlink. Vite resolves its
+      # TypeScript source directly, which means the SDK's own dependencies (ajv,
+      # json-schema-to-ts) must be installed separately - front/'s npm install
+      # does not descend into linked packages. A proper npm workspaces setup at
+      # the repo root would handle this automatically in the future.
+      - name: Install SDK dependencies
+        working-directory: packages/sdk
+        run: npm ci
 
       - name: Install Dependencies
         working-directory: front
