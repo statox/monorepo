@@ -1,4 +1,4 @@
-import Ajv, { type AnySchema, type ValidateFunction } from 'ajv';
+import { Ajv, type AnySchema, type ValidateFunction } from 'ajv';
 import { buildModules } from './generated/routes.js';
 import type { AuthType } from './types.js';
 
