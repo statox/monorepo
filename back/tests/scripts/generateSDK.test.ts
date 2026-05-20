@@ -201,9 +201,9 @@ describe('scripts/generateSDK', () => {
             assert.notInclude(sdk, '"homeTracker_getDashboard_Input"');
         });
 
-        it('authentication type appears in route comment', () => {
-            assert.include(sdk, '– auth: user2');
-            assert.include(sdk, '– auth: apikey-iot');
+        it('authentication value appears in route JSDoc', () => {
+            assert.include(sdk, '* Auth: user2');
+            assert.include(sdk, '* Auth: apikey-iot');
         });
 
         it('exports a bundle type for POST routes', () => {
