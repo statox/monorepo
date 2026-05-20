@@ -1,6 +1,6 @@
 # SDK Package Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Move the SDK from a Nunjucks-template code-generation system to a proper TypeScript package at `packages/sdk/` where all client logic lives as real `.ts` files and the generator produces only a data+routes file.
 
