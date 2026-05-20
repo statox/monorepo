@@ -26,7 +26,7 @@ packages/sdk/
 │   ├── client.ts              # APIClient, ApiError, AJV validation helpers
 │   ├── generated/
 │   │   └── routes.ts          # AUTO-GENERATED - committed to git
-│   └── index.ts               # export * from './client.js'; export * from './generated/routes.js'
+│   └── index.ts               # export { APIClient, BaseAPIClient, ApiError, ... } from './client.js'; export type * from './generated/routes.js'
 ├── tests/
 │   ├── mocha/
 │   │   └── sdk.json           # Mocha config
@@ -53,11 +53,12 @@ packages/sdk/
 - `schemas` const object (all route input/output JSON schemas)
 - Type exports via `FromSchema<typeof schemas.X>`
 - Error union types per endpoint (`Auth_Login_Errors = 'UNAUTHORIZED' | ... | 'NETWORK_ERROR'`)
+- `buildModules(fetch: FetchFn)` — thin per-route arrow functions that call into `BaseAPIClient._fetch`; used by the `APIClient` factory in `client.ts`
 - Header comment: `// AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk`
 
 ### What `generated/routes.ts` does NOT contain
 
-- `APIClient`, `ApiError`, or any runtime logic (those live in `src/client.ts`)
+- `APIClient`, `ApiError`, AJV setup, or any request logic (those live in `src/client.ts`)
 
 ## Package Configuration
 
@@ -66,7 +67,7 @@ packages/sdk/
 ```json
 {
   "name": "statox-api",
-  "version": "1",
+  "version": "1.0.0",
   "type": "module",
   "exports": { ".": "./src/index.ts" },
   "scripts": {
@@ -80,9 +81,31 @@ packages/sdk/
 
 No `build`, no `main`, no `postinstall`. This is intentional - see README.
 
+`src/index.ts` uses `export type *` (not `export *`) for the generated routes. This re-exports only TypeScript type declarations, hiding the runtime values `schemas` and `buildModules` from consumers. All input/output/error types remain accessible; the internal plumbing does not leak.
+
 ### `tsconfig.json`
 
-Mirrors `back/tsconfig.json`: nodenext module resolution, strict mode, es2022 target. No `outDir` (no build step).
+Mirrors `back/tsconfig.json` with two additions: `lib` includes `"dom"` (for `fetch`, `Response`, etc.) and `types` explicitly declares `["node", "mocha"]` so Mocha globals (`describe`, `it`) are available in tests without import.
+
+```json
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2023", "dom"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "types": ["node", "mocha"]
+  }
+}
+```
+
+No `outDir` (no build step).
 
 ## Frontend Wiring
 
@@ -115,10 +138,10 @@ Updated: categories 3 and 4 are removed (moved to SDK package). Categories 1 and
 
 ## What Gets Deleted
 
-- `back/scripts/templates/sdk.njk` - static client code moves to `packages/sdk/src/client.ts`
-- `back/scripts/templates/route.njk` - the generator's `generateSDK()` function is rewritten to build `routes.ts` content as a TypeScript string directly (no Nunjucks), since the output is now just schemas + type exports with no method bodies to template
 - `front/src/vendor/statox-api/index.ts` - replaced by `packages/sdk/src/generated/routes.ts`
 - `front/src/vendor/statox-api/` directory
+
+`back/scripts/templates/sdk.njk` and `route.njk` are **kept**. The generator continues to use Nunjucks; the templates were updated (removed `async`, redundant `: Promise<T>` return annotation, and `/* eslint-disable require-await */`) but not replaced.
 
 ## README Requirements
 
