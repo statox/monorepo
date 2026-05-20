@@ -15,7 +15,11 @@ function getValidator(schema: AnySchema, key: string): ValidateFunction {
 function validateInput(schema: AnySchema, data: unknown, endpoint: string): void {
     const validator = getValidator(schema, `input_${endpoint}`);
     if (!validator(data)) {
-        throw new Error(`Invalid input for ${endpoint}: ${ajv.errorsText(validator.errors)}`);
+        throw new ApiError(
+            0,
+            'INPUT_VALIDATION_FAILED',
+            `${endpoint}: ${ajv.errorsText(validator.errors)}`
+        );
     }
 }
 
@@ -70,7 +74,7 @@ export class BaseAPIClient {
         const bodyIsDefined = body !== null;
         if (bodyIsDefined) {
             if (!validation.inputSchema) {
-                throw new Error('Missing input schema');
+                throw new ApiError(0, 'INPUT_VALIDATION_FAILED', 'Missing input schema');
             }
             validateInput(validation.inputSchema, body, validation.endpoint);
         }

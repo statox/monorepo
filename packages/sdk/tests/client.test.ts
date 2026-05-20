@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
 import type { AnySchema } from 'ajv';
-import { BaseAPIClient, ApiError } from '../src/client.js';
+import { APIClient, BaseAPIClient, ApiError } from '../src/client.js';
 
 const outputSchema: AnySchema = {
     type: 'object',
@@ -105,9 +105,59 @@ describe('BaseAPIClient', () => {
             );
             assert.fail('Expected error');
         } catch (err) {
-            assert.include((err as Error).message, 'Invalid input');
+            assert.instanceOf(err, ApiError);
+            assert.propertyVal(err as object, 'code', 'INPUT_VALIDATION_FAILED');
             assert.equal(fetchStub.callCount, 0);
         }
+    });
+
+    it('POST call validates input — throws ApiError with INPUT_VALIDATION_FAILED', async () => {
+        const { client, fetchStub } = makeClient();
+
+        try {
+            await client._fetch(
+                '/test/post',
+                { invalid: true },
+                { inputSchema, outputSchema, endpoint: 'test.post' },
+                { method: 'POST' },
+                { type: 'none' }
+            );
+            assert.fail('Expected error');
+        } catch (err) {
+            assert.instanceOf(err, ApiError);
+            assert.propertyVal(err as object, 'code', 'INPUT_VALIDATION_FAILED');
+            assert.equal(fetchStub.callCount, 0);
+        }
+    });
+
+    it('calls onError callback on NETWORK_ERROR', async () => {
+        const onError = sinon.stub();
+        const { client, fetchStub } = makeClient({ onError });
+        fetchStub.rejects(new Error('Network failure'));
+
+        try {
+            await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+        } catch {
+            /* expected */
+        }
+
+        assert.isTrue(onError.calledOnce);
+        assert.instanceOf(onError.firstCall.args[0], ApiError);
+        assert.propertyVal(onError.firstCall.args[0] as object, 'code', 'NETWORK_ERROR');
+    });
+
+    it('apikey auth sends Authorization header when apiKey configured', async () => {
+        const { client, fetchStub } = makeClient({ apiKey: 'my-key' });
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'apikey' });
+
+        const [, opts] = fetchStub.firstCall.args;
+        const headers = (opts as RequestInit & { headers: Record<string, string> }).headers;
+        assert.equal(headers['Authorization'], 'Bearer my-key');
     });
 
     it('warns on output schema mismatch without throwing', async () => {
@@ -268,5 +318,41 @@ describe('BaseAPIClient', () => {
         assert.isTrue(onError.calledOnce);
         assert.instanceOf(onError.firstCall.args[0], ApiError);
         assert.propertyVal(onError.firstCall.args[0] as object, 'code', 'UNAUTHORIZED');
+    });
+});
+
+describe('APIClient factory', () => {
+    it('returns a BaseAPIClient instance with _fetch callable', async () => {
+        const fetchStub = sinon.stub<Parameters<typeof fetch>, ReturnType<typeof fetch>>();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        const client = APIClient({
+            baseURL: 'http://localhost:3000',
+            fetcher: fetchStub as unknown as typeof fetch
+        });
+
+        assert.instanceOf(client, BaseAPIClient);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            {
+                outputSchema: {
+                    type: 'object',
+                    properties: { result: { type: 'string' } },
+                    required: ['result'],
+                    additionalProperties: false
+                },
+                endpoint: 'test.get'
+            },
+            { method: 'GET' },
+            { type: 'none' }
+        );
+
+        assert.equal(fetchStub.callCount, 1);
+        assert.equal(fetchStub.firstCall.args[0], 'http://localhost:3000/test/get');
     });
 });
