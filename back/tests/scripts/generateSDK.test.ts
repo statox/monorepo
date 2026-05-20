@@ -2,9 +2,6 @@ import { assert } from 'chai';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
-import vm from 'node:vm';
-import { createRequire } from 'node:module';
-import sinon from 'sinon';
 import { groupRoutes, generateSDK } from '../../scripts/generateSDK.js';
 import type { Route } from '../../src/libs/routes/types.js';
 
@@ -187,11 +184,8 @@ describe('scripts/generateSDK', () => {
             assert.include(sdk, 'inputSchema: schemas.homeTracker_addEntry_Input');
         });
 
-        it('GET method passes null as body (skipping inline validation)', () => {
-            // GET routes pass null as body to fetch(); the bodyIsDefined guard inside
-            // fetch() then skips validation and Content-Type header — there is no
-            // inline validateInput call generated for the method itself.
-            assert.notInclude(sdk, 'validateInput(schemas.homeTracker_getDashboard_');
+        it('GET method passes null as the body argument to fetch', () => {
+            assert.include(sdk, "fetch('/homeTracker/getDashboard', null,");
         });
 
         it('type exports reference named types via FromSchema', () => {
@@ -207,9 +201,9 @@ describe('scripts/generateSDK', () => {
             assert.notInclude(sdk, '"homeTracker_getDashboard_Input"');
         });
 
-        it('authentication value appears in JSDoc for each route', () => {
-            assert.include(sdk, '* Authentication: user2');
-            assert.include(sdk, '* Authentication: apikey-iot');
+        it('authentication type appears in route comment', () => {
+            assert.include(sdk, '– auth: user2');
+            assert.include(sdk, '– auth: apikey-iot');
         });
 
         it('exports a bundle type for POST routes', () => {
@@ -270,6 +264,18 @@ describe('scripts/generateSDK', () => {
             assert.include(sdkWithErrors, "'ITEM_NOT_FOUND'");
             assert.include(sdkWithErrors, "'ITEM_ALREADY_EXISTS'");
         });
+
+        it('output contains buildModules function', () => {
+            assert.include(sdk, 'export function buildModules(');
+        });
+
+        it('output does not contain APIClient class', () => {
+            assert.notInclude(sdk, 'class APIClient');
+        });
+
+        it('output does not contain AJV instantiation', () => {
+            assert.notInclude(sdk, 'new Ajv()');
+        });
     });
 
     // -----------------------------------------------------------------------
@@ -277,7 +283,7 @@ describe('scripts/generateSDK', () => {
     // -----------------------------------------------------------------------
 
     describe('TypeScript transpilation', () => {
-        it('generated SDK transpiles without diagnostics', () => {
+        it('generated routes.ts transpiles without diagnostics', () => {
             const grouped = groupRoutes([getDashboardRoute, addEntryRoute, sensorDataRoute]);
             const sdk = generateSDK(grouped);
 
@@ -290,265 +296,7 @@ describe('scripts/generateSDK', () => {
             });
 
             assert.deepEqual(result.diagnostics, []);
-            assert.ok(result.outputText.length > 0);
-        });
-    });
-
-    // -----------------------------------------------------------------------
-    // Category 4 — Runtime instantiation (vm sandbox)
-    // -----------------------------------------------------------------------
-
-    describe('Runtime instantiation', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let APIClient: any;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let ApiError: any;
-        let fetchStub: sinon.SinonStub;
-
-        before(() => {
-            const grouped = groupRoutes([getDashboardRoute, addEntryRoute, sensorDataRoute]);
-            const sdk = generateSDK(grouped);
-
-            const result = ts.transpileModule(sdk, {
-                compilerOptions: {
-                    target: ts.ScriptTarget.ES2022,
-                    module: ts.ModuleKind.CommonJS,
-                    esModuleInterop: true
-                }
-            });
-            const jsCode = result.outputText;
-
-            const moduleExports: Record<string, unknown> = {};
-            const moduleObj = { exports: moduleExports };
-            const sandbox = vm.createContext({
-                require: createRequire(import.meta.url),
-                module: moduleObj,
-                exports: moduleExports,
-                console,
-                // Arrow-function indirection keeps the stub reference swappable across beforeEach
-                fetch: (...args: unknown[]) => fetchStub(...args)
-            });
-            vm.runInContext(jsCode, sandbox);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            APIClient = (moduleObj.exports as any).APIClient;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ApiError = (moduleObj.exports as any).ApiError;
-        });
-
-        beforeEach(() => {
-            fetchStub = sinon.stub();
-        });
-
-        it('APIClient can be instantiated', () => {
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            assert.ok(client);
-        });
-
-        it('GET method calls fetch with correct URL and method', async () => {
-            fetchStub.resolves({
-                ok: true,
-                json: () => ({ result: 'test' })
-            });
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            const output = await client.homeTracker.getDashboard();
-
-            assert.isTrue(fetchStub.calledOnce);
-            const [url, options] = fetchStub.firstCall.args as [string, RequestInit];
-            assert.include(url, '/homeTracker/getDashboard');
-            assert.equal(options.method, 'GET');
-            assert.deepEqual(output, { result: 'test' });
-        });
-
-        it('POST method calls fetch with correct URL, method, Content-Type and serialized body', async () => {
-            fetchStub.resolves({
-                ok: true,
-                json: () => ({ result: 'created' })
-            });
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            await client.homeTracker.addEntry({ name: 'test' });
-
-            assert.isTrue(fetchStub.calledOnce);
-            const [url, options] = fetchStub.firstCall.args as [
-                string,
-                RequestInit & { headers: Record<string, string> }
-            ];
-            assert.include(url, '/homeTracker/addEntry');
-            assert.equal(options.method, 'POST');
-            assert.equal(options.headers['Content-Type'], 'application/json');
-            assert.equal(options.body, JSON.stringify({ name: 'test' }));
-        });
-
-        it('POST method throws Invalid input before calling fetch for invalid input', async () => {
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-
-            try {
-                await client.homeTracker.addEntry({ invalid: 'field' });
-                assert.fail('Expected an error to be thrown');
-            } catch (err) {
-                assert.include((err as Error).message, 'Invalid input');
-                assert.equal(fetchStub.callCount, 0);
-            }
-        });
-
-        it('output validation warns on schema mismatch without throwing', async () => {
-            fetchStub.resolves({
-                ok: true,
-                json: () => ({}) // missing required 'result' field
-            });
-
-            const warnStub = sinon.stub(console, 'warn');
-            try {
-                const client = new APIClient({ baseURL: 'http://localhost:3000' });
-                await client.homeTracker.getDashboard();
-                assert.isTrue(warnStub.calledOnce);
-            } finally {
-                warnStub.restore();
-            }
-        });
-
-        it('apikey-iot method sends Authorization header when apiKey configured in client', async () => {
-            fetchStub.resolves({
-                ok: true,
-                json: () => ({ result: 'test' })
-            });
-
-            const client = new APIClient({
-                baseURL: 'http://localhost:3000',
-                apiKey: 'my-secret-key'
-            });
-            await client.sensor.data({ id: 'sensor-1' });
-
-            const [, options] = fetchStub.firstCall.args as [
-                string,
-                RequestInit & { headers: Record<string, string> }
-            ];
-            assert.equal(options.headers['Authorization'], 'Bearer my-secret-key');
-        });
-
-        it('apikey-iot method omits Authorization header when apiKey not configured', async () => {
-            fetchStub.resolves({
-                ok: true,
-                json: () => ({ result: 'test' })
-            });
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            await client.sensor.data({ id: 'sensor-1' });
-
-            const [, options] = fetchStub.firstCall.args as [
-                string,
-                RequestInit & { headers: Record<string, string> }
-            ];
-            assert.isUndefined(options.headers['Authorization']);
-        });
-
-        it('user2 endpoint sends credentials: include', async () => {
-            fetchStub.resolves({
-                ok: true,
-                json: () => ({ result: 'test' })
-            });
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            await client.homeTracker.getDashboard();
-
-            const [, options] = fetchStub.firstCall.args as [string, RequestInit];
-            assert.equal(options.credentials, 'include');
-        });
-
-        it('apikey-iot endpoint sends credentials: omit', async () => {
-            fetchStub.resolves({
-                ok: true,
-                json: () => ({ result: 'test' })
-            });
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            await client.sensor.data({ id: 'sensor-1' });
-
-            const [, options] = fetchStub.firstCall.args as [string, RequestInit];
-            assert.equal(options.credentials, 'omit');
-        });
-
-        it('throws ApiError with parsed code and httpStatus on HTTP error', async () => {
-            fetchStub.resolves({
-                ok: false,
-                status: 404,
-                statusText: 'Not Found',
-                json: () => ({
-                    httpStatus: 404,
-                    code: 'ITEM_NOT_FOUND',
-                    reason: 'No such item'
-                })
-            });
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            try {
-                await client.homeTracker.getDashboard();
-                assert.fail('Expected an error to be thrown');
-            } catch (err) {
-                assert.instanceOf(err, ApiError);
-                assert.propertyVal(err as object, 'httpStatus', 404);
-                assert.propertyVal(err as object, 'code', 'ITEM_NOT_FOUND');
-                assert.propertyVal(err as object, 'reason', 'No such item');
-            }
-        });
-
-        it('throws ApiError with INTERNAL_SERVER_ERROR when body has no code', async () => {
-            fetchStub.resolves({
-                ok: false,
-                status: 500,
-                statusText: 'Internal Server Error',
-                json: () => ({})
-            });
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            try {
-                await client.homeTracker.getDashboard();
-                assert.fail('Expected an error to be thrown');
-            } catch (err) {
-                assert.instanceOf(err, ApiError);
-                assert.propertyVal(err as object, 'httpStatus', 500);
-                assert.propertyVal(err as object, 'code', 'INTERNAL_SERVER_ERROR');
-                assert.propertyVal(err as object, 'reason', undefined);
-            }
-        });
-
-        it('throws ApiError with NETWORK_ERROR code when fetch itself rejects', async () => {
-            fetchStub.rejects(new Error('Network failure'));
-
-            const client = new APIClient({ baseURL: 'http://localhost:3000' });
-            try {
-                await client.homeTracker.getDashboard();
-                assert.fail('Expected an error to be thrown');
-            } catch (err) {
-                assert.instanceOf(err, ApiError);
-                assert.propertyVal(err as object, 'code', 'NETWORK_ERROR');
-                assert.propertyVal(err as object, 'httpStatus', 0);
-            }
-        });
-
-        it('calls onError callback with ApiError on HTTP error', async () => {
-            fetchStub.resolves({
-                ok: false,
-                status: 401,
-                statusText: 'Unauthorized',
-                json: () => ({ httpStatus: 401, code: 'UNAUTHORIZED' })
-            });
-
-            const onErrorStub = sinon.stub();
-            const client = new APIClient({
-                baseURL: 'http://localhost:3000',
-                onError: onErrorStub
-            });
-            try {
-                await client.homeTracker.getDashboard();
-            } catch {
-                /* expected */
-            }
-            assert.isTrue(onErrorStub.calledOnce);
-            const firstArg = onErrorStub.firstCall.args[0];
-            assert.instanceOf(firstArg, ApiError);
-            assert.propertyVal(firstArg as object, 'code', 'UNAUTHORIZED');
+            assert.include(result.outputText, 'buildModules');
         });
     });
 });
