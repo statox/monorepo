@@ -2,5 +2,5 @@
        * {{ method }} {{ routePath }}
        * Auth: {{ authentication }}
        */
-      {{ name }}: async ({{ params }}): Promise<{{ outputType }}> =>
+      {{ name }}: ({{ params }}) =>
         fetch('{{ routePath }}'{{ pathParamsTransform }}, {{ bodyArg }}, { {% if hasInput %}inputSchema: schemas.{{ inputSchemaName }}, {% endif %}outputSchema: schemas.{{ outputSchemaName }}, endpoint: '{{ module }}.{{ name }}' }, { method: '{{ method }}' }, { type: '{{ authentication }}' }) as Promise<{{ outputType }}>,

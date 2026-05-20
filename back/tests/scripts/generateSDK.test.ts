@@ -165,11 +165,11 @@ describe('scripts/generateSDK', () => {
         });
 
         it('GET method has no input parameter', () => {
-            assert.include(sdk, 'getDashboard: async ():');
+            assert.include(sdk, 'getDashboard: () =>');
         });
 
         it('POST method has typed input parameter', () => {
-            assert.include(sdk, 'addEntry: async (input: HomeTracker_AddEntry_Input):');
+            assert.include(sdk, 'addEntry: (input: HomeTracker_AddEntry_Input) =>');
         });
 
         it('path param appears in method signature', () => {
