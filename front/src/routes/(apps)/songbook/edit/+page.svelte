@@ -9,7 +9,7 @@
     import { goto } from '$app/navigation';
     import { Notice } from '$lib/components/Notice';
     import { AuthGuard } from '$lib/components/AuthGuard';
-    import type { Chords_UpdateAll_Errors } from '$vendor/statox-api';
+    import type { Chords_UpdateAll_Errors } from 'statox-api';
 
     interface Props {
         // From +page.ts load() function

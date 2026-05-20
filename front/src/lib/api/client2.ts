@@ -1,6 +1,6 @@
 import { getApiUrl } from '$lib/helpers';
-import { APIClient } from '$vendor/statox-api';
+import { APIClient } from 'statox-api';
 
-export const client2 = new APIClient({
+export const client2 = APIClient({
     baseURL: getApiUrl()
 });

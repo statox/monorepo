@@ -28,8 +28,7 @@ const config = {
             fallback: '404.html'
         }),
         alias: {
-            $config: 'src/config',
-            $vendor: 'src/vendor'
+            $config: 'src/config'
         },
         paths: {
             relative: false,

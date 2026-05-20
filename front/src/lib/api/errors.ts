@@ -1,1 +1,1 @@
-export { ApiError } from '$vendor/statox-api';
+export { ApiError } from 'statox-api';

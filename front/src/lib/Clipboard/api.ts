@@ -99,7 +99,6 @@ export const uploadToClipboard = async (data: {
         return;
     }
 
-    // @ts-expect-error We need to fix the typing of File in the SDK
     return client2.clipboard.addEntry(data);
 };
 

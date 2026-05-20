@@ -1,7 +1,7 @@
 import { LunarPhase } from 'lunarphase-js';
 import { getRangeEphemeridesAPI, getTodayEphemeridesAPI } from './api';
 import { DateTime, Duration } from 'luxon';
-import type { Ephemerides_GetRange_Output } from '$vendor/statox-api';
+import type { Ephemerides_GetRange_Output } from 'statox-api';
 import type { MoonVisibilitySegment, YearlyEphemerisDay } from './types';
 
 export const getMoonPhasePictureURL = (phase: LunarPhase) => {
