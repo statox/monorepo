@@ -1,12 +1,6 @@
-    /**
-     * {{ method }} {{ routePath }}
-     * Authentication: {{ authentication }}
-     */
-    {{ name }}: async ({{ params }}): Promise<{{ outputType }}> =>
-        this.fetch<{{ endpointBundleType }}>(
-            '{{ routePath }}'{{ pathParamsTransform }},
-            {{ bodyArg }},
-            { {% if hasInput %}inputSchema: schemas.{{ inputSchemaName }}, {% endif %}outputSchema: schemas.{{ outputSchemaName }}, endpoint: '{{ module }}.{{ name }}' },
-            { method: '{{ method }}' },
-            { type: '{{ authentication }}' }
-        ),
+      /**
+       * {{ method }} {{ routePath }}
+       * Auth: {{ authentication }}
+       */
+      {{ name }}: async ({{ params }}): Promise<{{ outputType }}> =>
+        fetch('{{ routePath }}'{{ pathParamsTransform }}, {{ bodyArg }}, { {% if hasInput %}inputSchema: schemas.{{ inputSchemaName }}, {% endif %}outputSchema: schemas.{{ outputSchemaName }}, endpoint: '{{ module }}.{{ name }}' }, { method: '{{ method }}' }, { type: '{{ authentication }}' }) as Promise<{{ outputType }}>,

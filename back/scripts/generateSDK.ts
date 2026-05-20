@@ -230,7 +230,7 @@ function generateErrorType(module: string, name: string): string {
 async function main() {
     const { routes } = await import('../src/libs/routes/index.js');
     const outputDir = process.argv[2] || './generated';
-    const outputFile = path.join(outputDir, 'index.ts');
+    const outputFile = path.join(outputDir, 'routes.ts');
 
     console.log('1. Generating SDK...');
     console.log(`2. Found ${routes.list.length} routes`);
