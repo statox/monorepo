@@ -37,7 +37,7 @@
         "@aws-sdk/client-s3": "^3.1051.0",
         "@aws-sdk/s3-request-presigner": "^3.1051.0",
         "@dotenvx/dotenvx": "^1.66.0",
-        "@elastic/elasticsearch": "^8.17.1",
+        "@elastic/elasticsearch": "^9.4.1",
         "@slack/webhook": "^7.0.9",
         "@types/passport": "^1.0.17",
         "@types/passport-local": "^1.0.38",
