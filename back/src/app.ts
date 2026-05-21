@@ -25,7 +25,7 @@ import {
     validatePassportSession
 } from './libs/middleware/auth_passport.middleware.js';
 import { initOpenapi } from './libs/modules/openapi/index.js';
-import { isPostRouteWithFile } from './libs/routes/types.js';
+import { isPostWithFileRoute } from './libs/routes/types.js';
 
 const { validate } = new Validator({ allowUnionTypes: true });
 export let app: express.Express;
@@ -80,7 +80,7 @@ export const initApp = () => {
             next();
         });
 
-        if (isPostRouteWithFile(route)) {
+        if (isPostWithFileRoute(route)) {
             pipeline.push(multipartHandler);
         }
 

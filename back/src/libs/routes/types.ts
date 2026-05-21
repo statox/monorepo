@@ -86,7 +86,7 @@ export type PostRoute<Input, Output> = BaseRoute<Input, Output> & {
     inputSchema: ApiJsonSchema;
 };
 
-export type PostRouteWithFileRoute<Input, Output> = PostRoute<Input, Output> & {
+export type PostWithFileRoute<Input, Output> = PostRoute<Input, Output> & {
     handler: RouteWithFileHandler<Input>;
     file: {
         maxSize: number;
@@ -94,19 +94,19 @@ export type PostRouteWithFileRoute<Input, Output> = PostRoute<Input, Output> & {
     };
 };
 
-export const isPostRouteWithFile = (
+export const isPostWithFileRoute = (
     route: Route<unknown, unknown>
-): route is PostRouteWithFileRoute<unknown, unknown> => {
+): route is PostWithFileRoute<unknown, unknown> => {
     return (
         'file' in route &&
-        typeof (route as PostRouteWithFileRoute<unknown, unknown>).file === 'object'
+        typeof (route as PostWithFileRoute<unknown, unknown>).file === 'object'
     );
 };
 
 export type Route<Input, Output> =
     | GetRoute<Input, Output>
     | PostRoute<Input, Output>
-    | PostRouteWithFileRoute<Input, Output>;
+    | PostWithFileRoute<Input, Output>;
 
 export type RouteWS = {
     onConnection: (ws: WebSocket, gameId: string) => void;

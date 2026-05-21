@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { config } from '../../packages/config/index.js';
-import { isPostRouteWithFile, Route, ApiFile } from '../routes/types.js';
+import { isPostWithFileRoute, Route, ApiFile } from '../routes/types.js';
 import { AllowedSchema, isAjvError, validateAgainstJsonSchema } from '../modules/ajv/index.js';
 import { slog } from '../modules/logging/index.js';
 import { User } from '../modules/auth/types.js';
@@ -30,7 +30,7 @@ export const apiPipeline = (route: Route<unknown, unknown>) => {
                 input = req.params || {};
             }
 
-            if (isPostRouteWithFile(route)) {
+            if (isPostWithFileRoute(route)) {
                 routeResult =
                     (await route.handler({
                         input,

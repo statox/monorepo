@@ -1,5 +1,5 @@
 import { FromSchema } from 'json-schema-to-ts';
-import { EmptyOutput, PostRouteWithFileRoute, RouteWithFileHandler } from '../types.js';
+import { EmptyOutput, PostWithFileRoute, RouteWithFileHandler } from '../types.js';
 import { addEntry, FileOrContentRequiredError } from '../../modules/clipboard/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 
@@ -48,7 +48,7 @@ const inputSchema = {
 
 type Input = FromSchema<typeof inputSchema>;
 
-export const route: PostRouteWithFileRoute<Input, EmptyOutput> = {
+export const route: PostWithFileRoute<Input, EmptyOutput> = {
     method: 'post',
     path: '/clipboard/addEntry',
     inputSchema,

@@ -8,7 +8,7 @@ import {
     EmptyOutput,
     GetRoute,
     PostRoute,
-    PostRouteWithFileRoute,
+    PostWithFileRoute,
     RouteWS
 } from '../../../src/libs/routes/types.js';
 import { routesAuth } from '../../../src/libs/routes/index.js';
@@ -177,7 +177,7 @@ const postRouteScopeAdmin: PostRoute<FromSchema<typeof postRouteInputSchema>, Em
     outputSchema: emptyObjectSchema
 };
 
-const postRouteWithFile: PostRouteWithFileRoute<EmptyInput, EmptyOutput> = {
+const postRouteWithFile: PostWithFileRoute<EmptyInput, EmptyOutput> = {
     method: 'post',
     authentication: 'none',
     path: '/postroutewithfile',
