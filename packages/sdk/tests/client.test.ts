@@ -47,7 +47,14 @@ describe('BaseAPIClient', () => {
             json: () => Promise.resolve({ result: 'test' })
         } as Response);
 
-        await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'none' }
+        );
 
         const [url, opts] = fetchStub.firstCall.args;
         assert.equal(url, 'http://localhost:3000/test/get');
@@ -65,7 +72,14 @@ describe('BaseAPIClient', () => {
             fetcher: fetchStub as unknown as typeof fetch
         });
 
-        await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'none' }
+        );
 
         const [url] = fetchStub.firstCall.args;
         assert.equal(url, 'http://localhost:3000/test/get');
@@ -81,6 +95,7 @@ describe('BaseAPIClient', () => {
         await client._fetch(
             '/test/post',
             { name: 'test' },
+            null,
             { inputSchema, outputSchema, endpoint: 'test.post' },
             { method: 'POST' },
             { type: 'none' }
@@ -99,6 +114,7 @@ describe('BaseAPIClient', () => {
             await client._fetch(
                 '/test/post',
                 { invalid: true },
+                null,
                 { inputSchema, outputSchema, endpoint: 'test.post' },
                 { method: 'POST' },
                 { type: 'none' }
@@ -111,23 +127,33 @@ describe('BaseAPIClient', () => {
         }
     });
 
-    it('POST call validates input — throws ApiError with INPUT_VALIDATION_FAILED', async () => {
+    it('file upload sends FormData and does not set Content-Type: application/json', async () => {
         const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'ok' })
+        } as Response);
 
-        try {
-            await client._fetch(
-                '/test/post',
-                { invalid: true },
-                { inputSchema, outputSchema, endpoint: 'test.post' },
-                { method: 'POST' },
-                { type: 'none' }
-            );
-            assert.fail('Expected error');
-        } catch (err) {
-            assert.instanceOf(err, ApiError);
-            assert.propertyVal(err as object, 'code', 'INPUT_VALIDATION_FAILED');
-            assert.equal(fetchStub.callCount, 0);
-        }
+        const file = new Blob(['data'], { type: 'image/png' });
+        await client._fetch(
+            '/test/upload',
+            { name: 'photo' },
+            file,
+            { inputSchema, outputSchema, endpoint: 'test.upload' },
+            { method: 'POST' },
+            { type: 'none' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        const form = (opts as RequestInit).body as FormData;
+        assert.instanceOf(form, FormData);
+        assert.equal(form.get('name'), 'photo');
+        const appendedFile = form.get('file') as Blob;
+        assert.instanceOf(appendedFile, Blob);
+        assert.equal(appendedFile.size, file.size);
+        assert.equal(appendedFile.type, file.type);
+        const headers = (opts as RequestInit & { headers: Record<string, string> }).headers;
+        assert.notProperty(headers, 'Content-Type');
     });
 
     it('calls onError callback on NETWORK_ERROR', async () => {
@@ -136,7 +162,14 @@ describe('BaseAPIClient', () => {
         fetchStub.rejects(new Error('Network failure'));
 
         try {
-            await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
         } catch {
             /* expected */
         }
@@ -153,7 +186,14 @@ describe('BaseAPIClient', () => {
             json: () => Promise.resolve({ result: 'test' })
         } as Response);
 
-        await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'apikey' });
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'apikey' }
+        );
 
         const [, opts] = fetchStub.firstCall.args;
         const headers = (opts as RequestInit & { headers: Record<string, string> }).headers;
@@ -169,7 +209,14 @@ describe('BaseAPIClient', () => {
 
         const warnStub = sinon.stub(console, 'warn');
         try {
-            await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
             assert.isTrue(warnStub.calledOnce);
         } finally {
             warnStub.restore();
@@ -183,7 +230,14 @@ describe('BaseAPIClient', () => {
             json: () => Promise.resolve({ result: 'test' })
         } as Response);
 
-        await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'user2' });
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'user2' }
+        );
 
         const [, opts] = fetchStub.firstCall.args;
         assert.equal((opts as RequestInit).credentials, 'include');
@@ -196,7 +250,14 @@ describe('BaseAPIClient', () => {
             json: () => Promise.resolve({ result: 'test' })
         } as Response);
 
-        await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'none' }
+        );
 
         const [, opts] = fetchStub.firstCall.args;
         assert.equal((opts as RequestInit).credentials, 'omit');
@@ -211,6 +272,7 @@ describe('BaseAPIClient', () => {
 
         await client._fetch(
             '/test/get',
+            null,
             null,
             validation,
             { method: 'GET' },
@@ -232,6 +294,7 @@ describe('BaseAPIClient', () => {
         await client._fetch(
             '/test/get',
             null,
+            null,
             validation,
             { method: 'GET' },
             { type: 'apikey-iot' }
@@ -252,7 +315,14 @@ describe('BaseAPIClient', () => {
         } as Response);
 
         try {
-            await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
             assert.fail('Expected error');
         } catch (err) {
             assert.instanceOf(err, ApiError);
@@ -271,7 +341,14 @@ describe('BaseAPIClient', () => {
         } as Response);
 
         try {
-            await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
             assert.fail('Expected error');
         } catch (err) {
             assert.instanceOf(err, ApiError);
@@ -285,7 +362,14 @@ describe('BaseAPIClient', () => {
         fetchStub.rejects(new Error('Network failure'));
 
         try {
-            await client._fetch('/test/get', null, validation, { method: 'GET' }, { type: 'none' });
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
             assert.fail('Expected error');
         } catch (err) {
             assert.instanceOf(err, ApiError);
@@ -306,6 +390,7 @@ describe('BaseAPIClient', () => {
         try {
             await client._fetch(
                 '/test/get',
+                null,
                 null,
                 validation,
                 { method: 'GET' },
@@ -338,6 +423,7 @@ describe('APIClient factory', () => {
 
         await client._fetch(
             '/test/get',
+            null,
             null,
             {
                 outputSchema: {

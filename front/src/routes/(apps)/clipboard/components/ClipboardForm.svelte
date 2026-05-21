@@ -59,10 +59,7 @@
             return;
         }
 
-        let file: File | undefined;
-        if (files && files.length) {
-            file = files[0] || undefined;
-        }
+        const file = files?.[0] ?? null;
 
         if (!content?.length && !file) {
             noticeMessages.push({
@@ -74,7 +71,7 @@
 
         try {
             uploading = true;
-            await uploadToClipboard({ name, content, ttlSeconds, isPublic, file });
+            await uploadToClipboard({ name, content, ttlSeconds, isPublic }, file);
             onUpload();
         } catch (error) {
             handleFormError(error);

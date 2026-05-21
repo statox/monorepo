@@ -5,9 +5,3 @@ export interface ReactorEntryForPublic {
     s3PresignedUrl: string;
     uri: string;
 }
-
-export type ReactorUploadData = {
-    name: string;
-    commaSeparatedTags: string;
-    file: File;
-};

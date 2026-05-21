@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-05-20T19:38:26.575Z
+// Generated on: 2026-05-22T00:48:08.473Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -2093,21 +2093,21 @@ export function buildModules(fetch: FetchFn) {
        * Auth: user2
        */
       login: (input: Auth_Login_Input) =>
-        fetch('/auth/login', input, { inputSchema: schemas.auth_login_Input, outputSchema: schemas.auth_login_Output, endpoint: 'auth.login' }, { method: 'POST' }, { type: 'user2' }) as Promise<Auth_Login_Output>,
+        fetch('/auth/login', input, null, { inputSchema: schemas.auth_login_Input, outputSchema: schemas.auth_login_Output, endpoint: 'auth.login' }, { method: 'POST' }, { type: 'user2' }) as Promise<Auth_Login_Output>,
 
       /**
        * POST /auth/logout
        * Auth: user2
        */
       logout: (input: Auth_Logout_Input) =>
-        fetch('/auth/logout', input, { inputSchema: schemas.auth_logout_Input, outputSchema: schemas.auth_logout_Output, endpoint: 'auth.logout' }, { method: 'POST' }, { type: 'user2' }) as Promise<Auth_Logout_Output>,
+        fetch('/auth/logout', input, null, { inputSchema: schemas.auth_logout_Input, outputSchema: schemas.auth_logout_Output, endpoint: 'auth.logout' }, { method: 'POST' }, { type: 'user2' }) as Promise<Auth_Logout_Output>,
 
       /**
        * POST /auth/me
        * Auth: user2
        */
       me: (input: Auth_Me_Input) =>
-        fetch('/auth/me', input, { inputSchema: schemas.auth_me_Input, outputSchema: schemas.auth_me_Output, endpoint: 'auth.me' }, { method: 'POST' }, { type: 'user2' }) as Promise<Auth_Me_Output>,
+        fetch('/auth/me', input, null, { inputSchema: schemas.auth_me_Input, outputSchema: schemas.auth_me_Output, endpoint: 'auth.me' }, { method: 'POST' }, { type: 'user2' }) as Promise<Auth_Me_Output>,
 
     },
 
@@ -2117,35 +2117,35 @@ export function buildModules(fetch: FetchFn) {
        * Auth: user2
        */
       addLinkVisit: (input: Chords_AddLinkVisit_Input) =>
-        fetch('/chords/addLinkVisit', input, { inputSchema: schemas.chords_addLinkVisit_Input, outputSchema: schemas.chords_addLinkVisit_Output, endpoint: 'chords.addLinkVisit' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_AddLinkVisit_Output>,
+        fetch('/chords/addLinkVisit', input, null, { inputSchema: schemas.chords_addLinkVisit_Input, outputSchema: schemas.chords_addLinkVisit_Output, endpoint: 'chords.addLinkVisit' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_AddLinkVisit_Output>,
 
       /**
        * GET /chords/checkLinks
        * Auth: none
        */
       checkLinks: () =>
-        fetch('/chords/checkLinks', null, { outputSchema: schemas.chords_checkLinks_Output, endpoint: 'chords.checkLinks' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_CheckLinks_Output>,
+        fetch('/chords/checkLinks', null, null, { outputSchema: schemas.chords_checkLinks_Output, endpoint: 'chords.checkLinks' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_CheckLinks_Output>,
 
       /**
        * GET /chords/getAll
        * Auth: none
        */
       getAll: () =>
-        fetch('/chords/getAll', null, { outputSchema: schemas.chords_getAll_Output, endpoint: 'chords.getAll' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetAll_Output>,
+        fetch('/chords/getAll', null, null, { outputSchema: schemas.chords_getAll_Output, endpoint: 'chords.getAll' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetAll_Output>,
 
       /**
        * GET /chords/getLinksVisitsCount
        * Auth: none
        */
       getLinksVisitsCount: () =>
-        fetch('/chords/getLinksVisitsCount', null, { outputSchema: schemas.chords_getLinksVisitsCount_Output, endpoint: 'chords.getLinksVisitsCount' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetLinksVisitsCount_Output>,
+        fetch('/chords/getLinksVisitsCount', null, null, { outputSchema: schemas.chords_getLinksVisitsCount_Output, endpoint: 'chords.getLinksVisitsCount' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetLinksVisitsCount_Output>,
 
       /**
        * POST /chords/updateAll
        * Auth: user2
        */
       updateAll: (input: Chords_UpdateAll_Input) =>
-        fetch('/chords/updateAll', input, { inputSchema: schemas.chords_updateAll_Input, outputSchema: schemas.chords_updateAll_Output, endpoint: 'chords.updateAll' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_UpdateAll_Output>,
+        fetch('/chords/updateAll', input, null, { inputSchema: schemas.chords_updateAll_Input, outputSchema: schemas.chords_updateAll_Output, endpoint: 'chords.updateAll' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_UpdateAll_Output>,
 
     },
 
@@ -2154,36 +2154,36 @@ export function buildModules(fetch: FetchFn) {
        * POST /clipboard/addEntry
        * Auth: user2
        */
-      addEntry: (input: Clipboard_AddEntry_Input) =>
-        fetch('/clipboard/addEntry', input, { inputSchema: schemas.clipboard_addEntry_Input, outputSchema: schemas.clipboard_addEntry_Output, endpoint: 'clipboard.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_AddEntry_Output>,
+      addEntry: (input: Clipboard_AddEntry_Input, file: null | File) =>
+        fetch('/clipboard/addEntry', input, file, { inputSchema: schemas.clipboard_addEntry_Input, outputSchema: schemas.clipboard_addEntry_Output, endpoint: 'clipboard.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_AddEntry_Output>,
 
       /**
        * POST /clipboard/deleteEntry
        * Auth: user2
        */
       deleteEntry: (input: Clipboard_DeleteEntry_Input) =>
-        fetch('/clipboard/deleteEntry', input, { inputSchema: schemas.clipboard_deleteEntry_Input, outputSchema: schemas.clipboard_deleteEntry_Output, endpoint: 'clipboard.deleteEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_DeleteEntry_Output>,
+        fetch('/clipboard/deleteEntry', input, null, { inputSchema: schemas.clipboard_deleteEntry_Input, outputSchema: schemas.clipboard_deleteEntry_Output, endpoint: 'clipboard.deleteEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_DeleteEntry_Output>,
 
       /**
        * GET /clipboard/getAllEntries
        * Auth: user2
        */
       getAllEntries: () =>
-        fetch('/clipboard/getAllEntries', null, { outputSchema: schemas.clipboard_getAllEntries_Output, endpoint: 'clipboard.getAllEntries' }, { method: 'GET' }, { type: 'user2' }) as Promise<Clipboard_GetAllEntries_Output>,
+        fetch('/clipboard/getAllEntries', null, null, { outputSchema: schemas.clipboard_getAllEntries_Output, endpoint: 'clipboard.getAllEntries' }, { method: 'GET' }, { type: 'user2' }) as Promise<Clipboard_GetAllEntries_Output>,
 
       /**
        * GET /clipboard/getPublicEntries
        * Auth: none
        */
       getPublicEntries: () =>
-        fetch('/clipboard/getPublicEntries', null, { outputSchema: schemas.clipboard_getPublicEntries_Output, endpoint: 'clipboard.getPublicEntries' }, { method: 'GET' }, { type: 'none' }) as Promise<Clipboard_GetPublicEntries_Output>,
+        fetch('/clipboard/getPublicEntries', null, null, { outputSchema: schemas.clipboard_getPublicEntries_Output, endpoint: 'clipboard.getPublicEntries' }, { method: 'GET' }, { type: 'none' }) as Promise<Clipboard_GetPublicEntries_Output>,
 
       /**
        * GET /clipboard/view
        * Auth: none
        */
       view: () =>
-        fetch('/clipboard/view', null, { outputSchema: schemas.clipboard_view_Output, endpoint: 'clipboard.view' }, { method: 'GET' }, { type: 'none' }) as Promise<Clipboard_View_Output>,
+        fetch('/clipboard/view', null, null, { outputSchema: schemas.clipboard_view_Output, endpoint: 'clipboard.view' }, { method: 'GET' }, { type: 'none' }) as Promise<Clipboard_View_Output>,
 
     },
 
@@ -2193,28 +2193,28 @@ export function buildModules(fetch: FetchFn) {
        * Auth: user2
        */
       addRecipe: (input: Cookbook_AddRecipe_Input) =>
-        fetch('/cookbook/addRecipe', input, { inputSchema: schemas.cookbook_addRecipe_Input, outputSchema: schemas.cookbook_addRecipe_Output, endpoint: 'cookbook.addRecipe' }, { method: 'POST' }, { type: 'user2' }) as Promise<Cookbook_AddRecipe_Output>,
+        fetch('/cookbook/addRecipe', input, null, { inputSchema: schemas.cookbook_addRecipe_Input, outputSchema: schemas.cookbook_addRecipe_Output, endpoint: 'cookbook.addRecipe' }, { method: 'POST' }, { type: 'user2' }) as Promise<Cookbook_AddRecipe_Output>,
 
       /**
        * POST /cookbook/getRecipe
        * Auth: user2
        */
       getRecipe: (input: Cookbook_GetRecipe_Input) =>
-        fetch('/cookbook/getRecipe', input, { inputSchema: schemas.cookbook_getRecipe_Input, outputSchema: schemas.cookbook_getRecipe_Output, endpoint: 'cookbook.getRecipe' }, { method: 'POST' }, { type: 'user2' }) as Promise<Cookbook_GetRecipe_Output>,
+        fetch('/cookbook/getRecipe', input, null, { inputSchema: schemas.cookbook_getRecipe_Input, outputSchema: schemas.cookbook_getRecipe_Output, endpoint: 'cookbook.getRecipe' }, { method: 'POST' }, { type: 'user2' }) as Promise<Cookbook_GetRecipe_Output>,
 
       /**
        * GET /cookbook/listIngredients
        * Auth: user2
        */
       listIngredients: () =>
-        fetch('/cookbook/listIngredients', null, { outputSchema: schemas.cookbook_listIngredients_Output, endpoint: 'cookbook.listIngredients' }, { method: 'GET' }, { type: 'user2' }) as Promise<Cookbook_ListIngredients_Output>,
+        fetch('/cookbook/listIngredients', null, null, { outputSchema: schemas.cookbook_listIngredients_Output, endpoint: 'cookbook.listIngredients' }, { method: 'GET' }, { type: 'user2' }) as Promise<Cookbook_ListIngredients_Output>,
 
       /**
        * GET /cookbook/listRecipes
        * Auth: user2
        */
       listRecipes: () =>
-        fetch('/cookbook/listRecipes', null, { outputSchema: schemas.cookbook_listRecipes_Output, endpoint: 'cookbook.listRecipes' }, { method: 'GET' }, { type: 'user2' }) as Promise<Cookbook_ListRecipes_Output>,
+        fetch('/cookbook/listRecipes', null, null, { outputSchema: schemas.cookbook_listRecipes_Output, endpoint: 'cookbook.listRecipes' }, { method: 'GET' }, { type: 'user2' }) as Promise<Cookbook_ListRecipes_Output>,
 
     },
 
@@ -2224,14 +2224,14 @@ export function buildModules(fetch: FetchFn) {
        * Auth: none
        */
       getRange: (input: Ephemerides_GetRange_Input) =>
-        fetch('/ephemerides/getRange', input, { inputSchema: schemas.ephemerides_getRange_Input, outputSchema: schemas.ephemerides_getRange_Output, endpoint: 'ephemerides.getRange' }, { method: 'POST' }, { type: 'none' }) as Promise<Ephemerides_GetRange_Output>,
+        fetch('/ephemerides/getRange', input, null, { inputSchema: schemas.ephemerides_getRange_Input, outputSchema: schemas.ephemerides_getRange_Output, endpoint: 'ephemerides.getRange' }, { method: 'POST' }, { type: 'none' }) as Promise<Ephemerides_GetRange_Output>,
 
       /**
        * GET /ephemerides/getToday
        * Auth: none
        */
       getToday: () =>
-        fetch('/ephemerides/getToday', null, { outputSchema: schemas.ephemerides_getToday_Output, endpoint: 'ephemerides.getToday' }, { method: 'GET' }, { type: 'none' }) as Promise<Ephemerides_GetToday_Output>,
+        fetch('/ephemerides/getToday', null, null, { outputSchema: schemas.ephemerides_getToday_Output, endpoint: 'ephemerides.getToday' }, { method: 'GET' }, { type: 'none' }) as Promise<Ephemerides_GetToday_Output>,
 
     },
 
@@ -2241,7 +2241,7 @@ export function buildModules(fetch: FetchFn) {
        * Auth: none
        */
       getNewGame: () =>
-        fetch('/gravitrips/getNewGame', null, { outputSchema: schemas.gravitrips_getNewGame_Output, endpoint: 'gravitrips.getNewGame' }, { method: 'GET' }, { type: 'none' }) as Promise<Gravitrips_GetNewGame_Output>,
+        fetch('/gravitrips/getNewGame', null, null, { outputSchema: schemas.gravitrips_getNewGame_Output, endpoint: 'gravitrips.getNewGame' }, { method: 'GET' }, { type: 'none' }) as Promise<Gravitrips_GetNewGame_Output>,
 
     },
 
@@ -2251,7 +2251,7 @@ export function buildModules(fetch: FetchFn) {
        * Auth: none
        */
       getRemoteTime: () =>
-        fetch('/health/getRemoteTime', null, { outputSchema: schemas.health_getRemoteTime_Output, endpoint: 'health.getRemoteTime' }, { method: 'GET' }, { type: 'none' }) as Promise<Health_GetRemoteTime_Output>,
+        fetch('/health/getRemoteTime', null, null, { outputSchema: schemas.health_getRemoteTime_Output, endpoint: 'health.getRemoteTime' }, { method: 'GET' }, { type: 'none' }) as Promise<Health_GetRemoteTime_Output>,
 
     },
 
@@ -2261,42 +2261,42 @@ export function buildModules(fetch: FetchFn) {
        * Auth: none
        */
       getSensorsDataForDashboard: () =>
-        fetch('/homeTracker/getSensorsDataForDashboard', null, { outputSchema: schemas.homeTracker_getSensorsDataForDashboard_Output, endpoint: 'homeTracker.getSensorsDataForDashboard' }, { method: 'GET' }, { type: 'none' }) as Promise<HomeTracker_GetSensorsDataForDashboard_Output>,
+        fetch('/homeTracker/getSensorsDataForDashboard', null, null, { outputSchema: schemas.homeTracker_getSensorsDataForDashboard_Output, endpoint: 'homeTracker.getSensorsDataForDashboard' }, { method: 'GET' }, { type: 'none' }) as Promise<HomeTracker_GetSensorsDataForDashboard_Output>,
 
       /**
        * GET /homeTracker/getWeatherForecast
        * Auth: none
        */
       getWeatherForecast: () =>
-        fetch('/homeTracker/getWeatherForecast', null, { outputSchema: schemas.homeTracker_getWeatherForecast_Output, endpoint: 'homeTracker.getWeatherForecast' }, { method: 'GET' }, { type: 'none' }) as Promise<HomeTracker_GetWeatherForecast_Output>,
+        fetch('/homeTracker/getWeatherForecast', null, null, { outputSchema: schemas.homeTracker_getWeatherForecast_Output, endpoint: 'homeTracker.getWeatherForecast' }, { method: 'GET' }, { type: 'none' }) as Promise<HomeTracker_GetWeatherForecast_Output>,
 
       /**
        * POST /homeTracker/histogramData
        * Auth: user2
        */
       histogramData: (input: HomeTracker_HistogramData_Input) =>
-        fetch('/homeTracker/histogramData', input, { inputSchema: schemas.homeTracker_histogramData_Input, outputSchema: schemas.homeTracker_histogramData_Output, endpoint: 'homeTracker.histogramData' }, { method: 'POST' }, { type: 'user2' }) as Promise<HomeTracker_HistogramData_Output>,
+        fetch('/homeTracker/histogramData', input, null, { inputSchema: schemas.homeTracker_histogramData_Input, outputSchema: schemas.homeTracker_histogramData_Output, endpoint: 'homeTracker.histogramData' }, { method: 'POST' }, { type: 'user2' }) as Promise<HomeTracker_HistogramData_Output>,
 
       /**
        * POST /homeTracker/histogramDataPublic
        * Auth: none
        */
       histogramDataPublic: (input: HomeTracker_HistogramDataPublic_Input) =>
-        fetch('/homeTracker/histogramDataPublic', input, { inputSchema: schemas.homeTracker_histogramDataPublic_Input, outputSchema: schemas.homeTracker_histogramDataPublic_Output, endpoint: 'homeTracker.histogramDataPublic' }, { method: 'POST' }, { type: 'none' }) as Promise<HomeTracker_HistogramDataPublic_Output>,
+        fetch('/homeTracker/histogramDataPublic', input, null, { inputSchema: schemas.homeTracker_histogramDataPublic_Input, outputSchema: schemas.homeTracker_histogramDataPublic_Output, endpoint: 'homeTracker.histogramDataPublic' }, { method: 'POST' }, { type: 'none' }) as Promise<HomeTracker_HistogramDataPublic_Output>,
 
       /**
        * POST /homeTracker/updateSensorMetadata
        * Auth: user2
        */
       updateSensorMetadata: (input: HomeTracker_UpdateSensorMetadata_Input) =>
-        fetch('/homeTracker/updateSensorMetadata', input, { inputSchema: schemas.homeTracker_updateSensorMetadata_Input, outputSchema: schemas.homeTracker_updateSensorMetadata_Output, endpoint: 'homeTracker.updateSensorMetadata' }, { method: 'POST' }, { type: 'user2' }) as Promise<HomeTracker_UpdateSensorMetadata_Output>,
+        fetch('/homeTracker/updateSensorMetadata', input, null, { inputSchema: schemas.homeTracker_updateSensorMetadata_Input, outputSchema: schemas.homeTracker_updateSensorMetadata_Output, endpoint: 'homeTracker.updateSensorMetadata' }, { method: 'POST' }, { type: 'user2' }) as Promise<HomeTracker_UpdateSensorMetadata_Output>,
 
       /**
        * POST /homeTracker/upload
        * Auth: apikey-iot
        */
       upload: (input: HomeTracker_Upload_Input) =>
-        fetch('/homeTracker/upload', input, { inputSchema: schemas.homeTracker_upload_Input, outputSchema: schemas.homeTracker_upload_Output, endpoint: 'homeTracker.upload' }, { method: 'POST' }, { type: 'apikey-iot' }) as Promise<HomeTracker_Upload_Output>,
+        fetch('/homeTracker/upload', input, null, { inputSchema: schemas.homeTracker_upload_Input, outputSchema: schemas.homeTracker_upload_Output, endpoint: 'homeTracker.upload' }, { method: 'POST' }, { type: 'apikey-iot' }) as Promise<HomeTracker_Upload_Output>,
 
     },
 
@@ -2306,7 +2306,7 @@ export function buildModules(fetch: FetchFn) {
        * Auth: none
        */
       definitionJson: () =>
-        fetch('/openapi/definition.json', null, { outputSchema: schemas.openapi_definitionJson_Output, endpoint: 'openapi.definitionJson' }, { method: 'GET' }, { type: 'none' }) as Promise<Openapi_DefinitionJson_Output>,
+        fetch('/openapi/definition.json', null, null, { outputSchema: schemas.openapi_definitionJson_Output, endpoint: 'openapi.definitionJson' }, { method: 'GET' }, { type: 'none' }) as Promise<Openapi_DefinitionJson_Output>,
 
     },
 
@@ -2316,14 +2316,14 @@ export function buildModules(fetch: FetchFn) {
        * Auth: user2
        */
       getAll: () =>
-        fetch('/personalTracker/getAll', null, { outputSchema: schemas.personalTracker_getAll_Output, endpoint: 'personalTracker.getAll' }, { method: 'GET' }, { type: 'user2' }) as Promise<PersonalTracker_GetAll_Output>,
+        fetch('/personalTracker/getAll', null, null, { outputSchema: schemas.personalTracker_getAll_Output, endpoint: 'personalTracker.getAll' }, { method: 'GET' }, { type: 'user2' }) as Promise<PersonalTracker_GetAll_Output>,
 
       /**
        * POST /personalTracker/upload
        * Auth: user2
        */
       upload: (input: PersonalTracker_Upload_Input) =>
-        fetch('/personalTracker/upload', input, { inputSchema: schemas.personalTracker_upload_Input, outputSchema: schemas.personalTracker_upload_Output, endpoint: 'personalTracker.upload' }, { method: 'POST' }, { type: 'user2' }) as Promise<PersonalTracker_Upload_Output>,
+        fetch('/personalTracker/upload', input, null, { inputSchema: schemas.personalTracker_upload_Input, outputSchema: schemas.personalTracker_upload_Output, endpoint: 'personalTracker.upload' }, { method: 'POST' }, { type: 'user2' }) as Promise<PersonalTracker_Upload_Output>,
 
     },
 
@@ -2332,15 +2332,15 @@ export function buildModules(fetch: FetchFn) {
        * POST /reactor/addEntry
        * Auth: user2
        */
-      addEntry: (input: Reactor_AddEntry_Input) =>
-        fetch('/reactor/addEntry', input, { inputSchema: schemas.reactor_addEntry_Input, outputSchema: schemas.reactor_addEntry_Output, endpoint: 'reactor.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Reactor_AddEntry_Output>,
+      addEntry: (input: Reactor_AddEntry_Input, file: null | File) =>
+        fetch('/reactor/addEntry', input, file, { inputSchema: schemas.reactor_addEntry_Input, outputSchema: schemas.reactor_addEntry_Output, endpoint: 'reactor.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Reactor_AddEntry_Output>,
 
       /**
        * GET /reactor/getEntriesForPublic
        * Auth: none
        */
       getEntriesForPublic: () =>
-        fetch('/reactor/getEntriesForPublic', null, { outputSchema: schemas.reactor_getEntriesForPublic_Output, endpoint: 'reactor.getEntriesForPublic' }, { method: 'GET' }, { type: 'none' }) as Promise<Reactor_GetEntriesForPublic_Output>,
+        fetch('/reactor/getEntriesForPublic', null, null, { outputSchema: schemas.reactor_getEntriesForPublic_Output, endpoint: 'reactor.getEntriesForPublic' }, { method: 'GET' }, { type: 'none' }) as Promise<Reactor_GetEntriesForPublic_Output>,
 
     },
 
@@ -2350,7 +2350,7 @@ export function buildModules(fetch: FetchFn) {
        * Auth: none
        */
       r: (params: { linkId: string }) =>
-        fetch('/r/:linkId'.replace(':linkId', params.linkId), null, { outputSchema: schemas.misc_r_Output, endpoint: 'misc.r' }, { method: 'GET' }, { type: 'none' }) as Promise<Misc_R_Output>,
+        fetch('/r/:linkId'.replace(':linkId', params.linkId), null, null, { outputSchema: schemas.misc_r_Output, endpoint: 'misc.r' }, { method: 'GET' }, { type: 'none' }) as Promise<Misc_R_Output>,
 
     },
 
@@ -2360,7 +2360,7 @@ export function buildModules(fetch: FetchFn) {
        * Auth: user2
        */
       getPageTitle: (input: WebReader_GetPageTitle_Input) =>
-        fetch('/webReader/getPageTitle', input, { inputSchema: schemas.webReader_getPageTitle_Input, outputSchema: schemas.webReader_getPageTitle_Output, endpoint: 'webReader.getPageTitle' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebReader_GetPageTitle_Output>,
+        fetch('/webReader/getPageTitle', input, null, { inputSchema: schemas.webReader_getPageTitle_Input, outputSchema: schemas.webReader_getPageTitle_Output, endpoint: 'webReader.getPageTitle' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebReader_GetPageTitle_Output>,
 
     },
 
@@ -2370,7 +2370,7 @@ export function buildModules(fetch: FetchFn) {
        * Auth: apikey
        */
       record: (input: WebStats_Record_Input) =>
-        fetch('/web-stats/record', input, { inputSchema: schemas.webStats_record_Input, outputSchema: schemas.webStats_record_Output, endpoint: 'webStats.record' }, { method: 'POST' }, { type: 'apikey' }) as Promise<WebStats_Record_Output>,
+        fetch('/web-stats/record', input, null, { inputSchema: schemas.webStats_record_Input, outputSchema: schemas.webStats_record_Output, endpoint: 'webStats.record' }, { method: 'POST' }, { type: 'apikey' }) as Promise<WebStats_Record_Output>,
 
     },
 
@@ -2380,28 +2380,28 @@ export function buildModules(fetch: FetchFn) {
        * Auth: user2
        */
       createWatcher: (input: WebWatcher_CreateWatcher_Input) =>
-        fetch('/webWatcher/createWatcher', input, { inputSchema: schemas.webWatcher_createWatcher_Input, outputSchema: schemas.webWatcher_createWatcher_Output, endpoint: 'webWatcher.createWatcher' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebWatcher_CreateWatcher_Output>,
+        fetch('/webWatcher/createWatcher', input, null, { inputSchema: schemas.webWatcher_createWatcher_Input, outputSchema: schemas.webWatcher_createWatcher_Output, endpoint: 'webWatcher.createWatcher' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebWatcher_CreateWatcher_Output>,
 
       /**
        * POST /webWatcher/deleteWatcher
        * Auth: user2
        */
       deleteWatcher: (input: WebWatcher_DeleteWatcher_Input) =>
-        fetch('/webWatcher/deleteWatcher', input, { inputSchema: schemas.webWatcher_deleteWatcher_Input, outputSchema: schemas.webWatcher_deleteWatcher_Output, endpoint: 'webWatcher.deleteWatcher' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebWatcher_DeleteWatcher_Output>,
+        fetch('/webWatcher/deleteWatcher', input, null, { inputSchema: schemas.webWatcher_deleteWatcher_Input, outputSchema: schemas.webWatcher_deleteWatcher_Output, endpoint: 'webWatcher.deleteWatcher' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebWatcher_DeleteWatcher_Output>,
 
       /**
        * GET /webWatcher/getAllWatchers
        * Auth: none
        */
       getAllWatchers: () =>
-        fetch('/webWatcher/getAllWatchers', null, { outputSchema: schemas.webWatcher_getAllWatchers_Output, endpoint: 'webWatcher.getAllWatchers' }, { method: 'GET' }, { type: 'none' }) as Promise<WebWatcher_GetAllWatchers_Output>,
+        fetch('/webWatcher/getAllWatchers', null, null, { outputSchema: schemas.webWatcher_getAllWatchers_Output, endpoint: 'webWatcher.getAllWatchers' }, { method: 'GET' }, { type: 'none' }) as Promise<WebWatcher_GetAllWatchers_Output>,
 
       /**
        * POST /webWatcher/toggleWatcherEnabled
        * Auth: user2
        */
       toggleWatcherEnabled: (input: WebWatcher_ToggleWatcherEnabled_Input) =>
-        fetch('/webWatcher/toggleWatcherEnabled', input, { inputSchema: schemas.webWatcher_toggleWatcherEnabled_Input, outputSchema: schemas.webWatcher_toggleWatcherEnabled_Output, endpoint: 'webWatcher.toggleWatcherEnabled' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebWatcher_ToggleWatcherEnabled_Output>,
+        fetch('/webWatcher/toggleWatcherEnabled', input, null, { inputSchema: schemas.webWatcher_toggleWatcherEnabled_Input, outputSchema: schemas.webWatcher_toggleWatcherEnabled_Output, endpoint: 'webWatcher.toggleWatcherEnabled' }, { method: 'POST' }, { type: 'user2' }) as Promise<WebWatcher_ToggleWatcherEnabled_Output>,
 
     },
 

@@ -1,7 +1,5 @@
 import { DateTime, type DurationUnit } from 'luxon';
-import { getApiUrl } from '$lib/helpers';
 import type { ClipboardEntryEnriched, ExpirationStatus } from './types';
-import superagent from 'superagent';
 import { client2 } from '$lib/api';
 
 const enrichEntry = (entry: {
@@ -76,30 +74,5 @@ export const getAllClipboard = async () => {
     return entries.map((entry) => enrichEntry(entry));
 };
 
-export const uploadToClipboard = async (data: {
-    name: string;
-    content: string;
-    file?: File;
-    ttlSeconds: number;
-    isPublic: boolean;
-}) => {
-    const url = getApiUrl() + '/clipboard/addEntry';
-
-    if (data.file) {
-        const request = superagent.post(url).withCredentials();
-
-        if (data.name !== undefined) request.field('name', data.name);
-        if (data.content !== undefined) request.field('content', data.content);
-        if (data.ttlSeconds !== undefined) request.field('ttlSeconds', data.ttlSeconds);
-        if (data.isPublic !== undefined) request.field('isPublic', data.isPublic);
-
-        // TODO have the SDK provide a handler for form content requests
-        // @ts-expect-error We need to fix the typing of File in the SDK
-        await request.attach('file', data.file);
-        return;
-    }
-
-    return client2.clipboard.addEntry(data);
-};
-
+export const uploadToClipboard = client2.clipboard.addEntry;
 export const deleteClipboardEntry = client2.clipboard.deleteEntry;

@@ -98,8 +98,7 @@ export const isPostWithFileRoute = (
     route: Route<unknown, unknown>
 ): route is PostWithFileRoute<unknown, unknown> => {
     return (
-        'file' in route &&
-        typeof (route as PostWithFileRoute<unknown, unknown>).file === 'object'
+        'file' in route && typeof (route as PostWithFileRoute<unknown, unknown>).file === 'object'
     );
 };
 

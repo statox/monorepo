@@ -30,10 +30,7 @@
         noticeMessages = [];
         validateName();
 
-        let file: File | undefined;
-        if (files && files.length) {
-            file = files[0];
-        }
+        const file = files?.[0];
         if (!file) {
             noticeMessages.push({ level: 'error', header: 'A file must be uploaded' });
         }
@@ -44,7 +41,7 @@
 
         try {
             uploading = true;
-            await uploadToReactor({ name, commaSeparatedTags: tags, file });
+            await uploadToReactor({ name, commaSeparatedTags: tags }, file);
             onUpload();
         } catch (error) {
             handleFormError(error);

@@ -67,6 +67,7 @@ export class BaseAPIClient {
     async _fetch(
         path: string,
         body: null | unknown,
+        file: File | Blob | null,
         validation: { inputSchema?: AnySchema; outputSchema: AnySchema; endpoint: string },
         options: { method: 'GET' | 'POST' },
         auth: { type: AuthType }
@@ -80,48 +81,64 @@ export class BaseAPIClient {
         }
 
         const url = `${this.baseURL}${path}`;
-        const headers: Record<string, string> = {};
+        const headers: Record<string, string> = { Accept: 'application/json' };
+        const credentials: RequestCredentials = auth.type === 'user2' ? 'include' : 'omit';
 
-        if (bodyIsDefined) {
-            headers['Content-Type'] = 'application/json';
-        }
         if ((auth.type === 'apikey' || auth.type === 'apikey-iot') && this.apiKey) {
             headers['Authorization'] = `Bearer ${this.apiKey}`;
         }
 
+        let fetchBody: BodyInit | undefined;
+        if (file) {
+            const form = new FormData();
+            if (body) {
+                for (const [key, value] of Object.entries(body as Record<string, unknown>)) {
+                    // This works for now because we send only primitives but sending objects/arrays
+                    // would silently send "[object Object]" If that happens we'll need JSON.stringify
+                    if (value !== undefined) form.append(key, String(value));
+                }
+            }
+            form.append('file', file);
+            fetchBody = form;
+        } else if (bodyIsDefined) {
+            headers['Content-Type'] = 'application/json';
+            fetchBody = JSON.stringify(body);
+        }
+
+        let response: Response;
         try {
-            const response = await this.fetcher(url, {
+            response = await this.fetcher(url, {
                 method: options.method,
                 headers,
-                body: bodyIsDefined ? JSON.stringify(body) : undefined,
-                mode: 'cors',
-                credentials: auth.type === 'user2' ? 'include' : 'omit'
+                body: fetchBody,
+                credentials,
+                mode: 'cors'
             });
-
-            if (!response.ok) {
-                let code = 'INTERNAL_SERVER_ERROR';
-                let reason: string | undefined;
-                try {
-                    const responseBody = await response.json();
-                    if (typeof responseBody?.code === 'string') code = responseBody.code;
-                    if (typeof responseBody?.reason === 'string') reason = responseBody.reason;
-                } catch {
-                    /* body was not JSON */
-                }
-                const error = new ApiError(response.status, code, reason);
-                this.onError?.(error, validation.endpoint);
-                throw error;
-            }
-
-            const output = await response.json();
-            validateOutput(validation.outputSchema, output, validation.endpoint);
-            return output;
-        } catch (error) {
-            if (error instanceof ApiError) throw error;
-            const err = new ApiError(0, 'NETWORK_ERROR', String(error));
-            this.onError?.(err, validation.endpoint);
-            throw err;
+        } catch (err) {
+            const networkError = new ApiError(0, 'NETWORK_ERROR', String(err));
+            this.onError?.(networkError, validation.endpoint);
+            throw networkError;
         }
+
+        if (!response.ok) {
+            let code = 'INTERNAL_SERVER_ERROR';
+            let reason: string | undefined;
+            try {
+                const errorBody = await response.json();
+                if (errorBody != null && typeof errorBody.code === 'string') code = errorBody.code;
+                if (errorBody != null && typeof errorBody.reason === 'string')
+                    reason = errorBody.reason;
+            } catch {
+                // ignore JSON parse errors on error responses
+            }
+            const apiError = new ApiError(response.status, code, reason);
+            this.onError?.(apiError, validation.endpoint);
+            throw apiError;
+        }
+
+        const output = await response.json();
+        validateOutput(validation.outputSchema, output, validation.endpoint);
+        return output;
     }
 }
 
@@ -129,7 +146,9 @@ export function APIClient(config: APIClientConfig) {
     const base = new BaseAPIClient(config);
     return Object.assign(
         base,
-        buildModules((p, b, v, o, a) => base._fetch(p, b, v, o, a))
+        buildModules((path, body, file, validation, options, auth) =>
+            base._fetch(path, body, file, validation, options, auth)
+        )
     );
 }
 

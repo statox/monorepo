@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import nunjucks from 'nunjucks';
-import type { ApiJsonSchema, Route } from '../src/libs/routes/types.js';
+import { isPostWithFileRoute, type ApiJsonSchema, type Route } from '../src/libs/routes/types.js';
 
 type RouteAuth = Route<unknown, unknown>['authentication'];
 
@@ -17,6 +17,7 @@ interface GroupedRoute {
     outputSchema: ApiJsonSchema;
     authentication: RouteAuth;
     clientErrors: string[];
+    hasFile: boolean; // Routes which needs multipart to upload a file
 }
 
 // Group routes by module (first part of path)
@@ -53,7 +54,8 @@ export function groupRoutes(routesList: Route<unknown, unknown>[]): Map<string, 
             inputSchema: route.method === 'post' ? route.inputSchema : undefined,
             outputSchema: route.outputSchema,
             authentication: route.authentication,
-            clientErrors: route.clientErrors ?? []
+            clientErrors: route.clientErrors ?? [],
+            hasFile: isPostWithFileRoute(route)
         };
 
         if (!grouped.has(module)) {
@@ -118,7 +120,7 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
 
             const bodyArg = hasInput ? 'input' : 'null';
 
-            const methodImplementation = nunjucksEnv.render('route.njk', {
+            const methodImplementation = nunjucksEnv.render( 'route.njk', {
                 method: route.method.toUpperCase(),
                 routePath: route.path,
                 authentication: route.authentication,
@@ -131,7 +133,8 @@ export function generateSDK(groupedRoutes: Map<string, GroupedRoute[]>): string 
                 module,
                 pathParamsTransform,
                 endpointBundleType: bundleType,
-                bodyArg
+                bodyArg,
+                hasFile: route.hasFile
             });
 
             methods.push(methodImplementation);

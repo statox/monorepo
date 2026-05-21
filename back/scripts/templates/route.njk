@@ -2,5 +2,5 @@
        * {{ method }} {{ routePath }}
        * Auth: {{ authentication }}
        */
-      {{ name }}: ({{ params }}) =>
-        fetch('{{ routePath }}'{{ pathParamsTransform }}, {{ bodyArg }}, { {% if hasInput %}inputSchema: schemas.{{ inputSchemaName }}, {% endif %}outputSchema: schemas.{{ outputSchemaName }}, endpoint: '{{ module }}.{{ name }}' }, { method: '{{ method }}' }, { type: '{{ authentication }}' }) as Promise<{{ outputType }}>,
+      {{ name }}: ({{ params }}{% if hasFile %}, file: null | File{% endif %}) =>
+        fetch('{{ routePath }}'{{ pathParamsTransform }}, {{ bodyArg }}, {% if hasFile %}file{% else %}null{% endif %}, { {% if hasInput %}inputSchema: schemas.{{ inputSchemaName }}, {% endif %}outputSchema: schemas.{{ outputSchemaName }}, endpoint: '{{ module }}.{{ name }}' }, { method: '{{ method }}' }, { type: '{{ authentication }}' }) as Promise<{{ outputType }}>,

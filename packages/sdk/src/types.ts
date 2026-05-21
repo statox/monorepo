@@ -10,6 +10,7 @@ export interface Endpoint<TOutput, TBody = null> {
 export type FetchFn = (
     path: string,
     body: null | unknown,
+    file: File | Blob | null,
     validation: { inputSchema?: AnySchema; outputSchema: AnySchema; endpoint: string },
     options: { method: 'GET' | 'POST' },
     auth: { type: AuthType }
