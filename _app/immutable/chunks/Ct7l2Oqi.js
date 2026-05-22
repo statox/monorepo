@@ -1,1 +1,0 @@
-import{o as e}from"./CRkhwTdI.js";import{r as t,t as n}from"./BNwUIyK1.js";import{t as r}from"./BDS6sYvL.js";var i=e(r(),1),a=n.reactor.getEntriesForPublic,o=async e=>{let n=t()+`/reactor/addEntry`;await i.default.post(n).withCredentials().field(`name`,e.name).field(`commaSeparatedTags`,e.commaSeparatedTags).attach(`file`,e.file)};export{o as n,a as t};
