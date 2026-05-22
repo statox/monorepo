@@ -404,6 +404,283 @@ describe('BaseAPIClient', () => {
         assert.instanceOf(onError.firstCall.args[0], ApiError);
         assert.propertyVal(onError.firstCall.args[0] as object, 'code', 'UNAUTHORIZED');
     });
+
+    // --- Input validation ---
+
+    it('throws INPUT_VALIDATION_FAILED when body is defined but inputSchema is missing', async () => {
+        const { client, fetchStub } = makeClient();
+
+        try {
+            await client._fetch(
+                '/test/post',
+                { name: 'test' },
+                null,
+                { outputSchema, endpoint: 'test.post' }, // no inputSchema
+                { method: 'POST' },
+                { type: 'none' }
+            );
+            assert.fail('Expected error');
+        } catch (err) {
+            assert.instanceOf(err, ApiError);
+            assert.propertyVal(err as object, 'code', 'INPUT_VALIDATION_FAILED');
+            assert.equal(fetchStub.callCount, 0);
+        }
+    });
+
+    // --- Output validation ---
+
+    it('returns the parsed response body on success', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'hello' })
+        } as Response);
+
+        const result = await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'none' }
+        );
+
+        assert.deepEqual(result, { result: 'hello' });
+    });
+
+    it('does not warn on valid output', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'hello' })
+        } as Response);
+
+        const warnStub = sinon.stub(console, 'warn');
+        try {
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
+            assert.isFalse(warnStub.called);
+        } finally {
+            warnStub.restore();
+        }
+    });
+
+    // --- Error handling ---
+
+    it('HTTP error throws an ApiError instance (not the raw response)', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: false,
+            status: 401,
+            json: () => Promise.resolve({ code: 'UNAUTHORIZED' })
+        } as Response);
+
+        try {
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
+            assert.fail('Expected error');
+        } catch (err) {
+            assert.instanceOf(err, ApiError);
+            assert.propertyVal(err as object, 'httpStatus', 401);
+            assert.propertyVal(err as object, 'code', 'UNAUTHORIZED');
+        }
+    });
+
+    it('falls back to INTERNAL_SERVER_ERROR when error response body is not JSON', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: false,
+            status: 503,
+            json: () => Promise.reject(new SyntaxError('Unexpected token'))
+        } as Response);
+
+        try {
+            await client._fetch(
+                '/test/get',
+                null,
+                null,
+                validation,
+                { method: 'GET' },
+                { type: 'none' }
+            );
+            assert.fail('Expected error');
+        } catch (err) {
+            assert.instanceOf(err, ApiError);
+            assert.propertyVal(err as object, 'httpStatus', 503);
+            assert.propertyVal(err as object, 'code', 'INTERNAL_SERVER_ERROR');
+        }
+    });
+
+    // --- CORS ---
+
+    it('sends mode: cors on all requests', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'none' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.equal((opts as RequestInit).mode, 'cors');
+    });
+
+    it('apikey auth sends credentials: omit', async () => {
+        const { client, fetchStub } = makeClient({ apiKey: 'my-key' });
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'apikey' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.equal((opts as RequestInit).credentials, 'omit');
+    });
+
+    it('apikey-iot auth sends credentials: omit', async () => {
+        const { client, fetchStub } = makeClient({ apiKey: 'my-key' });
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'apikey-iot' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.equal((opts as RequestInit).credentials, 'omit');
+    });
+
+    // --- Auth headers ---
+
+    it('apikey auth omits Authorization header when no apiKey configured', async () => {
+        const { client, fetchStub } = makeClient(); // no apiKey
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'apikey' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        const headers = (opts as RequestInit & { headers: Record<string, string> }).headers;
+        assert.isUndefined(headers['Authorization']);
+    });
+
+    it('user2 auth does not send Authorization header even when apiKey is configured', async () => {
+        const { client, fetchStub } = makeClient({ apiKey: 'my-key' });
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'user2' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        const headers = (opts as RequestInit & { headers: Record<string, string> }).headers;
+        assert.isUndefined(headers['Authorization']);
+    });
+
+    // --- Request body ---
+
+    it('POST with null body and null file sends no body and no Content-Type header', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'ok' })
+        } as Response);
+
+        await client._fetch(
+            '/test/post',
+            null,
+            null,
+            validation,
+            { method: 'POST' },
+            { type: 'none' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.isUndefined((opts as RequestInit).body);
+        const headers = (opts as RequestInit & { headers: Record<string, string> }).headers;
+        assert.notProperty(headers, 'Content-Type');
+    });
+
+    it('file upload with null body sends only the file field in FormData', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'ok' })
+        } as Response);
+
+        const file = new Blob(['data'], { type: 'image/png' });
+        await client._fetch(
+            '/test/upload',
+            null,
+            file,
+            { outputSchema, endpoint: 'test.upload' },
+            { method: 'POST' },
+            { type: 'none' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        const form = (opts as RequestInit).body as FormData;
+        assert.instanceOf(form, FormData);
+        const entries = [...form.entries()];
+        assert.equal(entries.length, 1);
+        assert.equal(entries[0][0], 'file');
+        const appendedFile = entries[0][1] as Blob;
+        assert.instanceOf(appendedFile, Blob);
+        assert.equal(appendedFile.size, file.size);
+        assert.equal(appendedFile.type, file.type);
+    });
 });
 
 describe('APIClient factory', () => {
