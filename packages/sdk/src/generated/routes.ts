@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-05-22T00:48:08.473Z
+// Generated on: 2026-05-24T22:45:39.913Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -1359,88 +1359,6 @@ export const schemas = {
     ],
     "additionalProperties": false
   },
-  "homeTracker_histogramDataPublic_Input": {
-    "type": "object",
-    "required": [
-      "timeWindow"
-    ],
-    "additionalProperties": false,
-    "properties": {
-      "timeWindow": {
-        "type": "string",
-        "enum": [
-          "30m",
-          "3h",
-          "12h",
-          "1d",
-          "3d",
-          "7d",
-          "2w"
-        ]
-      }
-    }
-  },
-  "homeTracker_histogramDataPublic_Output": {
-    "type": "object",
-    "properties": {
-      "sensorNames": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "histogramData": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "object",
-          "properties": {
-            "tempCelsius": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "number"
-              }
-            },
-            "internalTempCelsius": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "number"
-              }
-            },
-            "batteryCharge": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "number"
-              }
-            },
-            "humidity": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "number"
-              }
-            },
-            "internalHumidity": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "number"
-              }
-            },
-            "pressurehPa": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "number"
-              }
-            }
-          },
-          "additionalProperties": false
-        }
-      }
-    },
-    "required": [
-      "sensorNames",
-      "histogramData"
-    ],
-    "additionalProperties": false
-  },
   "homeTracker_updateSensorMetadata_Input": {
     "type": "object",
     "required": [
@@ -2028,10 +1946,6 @@ export type HomeTracker_HistogramData_Input = FromSchema<typeof schemas.homeTrac
 export type HomeTracker_HistogramData_Output = FromSchema<typeof schemas.homeTracker_histogramData_Output>;
 export type HomeTracker_HistogramData = Endpoint<HomeTracker_HistogramData_Output, HomeTracker_HistogramData_Input>;
 export type HomeTracker_HistogramData_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
-export type HomeTracker_HistogramDataPublic_Input = FromSchema<typeof schemas.homeTracker_histogramDataPublic_Input>;
-export type HomeTracker_HistogramDataPublic_Output = FromSchema<typeof schemas.homeTracker_histogramDataPublic_Output>;
-export type HomeTracker_HistogramDataPublic = Endpoint<HomeTracker_HistogramDataPublic_Output, HomeTracker_HistogramDataPublic_Input>;
-export type HomeTracker_HistogramDataPublic_Errors = 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type HomeTracker_UpdateSensorMetadata_Input = FromSchema<typeof schemas.homeTracker_updateSensorMetadata_Input>;
 export type HomeTracker_UpdateSensorMetadata_Output = FromSchema<typeof schemas.homeTracker_updateSensorMetadata_Output>;
 export type HomeTracker_UpdateSensorMetadata = Endpoint<HomeTracker_UpdateSensorMetadata_Output, HomeTracker_UpdateSensorMetadata_Input>;
@@ -2276,13 +2190,6 @@ export function buildModules(fetch: FetchFn) {
        */
       histogramData: (input: HomeTracker_HistogramData_Input) =>
         fetch('/homeTracker/histogramData', input, null, { inputSchema: schemas.homeTracker_histogramData_Input, outputSchema: schemas.homeTracker_histogramData_Output, endpoint: 'homeTracker.histogramData' }, { method: 'POST' }, { type: 'user2' }) as Promise<HomeTracker_HistogramData_Output>,
-
-      /**
-       * POST /homeTracker/histogramDataPublic
-       * Auth: none
-       */
-      histogramDataPublic: (input: HomeTracker_HistogramDataPublic_Input) =>
-        fetch('/homeTracker/histogramDataPublic', input, null, { inputSchema: schemas.homeTracker_histogramDataPublic_Input, outputSchema: schemas.homeTracker_histogramDataPublic_Output, endpoint: 'homeTracker.histogramDataPublic' }, { method: 'POST' }, { type: 'none' }) as Promise<HomeTracker_HistogramDataPublic_Output>,
 
       /**
        * POST /homeTracker/updateSensorMetadata
