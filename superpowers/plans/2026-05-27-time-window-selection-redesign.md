@@ -1,3 +1,25 @@
+# TimeWindowSelection Redesign Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Replace the preset time window dropdown with a stepper (−/number/+) and a unit selector that lets the user enter any positive integer duration.
+
+**Architecture:** Single component rewrite — `TimeWindowSelection.svelte` is the only file touched. Internally it holds two state variables (`selectedValue: number`, `selectedUnit: string`), debounces changes with a `setTimeout`/`clearTimeout` pattern, and converts to `TimeWindow` using the same `startDateMs = now - value * unitMs` formula. The component's external interface (`onSelect` prop, `selectedTimeWindow` store) is unchanged.
+
+**Tech Stack:** Svelte 5 (runes), TypeScript, no component test framework present — validation via `svelte-check` and ESLint.
+
+---
+
+### Task 1: Rewrite TimeWindowSelection.svelte
+
+**Files:**
+- Modify: `front/src/routes/(apps)/home-tracker/components/TimeWindowSelection.svelte`
+
+- [ ] **Step 1: Replace the component with the new implementation**
+
+Overwrite the file with:
+
+```svelte
 <script lang="ts">
     import type { TimeWindow } from '$lib/HomeTracker';
     import { selectedTimeWindow } from '../store';
@@ -109,12 +131,38 @@
     .stepper input {
         width: 3.5rem;
         text-align: center;
-        appearance: textfield; /* Remove the built-in up/down arrows on firefox */
-    }
-
-    .stepper input::-webkit-inner-spin-button,
-    .stepper input::-webkit-outer-spin-button {
-        appearance: none;
-        margin: 0;
     }
 </style>
+```
+
+- [ ] **Step 2: Run svelte-check**
+
+```bash
+cd front && npm run check
+```
+
+Expected: no errors. Fix any type errors before continuing.
+
+- [ ] **Step 3: Run lint**
+
+```bash
+cd front && npm run lint
+```
+
+Expected: no errors. Fix any ESLint issues before continuing.
+
+- [ ] **Step 4: Run prettier check**
+
+```bash
+cd front && npm run prettier
+```
+
+If formatting issues reported, run:
+
+```bash
+cd front && npm run prettier:fix
+```
+
+- [ ] **Step 5: Wait for user validation**
+
+Let them test and give you feedbacks if needed
