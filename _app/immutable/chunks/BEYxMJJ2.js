@@ -1,1 +1,0 @@
-import{t as e}from"./B2_PX9wD.js";var t=e.webWatcher.getAllWatchers,n=e.webWatcher.createWatcher,r=e.webWatcher.deleteWatcher,i=e.webWatcher.toggleWatcherEnabled;export{i,r as n,t as r,n as t};
