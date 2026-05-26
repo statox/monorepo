@@ -1,6 +1,6 @@
-import { DateTime } from 'luxon';
 import { elk } from '../../../databases/elk.js';
-import { SensorLogData } from '../types.js';
+import { SensorLogData, TimeWindow } from '../types.js';
+import { InvalidTimeWindowError } from '../errors.js';
 
 interface SensorRecord {
     '@timestamp': number;
@@ -32,97 +32,50 @@ interface HomeTrackerHistogramData {
     [timestamp: number]: HomeTrackerTimeData;
 }
 
-const getSearchParams = (
-    window: '30m' | '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1M' | '2M' | '6M' | 'alltime'
-) => {
-    let earliestTS: number;
-    let nbBuckets: number;
+const computeNbBuckets = (startDateMs: number, endDateMs: number): number => {
+    const durationMs = endDateMs - startDateMs;
+    const MINUTE = 60_000;
+    const HOUR = 60 * MINUTE;
+    const DAY = 24 * HOUR;
 
-    const oneHour = 60 * 60 * 1000;
-    const oneDay = 24 * oneHour;
-
-    if (window === '30m') {
-        earliestTS = DateTime.now().minus({ minutes: 30 }).toMillis();
-        nbBuckets = 30;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '3h') {
-        earliestTS = Date.now() - 3 * oneHour;
-        nbBuckets = 18;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '12h') {
-        earliestTS = Date.now() - 12 * oneHour;
-        nbBuckets = 72;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '1d') {
-        earliestTS = Date.now() - 24 * oneHour;
-        nbBuckets = 48;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '3d') {
-        earliestTS = Date.now() - 3 * oneDay;
-        nbBuckets = 72;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '7d') {
-        earliestTS = Date.now() - 7 * oneDay;
-        nbBuckets = 200;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '2w') {
-        earliestTS = DateTime.now().minus({ weeks: 2 }).toMillis();
-        nbBuckets = 120;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '1M') {
-        earliestTS = DateTime.now().minus({ months: 1 }).toMillis();
-        nbBuckets = 124;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '2M') {
-        earliestTS = DateTime.now().minus({ months: 2 }).toMillis();
-        nbBuckets = 248;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === '6M') {
-        earliestTS = DateTime.now().minus({ months: 6 }).toMillis();
-        nbBuckets = 180;
-        return { earliestTS, nbBuckets };
-    }
-    if (window === 'alltime') {
-        const startDateTime = DateTime.fromObject({ year: 2024, month: 8, day: 30 });
-        earliestTS = startDateTime.toMillis();
-        nbBuckets = Math.max(startDateTime.diffNow('days').get('days'), 200);
-        return { earliestTS, nbBuckets };
+    let targetIntervalMs: number;
+    if (durationMs <= 2 * HOUR) {
+        targetIntervalMs = 2 * MINUTE;
+    } else if (durationMs <= DAY) {
+        targetIntervalMs = 10 * MINUTE;
+    } else if (durationMs <= 14 * DAY) {
+        targetIntervalMs = HOUR;
+    } else if (durationMs <= 90 * DAY) {
+        targetIntervalMs = 6 * HOUR;
+    } else {
+        targetIntervalMs = DAY;
     }
 
-    earliestTS = Date.now() - oneDay;
-    nbBuckets = 48;
-    return { earliestTS, nbBuckets };
+    return Math.ceil(durationMs / targetIntervalMs);
 };
 
-export const getHistogramData = async (
-    window: '30m' | '3h' | '12h' | '1d' | '3d' | '7d' | '2w' | '1M' | '2M' | '6M' | 'alltime'
-) => {
-    const { earliestTS, nbBuckets } = getSearchParams(window);
+export const getHistogramData = async (timeWindow: TimeWindow) => {
+    const { startDateMs, endDateMs } = timeWindow;
+
+    if (startDateMs >= endDateMs) {
+        throw new InvalidTimeWindowError();
+    }
+
+    const nbBuckets = computeNbBuckets(startDateMs, endDateMs);
 
     const result = await elk.search<SensorRecord>({
         index: 'data-home-tracker',
-        // We don't need results in hits as the results we want are in the aggregation, hence size 0
         size: 0,
         query: {
             range: {
                 '@timestamp': {
-                    gte: earliestTS
+                    gte: startDateMs,
+                    lte: endDateMs
                 }
             }
         },
         aggregations: {
-            // We have to aggregate by date first to get the same buckets for all sensors
             byDate: {
-                // TODO might need to add some boundaries param like "extended_bounds" in case data is missing
                 auto_date_histogram: {
                     field: '@timestamp',
                     buckets: nbBuckets

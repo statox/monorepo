@@ -3,7 +3,8 @@ import { PostRoute, RouteHandler } from '../types.js';
 import { getHistogramData } from '../../modules/homeTracker/index.js';
 
 const handler: RouteHandler<Input> = (params) => {
-    params.loggableContext.addData('timewindow', params.input.timeWindow);
+    params.loggableContext.addData('timewindowStartMs', params.input.timeWindow.startDateMs);
+    params.loggableContext.addData('timewindowEndMs', params.input.timeWindow.endDateMs);
     return getHistogramData(params.input.timeWindow);
 };
 
@@ -13,8 +14,13 @@ const inputSchema = {
     additionalProperties: false,
     properties: {
         timeWindow: {
-            type: 'string',
-            enum: ['30m', '3h', '12h', '1d', '3d', '7d', '2w', '1M', '2M', '6M', 'alltime']
+            type: 'object',
+            required: ['startDateMs', 'endDateMs'],
+            additionalProperties: false,
+            properties: {
+                startDateMs: { type: 'number' },
+                endDateMs: { type: 'number' }
+            }
         }
     }
 } as const;
@@ -61,5 +67,6 @@ export const route: PostRoute<Input, FromSchema<typeof outputSchema>> = {
     scope: 'homeTracker',
     handler,
     authentication: 'user2',
+    clientErrors: ['INVALID_TIME_WINDOW'],
     outputSchema
 };
