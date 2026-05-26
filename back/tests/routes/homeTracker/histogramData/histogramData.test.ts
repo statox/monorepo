@@ -191,8 +191,9 @@ describe('/homeTracker/histogramData', () => {
 
                 // Only the 6h-ago record is in the window; the current-time record is excluded
                 assert.sameMembers(sensorNames, ['salon']);
-                const allTemps = Object.values(histogramData as Record<string, { tempCelsius?: Record<string, number> }>)
-                    .flatMap((bucket) => Object.values(bucket.tempCelsius ?? {}));
+                const allTemps = Object.values(
+                    histogramData as Record<string, { tempCelsius?: Record<string, number> }>
+                ).flatMap((bucket) => Object.values(bucket.tempCelsius ?? {}));
                 assert.notInclude(allTemps, 99, 'data after endDateMs must be excluded');
             });
     });
