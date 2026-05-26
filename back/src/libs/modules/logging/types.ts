@@ -88,6 +88,8 @@ export type LoggableProperties = {
     timestampLatest?: number;
     timestampOldest?: number;
     timewindow?: string;
+    timewindowStartMs?: number;
+    timewindowEndMs?: number;
     trend?: string;
     url?: string;
     userId?: number;

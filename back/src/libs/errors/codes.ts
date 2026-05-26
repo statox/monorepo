@@ -28,6 +28,7 @@ export const ERROR_CODES = [
     'INVALID_URL',
     // HomeTracker
     'SENSOR_NOT_FOUND',
+    'INVALID_TIME_WINDOW',
     // System (not forwarded to client)
     'OUTPUT_VALIDATION_FAILED',
     'INTERNAL_SERVER_ERROR',

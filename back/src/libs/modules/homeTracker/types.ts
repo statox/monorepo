@@ -1,5 +1,10 @@
 import { ApiJsonSchema } from '../../routes/types.js';
 
+export interface TimeWindow {
+    startDateMs: number;
+    endDateMs: number;
+}
+
 export interface SensorRawData {
     sensorName: string;
 
