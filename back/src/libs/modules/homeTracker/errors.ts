@@ -5,3 +5,9 @@ export class SensorNotFoundError extends AppError {
         super({ code: 'SENSOR_NOT_FOUND', httpStatus: 400 });
     }
 }
+
+export class InvalidTimeWindowError extends AppError {
+    constructor() {
+        super({ code: 'INVALID_TIME_WINDOW', httpStatus: 400 });
+    }
+}
