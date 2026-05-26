@@ -1,10 +1,37 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 #
 # This is a script to be run locally to deploy the API to our prod server
 #
+
+set -euo pipefail
+
+# Parse arguments
+SKIP_TESTS=false
+for arg in "$@"; do
+    case "$arg" in
+        --skip-tests) SKIP_TESTS=true ;;
+        *) echo "Unknown argument: $arg" >&2; exit 1 ;;
+    esac
+done
+
+# Build
+echo "Building..."
+npm run build
+
+# Lint + Prettier
+echo "Checking lint and formatting..."
+npm run check
+
+# Tests
+if [ "$SKIP_TESTS" = true ]; then
+    echo "Skipping tests (--skip-tests passed)."
+else
+    echo "Running tests..."
+    npm run tests:framework -- --bail --retries 2
+    npm run tests:scripts -- --bail --retries 2
+    npm run tests:packages -- --bail --retries 2
+fi
 
 # Prod server access
 SSH_HOST='panda.statox.fr'
