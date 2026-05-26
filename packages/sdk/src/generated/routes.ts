@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-05-24T22:45:39.913Z
+// Generated on: 2026-05-26T21:58:32.413Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -1281,20 +1281,20 @@ export const schemas = {
     "additionalProperties": false,
     "properties": {
       "timeWindow": {
-        "type": "string",
-        "enum": [
-          "30m",
-          "3h",
-          "12h",
-          "1d",
-          "3d",
-          "7d",
-          "2w",
-          "1M",
-          "2M",
-          "6M",
-          "alltime"
-        ]
+        "type": "object",
+        "required": [
+          "startDateMs",
+          "endDateMs"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "startDateMs": {
+            "type": "number"
+          },
+          "endDateMs": {
+            "type": "number"
+          }
+        }
       }
     }
   },
@@ -1945,7 +1945,7 @@ export type HomeTracker_GetWeatherForecast_Errors = 'INTERNAL_SERVER_ERROR' | 'N
 export type HomeTracker_HistogramData_Input = FromSchema<typeof schemas.homeTracker_histogramData_Input>;
 export type HomeTracker_HistogramData_Output = FromSchema<typeof schemas.homeTracker_histogramData_Output>;
 export type HomeTracker_HistogramData = Endpoint<HomeTracker_HistogramData_Output, HomeTracker_HistogramData_Input>;
-export type HomeTracker_HistogramData_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type HomeTracker_HistogramData_Errors = 'INVALID_TIME_WINDOW' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type HomeTracker_UpdateSensorMetadata_Input = FromSchema<typeof schemas.homeTracker_updateSensorMetadata_Input>;
 export type HomeTracker_UpdateSensorMetadata_Output = FromSchema<typeof schemas.homeTracker_updateSensorMetadata_Output>;
 export type HomeTracker_UpdateSensorMetadata = Endpoint<HomeTracker_UpdateSensorMetadata_Output, HomeTracker_UpdateSensorMetadata_Input>;
