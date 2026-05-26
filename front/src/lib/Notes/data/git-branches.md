@@ -9,7 +9,6 @@ See [stackoverflow](https://stackoverflow.com/a/28464339)
 git remote prune origin --dry-run
 ```
 
-
 2. Delete remote branches
 
 ```bash
