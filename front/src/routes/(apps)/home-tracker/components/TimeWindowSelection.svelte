@@ -8,6 +8,8 @@
     }
     const { onSelect }: Props = $props();
 
+    const ALLTIME_START_MS = new Date('2024-08-30T00:00:00Z').getTime();
+
     const authenticatedOptions = [
         { name: '30 minutes', value: '30m' },
         { name: '3 hours', value: '3h' },
@@ -33,15 +35,42 @@
     ];
 
     const options = $user ? authenticatedOptions : unauthenticatedOptions;
+
+    const MINUTE = 60_000;
+    const HOUR = 60 * MINUTE;
+    const DAY = 24 * HOUR;
+
+    const offsetMap: Record<string, number> = {
+        '30m': 30 * MINUTE,
+        '3h': 3 * HOUR,
+        '12h': 12 * HOUR,
+        '1d': DAY,
+        '3d': 3 * DAY,
+        '7d': 7 * DAY,
+        '2w': 14 * DAY,
+        '1M': 30 * DAY,
+        '2M': 60 * DAY,
+        '6M': 182 * DAY
+    };
+
+    const toTimeWindow = (value: string): TimeWindow => {
+        const now = Date.now();
+        if (value === 'alltime') return { startDateMs: ALLTIME_START_MS, endDateMs: now };
+        return { startDateMs: now - offsetMap[value], endDateMs: now };
+    };
+
+    let selectedValue = $state('1d');
+
+    const handleChange = () => {
+        const tw = toTimeWindow(selectedValue);
+        selectedTimeWindow.set(tw);
+        onSelect(tw);
+    };
 </script>
 
 <div class="time-window-select">
     <label for="time-window-select" class="far fa-calendar-alt"></label>
-    <select
-        id="time-window-select"
-        bind:value={$selectedTimeWindow}
-        onchange={() => onSelect($selectedTimeWindow)}
-    >
+    <select id="time-window-select" bind:value={selectedValue} onchange={handleChange}>
         {#each options as option}
             <option value={option.value}>{option.name}</option>
         {/each}
