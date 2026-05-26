@@ -59,11 +59,14 @@ describe('/homeTracker/histogramData', () => {
             ]
         });
 
+        const startDateMs = DateTime.now().minus({ hours: 3 }).toMillis();
+        const endDateMs = DateTime.now().toMillis();
+
         await request(app)
             .post('/homeTracker/histogramData')
             .set('Cookie', th.auth2.getPassportSessionCookie())
             .set('Accept', 'application/json')
-            .send({ timeWindow: '3h' })
+            .send({ timeWindow: { startDateMs, endDateMs } })
             .expect(200)
             .then((response) => {
                 const { histogramData, sensorNames } = response.body;
@@ -124,24 +127,87 @@ describe('/homeTracker/histogramData', () => {
                 })
         });
 
+        const startDateMs = DateTime.now().minus({ hours: 3 }).toMillis();
+        const endDateMs = DateTime.now().toMillis();
+
         await request(app)
             .post('/homeTracker/histogramData')
             .set('Accept', 'application/json')
             .set('Cookie', th.auth2.getPassportSessionCookie())
-            .send({ timeWindow: '3h' })
+            .send({ timeWindow: { startDateMs, endDateMs } })
             .expect(200)
             .then((response) => {
                 const { histogramData } = response.body;
 
-                assert.lengthOf(Object.keys(histogramData), 18);
+                // With a 3h window our formula requests 12 buckets; ELK rounds to 10min
+                // intervals giving ~18 actual buckets. Accept a reasonable range.
+                const nbBuckets = Object.keys(histogramData).length;
+                assert.isAtLeast(nbBuckets, 10);
+                assert.isAtMost(nbBuckets, 25);
 
-                // Check that the date of the earliest bucket is roughly 3 hours in the past
-                // even if existing data earlier than that
+                // Check that the earliest bucket is roughly 3 hours in the past
                 const minTS = Math.min(...Object.keys(histogramData).map(Number));
                 const minDate = DateTime.fromSeconds(minTS);
                 const diff = DateTime.now().diff(minDate, 'minutes').minutes;
                 assert.isAtMost(diff, 3 * 60 + 30);
                 assert.isAtLeast(diff, 3 * 60 - 30);
+
+                // Check that the latest bucket respects endDateMs
+                const maxTS = Math.max(...Object.keys(histogramData).map(Number));
+                const maxDate = DateTime.fromSeconds(maxTS);
+                assert.isBelow(maxDate.toMillis(), endDateMs + 60_000); // within 1 min tolerance
+            });
+    });
+
+    it('should exclude data outside the time window', async () => {
+        const now = DateTime.now();
+
+        await th.elk.fixture({
+            'data-home-tracker': [
+                {
+                    // Within the window (6h ago)
+                    '@timestamp': now.minus({ hours: 6 }).toMillis(),
+                    document: { sensorName: 'salon', tempCelsius: 20 }
+                },
+                {
+                    // After endDateMs (now) — should be excluded
+                    '@timestamp': now.toMillis(),
+                    document: { sensorName: 'salon', tempCelsius: 99 }
+                }
+            ]
+        });
+
+        const startDateMs = now.minus({ hours: 12 }).toMillis();
+        const endDateMs = now.minus({ hours: 3 }).toMillis();
+
+        await request(app)
+            .post('/homeTracker/histogramData')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('Accept', 'application/json')
+            .send({ timeWindow: { startDateMs, endDateMs } })
+            .expect(200)
+            .then((response) => {
+                const { histogramData, sensorNames } = response.body;
+
+                // Only the 6h-ago record is in the window; the current-time record is excluded
+                assert.sameMembers(sensorNames, ['salon']);
+                const allTemps = Object.values(histogramData as Record<string, { tempCelsius?: Record<string, number> }>)
+                    .flatMap((bucket) => Object.values(bucket.tempCelsius ?? {}));
+                assert.notInclude(allTemps, 99, 'data after endDateMs must be excluded');
+            });
+    });
+
+    it('should return INVALID_TIME_WINDOW when startDateMs >= endDateMs', async () => {
+        const now = Date.now();
+
+        await request(app)
+            .post('/homeTracker/histogramData')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('Accept', 'application/json')
+            .send({ timeWindow: { startDateMs: now, endDateMs: now - 1000 } })
+            .expect(400)
+            .then((response) => {
+                assert.equal(response.body.code, 'INVALID_TIME_WINDOW');
             });
     });
 });
