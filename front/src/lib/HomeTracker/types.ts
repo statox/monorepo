@@ -61,9 +61,10 @@ export interface SensorLogData {
     timeToSendMs?: number;
 }
 
-export type TimeWindowPublic = '30m' | '3h' | '12h' | '1d' | '3d' | '7d' | '2w';
-
-export type TimeWindow = TimeWindowPublic | '6M' | 'alltime';
+export interface TimeWindow {
+    startDateMs: number;
+    endDateMs: number;
+}
 
 export type Trend = 'falling' | 'rising' | 'steady' | 'unknown';
 export interface WeatherForecast {
