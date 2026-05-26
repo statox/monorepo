@@ -1,6 +1,7 @@
 import { elk } from '../../../databases/elk.js';
 import { SensorLogData, TimeWindow } from '../types.js';
 import { InvalidTimeWindowError } from '../errors.js';
+import { getMonitoredSensors } from './monitorSensors.js';
 
 interface SensorRecord {
     '@timestamp': number;
@@ -63,15 +64,29 @@ export const getHistogramData = async (timeWindow: TimeWindow) => {
 
     const nbBuckets = computeNbBuckets(startDateMs, endDateMs);
 
+    const monitoredSensors = await getMonitoredSensors();
+    const monitoredSensorNames = monitoredSensors.map((s) => s.name);
+
     const result = await elk.search<SensorRecord>({
         index: 'data-home-tracker',
         size: 0,
         query: {
-            range: {
-                '@timestamp': {
-                    gte: startDateMs,
-                    lte: endDateMs
-                }
+            bool: {
+                filter: [
+                    {
+                        range: {
+                            '@timestamp': {
+                                gte: startDateMs,
+                                lte: endDateMs
+                            }
+                        }
+                    },
+                    {
+                        terms: {
+                            'document.sensorName.keyword': monitoredSensorNames
+                        }
+                    }
+                ]
             }
         },
         aggregations: {

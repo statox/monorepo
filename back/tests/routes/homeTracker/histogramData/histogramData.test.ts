@@ -8,6 +8,13 @@ describe('/homeTracker/histogramData', () => {
     beforeEach('Flush ELK', th.elk.flush);
 
     it('should average the data in the same bucket', async () => {
+        await th.mysql.fixture({
+            HomeTrackerSensor: [
+                { name: 'salon', isMonitored: 1 },
+                { name: 'jardiniere', isMonitored: 1 }
+            ]
+        });
+
         await th.elk.fixture({
             'data-home-tracker': [
                 {
@@ -105,6 +112,10 @@ describe('/homeTracker/histogramData', () => {
     });
 
     it('should create buckets based on the time', async () => {
+        await th.mysql.fixture({
+            HomeTrackerSensor: [{ name: 'salon', isMonitored: 1 }]
+        });
+
         await th.elk.fixture({
             // Create logs every 5 minutes for the past 4 hours
             'data-home-tracker': new Array(4 * 6 * 2)
@@ -159,8 +170,46 @@ describe('/homeTracker/histogramData', () => {
             });
     });
 
+    it('should only return data for monitored sensors', async () => {
+        await th.mysql.fixture({
+            HomeTrackerSensor: [{ name: 'salon', isMonitored: 1 }]
+        });
+
+        await th.elk.fixture({
+            'data-home-tracker': [
+                {
+                    '@timestamp': DateTime.now().toMillis(),
+                    document: { sensorName: 'salon', tempCelsius: 20 }
+                },
+                {
+                    '@timestamp': DateTime.now().toMillis(),
+                    document: { sensorName: 'jardiniere', tempCelsius: 99 }
+                }
+            ]
+        });
+
+        const startDateMs = DateTime.now().minus({ hours: 1 }).toMillis();
+        const endDateMs = DateTime.now().toMillis();
+
+        await request(app)
+            .post('/homeTracker/histogramData')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('Accept', 'application/json')
+            .send({ timeWindow: { startDateMs, endDateMs } })
+            .expect(200)
+            .then((response) => {
+                const { sensorNames } = response.body;
+                assert.sameMembers(sensorNames, ['salon']);
+                assert.notInclude(sensorNames, 'jardiniere');
+            });
+    });
+
     it('should exclude data outside the time window', async () => {
         const now = DateTime.now();
+
+        await th.mysql.fixture({
+            HomeTrackerSensor: [{ name: 'salon', isMonitored: 1 }]
+        });
 
         await th.elk.fixture({
             'data-home-tracker': [

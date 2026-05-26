@@ -10,7 +10,7 @@ type MonitoredSensorsResult = {
     lastAlertDateUnix: null | number;
 };
 
-const getMonitoredSensors = async (): Promise<MonitoredSensorsResult[]> => {
+export const getMonitoredSensors = async (): Promise<MonitoredSensorsResult[]> => {
     const [rows] = await db.query<(MonitoredSensorsResult & RowDataPacket)[]>(
         `SELECT name, lastSyncDateUnix, lastAlertDateUnix
         FROM HomeTrackerSensor
