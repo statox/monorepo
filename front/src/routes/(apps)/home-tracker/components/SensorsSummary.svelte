@@ -1,19 +1,17 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
-    import { getSensorsMetadata, type TimeWindow } from '$lib/HomeTracker';
+    import { getSensorsMetadata } from '$lib/HomeTracker';
     import SensorCard from './SensorCard/Main.svelte';
-    import { selectedTimeWindow } from '../store';
 
-    const refreshData = async (timeWindowInput: TimeWindow) => {
-        selectedTimeWindow.set(timeWindowInput);
+    const refreshData = async () => {
         const sensorsDetails = await getSensorsMetadata();
         return sensorsDetails;
     };
 
-    let apiData = $state(refreshData($selectedTimeWindow));
+    let apiData = $state(refreshData());
 
     document.addEventListener('HomeTracker-RefreshData', () => {
-        apiData = refreshData($selectedTimeWindow);
+        apiData = refreshData();
     });
 </script>
 

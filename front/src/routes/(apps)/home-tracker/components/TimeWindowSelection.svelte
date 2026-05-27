@@ -1,23 +1,11 @@
 <script lang="ts">
     import type { TimeWindow } from '$lib/HomeTracker';
-    import { selectedTimeWindow } from '../store';
+    import { selectedTimeWindowSelection, toTimeWindow } from '../store';
 
     interface Props {
         onSelect: (newTimeWindow: TimeWindow) => void;
     }
     const { onSelect }: Props = $props();
-
-    const MINUTE = 60_000;
-    const HOUR = 60 * MINUTE;
-    const DAY = 24 * HOUR;
-
-    const unitMs: Record<string, number> = {
-        minute: MINUTE,
-        hour: HOUR,
-        day: DAY,
-        month: 30 * DAY,
-        year: 365 * DAY
-    };
 
     const units = [
         { label: 'minute', value: 'minute' },
@@ -27,21 +15,16 @@
         { label: 'year', value: 'year' }
     ];
 
-    let selectedValue = $state(1);
-    let selectedUnit = $state('day');
+    let selectedValue = $state($selectedTimeWindowSelection.value);
+    let selectedUnit = $state($selectedTimeWindowSelection.unit);
     let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-
-    const toTimeWindow = (): TimeWindow => {
-        const now = Date.now();
-        return { startDateMs: now - selectedValue * unitMs[selectedUnit], endDateMs: now };
-    };
 
     const notify = () => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-            const tw = toTimeWindow();
-            selectedTimeWindow.set(tw);
-            onSelect(tw);
+            const selection = { value: selectedValue, unit: selectedUnit };
+            selectedTimeWindowSelection.set(selection);
+            onSelect(toTimeWindow(selection));
         }, 500);
     };
 

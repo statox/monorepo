@@ -15,16 +15,15 @@
     ];
 
     const refreshData = async (timeWindowInput: TimeWindow) => {
-        selectedTimeWindow.set(timeWindowInput);
-        const histogramData = await getHistogramData({ timeWindow: $selectedTimeWindow });
+        const histogramData = await getHistogramData({ timeWindow: timeWindowInput });
         const sensorsDetails = await getSensorsMetadata();
         return { histogramData, sensorsDetails };
     };
 
-    let apiData = $state(refreshData($selectedTimeWindow));
+    let apiData = $state(refreshData(selectedTimeWindow.get()));
 
     document.addEventListener('HomeTracker-RefreshData', () => {
-        apiData = refreshData($selectedTimeWindow);
+        apiData = refreshData(selectedTimeWindow.get());
     });
 </script>
 
