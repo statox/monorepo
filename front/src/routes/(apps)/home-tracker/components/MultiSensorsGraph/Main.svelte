@@ -86,7 +86,17 @@
         return color + alpha;
     };
 
-    const commonGraphSettings = {
+    const pointRadius = $derived.by(() => {
+        // TODO This function should also take into consideration
+        // the width of the graph to better handle mobile
+        const nbPoints = allDates.length;
+
+        if (nbPoints < 30) return 6;
+        if (nbPoints < 200) return 4;
+        return 2;
+    });
+
+    const commonGraphSettings = $derived({
         lineTension: 0.3,
         backgroundColor: 'rgba(225, 204, 230, .3)',
         borderCapStyle: 'butt' as const,
@@ -98,9 +108,9 @@
         pointHoverBackgroundColor: 'rgb(0, 0, 0)',
         pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
         pointHoverBorderWidth: 2,
-        pointRadius: 1,
+        pointRadius,
         pointHitRadius: 10
-    };
+    });
 
     const datasets = $derived(
         sensorNames.reduce((datasets, sensor) => {
