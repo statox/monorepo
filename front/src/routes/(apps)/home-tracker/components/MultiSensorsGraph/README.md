@@ -73,3 +73,43 @@ A custom Chart.js `afterDraw` plugin draws a white vertical line through the act
 ## Lifecycle note
 
 The Chart instance is created once in `onMount`. The chart does **not** react to prop changes after mount — if `histogramData` or `graphType` changes, the parent must remount the component (e.g. via a keyed `{#each}` or conditional block). This is the current behavior in `SensorsHistogram.svelte` where the entire graph list is re-rendered when the time window changes.
+
+---
+
+## Metrics.svelte
+
+A stats panel rendered below each graph. Accepts the same four props as `Main.svelte`. Manages its own visibility — `Main.svelte` always renders it unconditionally.
+
+### Toggle
+
+A "see stats / hide stats" button at the top of the component controls visibility. State is persisted in `localStorage` under the key `home-tracker-show-metrics` using `localStore` from `$lib/localStore.svelte`. Default: visible. Because the key is shared across all six graph instances, toggling one toggles all.
+
+### Stats computed
+
+`computeMetricsStats` (from `$lib/HomeTracker/service.ts`) is called via `$derived` with the current `metricProperty` and `sensorsData`. It returns one `SensorMetricStats` per sensor that has data for the metric. Sensors with no data points are omitted.
+
+Each `SensorMetricStats` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `sensorName` | `string` | |
+| `hexColor` | `string` | From `SensorMetadata`, used to color the name |
+| `iconPath` | `string` | From `SensorMetadata` |
+| `first` | `MetricDataPoint` | Lowest timestamp in the window |
+| `last` | `MetricDataPoint` | Highest timestamp in the window |
+| `min` | `MetricDataPoint` | Lowest value (carries its own timestamp) |
+| `max` | `MetricDataPoint` | Highest value (carries its own timestamp) |
+| `average` | `number` | Mean of all data points |
+
+`MetricDataPoint` is `{ ts: number; value: number }`. The temp offset from `SensorMetadata` is applied to all values when `metricProperty === 'tempCelsius'`, matching the graph's own offset logic.
+
+### Layout
+
+CSS-only responsive switch at 600px:
+
+- **Mobile** — one card per sensor with a 3-column grid (label / timestamp / value).
+- **Desktop** — a table with columns: Sensor / First / Last / Min / Max / Avg / Delta.
+
+Values use `<ValueWithUnit>` (from `$lib/components/ValueWithUnit`). The unit string comes from `graphsProperties[graphType].metricUnitSymbol`.
+
+Delta uses `<DataTrend>` (from `../DataTrend.svelte`) with `first` as old and `last` as new, showing direction arrow + magnitude / duration.
