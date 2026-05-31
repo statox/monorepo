@@ -1,8 +1,8 @@
 <script lang="ts">
     import { Notice } from '$lib/components/Notice';
     import ButtonSwitch from '$lib/components/ButtonSwitch/Main.svelte';
-    import { getYearlyEphemerides, processYearlyEphemerides } from '$lib/HomeTracker';
-    import type { YearlyEphemerisDay } from '$lib/HomeTracker';
+    import { getYearlyEphemerides, processYearlyEphemerides } from '$lib/Ephemerides';
+    import type { YearlyEphemerisDay } from '$lib/Ephemerides';
 
     const LUNAR_DISTANCE_MIN = 55;
     const LUNAR_DISTANCE_MAX = 64;

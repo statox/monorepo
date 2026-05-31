@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { DateTime } from 'luxon';
-    import { getMoonPhaseIconURL, type EnrichedMoonState } from '$lib/HomeTracker';
+    import { getMoonPhaseIconURL, type EnrichedMoonState } from '$lib/Ephemerides';
 
     interface Props {
         upcomingLunarStates: {

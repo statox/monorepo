@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getTodayEphemerides } from '$lib/HomeTracker';
+    import { getTodayEphemerides } from '$lib/Ephemerides';
     import { HeadIOS } from '$lib/components/HeadIOS';
     import { pageMetadataStore } from '$lib/components/Header';
     import { Notice } from '$lib/components/Notice';

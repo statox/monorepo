@@ -1,6 +1,6 @@
 <script lang="ts">
     import { DateTime } from 'luxon';
-    import { getMoonPhasePictureURL } from '$lib/HomeTracker';
+    import { getMoonPhasePictureURL } from '$lib/Ephemerides';
 
     let { moonState, sunState } = $props();
 </script>
