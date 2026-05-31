@@ -156,17 +156,22 @@
     }
 
     .sensor-header {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
         margin-bottom: 0.4rem;
         font-weight: bold;
+        text-align: left;
     }
 
     .sensor-icon {
+        display: inline-block;
+        vertical-align: middle;
         height: 1em;
         width: 1em;
         object-fit: contain;
+        margin-right: 0.3rem;
+    }
+
+    .sensor-name {
+        vertical-align: middle;
     }
 
     .stat-grid {
@@ -208,9 +213,6 @@
     }
 
     .sensor-cell {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
         white-space: nowrap;
     }
 </style>
