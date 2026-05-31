@@ -8,6 +8,7 @@
     import { ValueWithUnit } from '$lib/components/ValueWithUnit';
     import DataTrend from '../DataTrend.svelte';
     import { graphsProperties, type GraphType } from './types';
+    import { showMetrics } from './store';
 
     interface Props {
         sensorsData: SensorMetadata[];
@@ -23,8 +24,14 @@
     const stats = $derived(
         computeMetricsStats(histogramData, sensorNames, sensorsData, metricProperty)
     );
+
 </script>
 
+<button class="toggle-stats" onclick={() => showMetrics.update((v) => !v)}>
+    {$showMetrics ? 'hide stats' : 'see stats'}
+</button>
+
+{#if $showMetrics}
 <!-- Mobile: cards -->
 <div class="mobile-cards">
     {#each stats as stat}
@@ -124,8 +131,24 @@
         </tbody>
     </table>
 </div>
+{/if}
 
 <style>
+    .toggle-stats {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.85em;
+        color: var(--nc-lk-1);
+        padding: 0.25rem 0;
+        display: block;
+        margin-top: 0.25rem;
+    }
+
+    .toggle-stats:hover {
+        text-decoration: underline;
+    }
+
     .mobile-cards {
         display: flex;
         flex-direction: column;

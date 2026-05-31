@@ -178,7 +178,6 @@
     });
 
     let chartElement: HTMLCanvasElement | undefined = $state();
-    let showMetrics = $state(true);
     onMount(() => {
         if (chartElement === undefined) {
             throw new Error('Missing canvas element to draw in');
@@ -195,31 +194,10 @@
 
 <canvas class="graph-canvas" bind:this={chartElement}></canvas>
 
-<button class="toggle-metrics" onclick={() => (showMetrics = !showMetrics)}>
-    {showMetrics ? 'hide stats' : 'see stats'}
-</button>
-
-{#if showMetrics}
-    <Metrics {sensorsData} {sensorNames} {histogramData} {graphType} />
-{/if}
+<Metrics {sensorsData} {sensorNames} {histogramData} {graphType} />
 
 <style>
     .graph-canvas {
         max-height: 300px;
-    }
-
-    .toggle-metrics {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 0.85em;
-        color: var(--nc-lk-1);
-        padding: 0.25rem 0;
-        display: block;
-        margin-top: 0.25rem;
-    }
-
-    .toggle-metrics:hover {
-        text-decoration: underline;
     }
 </style>
