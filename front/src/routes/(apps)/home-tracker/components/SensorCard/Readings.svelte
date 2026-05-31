@@ -8,11 +8,18 @@
     }
 
     let { sensor }: Props = $props();
+
+    const adjustedTemperature = $derived.by(() => {
+        if (sensor.lastLogData.tempCelsius !== undefined) {
+            return sensor.lastLogData.tempCelsius + sensor.tempOffset;
+        }
+        return undefined;
+    });
 </script>
 
 <div class="sensor-data-records-container-with-trend">
     <i class="unit-icon fas fa-thermometer-half"></i>
-    <ValueWithUnit value={sensor.lastLogData.tempCelsius} unitString="°C" precision={1} />
+    <ValueWithUnit value={adjustedTemperature} unitString="°C" precision={1} />
     <DataTrend
         oldValue={sensor.oneHourAgoLogData.tempCelsius || 0}
         newValue={sensor.lastLogData.tempCelsius || 0}
