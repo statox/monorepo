@@ -14,11 +14,11 @@
     import {
         formatRecordTimestampToHuman,
         type HomeTrackerHistogramData,
-        type HomeTrackerTimeData,
         type SensorMetadata
     } from '$lib/HomeTracker';
-    import type { GraphType } from './types';
+    import { graphsProperties, type GraphType } from './types';
     import { onMount } from 'svelte';
+    import Metrics from './Metrics.svelte';
 
     Chart.register(
         CategoryScale,
@@ -40,33 +40,6 @@
 
     let { sensorsData, sensorNames, histogramData, graphType }: Props = $props();
 
-    const graphsProperties: Record<
-        GraphType,
-        {
-            graphName: string;
-            metricUnitSymbol: string;
-            metricProperty: keyof HomeTrackerTimeData;
-        }
-    > = {
-        temperature: {
-            graphName: 'Temperature',
-            metricProperty: 'tempCelsius',
-            metricUnitSymbol: 'C'
-        },
-        battery: { graphName: 'Battery', metricProperty: 'batteryCharge', metricUnitSymbol: 'V' },
-        humidity: { graphName: 'Humidity', metricProperty: 'humidity', metricUnitSymbol: '%' },
-        pressure: { graphName: 'Pressure', metricProperty: 'pressurehPa', metricUnitSymbol: 'hPa' },
-        internalTemperature: {
-            graphName: 'Internal Temperature',
-            metricProperty: 'internalTempCelsius',
-            metricUnitSymbol: 'C'
-        },
-        internalHumidity: {
-            graphName: 'Internal Humidity',
-            metricProperty: 'internalHumidity',
-            metricUnitSymbol: '%'
-        }
-    };
     const { graphName, metricUnitSymbol, metricProperty } = $derived(graphsProperties[graphType]);
 
     const allDates = $derived(Object.keys(histogramData).sort((a, b) => Number(a) - Number(b)));
@@ -220,6 +193,8 @@
 <h2>{graphName} ({metricUnitSymbol})</h2>
 
 <canvas class="graph-canvas" bind:this={chartElement}></canvas>
+
+<Metrics {sensorNames} {sensorsData} {histogramData} {graphType} />
 
 <style>
     .graph-canvas {
