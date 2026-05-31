@@ -21,6 +21,9 @@ export const getSensorsDashboardData = async () => {
 
     const sensors: SensorState[] = [];
     for (const sensorMetaData of metadata) {
+        if (!sensorMetaData.isMonitored) {
+            continue;
+        }
         const sensorName = sensorMetaData.name;
 
         const lastLogQuery = await elk.search<{ '@timestamp': number; document: SensorLogData }>({

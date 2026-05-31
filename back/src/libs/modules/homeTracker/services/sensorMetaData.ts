@@ -11,6 +11,7 @@ type SensorMetaData = {
     hexColor: string;
     tempOffset: number;
     sleepTimeSec: number;
+    isMonitored: boolean;
 };
 
 type SensorMetaDataResults = SensorMetaData & RowDataPacket;
@@ -24,7 +25,8 @@ export const getAllSensorsMetadata = async (): Promise<SensorMetaData[]> => {
             lastAlertDateUnix,
             hexColor,
             tempOffset,
-            sleepTimeSec
+            sleepTimeSec,
+            isMonitored
         FROM HomeTrackerSensor
     `
     );
