@@ -85,3 +85,19 @@ export interface PressureHistoryItem {
     averagePressurehPa: number;
 }
 
+export interface MetricDataPoint {
+    ts: number;
+    value: number;
+}
+
+export interface SensorMetricStats {
+    sensorName: string;
+    hexColor: string;
+    iconPath: string;
+    first: MetricDataPoint;
+    last: MetricDataPoint;
+    min: MetricDataPoint;
+    max: MetricDataPoint;
+    average: number;
+}
+
