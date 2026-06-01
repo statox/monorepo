@@ -74,6 +74,11 @@ export type LoggableProperties = {
     previousTimestamp?: number;
     referenceTime?: string;
     remoteIp?: string;
+    /**
+     * In debug mode the schemaValidation middleware logs the request body
+     * Only set this properly when isDebug is true
+     */
+    requestBody_DANGER?: string;
     requestId?: string;
     requestInterrupted?: boolean;
     requiredScope?: string;

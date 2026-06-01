@@ -3,7 +3,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import mustacheExpress from 'mustache-express';
 import { DateTime } from 'luxon';
 import { Server } from 'http';
-import { AllowedSchema, Validator } from 'express-json-validator-middleware';
 import { errorHandler } from './libs/middleware/errors.middleware.js';
 import { config } from './packages/config/index.js';
 import { loggingHandler } from './libs/middleware/logging.middleware.js';
@@ -26,8 +25,8 @@ import {
 } from './libs/middleware/auth_passport.middleware.js';
 import { initOpenapi } from './libs/modules/openapi/index.js';
 import { isPostWithFileRoute } from './libs/routes/types.js';
+import { validatePostBody } from './libs/middleware/schemaValidation.middleware.js';
 
-const { validate } = new Validator({ allowUnionTypes: true });
 export let app: express.Express;
 export let wss: WebSocketServer;
 
@@ -107,11 +106,7 @@ export const initApp = () => {
         }
 
         if (route.method === 'post') {
-            // Weird typing because we are using json-schema-to-ts's JSONSchema to type inputSchema in routes
-            // but validate() expects the AllowedSchemas from express-json-validator-middleware
-            // they just two ways to represent a json schema.
-            // TODO: Reunify this
-            pipeline.push(validate({ body: route.inputSchema as unknown as AllowedSchema }));
+            pipeline.push(validatePostBody(route.inputSchema));
         }
         pipeline.push(apiPipeline(route));
 
