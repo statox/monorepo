@@ -46,6 +46,7 @@ export type LoggableProperties = {
     failedCalls?: number;
     forecast?: string;
     gameId?: string;
+    httpMethod?: string;
     id?: number;
     insertTime?: string;
     instructSleepSec?: number;

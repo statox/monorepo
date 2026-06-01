@@ -36,11 +36,14 @@ export const loggingHandler = (req: Request, res: Response, next: NextFunction) 
         const executionTimeMs = Number(hrtime.bigint() - res.locals.startTimeNs) / 1e6;
         const code = res.statusCode;
 
+        const httpMethod = req.method;
+
         slog.log('app', 'access-log', {
             cfGeoInfo,
             cfRay,
             code,
             executionTimeMs,
+            httpMethod,
             path,
             remoteIp,
             requestId: res.locals.requestId,
