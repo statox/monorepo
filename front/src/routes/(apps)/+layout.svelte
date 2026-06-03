@@ -9,12 +9,26 @@
     import { type Snippet } from 'svelte';
     import { SvelteToast } from '$lib/components/Toast';
     import { Header, pageMetadataStore } from '$lib/components/Header';
+    import { afterNavigate, beforeNavigate } from '$app/navigation';
+    import { page } from '$app/state';
+    import { logWebStatRecord } from '$lib/WebStats';
 
     interface Props {
         children?: Snippet;
     }
 
     let { children }: Props = $props();
+
+    /*
+     * All pages in the app log an event when navigated in and out
+     */
+    afterNavigate(() => {
+        logWebStatRecord({path: page.url.pathname, action: 'navigated to'})
+    });
+
+    beforeNavigate(({ from }) => {
+        logWebStatRecord({path: from?.url.pathname || 'N/A', action: 'navigated from'})
+    });
 </script>
 
 <Header />

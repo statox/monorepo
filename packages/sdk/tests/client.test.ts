@@ -545,6 +545,46 @@ describe('BaseAPIClient', () => {
         assert.equal((opts as RequestInit).mode, 'cors');
     });
 
+    it('passes keepalive: true to native fetch when keepalive option is set', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET', keepalive: true },
+            { type: 'none' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.isTrue((opts as RequestInit).keepalive);
+    });
+
+    it('does not set keepalive when not specified in options', async () => {
+        const { client, fetchStub } = makeClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({ result: 'test' })
+        } as Response);
+
+        await client._fetch(
+            '/test/get',
+            null,
+            null,
+            validation,
+            { method: 'GET' },
+            { type: 'none' }
+        );
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.isUndefined((opts as RequestInit).keepalive);
+    });
+
     it('apikey auth sends credentials: omit', async () => {
         const { client, fetchStub } = makeClient({ apiKey: 'my-key' });
         fetchStub.resolves({
@@ -680,6 +720,69 @@ describe('BaseAPIClient', () => {
         assert.instanceOf(appendedFile, Blob);
         assert.equal(appendedFile.size, file.size);
         assert.equal(appendedFile.type, file.type);
+    });
+});
+
+describe('APIClient.withOptions', () => {
+    function makeAPIClient() {
+        const fetchStub = sinon.stub<Parameters<typeof fetch>, ReturnType<typeof fetch>>();
+        const client = APIClient({
+            baseURL: 'http://localhost:3000',
+            fetcher: fetchStub as unknown as typeof fetch
+        });
+        return { client, fetchStub };
+    }
+
+    const webStatsPayload = {
+        clientTimestamp: 1000000,
+        app: 'test-app',
+        path: '/test',
+        action: 'navigated',
+        clientId: 'test-client'
+    };
+
+    it('withOptions is a function on the returned client', () => {
+        const { client } = makeAPIClient();
+        assert.isFunction(client.withOptions);
+    });
+
+    it('withOptions({ keepalive: true }) passes keepalive: true to native fetch', async () => {
+        const { client, fetchStub } = makeAPIClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({})
+        } as Response);
+
+        await client.withOptions({ keepalive: true }).webStats.record(webStatsPayload);
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.isTrue((opts as RequestInit).keepalive);
+    });
+
+    it('direct client calls do not set keepalive', async () => {
+        const { client, fetchStub } = makeAPIClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({})
+        } as Response);
+
+        await client.webStats.record(webStatsPayload);
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.isUndefined((opts as RequestInit).keepalive);
+    });
+
+    it('withOptions({}) does not set keepalive', async () => {
+        const { client, fetchStub } = makeAPIClient();
+        fetchStub.resolves({
+            ok: true,
+            json: () => Promise.resolve({})
+        } as Response);
+
+        await client.withOptions({}).webStats.record(webStatsPayload);
+
+        const [, opts] = fetchStub.firstCall.args;
+        assert.isUndefined((opts as RequestInit).keepalive);
     });
 });
 

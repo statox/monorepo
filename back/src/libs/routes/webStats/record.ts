@@ -30,6 +30,6 @@ export const route: PostRoute<Input, EmptyOutput> = {
     path: '/web-stats/record',
     inputSchema,
     handler,
-    authentication: 'apikey',
+    authentication: 'none',
     outputSchema: emptyObjectSchema
 };

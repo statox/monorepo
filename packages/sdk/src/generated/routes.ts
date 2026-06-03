@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-05-26T21:58:32.413Z
+// Generated on: 2026-06-03T22:03:39.350Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -1981,7 +1981,7 @@ export type WebReader_GetPageTitle_Errors = 'INVALID_URL' | 'UNAUTHORIZED' | 'FO
 export type WebStats_Record_Input = FromSchema<typeof schemas.webStats_record_Input>;
 export type WebStats_Record_Output = FromSchema<typeof schemas.webStats_record_Output>;
 export type WebStats_Record = Endpoint<WebStats_Record_Output, WebStats_Record_Input>;
-export type WebStats_Record_Errors = 'MISSING_API_KEY' | 'INVALID_AUTH_HEADER' | 'UNKNOWN_API_KEY' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type WebStats_Record_Errors = 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type WebWatcher_CreateWatcher_Input = FromSchema<typeof schemas.webWatcher_createWatcher_Input>;
 export type WebWatcher_CreateWatcher_Output = FromSchema<typeof schemas.webWatcher_createWatcher_Output>;
 export type WebWatcher_CreateWatcher = Endpoint<WebWatcher_CreateWatcher_Output, WebWatcher_CreateWatcher_Input>;
@@ -2274,10 +2274,10 @@ export function buildModules(fetch: FetchFn) {
     webStats: {
       /**
        * POST /web-stats/record
-       * Auth: apikey
+       * Auth: none
        */
       record: (input: WebStats_Record_Input) =>
-        fetch('/web-stats/record', input, null, { inputSchema: schemas.webStats_record_Input, outputSchema: schemas.webStats_record_Output, endpoint: 'webStats.record' }, { method: 'POST' }, { type: 'apikey' }) as Promise<WebStats_Record_Output>,
+        fetch('/web-stats/record', input, null, { inputSchema: schemas.webStats_record_Input, outputSchema: schemas.webStats_record_Output, endpoint: 'webStats.record' }, { method: 'POST' }, { type: 'none' }) as Promise<WebStats_Record_Output>,
 
     },
 

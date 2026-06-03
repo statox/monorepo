@@ -69,7 +69,7 @@ export class BaseAPIClient {
         body: null | unknown,
         file: File | Blob | null,
         validation: { inputSchema?: AnySchema; outputSchema: AnySchema; endpoint: string },
-        options: { method: 'GET' | 'POST' },
+        options: { method: 'GET' | 'POST'; keepalive?: true },
         auth: { type: AuthType }
     ): Promise<unknown> {
         const bodyIsDefined = body !== null;
@@ -112,7 +112,12 @@ export class BaseAPIClient {
                 headers,
                 body: fetchBody,
                 credentials,
-                mode: 'cors'
+                mode: 'cors',
+                /** Prevent the browser to interrupt a call
+                 * when the page closes. We use `keepalive` for web
+                 *analytics only
+                 */
+                keepalive: options.keepalive
             });
         } catch (err) {
             const networkError = new ApiError(0, 'NETWORK_ERROR', String(err));
@@ -144,12 +149,19 @@ export class BaseAPIClient {
 
 export function APIClient(config: APIClientConfig) {
     const base = new BaseAPIClient(config);
-    return Object.assign(
-        base,
+
+    // makeModules wraps buildModules so every generated route call merges extraOptions
+    // into the native fetch options. Called with no args for the default client modules;
+    // called by withOptions to produce a one-shot proxy with caller-supplied overrides
+    // (e.g. keepalive: true for telemetry that must survive page navigation).
+    const makeModules = (extraOptions: { keepalive?: true } = {}) =>
         buildModules((path, body, file, validation, options, auth) =>
-            base._fetch(path, body, file, validation, options, auth)
-        )
-    );
+            base._fetch(path, body, file, validation, { ...options, ...extraOptions }, auth)
+        );
+
+    return Object.assign(base, makeModules(), {
+        withOptions: (opts: { keepalive?: true }) => makeModules(opts)
+    });
 }
 
 export type APIClient = ReturnType<typeof APIClient>;

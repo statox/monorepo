@@ -42,6 +42,29 @@ const client = APIClient({ baseURL: 'https://api.statox.fr' });
 const data = await client.homeTracker.getDashboard();
 ```
 
+## Call-time fetch options — `withOptions`
+
+Some calls need fetch options that only apply to specific invocations. Rather than adding optional parameters to every generated method, `APIClient` exposes `withOptions`, which returns a one-shot modules proxy with the extra options merged into every underlying `fetch` call.
+
+### keepalive — fire-and-forget telemetry
+
+The browser cancels in-flight `fetch` requests when a page navigates away. Passing `keepalive: true` signals to the browser that it should complete the request even if the page unloads. This is the right tool for telemetry that fires on navigation (e.g. `webStats.record` in `beforeNavigate`).
+
+```ts
+// In a SvelteKit beforeNavigate callback
+beforeNavigate(({ from }) => {
+    client.withOptions({ keepalive: true }).webStats.record({
+        clientTimestamp: Date.now(),
+        app: 'apps.statox.fr',
+        path: from?.url.pathname || 'N/A',
+        action: 'navigated',
+        clientId: 'my-client-id'
+    });
+});
+```
+
+`withOptions` returns the generated module namespace (same shape as `client.webStats`, `client.homeTracker`, etc.) but **not** a full `APIClient`. It is meant for single call-site use — do not store the result.
+
 ## Generated file
 
 `src/generated/routes.ts` is committed to git. It contains:
