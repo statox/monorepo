@@ -1,21 +1,11 @@
 export class TapTempo {
-    taps: number[];
-    keptDuration: number;
-    bpm: number;
-    lastTap: number;
-    groundZero: number;
-    counter: number;
-    previousTap: number;
-
-    constructor() {
-        this.taps = [];
-        this.keptDuration = 1000 * 15;
-        this.bpm = 0;
-        this.lastTap = 0;
-        this.groundZero = 0;
-        this.counter = 0;
-        this.previousTap = 0;
-    }
+    taps: number[] = $state([]);
+    keptDuration: number = 1000 * 15;
+    bpm: number = $state(0);
+    lastTap: number = 0;
+    groundZero: number = 0;
+    counter: number = 0;
+    previousTap: number = 0;
 
     reset() {
         this.taps = [];

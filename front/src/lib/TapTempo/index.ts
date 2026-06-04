@@ -1,3 +1,3 @@
-import { TapTempo } from './TapTempo';
+import { TapTempo } from './TapTempo.svelte';
 
 export { TapTempo };

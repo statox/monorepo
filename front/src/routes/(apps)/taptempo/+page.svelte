@@ -21,7 +21,6 @@
             return;
         }
         tapTempo.addBeat();
-        tapTempo = tapTempo;
 
         taped = true;
         setTimeout(() => (taped = false), 100);
@@ -54,7 +53,6 @@
         }
         if (e.key === C) {
             reset();
-            tapTempo = tapTempo;
         }
     };
 </script>
