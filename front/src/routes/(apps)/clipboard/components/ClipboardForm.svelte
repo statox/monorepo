@@ -87,7 +87,7 @@
         <textarea id="content" bind:value={content} rows="3"></textarea>
 
         {#if extractedTitle}
-            <label>Page title</label>
+            <span class="field-label">Extracted page title</span>
             <div class="extracted-title">
                 <span>{extractedTitle}</span>
                 <button type="button" onclick={() => (name = extractedTitle)}>Use as name</button>
@@ -153,5 +153,9 @@
         button {
             white-space: nowrap;
         }
+    }
+
+    .field-label {
+        font-style: italic;
     }
 </style>

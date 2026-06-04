@@ -513,8 +513,7 @@
             --moon-icon-size: 12px;
         }
 
-        .month-label,
-        .today-marker {
+        .month-label {
             font-size: 8px;
         }
 

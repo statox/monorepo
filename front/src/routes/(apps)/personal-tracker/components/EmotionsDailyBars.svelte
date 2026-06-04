@@ -303,6 +303,8 @@
             <svg
                 viewBox="0 0 {width} {height}"
                 class="bar-chart"
+                role="img"
+                aria-label="Emotions bar chart"
                 onmousemove={handleMouseMove}
                 onmouseleave={handleMouseLeave}
             >

@@ -376,6 +376,8 @@
             <svg
                 viewBox="0 0 {width} {height}"
                 class="stream-chart"
+                role="img"
+                aria-label="Emotions stream graph"
                 onmousemove={handleMouseMove}
                 onmouseleave={handleMouseLeave}
             >

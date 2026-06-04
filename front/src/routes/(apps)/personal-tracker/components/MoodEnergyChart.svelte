@@ -241,6 +241,8 @@
             <svg
                 viewBox="0 0 {width} {height}"
                 class="line-chart"
+                role="img"
+                aria-label="Mood and energy chart"
                 onmousemove={handleMouseMove}
                 onmouseleave={handleMouseLeave}
             >
@@ -289,6 +291,8 @@
                             cy={point.y}
                             r="4"
                             class="point energy-point"
+                            role="graphics-symbol"
+                            aria-label="Energy: {point.value}"
                             onmouseenter={() => (hoveredPoint = { ...point, type: 'energy' })}
                             onmouseleave={() => (hoveredPoint = null)}
                         />
@@ -301,6 +305,8 @@
                             cy={point.y}
                             r="4"
                             class="point mood-point"
+                            role="graphics-symbol"
+                            aria-label="Mood: {point.value}"
                             onmouseenter={() => (hoveredPoint = { ...point, type: 'mood' })}
                             onmouseleave={() => (hoveredPoint = null)}
                         />
