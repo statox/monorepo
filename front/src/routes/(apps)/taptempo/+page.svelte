@@ -4,6 +4,7 @@
     import TempoList from './components/TempoList.svelte';
     import { TapTempo } from '$lib/TapTempo';
     import { pageMetadataStore } from '$lib/components/Header';
+    import { Notice } from '$lib/components/Notice';
 
     const pageMetadata = {
         name: 'Tap Tempo',
@@ -64,19 +65,25 @@
     iconPath={pageMetadata.iconPath}
 />
 
+<Notice
+    item={{
+        level: 'info',
+        message: 'Press the space bar or click/tap anywhere on the page to get a bpm.'
+    }}
+/>
 <div class="container">
-    <div>Press the space bar or click/tap anywhere on the page to get a bpm.</div>
+    <div class="taptempo">
+        <div class="bpm" class:tapped={taped}>{tapTempo.bpm}<br />BPM</div>
 
-    <div class="bpm" class:tapped={taped}>{tapTempo.bpm}<br />BPM</div>
+        <div class="controls">
+            <button class="control-button" onclick={reset}>Reset (c)</button>
+            <button class="control-button" onclick={() => (pause = !pause)}>
+                {pause ? 'Play' : 'Pause'} (Enter)
+            </button>
+        </div>
 
-    <div class="controls">
-        <button class="control-button" onclick={reset}>Reset (c)</button>
-        <button class="control-button" onclick={() => (pause = !pause)}>
-            {pause ? 'Play' : 'Pause'} (Enter)
-        </button>
+        <Beats taps={tapTempo.taps} keptDuration={tapTempo.keptDuration} {pause} />
     </div>
-
-    <Beats taps={tapTempo.taps} keptDuration={tapTempo.keptDuration} {pause} />
 
     <TempoList currentBpm={tapTempo.bpm} />
 </div>
@@ -89,6 +96,12 @@
         -webkit-user-select: none; /* Safari */
         -ms-user-select: none; /* IE 10 and IE 11 */
         user-select: none; /* Standard syntax */
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 40px;
+        row-gap: 2em;
+        justify-content: center;
     }
     .controls {
         display: flex;

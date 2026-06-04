@@ -114,6 +114,7 @@
         display: grid;
         flex-wrap: wrap;
         grid-template-columns: auto 1fr 2fr;
+        width: 700px;
     }
     .container .col {
         box-sizing: border-box;
