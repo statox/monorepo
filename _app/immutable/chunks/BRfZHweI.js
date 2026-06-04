@@ -1,0 +1,1 @@
+import"./ir2NdXs5.js";
