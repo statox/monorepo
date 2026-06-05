@@ -73,6 +73,8 @@ html {
     --nc-bg-1-rgb: var(--nc-light-bg-1-rgb);
     --nc-bg-2-rgb: var(--nc-light-bg-2-rgb);
     --nc-bg-3-rgb: var(--nc-light-bg-3-rgb);
+
+    --nc-delimiter: var(--nc-light-tx-3);
 }
 
 html[data-theme='dark'] {
@@ -96,6 +98,8 @@ html[data-theme='dark'] {
     --nc-bg-1-rgb: var(--nc-dark-bg-1-rgb);
     --nc-bg-2-rgb: var(--nc-dark-bg-2-rgb);
     --nc-bg-3-rgb: var(--nc-dark-bg-3-rgb);
+
+    --nc-delimiter: var(--nc-dark-tx-3);
 }
 
 /* TODO See if that works */

@@ -46,3 +46,10 @@
         </ul>
     </div>
 </div>
+
+<style>
+    .contents {
+        border-top: 1px var(--nc-delimiter) solid;
+        padding-top: 2em;
+    }
+</style>

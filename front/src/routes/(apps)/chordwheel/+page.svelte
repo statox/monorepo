@@ -2,7 +2,7 @@
     import type p5 from 'p5';
     import P5, { type Sketch } from 'p5-svelte';
     import { onDestroy } from 'svelte';
-    import InfoModal from './components/InfoModal.svelte';
+    import InfoPanel from './components/InfoPanel.svelte';
     import { wheel } from '$lib/ChordWheel/wheel-config';
     import type { WheelTiles } from '$lib/ChordWheel/types';
     import {
@@ -205,7 +205,7 @@
         On mobile swipe left/right to rotate the shape and up/down to rotate the wheel. On the
         browser you can drag the mouse left/right and up/down.
     </p>
-    <InfoModal />
+    <InfoPanel />
 </div>
 
 <style>
