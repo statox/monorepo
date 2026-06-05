@@ -4,6 +4,7 @@
     import { pageMetadataStore } from '$lib/components/Header';
     import NotesOnInstrument from './components/NotesOnInstrument.svelte';
     import Progressions from './components/Progressions.svelte';
+    import InfoPanel from './components/InfoPanel.svelte';
 
     pageMetadataStore.set({ name: 'Scales' });
 
@@ -102,96 +103,108 @@
     onMount(() => getScale(tonic, scale, mode));
 </script>
 
-<table>
-    <thead>
-        <tr>
-            <th>
-                <label for="tonicInput">Tonic</label>
-            </th>
-            <th>
-                <label for="scaleInput">Scale</label>
-            </th>
-            <th>
-                <label for="modeInput">mode</label>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <select
-                    id="tonicInput"
-                    bind:value={tonic}
-                    onchange={() => getScale(tonic, scale, mode)}
-                >
-                    {#each notes as note}
-                        <option value={note}>
-                            {note}
-                        </option>
-                    {/each}
-                </select>
-            </td>
+<div class="container">
+    <InfoPanel/>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <label for="tonicInput">Tonic</label>
+                </th>
+                <th>
+                    <label for="scaleInput">Scale</label>
+                </th>
+                <th>
+                    <label for="modeInput">mode</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select
+                        id="tonicInput"
+                        bind:value={tonic}
+                        onchange={() => getScale(tonic, scale, mode)}
+                    >
+                        {#each notes as note}
+                            <option value={note}>
+                                {note}
+                            </option>
+                        {/each}
+                    </select>
+                </td>
 
-            <td>
-                <select
-                    id="scaleInput"
-                    bind:value={scale}
-                    onchange={() => getScale(tonic, scale, mode)}
-                >
-                    {#each scales as scale}
-                        <option value={scale}>
-                            {scale.name}
-                        </option>
-                    {/each}
-                </select>
-            </td>
+                <td>
+                    <select
+                        id="scaleInput"
+                        bind:value={scale}
+                        onchange={() => getScale(tonic, scale, mode)}
+                    >
+                        {#each scales as scale}
+                            <option value={scale}>
+                                {scale.name}
+                            </option>
+                        {/each}
+                    </select>
+                </td>
 
-            <td>
-                <select
-                    id="modeInput"
-                    bind:value={mode}
-                    onchange={() => getScale(tonic, scale, mode)}
-                >
-                    {#each modes as mode}
-                        <option value={mode}>
-                            {mode.name}
-                        </option>
-                    {/each}
-                </select>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                <td>
+                    <select
+                        id="modeInput"
+                        bind:value={mode}
+                        onchange={() => getScale(tonic, scale, mode)}
+                    >
+                        {#each modes as mode}
+                            <option value={mode}>
+                                {mode.name}
+                            </option>
+                        {/each}
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-<br />
+    <table>
+        <tbody>
+            <tr>
+                {#each scale.chords as chord, index}
+                    <th>{formatDegreeName(index + 1, chord)}</th>
+                {/each}
+            </tr>
+            <tr>
+                {#each scaleNotes as note, index}
+                    {@const type = scale.chords[index]}
+                    <td>{formatDegreeNote(note, type)}</td>
+                {/each}
+            </tr>
+        </tbody>
+    </table>
 
-<table>
-    <tbody>
-        <tr>
-            {#each scale.chords as chord, index}
-                <th>{formatDegreeName(index + 1, chord)}</th>
-            {/each}
-        </tr>
-        <tr>
-            {#each scaleNotes as note, index}
-                {@const type = scale.chords[index]}
-                <td>{formatDegreeNote(note, type)}</td>
-            {/each}
-        </tr>
-    </tbody>
-</table>
+    <NotesOnInstrument notesToDisplay={scaleNotes} />
 
-<NotesOnInstrument notesToDisplay={scaleNotes} />
-
-{#if ['Major', 'Natural minor'].includes(scale.name)}
-    {#key scaleNotes}
-        <Progressions {scaleNotes} />
-    {/key}
-{/if}
+    {#if ['Major', 'Natural minor'].includes(scale.name)}
+        {#key scaleNotes}
+            <Progressions {scaleNotes} />
+        {/key}
+    {/if}
+</div>
 
 <style>
-    th,
-    td {
-        text-align: center;
+th,
+td {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 900px;
+}
+@media screen and (min-width: 900px) {
+    .container {
+        margin: 0 auto;
     }
+}
 </style>

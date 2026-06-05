@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { modals } from 'svelte-modals';
-    import InfoModal from './InfoModal.svelte';
     import { degreeToRoman, notes, progressions, type Chord } from '$lib/Scales';
 
     interface Props {
@@ -41,53 +39,79 @@
 
 <h3>
     Chord Progressions
-    <span>
-        <button aria-label="info" style:position="relative" onclick={() => modals.open(InfoModal)}>
-            <i class="fa fa-info-circle" aria-hidden="true"></i>
-        </button>
-    </span>
 </h3>
 
-{#each progressions as progression}
-    <div>
-        <h4>{progression.name}</h4>
-        {#if progression.examples}
-            <span>
-                <b>Examples:</b>
-                {progression.examples.join(', ')}
-            </span>
-        {/if}
-        <div class="progression-table">
-            {#each progression.chords as chord}
-                <div class="progression-step">
-                    <div class="step-degree">{formatChord(chord)}</div>
-                    <div class="step-value">{chordInScaleFromDegree(chord)}</div>
-                </div>
-            {/each}
+<div class="progressions">
+    {#each progressions as progression}
+        <div class="progression">
+            <h4>{progression.name}</h4>
+            {#if progression.examples}
+                <span>
+                    <b>Examples:</b>
+                    {progression.examples.join(', ')}
+                </span>
+            {/if}
+            <div class="progression-table">
+                {#each progression.chords as chord}
+                    <div class="progression-step">
+                        <div class="step-degree">{formatChord(chord)}</div>
+                        <div class="step-value">{chordInScaleFromDegree(chord)}</div>
+                    </div>
+                {/each}
+            </div>
         </div>
-    </div>
-    <br />
-{/each}
+    {/each}
+</div>
 
 <style>
+    .progressions {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .progression {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        position: relative;
+        padding-left: 20px;
+    }
+
+    .progression::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 10px;          /* distance from top */
+        bottom: 10px;       /* distance from bottom */
+        width: 1px;
+        background-color: var(--nc-lk-1);
+    }
+
     .progression-table {
         display: grid;
-        row-gap: 1em;
         grid-template-columns: repeat(4, 25%);
-        margin: 1em;
+
+        width: 80%;
+        margin: 2em auto;
+        row-gap: 0;
+
+        border: 1px solid var(--nc-tx-3);
     }
 
     .step-degree {
         font-weight: bold;
-        background: var(--nc-bg-3);
+        background: var(--nc-bg-2);
     }
 
     .step-degree,
     .step-value {
         text-align: center;
         width: 100%;
-        border: 1px solid var(--nc-bg-3);
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
+    }
+    .step-value {
+        border: 1px solid var(--nc-bg-3);
     }
 </style>
