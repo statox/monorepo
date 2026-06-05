@@ -81,6 +81,7 @@
 <div class="container">
     <InfoPanel />
 
+    <h2>Scale selector</h2>
     <ScaleSelector
         bind:tonic
         bind:scale
@@ -91,8 +92,10 @@
         onchange={getScale}
     />
 
+    <h2>Notes on instrument</h2>
     <NotesOnInstrument notesToDisplay={scaleNotes} />
 
+    <h2>Chord Progressions</h2>
     {#if ['Major', 'Natural minor'].includes(scale.name)}
         {#key scaleNotes}
             <Progressions {scaleNotes} />

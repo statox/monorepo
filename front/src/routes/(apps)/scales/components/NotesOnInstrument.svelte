@@ -15,10 +15,10 @@
     let displayMode = $state(0);
 </script>
 
-<h3>Instrument</h3>
-
 <div>
+    <span>Notation</span>
     <button onclick={() => (labelMode = labelMode === 'name' ? 'degree' : 'name')}>C / IV</button>
+    <span>Instrument</span>
     <button onclick={() => (displayMode = (displayMode + 1) % displayModes.length)}
         ><i class="fas fa-guitar"></i> / <i class="fas fa-keyboard"></i></button
     >

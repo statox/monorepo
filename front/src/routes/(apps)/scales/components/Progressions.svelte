@@ -37,8 +37,6 @@
     };
 </script>
 
-<h3>Chord Progressions</h3>
-
 <div class="progressions">
     {#each progressions as progression}
         <div class="progression">
