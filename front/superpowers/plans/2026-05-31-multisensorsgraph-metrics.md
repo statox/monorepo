@@ -14,19 +14,20 @@
 
 ## File map
 
-| File | Action | Purpose |
-|---|---|---|
-| `src/lib/HomeTracker/types.ts` | Modify | Add `MetricDataPoint`, `SensorMetricStats` |
-| `src/lib/HomeTracker/service.ts` | Modify | Add `computeMetricsStats` |
-| `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/types.ts` | Modify | Add `graphsProperties` export, import `HomeTrackerTimeData` |
-| `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/Main.svelte` | Modify | Import `graphsProperties` from `./types`; add toggle + `<Metrics>` |
-| `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/Metrics.svelte` | Modify | Full implementation |
+| File                                                                         | Action | Purpose                                                            |
+| ---------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------ |
+| `src/lib/HomeTracker/types.ts`                                               | Modify | Add `MetricDataPoint`, `SensorMetricStats`                         |
+| `src/lib/HomeTracker/service.ts`                                             | Modify | Add `computeMetricsStats`                                          |
+| `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/types.ts`       | Modify | Add `graphsProperties` export, import `HomeTrackerTimeData`        |
+| `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/Main.svelte`    | Modify | Import `graphsProperties` from `./types`; add toggle + `<Metrics>` |
+| `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/Metrics.svelte` | Modify | Full implementation                                                |
 
 ---
 
 ## Task 1: Add types to HomeTracker/types.ts
 
 **Files:**
+
 - Modify: `src/lib/HomeTracker/types.ts`
 
 - [ ] **Step 1: Add `MetricDataPoint` and `SensorMetricStats` to the end of the file**
@@ -71,6 +72,7 @@ git commit -m "feat(home-tracker): add MetricDataPoint and SensorMetricStats typ
 `graphsProperties` is currently defined inline in `Main.svelte`. It needs to be shared with `Metrics.svelte`, so move it to `types.ts`.
 
 **Files:**
+
 - Modify: `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/types.ts`
 
 - [ ] **Step 1: Replace the full content of `types.ts` with**
@@ -157,6 +159,7 @@ git commit -m "refactor(home-tracker): extract graphsProperties to MultiSensorsG
 ## Task 3: Implement computeMetricsStats in HomeTracker/service.ts
 
 **Files:**
+
 - Modify: `src/lib/HomeTracker/service.ts`
 
 - [ ] **Step 1: Add the import at the top of `service.ts`**
@@ -180,8 +183,7 @@ export const computeMetricsStats = (
 ): SensorMetricStats[] => {
     return sensorNames.reduce<SensorMetricStats[]>((acc, sensorName) => {
         const sensorMetadata = sensorsData.find((s) => s.sensorName === sensorName);
-        const offset =
-            metricProperty === 'tempCelsius' ? (sensorMetadata?.tempOffset ?? 0) : 0;
+        const offset = metricProperty === 'tempCelsius' ? (sensorMetadata?.tempOffset ?? 0) : 0;
 
         const points: MetricDataPoint[] = Object.keys(histogramData)
             .filter((ts) => {
@@ -192,7 +194,7 @@ export const computeMetricsStats = (
                 const key = ts as unknown as keyof HomeTrackerHistogramData;
                 return {
                     ts: Number(ts),
-                    value: (histogramData[key]![metricProperty]![sensorName]!) + offset
+                    value: histogramData[key]![metricProperty]![sensorName]! + offset
                 };
             })
             .sort((a, b) => a.ts - b.ts);
@@ -241,6 +243,7 @@ git commit -m "feat(home-tracker): add computeMetricsStats service function"
 ## Task 4: Update Main.svelte with toggle and Metrics child
 
 **Files:**
+
 - Modify: `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/Main.svelte`
 
 - [ ] **Step 1: Add the Metrics import at the top of the script block** (after the existing imports)
@@ -305,6 +308,7 @@ Expected: 0 errors (Metrics.svelte not yet implemented, so there may be an impor
 ## Task 5: Implement Metrics.svelte
 
 **Files:**
+
 - Modify: `src/routes/(apps)/home-tracker/components/MultiSensorsGraph/Metrics.svelte`
 
 - [ ] **Step 1: Replace the full content of Metrics.svelte with**
@@ -348,23 +352,33 @@ Expected: 0 errors (Metrics.svelte not yet implemented, so there may be an impor
             <div class="stat-grid">
                 <span class="label">First</span>
                 <span class="ts">{formatRecordTimestampToHuman(stat.first.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.first.value} unitString={metricUnitSymbol} /></span>
+                <span class="val"
+                    ><ValueWithUnit value={stat.first.value} unitString={metricUnitSymbol} /></span
+                >
 
                 <span class="label">Last</span>
                 <span class="ts">{formatRecordTimestampToHuman(stat.last.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.last.value} unitString={metricUnitSymbol} /></span>
+                <span class="val"
+                    ><ValueWithUnit value={stat.last.value} unitString={metricUnitSymbol} /></span
+                >
 
                 <span class="label">Min</span>
                 <span class="ts">{formatRecordTimestampToHuman(stat.min.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.min.value} unitString={metricUnitSymbol} /></span>
+                <span class="val"
+                    ><ValueWithUnit value={stat.min.value} unitString={metricUnitSymbol} /></span
+                >
 
                 <span class="label">Max</span>
                 <span class="ts">{formatRecordTimestampToHuman(stat.max.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.max.value} unitString={metricUnitSymbol} /></span>
+                <span class="val"
+                    ><ValueWithUnit value={stat.max.value} unitString={metricUnitSymbol} /></span
+                >
 
                 <span class="label">Avg</span>
                 <span class="ts"></span>
-                <span class="val"><ValueWithUnit value={stat.average} unitString={metricUnitSymbol} /></span>
+                <span class="val"
+                    ><ValueWithUnit value={stat.average} unitString={metricUnitSymbol} /></span
+                >
 
                 <span class="label">Delta</span>
                 <span class="ts"></span>

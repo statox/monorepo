@@ -23,11 +23,11 @@
      * All pages in the app log an event when navigated in and out
      */
     afterNavigate(() => {
-        logWebStatRecord({path: page.url.pathname, action: 'navigated to'})
+        logWebStatRecord({ path: page.url.pathname, action: 'navigated to' });
     });
 
     beforeNavigate(({ from }) => {
-        logWebStatRecord({path: from?.url.pathname || 'N/A', action: 'navigated from'})
+        logWebStatRecord({ path: from?.url.pathname || 'N/A', action: 'navigated from' });
     });
 </script>
 

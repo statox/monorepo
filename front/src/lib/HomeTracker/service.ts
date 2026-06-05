@@ -14,8 +14,7 @@ export const computeMetricsStats = (
 ): SensorMetricStats[] => {
     return sensorNames.reduce<SensorMetricStats[]>((acc, sensorName) => {
         const sensorMetadata = sensorsData.find((s) => s.sensorName === sensorName);
-        const offset =
-            metricProperty === 'tempCelsius' ? (sensorMetadata?.tempOffset ?? 0) : 0;
+        const offset = metricProperty === 'tempCelsius' ? (sensorMetadata?.tempOffset ?? 0) : 0;
 
         const points: MetricDataPoint[] = Object.keys(histogramData)
             .filter((ts) => {
@@ -26,7 +25,7 @@ export const computeMetricsStats = (
                 const key = ts as unknown as keyof HomeTrackerHistogramData;
                 return {
                     ts: Number(ts),
-                    value: (histogramData[key]![metricProperty]![sensorName]!) + offset
+                    value: histogramData[key]![metricProperty]![sensorName]! + offset
                 };
             })
             .sort((a, b) => a.ts - b.ts);

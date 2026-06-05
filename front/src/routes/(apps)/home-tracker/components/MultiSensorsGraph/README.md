@@ -90,16 +90,16 @@ A "see stats / hide stats" button at the top of the component controls visibilit
 
 Each `SensorMetricStats` contains:
 
-| Field | Type | Description |
-|---|---|---|
-| `sensorName` | `string` | |
-| `hexColor` | `string` | From `SensorMetadata`, used to color the name |
-| `iconPath` | `string` | From `SensorMetadata` |
-| `first` | `MetricDataPoint` | Lowest timestamp in the window |
-| `last` | `MetricDataPoint` | Highest timestamp in the window |
-| `min` | `MetricDataPoint` | Lowest value (carries its own timestamp) |
-| `max` | `MetricDataPoint` | Highest value (carries its own timestamp) |
-| `average` | `number` | Mean of all data points |
+| Field        | Type              | Description                                   |
+| ------------ | ----------------- | --------------------------------------------- |
+| `sensorName` | `string`          |                                               |
+| `hexColor`   | `string`          | From `SensorMetadata`, used to color the name |
+| `iconPath`   | `string`          | From `SensorMetadata`                         |
+| `first`      | `MetricDataPoint` | Lowest timestamp in the window                |
+| `last`       | `MetricDataPoint` | Highest timestamp in the window               |
+| `min`        | `MetricDataPoint` | Lowest value (carries its own timestamp)      |
+| `max`        | `MetricDataPoint` | Highest value (carries its own timestamp)     |
+| `average`    | `number`          | Mean of all data points                       |
 
 `MetricDataPoint` is `{ ts: number; value: number }`. The temp offset from `SensorMetadata` is applied to all values when `metricProperty === 'tempCelsius'`, matching the graph's own offset logic.
 

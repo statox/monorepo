@@ -100,4 +100,3 @@ export interface SensorMetricStats {
     max: MetricDataPoint;
     average: number;
 }
-

@@ -6,13 +6,13 @@ Implement `Metrics.svelte` as a child of `Main.svelte`. It displays per-sensor s
 
 ## Files changed
 
-| File | Change |
-|---|---|
-| `src/lib/HomeTracker/types.ts` | Add `MetricDataPoint`, `SensorMetricStats` |
-| `src/lib/HomeTracker/service.ts` | Add `computeMetricsStats` |
-| `MultiSensorsGraph/types.ts` | Extract `graphsProperties` from `Main.svelte`, export it |
-| `MultiSensorsGraph/Main.svelte` | Import `graphsProperties`; add toggle state + `<Metrics>` |
-| `MultiSensorsGraph/Metrics.svelte` | Full implementation |
+| File                               | Change                                                    |
+| ---------------------------------- | --------------------------------------------------------- |
+| `src/lib/HomeTracker/types.ts`     | Add `MetricDataPoint`, `SensorMetricStats`                |
+| `src/lib/HomeTracker/service.ts`   | Add `computeMetricsStats`                                 |
+| `MultiSensorsGraph/types.ts`       | Extract `graphsProperties` from `Main.svelte`, export it  |
+| `MultiSensorsGraph/Main.svelte`    | Import `graphsProperties`; add toggle state + `<Metrics>` |
+| `MultiSensorsGraph/Metrics.svelte` | Full implementation                                       |
 
 ## Types
 
@@ -20,7 +20,7 @@ Added to `src/lib/HomeTracker/types.ts`:
 
 ```typescript
 export interface MetricDataPoint {
-    ts: number;    // Unix ms
+    ts: number; // Unix ms
     value: number;
 }
 
@@ -72,19 +72,20 @@ export const graphsProperties: Record<
 
 - Import `graphsProperties` from `./types` instead of defining it inline.
 - Add toggle state (default visible):
-  ```typescript
-  let showMetrics = $state(true);
-  ```
+    ```typescript
+    let showMetrics = $state(true);
+    ```
 - Below `<canvas>`, add toggle trigger and conditional `<Metrics>`:
-  ```svelte
-  <button class="toggle-metrics" onclick={() => showMetrics = !showMetrics}>
-      {showMetrics ? 'hide stats' : 'see stats'}
-  </button>
 
-  {#if showMetrics}
-      <Metrics {sensorsData} {sensorNames} {histogramData} {graphType} />
-  {/if}
-  ```
+    ```svelte
+    <button class="toggle-metrics" onclick={() => (showMetrics = !showMetrics)}>
+        {showMetrics ? 'hide stats' : 'see stats'}
+    </button>
+
+    {#if showMetrics}
+        <Metrics {sensorsData} {sensorNames} {histogramData} {graphType} />
+    {/if}
+    ```
 
 ## Metrics.svelte
 

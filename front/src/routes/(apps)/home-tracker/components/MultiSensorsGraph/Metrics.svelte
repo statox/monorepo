@@ -24,7 +24,6 @@
     const stats = $derived(
         computeMetricsStats(histogramData, sensorNames, sensorsData, metricProperty)
     );
-
 </script>
 
 <button class="toggle-stats" onclick={() => showMetrics.update((v) => !v)}>
@@ -32,105 +31,132 @@
 </button>
 
 {#if $showMetrics}
-<!-- Mobile: cards -->
-<div class="mobile-cards">
-    {#each stats as stat}
-        <div class="sensor-card">
-            <div class="sensor-header">
-                <img src={stat.iconPath} alt={stat.sensorName} class="sensor-icon" />
-                <span class="sensor-name" style="color: {stat.hexColor}">{stat.sensorName}</span>
-            </div>
-            <div class="stat-grid">
-                <span class="label">First</span>
-                <span class="ts">{formatRecordTimestampToHuman(stat.first.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.first.value} unitString={metricUnitSymbol} /></span>
+    <!-- Mobile: cards -->
+    <div class="mobile-cards">
+        {#each stats as stat}
+            <div class="sensor-card">
+                <div class="sensor-header">
+                    <img src={stat.iconPath} alt={stat.sensorName} class="sensor-icon" />
+                    <span class="sensor-name" style="color: {stat.hexColor}">{stat.sensorName}</span
+                    >
+                </div>
+                <div class="stat-grid">
+                    <span class="label">First</span>
+                    <span class="ts">{formatRecordTimestampToHuman(stat.first.ts)}</span>
+                    <span class="val"
+                        ><ValueWithUnit
+                            value={stat.first.value}
+                            unitString={metricUnitSymbol}
+                        /></span
+                    >
 
-                <span class="label">Last</span>
-                <span class="ts">{formatRecordTimestampToHuman(stat.last.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.last.value} unitString={metricUnitSymbol} /></span>
+                    <span class="label">Last</span>
+                    <span class="ts">{formatRecordTimestampToHuman(stat.last.ts)}</span>
+                    <span class="val"
+                        ><ValueWithUnit
+                            value={stat.last.value}
+                            unitString={metricUnitSymbol}
+                        /></span
+                    >
 
-                <span class="label">Min</span>
-                <span class="ts">{formatRecordTimestampToHuman(stat.min.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.min.value} unitString={metricUnitSymbol} /></span>
+                    <span class="label">Min</span>
+                    <span class="ts">{formatRecordTimestampToHuman(stat.min.ts)}</span>
+                    <span class="val"
+                        ><ValueWithUnit
+                            value={stat.min.value}
+                            unitString={metricUnitSymbol}
+                        /></span
+                    >
 
-                <span class="label">Max</span>
-                <span class="ts">{formatRecordTimestampToHuman(stat.max.ts)}</span>
-                <span class="val"><ValueWithUnit value={stat.max.value} unitString={metricUnitSymbol} /></span>
+                    <span class="label">Max</span>
+                    <span class="ts">{formatRecordTimestampToHuman(stat.max.ts)}</span>
+                    <span class="val"
+                        ><ValueWithUnit
+                            value={stat.max.value}
+                            unitString={metricUnitSymbol}
+                        /></span
+                    >
 
-                <span class="label">Avg</span>
-                <span class="ts"></span>
-                <span class="val"><ValueWithUnit value={stat.average} unitString={metricUnitSymbol} /></span>
+                    <span class="label">Avg</span>
+                    <span class="ts"></span>
+                    <span class="val"
+                        ><ValueWithUnit value={stat.average} unitString={metricUnitSymbol} /></span
+                    >
 
-                <span class="label">Delta</span>
-                <span class="ts"></span>
-                <span class="val">
-                    <DataTrend
-                        oldValue={stat.first.value}
-                        newValue={stat.last.value}
-                        oldTimestamp={stat.first.ts}
-                        newTimestamp={stat.last.ts}
-                    />
-                </span>
-            </div>
-        </div>
-    {/each}
-</div>
-
-<!-- Desktop: table -->
-<div class="desktop-table">
-    <table>
-        <thead>
-            <tr>
-                <th>Sensor</th>
-                <th>First</th>
-                <th>Last</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Avg</th>
-                <th>Delta</th>
-            </tr>
-        </thead>
-        <tbody>
-            {#each stats as stat}
-                <tr>
-                    <td>
-                        <span class="sensor-cell">
-                            <img src={stat.iconPath} alt={stat.sensorName} class="sensor-icon" />
-                            <span style="color: {stat.hexColor}">{stat.sensorName}</span>
-                        </span>
-                    </td>
-                    <td>
-                        <ValueWithUnit value={stat.first.value} unitString={metricUnitSymbol} />
-                        <div class="ts">{formatRecordTimestampToHuman(stat.first.ts)}</div>
-                    </td>
-                    <td>
-                        <ValueWithUnit value={stat.last.value} unitString={metricUnitSymbol} />
-                        <div class="ts">{formatRecordTimestampToHuman(stat.last.ts)}</div>
-                    </td>
-                    <td>
-                        <ValueWithUnit value={stat.min.value} unitString={metricUnitSymbol} />
-                        <div class="ts">{formatRecordTimestampToHuman(stat.min.ts)}</div>
-                    </td>
-                    <td>
-                        <ValueWithUnit value={stat.max.value} unitString={metricUnitSymbol} />
-                        <div class="ts">{formatRecordTimestampToHuman(stat.max.ts)}</div>
-                    </td>
-                    <td>
-                        <ValueWithUnit value={stat.average} unitString={metricUnitSymbol} />
-                    </td>
-                    <td>
+                    <span class="label">Delta</span>
+                    <span class="ts"></span>
+                    <span class="val">
                         <DataTrend
                             oldValue={stat.first.value}
                             newValue={stat.last.value}
                             oldTimestamp={stat.first.ts}
                             newTimestamp={stat.last.ts}
                         />
-                    </td>
+                    </span>
+                </div>
+            </div>
+        {/each}
+    </div>
+
+    <!-- Desktop: table -->
+    <div class="desktop-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sensor</th>
+                    <th>First</th>
+                    <th>Last</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Avg</th>
+                    <th>Delta</th>
                 </tr>
-            {/each}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                {#each stats as stat}
+                    <tr>
+                        <td>
+                            <span class="sensor-cell">
+                                <img
+                                    src={stat.iconPath}
+                                    alt={stat.sensorName}
+                                    class="sensor-icon"
+                                />
+                                <span style="color: {stat.hexColor}">{stat.sensorName}</span>
+                            </span>
+                        </td>
+                        <td>
+                            <ValueWithUnit value={stat.first.value} unitString={metricUnitSymbol} />
+                            <div class="ts">{formatRecordTimestampToHuman(stat.first.ts)}</div>
+                        </td>
+                        <td>
+                            <ValueWithUnit value={stat.last.value} unitString={metricUnitSymbol} />
+                            <div class="ts">{formatRecordTimestampToHuman(stat.last.ts)}</div>
+                        </td>
+                        <td>
+                            <ValueWithUnit value={stat.min.value} unitString={metricUnitSymbol} />
+                            <div class="ts">{formatRecordTimestampToHuman(stat.min.ts)}</div>
+                        </td>
+                        <td>
+                            <ValueWithUnit value={stat.max.value} unitString={metricUnitSymbol} />
+                            <div class="ts">{formatRecordTimestampToHuman(stat.max.ts)}</div>
+                        </td>
+                        <td>
+                            <ValueWithUnit value={stat.average} unitString={metricUnitSymbol} />
+                        </td>
+                        <td>
+                            <DataTrend
+                                oldValue={stat.first.value}
+                                newValue={stat.last.value}
+                                oldTimestamp={stat.first.ts}
+                                newTimestamp={stat.last.ts}
+                            />
+                        </td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
 {/if}
 
 <style>

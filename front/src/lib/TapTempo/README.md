@@ -23,6 +23,7 @@ The `TapTempo` class tracks a sliding window of taps over the last 15 seconds (`
 An info banner (`Notice`) tells the user to press Space or tap anywhere to get a BPM.
 
 Input handling:
+
 - Any `pointerdown` event on the page triggers `addBeat()`.
 - `Space` always **clears pause** first, then triggers `addBeat()` — so Space resumes and counts in one gesture.
 - `Enter` toggles pause. While paused, `addBeat` returns early so taps are ignored.
