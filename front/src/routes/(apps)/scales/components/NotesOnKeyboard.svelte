@@ -98,8 +98,12 @@
 
     const sketch: Sketch = (p5) => {
         p5.setup = () => {
+            // Canvas width: min: 500, max: 900, between: window width
+            // It's not ideal because between 500 and 900 we don't account for the borders
+            // so the canvas overflows the page but it's good enough for now
+            const canvasWidth = Math.max(500, Math.min(900, p5.windowWidth)); // min: 500, max: 900, between: window width
             _p5 = p5;
-            p5.createCanvas(900, 300);
+            p5.createCanvas(canvasWidth, 300);
             p5.textStyle(p5.BOLD);
         };
         p5.draw = () => {

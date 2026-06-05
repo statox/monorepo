@@ -149,8 +149,9 @@
 
     const sketch: Sketch = (p5) => {
         p5.setup = () => {
+            const canvasWidth = Math.max(500, Math.min(900, p5.windowWidth)); // min: 500, max: 900, between: window width
             _p5 = p5;
-            p5.createCanvas(900, 300);
+            p5.createCanvas(canvasWidth, 300);
             p5.textStyle(p5.BOLD);
         };
         p5.draw = () => {
