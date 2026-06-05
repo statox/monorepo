@@ -1,21 +1,19 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { degreeToRoman, notes } from '$lib/Scales';
+    import { notes } from '$lib/Scales';
     import { pageMetadataStore } from '$lib/components/Header';
     import NotesOnInstrument from './components/NotesOnInstrument.svelte';
     import Progressions from './components/Progressions.svelte';
     import InfoPanel from './components/InfoPanel.svelte';
+    import ScaleSelector from './components/ScaleSelector.svelte';
+    import type { Scale, Mode } from './components/ScaleSelector.svelte';
 
     pageMetadataStore.set({ name: 'Scales' });
 
     // https://hellomusictheory.com/learn/scale-degree-names/
     // https://ianring.com/musictheory/scales/
 
-    type Interval = number;
-    type TypeOfChord = 'major' | 'minor' | 'diminished';
-
-    // Intervals a numbers of semitones
-    type Scale = { name: string; intervals: Interval[]; chords: TypeOfChord[] };
+    // Intervals as numbers of semitones
     const scales: Scale[] = [
         {
             name: 'Major',
@@ -39,7 +37,6 @@
         }
     ];
 
-    type Mode = { name: string; degree: number };
     const modes: Mode[] = [
         { name: 'Ionian', degree: 1 },
         { name: 'Dorian', degree: 2 },
@@ -78,109 +75,21 @@
         }
     };
 
-    const formatDegreeName = (degree: number, chord: TypeOfChord) => {
-        let roman = degreeToRoman(degree);
-        if (chord === 'minor') {
-            roman = roman.toLowerCase();
-        } else if (chord === 'diminished') {
-            roman += '°';
-        }
-
-        return roman;
-    };
-
-    const formatDegreeNote = (note: string, chord: TypeOfChord) => {
-        let label = note;
-        if (chord === 'minor') {
-            label += 'm';
-        } else if (chord === 'diminished') {
-            label += '°';
-        }
-
-        return label;
-    };
-
     onMount(() => getScale(tonic, scale, mode));
 </script>
 
 <div class="container">
-    <InfoPanel/>
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    <label for="tonicInput">Tonic</label>
-                </th>
-                <th>
-                    <label for="scaleInput">Scale</label>
-                </th>
-                <th>
-                    <label for="modeInput">mode</label>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <select
-                        id="tonicInput"
-                        bind:value={tonic}
-                        onchange={() => getScale(tonic, scale, mode)}
-                    >
-                        {#each notes as note}
-                            <option value={note}>
-                                {note}
-                            </option>
-                        {/each}
-                    </select>
-                </td>
+    <InfoPanel />
 
-                <td>
-                    <select
-                        id="scaleInput"
-                        bind:value={scale}
-                        onchange={() => getScale(tonic, scale, mode)}
-                    >
-                        {#each scales as scale}
-                            <option value={scale}>
-                                {scale.name}
-                            </option>
-                        {/each}
-                    </select>
-                </td>
-
-                <td>
-                    <select
-                        id="modeInput"
-                        bind:value={mode}
-                        onchange={() => getScale(tonic, scale, mode)}
-                    >
-                        {#each modes as mode}
-                            <option value={mode}>
-                                {mode.name}
-                            </option>
-                        {/each}
-                    </select>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table>
-        <tbody>
-            <tr>
-                {#each scale.chords as chord, index}
-                    <th>{formatDegreeName(index + 1, chord)}</th>
-                {/each}
-            </tr>
-            <tr>
-                {#each scaleNotes as note, index}
-                    {@const type = scale.chords[index]}
-                    <td>{formatDegreeNote(note, type)}</td>
-                {/each}
-            </tr>
-        </tbody>
-    </table>
+    <ScaleSelector
+        bind:tonic
+        bind:scale
+        bind:mode
+        {scales}
+        {modes}
+        {scaleNotes}
+        onchange={getScale}
+    />
 
     <NotesOnInstrument notesToDisplay={scaleNotes} />
 
@@ -192,19 +101,14 @@
 </div>
 
 <style>
-th,
-td {
-    text-align: center;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    max-width: 900px;
-}
-@media screen and (min-width: 900px) {
     .container {
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        max-width: 900px;
     }
-}
+    @media screen and (min-width: 900px) {
+        .container {
+            margin: 0 auto;
+        }
+    }
 </style>

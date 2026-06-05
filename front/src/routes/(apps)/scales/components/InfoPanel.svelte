@@ -1,6 +1,5 @@
 <div class="contents">
-    This is a list of chord progressions I took from David Benett's videos and elsewhere
-    too
+    This is a list of chord progressions I took from David Benett's videos and elsewhere too
 
     <ul>
         <li>
@@ -23,6 +22,6 @@
         </li>
     </ul>
 
-    The user can change the tonic note in the "Scales" section and the progressions will
-    change the actual chords to play.
+    The user can change the tonic note in the "Scales" section and the progressions will change the
+    actual chords to play.
 </div>

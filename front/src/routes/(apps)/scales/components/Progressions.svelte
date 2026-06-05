@@ -37,9 +37,7 @@
     };
 </script>
 
-<h3>
-    Chord Progressions
-</h3>
+<h3>Chord Progressions</h3>
 
 <div class="progressions">
     {#each progressions as progression}
@@ -79,11 +77,11 @@
     }
 
     .progression::before {
-        content: "";
+        content: '';
         position: absolute;
         left: 0;
-        top: 10px;          /* distance from top */
-        bottom: 10px;       /* distance from bottom */
+        top: 10px; /* distance from top */
+        bottom: 10px; /* distance from bottom */
         width: 1px;
         background-color: var(--nc-lk-1);
     }
