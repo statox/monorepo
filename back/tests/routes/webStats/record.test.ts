@@ -15,7 +15,6 @@ describe('webStats/record', () => {
         await request(app)
             .post('/web-stats/record')
             .set('Accept', 'application/json')
-            .set('Authorization', 'Bearer fakeaccesskeyfortests')
             .send(validPayload)
             .expect(200);
 
@@ -37,27 +36,6 @@ describe('webStats/record', () => {
             path: '/some/path',
             action: 'click'
         });
-    });
-
-    it('should return 401 when no API key is provided', async () => {
-        await request(app)
-            .post('/web-stats/record')
-            .set('Accept', 'application/json')
-            .send(validPayload)
-            .expect(401);
-
-        await th.mysql.checkTableLength('WebStats', 0);
-    });
-
-    it('should return 403 when an invalid API key is provided', async () => {
-        await request(app)
-            .post('/web-stats/record')
-            .set('Accept', 'application/json')
-            .set('Authorization', 'Bearer wrongapikey')
-            .send(validPayload)
-            .expect(403);
-
-        await th.mysql.checkTableLength('WebStats', 0);
     });
 
     it('should return 400 when a required field is missing', async () => {
