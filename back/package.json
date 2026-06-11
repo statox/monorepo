@@ -34,9 +34,9 @@
         "user:create:prod": "npx heroku@latest run node dist/src/tools/auth/createUser.js"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.1063.0",
-        "@aws-sdk/s3-request-presigner": "^3.1063.0",
-        "@dotenvx/dotenvx": "^1.71.0",
+        "@aws-sdk/client-s3": "^3.1066.0",
+        "@aws-sdk/s3-request-presigner": "^3.1066.0",
+        "@dotenvx/dotenvx": "^1.71.2",
         "@elastic/elasticsearch": "^8.17.1",
         "@slack/webhook": "^7.0.9",
         "@types/passport": "^1.0.17",
@@ -85,7 +85,7 @@
         "@types/sinon": "^21.0.1",
         "@types/slug": "^5.0.9",
         "@types/supertest": "^7.2.0",
-        "@typescript-eslint/eslint-plugin": "^8.60.1",
+        "@typescript-eslint/eslint-plugin": "^8.61.0",
         "@typescript-eslint/parser": "^8.32.1",
         "aws-sdk-client-mock-jest": "^4.1.0",
         "chai": "^6.2.2",
@@ -99,7 +99,7 @@
         "mocha": "^11.7.6",
         "mocha-ctrf-json-reporter": "^0.0.11",
         "nunjucks": "^3.2.4",
-        "prettier": "^3.8.3",
+        "prettier": "^3.8.4",
         "sinon": "^22.0.0",
         "supertest": "^7.2.2",
         "typescript": "^6.0.3"
