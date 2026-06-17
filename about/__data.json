@@ -1,1 +1,1 @@
-{"type":"data","nodes":[null,null,{"type":"data","data":[{"commitSha":1,"commitMessage":1,"commitLink":1,"buildTimeStr":2,"buildUrl":3},"","17/06/2026 21:38","https://github.com/statox/apps/actions/runs/27721432399"],"uses":{}}]}
+{"type":"data","nodes":[null,null,{"type":"data","data":[{"commitSha":1,"commitMessage":2,"commitLink":3,"buildTimeStr":4,"buildUrl":5},"de14d7a","TO REVERT - Try to fix CI","https://github.com/statox/monorepo/commit/de14d7ab5013f5f0fb3615e9239bc405ea8f66cf","17/06/2026 21:42","https://github.com/statox/apps/actions/runs/27721612709"],"uses":{}}]}
