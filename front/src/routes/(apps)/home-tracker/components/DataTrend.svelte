@@ -12,7 +12,7 @@
 
     const trendValue = $derived(newValue - oldValue);
     const trendValueStr = $derived(trendValue.toFixed(1));
-    const trendDuration = $derived(Duration.fromMillis(newTimestamp - oldTimestamp));
+    const trendDuration = $derived(Duration.fromMillis(( newTimestamp - oldTimestamp ) * 1000));
     const trendDurationStr = $derived(
         trendDuration.as('hours') < 2
             ? trendDuration.toFormat("m'm'")
