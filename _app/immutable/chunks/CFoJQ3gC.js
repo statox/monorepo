@@ -1,1 +1,0 @@
-import{Wt as e}from"./Bwc-EWyG.js";import"./DGZ9PPw6.js";var t=e({name:`My apps`,iconPath:`/favicon.png`,showAuthInHeader:!0}),n=e(!1);export{n,t};
