@@ -4,15 +4,15 @@
     interface Props {
         oldValue: number;
         newValue: number;
-        oldTimestamp: number;
-        newTimestamp: number;
+        oldTimestampMs: number;
+        newTimestampMs: number;
     }
 
-    let { oldValue, newValue, oldTimestamp, newTimestamp }: Props = $props();
+    let { oldValue, newValue, oldTimestampMs, newTimestampMs }: Props = $props();
 
     const trendValue = $derived(newValue - oldValue);
     const trendValueStr = $derived(trendValue.toFixed(1));
-    const trendDuration = $derived(Duration.fromMillis(( newTimestamp - oldTimestamp ) * 1000));
+    const trendDuration = $derived(Duration.fromMillis(( newTimestampMs - oldTimestampMs )));
     const trendDurationStr = $derived(
         trendDuration.as('hours') < 2
             ? trendDuration.toFormat("m'm'")

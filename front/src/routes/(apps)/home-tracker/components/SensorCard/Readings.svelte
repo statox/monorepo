@@ -23,14 +23,14 @@
     <DataTrend
         oldValue={sensor.oneHourAgoLogData.tempCelsius || 0}
         newValue={sensor.lastLogData.tempCelsius || 0}
-        oldTimestamp={sensor.oneHourAgoLogData.timestamp}
-        newTimestamp={sensor.lastLogData.timestamp}
+        oldTimestampMs={sensor.oneHourAgoLogData.timestamp}
+        newTimestampMs={sensor.lastLogData.timestamp}
     />
     <DataTrend
         oldValue={sensor.oneDayAgoLogData.tempCelsius || 0}
         newValue={sensor.lastLogData.tempCelsius || 0}
-        oldTimestamp={sensor.oneDayAgoLogData.timestamp}
-        newTimestamp={sensor.lastLogData.timestamp}
+        oldTimestampMs={sensor.oneDayAgoLogData.timestamp}
+        newTimestampMs={sensor.lastLogData.timestamp}
     />
 
     <i class="unit-icon fas fa-tint"></i>
@@ -38,14 +38,14 @@
     <DataTrend
         oldValue={sensor.oneHourAgoLogData.humidity || 0}
         newValue={sensor.lastLogData.humidity || 0}
-        oldTimestamp={sensor.oneHourAgoLogData.timestamp}
-        newTimestamp={sensor.lastLogData.timestamp}
+        oldTimestampMs={sensor.oneHourAgoLogData.timestamp}
+        newTimestampMs={sensor.lastLogData.timestamp}
     />
     <DataTrend
         oldValue={sensor.oneDayAgoLogData.humidity || 0}
         newValue={sensor.lastLogData.humidity || 0}
-        oldTimestamp={sensor.oneDayAgoLogData.timestamp}
-        newTimestamp={sensor.lastLogData.timestamp}
+        oldTimestampMs={sensor.oneDayAgoLogData.timestamp}
+        newTimestampMs={sensor.lastLogData.timestamp}
     />
 
     {#if sensor.lastLogData.pressurehPa}

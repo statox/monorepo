@@ -89,8 +89,8 @@
                         <DataTrend
                             oldValue={stat.first.value}
                             newValue={stat.last.value}
-                            oldTimestamp={stat.first.ts}
-                            newTimestamp={stat.last.ts}
+                            oldTimestampMs={stat.first.ts * 1000}
+                            newTimestampMs={stat.last.ts * 1000}
                         />
                     </span>
                 </div>
@@ -148,8 +148,8 @@
                             <DataTrend
                                 oldValue={stat.first.value}
                                 newValue={stat.last.value}
-                                oldTimestamp={stat.first.ts}
-                                newTimestamp={stat.last.ts}
+                                oldTimestampMs={stat.first.ts * 1000}
+                                newTimestampMs={stat.last.ts * 1000}
                             />
                         </td>
                     </tr>
