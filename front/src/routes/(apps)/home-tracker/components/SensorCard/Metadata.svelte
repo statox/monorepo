@@ -45,6 +45,11 @@
             });
         }
     };
+
+    const resetToDefaultSleepTime = async () => {
+        sleepTimeSec = 596;
+        await updateMetadata();
+    }
 </script>
 
 <div class="container">
@@ -61,6 +66,7 @@
     <span>
         <input disabled={!$user} bind:value={sleepTimeSec} type="number" />
         {Duration.fromMillis(sleepTimeSec * 1000).toFormat("mm'm'ss's'")}
+        <button onclick={resetToDefaultSleepTime} >Reset</button>
     </span>
 </div>
 

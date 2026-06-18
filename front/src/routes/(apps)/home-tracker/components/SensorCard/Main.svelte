@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Duration } from 'luxon';
+    import { user } from '$lib/auth';
     import {
         formatRecordTimestampToHumanWithSeconds,
         formatRecordTimestampToRelative
@@ -7,7 +9,7 @@
     import Metadata from './Metadata.svelte';
     import Readings from './Readings.svelte';
     import { DateTime } from 'luxon';
-    import { onDestroy } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { ProgressIndicatorDisk } from '$lib/components/ProgressIndicatorDisk';
 
     interface Props {
@@ -89,6 +91,10 @@
                 onclick={() => (timestampDisplayFormatRelative = !timestampDisplayFormatRelative)}
             >
                 {formatedLastLogTimestamp}
+                &nbsp;
+                {#if $user && $user.user.username === 'statox'}
+                    <i>({Duration.fromMillis(sensor.sleepTimeSec * 1000).toFormat("mm'm'ss's'")})</i>
+                {/if}
                 &nbsp;
                 <ProgressIndicatorDisk progress={nextLogProgress} />
             </button>
