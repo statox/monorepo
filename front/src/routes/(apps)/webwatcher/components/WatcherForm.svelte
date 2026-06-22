@@ -123,8 +123,7 @@
             id="notification-message"
             bind:value={notificationMessage}
             rows="2"
-            onblur={validateNotificationMessage}
-        ></textarea>
+            onblur={validateNotificationMessage}></textarea>
         {#if fieldErrors.notificationMessage}
             <span class="field-error">{fieldErrors.notificationMessage}</span>
         {/if}
@@ -147,8 +146,7 @@
                 id="css-selector"
                 bind:value={cssSelector}
                 rows="2"
-                onblur={validateCssSelector}
-            ></textarea>
+                onblur={validateCssSelector}></textarea>
             {#if fieldErrors.cssSelector}
                 <span class="field-error">{fieldErrors.cssSelector}</span>
             {/if}

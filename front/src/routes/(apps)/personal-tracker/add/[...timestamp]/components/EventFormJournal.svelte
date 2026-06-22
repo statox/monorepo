@@ -22,8 +22,7 @@
             bind:value
             class="journal-textarea"
             placeholder="Write your thoughts, notes, or reflections for today..."
-            rows="8"
-        ></textarea>
+            rows="8"></textarea>
 
         <div class="character-count">
             {characterCount} character{characterCount !== 1 ? 's' : ''}

@@ -93,7 +93,8 @@
                 {formatedLastLogTimestamp}
                 &nbsp;
                 {#if $user && $user.user.username === 'statox'}
-                    <i>({Duration.fromMillis(sensor.sleepTimeSec * 1000).toFormat("mm'm'ss's'")})</i>
+                    <i>({Duration.fromMillis(sensor.sleepTimeSec * 1000).toFormat("mm'm'ss's'")})</i
+                    >
                 {/if}
                 &nbsp;
                 <ProgressIndicatorDisk progress={nextLogProgress} />

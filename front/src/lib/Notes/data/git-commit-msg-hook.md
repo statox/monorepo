@@ -8,7 +8,7 @@
 
 MSG_FILE="$1"
 
-# Pattern to remove 
+# Pattern to remove
 PATTERN='Co-Authored-By'
 
 # Remove matching lines

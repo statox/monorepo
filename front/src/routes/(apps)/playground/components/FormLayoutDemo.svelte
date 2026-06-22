@@ -190,8 +190,7 @@
                 <textarea
                     bind:value={description}
                     rows="4"
-                    placeholder="Enter a detailed description..."
-                ></textarea>
+                    placeholder="Enter a detailed description..."></textarea>
 
                 <div class="button-group">
                     <FormSubmitButton onclick={handleSubmit} loading={uploading} label="Submit" />

@@ -390,8 +390,7 @@ Find (around line 118):
     id="notification-message"
     bind:value={notificationMessage}
     rows="2"
-    onblur={validateNotificationMessage}
-></textarea>
+    onblur={validateNotificationMessage}></textarea>
 ```
 
 Replace with:
@@ -402,8 +401,7 @@ Replace with:
     bind:value={notificationMessage}
     rows="2"
     onblur={validateNotificationMessage}
-    class:error={!!fieldErrors.notificationMessage}
-></textarea>
+    class:error={!!fieldErrors.notificationMessage}></textarea>
 ```
 
 Find (around line 130):
@@ -434,8 +432,7 @@ Replace with:
     bind:value={cssSelector}
     rows="2"
     onblur={validateCssSelector}
-    class:error={!!fieldErrors.cssSelector}
-></textarea>
+    class:error={!!fieldErrors.cssSelector}></textarea>
 ```
 
 - [ ] **Step 4: Edit `RecipeForm.svelte` — add `class:error` to name input and content textarea**
@@ -473,8 +470,7 @@ Replace with:
     rows="10"
     cols="50"
     onblur={validateContent}
-    class:error={!!fieldErrors.content}
-></textarea>
+    class:error={!!fieldErrors.content}></textarea>
 ```
 
 - [ ] **Step 5: Edit `ChordForm.svelte` — add `class:error` to artist, title, and url inputs**
