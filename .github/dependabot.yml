@@ -2,6 +2,8 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/front"
+    cooldown:
+      default-days: 7
     schedule:
       interval: "weekly"
     groups:
@@ -14,6 +16,8 @@ updates:
 
   - package-ecosystem: "npm"
     directory: "/back"
+    cooldown:
+      default-days: 7
     schedule:
       interval: "weekly"
     groups:
@@ -27,5 +31,7 @@ updates:
   - package-ecosystem: "github-actions"
     # Workflow files stored in the default location of `.github/workflows`. (You don't need to specify `/.github/workflows` for `directory`. You can use `directory: '/'`.)
     directory: "/"
+    cooldown:
+      default-days: 7
     schedule:
       interval: "weekly"
