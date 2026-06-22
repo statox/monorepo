@@ -9,7 +9,7 @@
     import Metadata from './Metadata.svelte';
     import Readings from './Readings.svelte';
     import { DateTime } from 'luxon';
-    import { onDestroy, onMount } from 'svelte';
+    import { onDestroy } from 'svelte';
     import { ProgressIndicatorDisk } from '$lib/components/ProgressIndicatorDisk';
 
     interface Props {
