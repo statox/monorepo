@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+# git pre-push hook
+# Runs validation scripts when files were modified in a workspace:
+#   - front/ : npm run check, npm run lint, npm run prettier
+#   - back/  : npm run check
+# A non-zero exit aborts the push.
+
+remote="$1"
+
+zero="0000000000000000000000000000000000000000"
+
+# Print the files changed by the commits being pushed for a single ref.
+files_for_ref() {
+    local_oid="$1"
+    remote_oid="$2"
+
+    # Existing remote branch: diff what it has against what we push.
+    if [ "$remote_oid" != "$zero" ]; then
+        git diff --name-only "$remote_oid" "$local_oid"
+        return
+    fi
+
+    # New remote branch: find the oldest commit we are pushing and diff from
+    # its parent, so we only consider the commits being added.
+    oldest="$(git rev-list "$local_oid" --not --remotes="$remote" | tail -n 1)"
+    if [ -n "$oldest" ]; then
+        git diff --name-only "$oldest^" "$local_oid" 2>/dev/null
+    else
+        git diff --name-only "$local_oid" 2>/dev/null
+    fi
+}
+
+# git feeds one line per ref being pushed on stdin:
+#   <local ref> <local oid> <remote ref> <remote oid>
+# We only need the oids, so the ref names are read into a throwaway "_".
+changed_files="$(
+    while read -r _ local_oid _ remote_oid; do
+        # Branch deletion: nothing to validate.
+        [ "$local_oid" = "$zero" ] && continue
+        files_for_ref "$local_oid" "$remote_oid"
+    done
+)"
+
+# Nothing to push / no file changes.
+[ -z "$(echo "$changed_files" | tr -d '[:space:]')" ] && exit 0
+
+check_changed() {
+    echo "$changed_files" | grep --quiet -E "$1"
+}
+
+run_script() {
+    dir="$1"
+    script="$2"
+
+    echo "> npm --prefix $dir run $script"
+    if ! npm --prefix "$dir" run "$script"; then
+        tput setaf 1 2>/dev/null
+        echo "ERROR: 'npm run $script' failed in $dir/. Push aborted."
+        tput sgr0 2>/dev/null
+        exit 1
+    fi
+}
+
+run_checks() {
+    dir="$1"
+
+    tput setaf 3 2>/dev/null
+    echo "Changes detected in $dir/, running checks..."
+    tput sgr0 2>/dev/null
+
+    if [ "$dir" = 'front' ]; then
+        run_script front check
+        run_script front lint
+        run_script front prettier
+    elif [ "$dir" = 'back' ]; then
+        run_script back check
+    fi
+}
+
+check_changed '^front/' && run_checks front
+check_changed '^back/' && run_checks back
+
+exit 0
