@@ -20,3 +20,5 @@ export const getSensorsMetadata = async () => {
 };
 
 export const updateSensorMetadata = client2.homeTracker.updateSensorMetadata;
+
+export const enableSensorBoost = client2.homeTracker.enableSensorBoost;
