@@ -48,12 +48,16 @@ const outputSchema = {
                     oneHourAgoLogData: logDataSchema,
                     oneDayAgoLogData: logDataSchema,
                     sleepTimeSec: { type: 'number' },
+                    sleepTimeSecDefault: { type: 'number' },
+                    nextSleepTimeResetUnix: { type: 'number' },
                     tempOffset: { type: 'number' }
                 },
                 required: [
                     'sensorName',
                     'tempOffset',
                     'sleepTimeSec',
+                    'sleepTimeSecDefault',
+                    'nextSleepTimeResetUnix',
                     'hexColor',
                     'lastSyncDateUnix',
                     'lastAlertDateUnix',

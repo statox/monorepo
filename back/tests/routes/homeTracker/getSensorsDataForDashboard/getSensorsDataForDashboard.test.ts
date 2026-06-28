@@ -87,6 +87,8 @@ describe('homeTracker/getSensorsDataForDashboard', () => {
                 hexColor: '#FF0000',
                 tempOffset: -1.2,
                 sleepTimeSec: 300,
+                sleepTimeSecDefault: 596,
+                nextSleepTimeResetUnix: 0,
                 lastSyncDateUnix: nowSec,
                 lastAlertDateUnix: tenMinutesAgoSec,
                 lastLogData: {
@@ -220,6 +222,8 @@ describe('homeTracker/getSensorsDataForDashboard', () => {
                 hexColor: '#00FF00',
                 tempOffset: 0.2,
                 sleepTimeSec: 596,
+                sleepTimeSecDefault: 596,
+                nextSleepTimeResetUnix: 0,
                 lastSyncDateUnix: tenMinutesAgoSec,
                 lastAlertDateUnix: null,
                 lastLogData: {
@@ -253,6 +257,8 @@ describe('homeTracker/getSensorsDataForDashboard', () => {
                 hexColor: '#FF0000',
                 tempOffset: -1.2,
                 sleepTimeSec: 300,
+                sleepTimeSecDefault: 596,
+                nextSleepTimeResetUnix: 0,
                 lastSyncDateUnix: nowSec,
                 lastAlertDateUnix: tenMinutesAgoSec,
                 lastLogData: {
