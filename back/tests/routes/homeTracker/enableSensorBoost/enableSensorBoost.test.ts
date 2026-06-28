@@ -39,8 +39,7 @@ describe('homeTracker/enableSensorBoost', () => {
                     id: 1,
                     name: 'foo',
                     sleepTimeSec: 120,
-                    nextSleepTimeResetUnix: (value: number) =>
-                        Math.abs(value - expectedReset) <= 2
+                    nextSleepTimeResetUnix: (value: number) => Math.abs(value - expectedReset) <= 2
                 }
             ]
         });
