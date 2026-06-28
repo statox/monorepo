@@ -4,6 +4,8 @@ export interface SensorMetadata {
     hexColor: string;
     tempOffset: number;
     sleepTimeSec: number;
+    sleepTimeSecDefault: number;
+    nextSleepTimeResetUnix: number;
     lastSyncDateUnix: number;
     lastAlertDateUnix: number | null;
     lastLogData: SensorLogData;
