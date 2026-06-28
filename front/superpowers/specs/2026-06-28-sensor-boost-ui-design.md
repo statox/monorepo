@@ -5,6 +5,7 @@ Date: 2026-06-28
 ## Goal
 
 Update the HomeTracker `Metadata.svelte` sensor card to:
+
 1. Display the sensor's default sleep time (`sleepTimeSecDefault`).
 2. Show a "Boost resets in" countdown when a boost is currently active.
 3. Add a "Boost (2min/10min)" button that enables boost mode (120s sleep, 600s duration) for the selected sensor.
