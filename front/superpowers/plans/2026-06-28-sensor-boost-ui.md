@@ -27,6 +27,7 @@ No new files. No test files (frontend has no unit test runner; verification is `
 ## Task 1: Update `SensorMetadata` type and API export
 
 **Files:**
+
 - Modify: `front/src/lib/HomeTracker/types.ts:1-12`
 - Modify: `front/src/lib/HomeTracker/api.ts`
 
@@ -110,6 +111,7 @@ git commit -m "HomeTracker - Add sleepTimeSecDefault, nextSleepTimeResetUnix to 
 ## Task 2: Update `Metadata.svelte`
 
 **Files:**
+
 - Modify: `front/src/routes/(apps)/home-tracker/components/SensorCard/Metadata.svelte`
 
 - [ ] **Step 1: Update the script block**
