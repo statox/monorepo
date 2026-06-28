@@ -49,7 +49,30 @@ export const updateSensorLastSyncDate = (params: { sensorName: string }) => {
 // The -4 seconds is to try to reduce the drift due to sensors restarting
 const SENSORS_DEFAULT_SLEEP_TIME_SEC = 10 * 60 - 4;
 
+/*
+ * To be implemented
+ *
+ * Input:
+ * sensorName
+ *
+ * Logic:
+ *
+ * Get from the DB for the sensor:
+ *  - sleepTimeSec
+ *  - sleepTimeSecDefault
+ *  - nextSleepTimeResetUnix
+ *
+ *  if sleepTimeSec != sleepTimeSecDefault and nextSleepTimeResetUnix is in the past
+ *      => reset sleepTimeSec to sleepTimeSecDefault in the DB
+ */
+const checkOrResetSensorSleepTime = async (params) => {};
+
 export const getSensorSleepTimeSec = async (params: { sensorName: string }): Promise<number> => {
+    /*
+     * TODO Update this method to call the new checkOrResetSensorSleepTime first
+     *
+     */
+
     const [rows] = await db.query<({ sleepTimeSec: number } & RowDataPacket)[]>(
         `SELECT sleepTimeSec FROM HomeTrackerSensor WHERE name = ?`,
         [params.sensorName]
@@ -87,6 +110,25 @@ export const updateSensorMetadata = async (params: {
             sleepTimeSec = ?
         WHERE name = ?`,
         [params.hexColor, params.tempOffset, params.sleepTimeSec, params.sensorName]
+    );
+
+    if ((result as OkPacket).affectedRows === 0) {
+        throw new SensorNotFoundError();
+    }
+};
+
+export const enableSensorBoost = async (params: {
+    sensorName: string;
+    sleepTimeSec: number;
+    durationSec: number;
+}) => {
+    const [result] = await db.execute(
+        `
+        UPDATE HomeTrackerSensor SET
+            sleepTimeSec = ?,
+            nextSleepTimeResetUnix = UNIX_TIMESTAMP() + ?
+        WHERE name = ?`,
+        [params.sleepTimeSec, params.durationSec, params.sensorName]
     );
 
     if ((result as OkPacket).affectedRows === 0) {
