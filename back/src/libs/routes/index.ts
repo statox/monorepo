@@ -20,6 +20,7 @@ import { route as Ephemerides_getRange } from './ephemerides/getRange.js';
 import { route as Ephemerides_getToday } from './ephemerides/getToday.js';
 import { route as Gravitrips_getNewGame } from './gravitrips/getNewGame.js';
 import { route as Health_GetRemoteTime } from './health/getRemoteTime.js';
+import { route as HomeTracker_enableSensorBoost } from './homeTracker/enableSensorBoost.js';
 import { route as HomeTracker_getSensorsDataForDashboard } from './homeTracker/getSensorsDataForDashboard.js';
 import { route as HomeTracker_getWeatherForecast } from './homeTracker/getWeatherForecast.js';
 import { route as HomeTracker_histogramData } from './homeTracker/histogramData.js';
@@ -78,6 +79,7 @@ export const routes: {
         Ephemerides_getToday,
         Gravitrips_getNewGame,
         Health_GetRemoteTime,
+        HomeTracker_enableSensorBoost,
         HomeTracker_getSensorsDataForDashboard,
         HomeTracker_getWeatherForecast,
         HomeTracker_histogramData,
