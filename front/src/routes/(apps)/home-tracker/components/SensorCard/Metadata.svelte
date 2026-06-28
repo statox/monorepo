@@ -2,7 +2,7 @@
     import { user } from '$lib/auth';
     import { toast } from '$lib/components/Toast';
     import type { SensorMetadata } from '$lib/HomeTracker';
-    import { updateSensorMetadata } from '$lib/HomeTracker';
+    import { enableSensorBoost, updateSensorMetadata } from '$lib/HomeTracker';
     import { Duration } from 'luxon';
 
     interface Props {
@@ -21,6 +21,13 @@
         tempOffset = sensor.tempOffset;
         sleepTimeSec = sensor.sleepTimeSec;
     });
+
+    const boostIsActive = $derived(sensor.nextSleepTimeResetUnix * 1000 > Date.now());
+    const boostRemainingFormatted = $derived(
+        Duration.fromMillis(sensor.nextSleepTimeResetUnix * 1000 - Date.now()).toFormat(
+            "mm'm'ss's'"
+        )
+    );
 
     const updateMetadata = async () => {
         try {
@@ -50,6 +57,23 @@
         sleepTimeSec = 596;
         await updateMetadata();
     };
+
+    const enableBoost = async () => {
+        try {
+            await enableSensorBoost({
+                sensorName: sensor.sensorName,
+                sleepTimeSec: 120,
+                durationSec: 600
+            });
+            toast.push('<i class="fas fa-check"></i> Boost enabled');
+            const event = new CustomEvent('HomeTracker-RefreshData');
+            document.dispatchEvent(event);
+        } catch (error) {
+            const errorMessage = (error as Error).message;
+            const message = `<strong>Boost failed</strong><br/> ${errorMessage}`;
+            toast.push(message, { theme: { '--toastBarBackground': '#FF0000' } });
+        }
+    };
 </script>
 
 <div class="container">
@@ -67,7 +91,19 @@
         <input disabled={!$user} bind:value={sleepTimeSec} type="number" />
         {Duration.fromMillis(sleepTimeSec * 1000).toFormat("mm'm'ss's'")}
         <button onclick={resetToDefaultSleepTime}>Reset</button>
+        <button onclick={enableBoost}>Boost (2min/10min)</button>
     </span>
+
+    <div>Default sleep time</div>
+    <span>
+        {sensor.sleepTimeSecDefault}s
+        {Duration.fromMillis(sensor.sleepTimeSecDefault * 1000).toFormat("mm'm'ss's'")}
+    </span>
+
+    {#if boostIsActive}
+        <div>Boost resets in</div>
+        <span>{boostRemainingFormatted}</span>
+    {/if}
 </div>
 
 {#if $user}
