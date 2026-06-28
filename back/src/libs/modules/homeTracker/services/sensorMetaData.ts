@@ -11,6 +11,8 @@ type SensorMetaData = {
     hexColor: string;
     tempOffset: number;
     sleepTimeSec: number;
+    sleepTimeSecDefault: number;
+    nextSleepTimeResetUnix: number;
     isMonitored: boolean;
 };
 
@@ -26,6 +28,8 @@ export const getAllSensorsMetadata = async (): Promise<SensorMetaData[]> => {
             hexColor,
             tempOffset,
             sleepTimeSec,
+            sleepTimeSecDefault,
+            nextSleepTimeResetUnix,
             isMonitored
         FROM HomeTrackerSensor
     `
