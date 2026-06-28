@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-06-03T22:03:39.350Z
+// Generated on: 2026-06-28T21:24:30.184Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -972,6 +972,32 @@ export const schemas = {
   "health_getRemoteTime_Output": {
     "type": "number"
   },
+  "homeTracker_enableSensorBoost_Input": {
+    "type": "object",
+    "required": [
+      "sensorName",
+      "sleepTimeSec",
+      "durationSec"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "sensorName": {
+        "type": "string"
+      },
+      "sleepTimeSec": {
+        "type": "number",
+        "minimum": 1
+      },
+      "durationSec": {
+        "type": "number",
+        "minimum": 1
+      }
+    }
+  },
+  "homeTracker_enableSensorBoost_Output": {
+    "type": "object",
+    "additionalProperties": false
+  },
   "homeTracker_getSensorsDataForDashboard_Output": {
     "type": "object",
     "properties": {
@@ -1156,6 +1182,12 @@ export const schemas = {
             "sleepTimeSec": {
               "type": "number"
             },
+            "sleepTimeSecDefault": {
+              "type": "number"
+            },
+            "nextSleepTimeResetUnix": {
+              "type": "number"
+            },
             "tempOffset": {
               "type": "number"
             }
@@ -1164,6 +1196,8 @@ export const schemas = {
             "sensorName",
             "tempOffset",
             "sleepTimeSec",
+            "sleepTimeSecDefault",
+            "nextSleepTimeResetUnix",
             "hexColor",
             "lastSyncDateUnix",
             "lastAlertDateUnix",
@@ -1936,6 +1970,10 @@ export type Gravitrips_GetNewGame_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ER
 export type Health_GetRemoteTime_Output = FromSchema<typeof schemas.health_getRemoteTime_Output>;
 export type Health_GetRemoteTime = Endpoint<Health_GetRemoteTime_Output>;
 export type Health_GetRemoteTime_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type HomeTracker_EnableSensorBoost_Input = FromSchema<typeof schemas.homeTracker_enableSensorBoost_Input>;
+export type HomeTracker_EnableSensorBoost_Output = FromSchema<typeof schemas.homeTracker_enableSensorBoost_Output>;
+export type HomeTracker_EnableSensorBoost = Endpoint<HomeTracker_EnableSensorBoost_Output, HomeTracker_EnableSensorBoost_Input>;
+export type HomeTracker_EnableSensorBoost_Errors = 'SENSOR_NOT_FOUND' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type HomeTracker_GetSensorsDataForDashboard_Output = FromSchema<typeof schemas.homeTracker_getSensorsDataForDashboard_Output>;
 export type HomeTracker_GetSensorsDataForDashboard = Endpoint<HomeTracker_GetSensorsDataForDashboard_Output>;
 export type HomeTracker_GetSensorsDataForDashboard_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
@@ -2170,6 +2208,13 @@ export function buildModules(fetch: FetchFn) {
     },
 
     homeTracker: {
+      /**
+       * POST /homeTracker/enableSensorBoost
+       * Auth: user2
+       */
+      enableSensorBoost: (input: HomeTracker_EnableSensorBoost_Input) =>
+        fetch('/homeTracker/enableSensorBoost', input, null, { inputSchema: schemas.homeTracker_enableSensorBoost_Input, outputSchema: schemas.homeTracker_enableSensorBoost_Output, endpoint: 'homeTracker.enableSensorBoost' }, { method: 'POST' }, { type: 'user2' }) as Promise<HomeTracker_EnableSensorBoost_Output>,
+
       /**
        * GET /homeTracker/getSensorsDataForDashboard
        * Auth: none
