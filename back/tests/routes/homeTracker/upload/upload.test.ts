@@ -186,6 +186,62 @@ describe('homeTracker/upload', () => {
         });
     });
 
+    it('should reset the sleep time to the default when the boost has expired', async () => {
+        await th.mysql.fixture({
+            HomeTrackerSensor: [
+                {
+                    id: 1,
+                    name: 'foo',
+                    hexColor: '#FF0000',
+                    sleepTimeSec: 120,
+                    sleepTimeSecDefault: 596,
+                    nextSleepTimeResetUnix: th.mysql.nowSec() - 60
+                }
+            ]
+        });
+
+        const res = await request(app)
+            .post('/homeTracker/upload')
+            .set('Accept', 'application/json')
+            .set('Authorization', 'Bearer fakeaccesskeyfortests')
+            .send({ sensorName: 'foo', tempCelsius: 23.5 })
+            .expect(200);
+
+        assert.deepEqual(res.body, { instructSleepSec: 596 });
+
+        await th.mysql.checkContains({
+            HomeTrackerSensor: [{ id: 1, name: 'foo', sleepTimeSec: 596 }]
+        });
+    });
+
+    it('should keep the boosted sleep time while the boost is still active', async () => {
+        await th.mysql.fixture({
+            HomeTrackerSensor: [
+                {
+                    id: 1,
+                    name: 'foo',
+                    hexColor: '#FF0000',
+                    sleepTimeSec: 120,
+                    sleepTimeSecDefault: 596,
+                    nextSleepTimeResetUnix: th.mysql.nowSec() + 3600
+                }
+            ]
+        });
+
+        const res = await request(app)
+            .post('/homeTracker/upload')
+            .set('Accept', 'application/json')
+            .set('Authorization', 'Bearer fakeaccesskeyfortests')
+            .send({ sensorName: 'foo', tempCelsius: 23.5 })
+            .expect(200);
+
+        assert.deepEqual(res.body, { instructSleepSec: 120 });
+
+        await th.mysql.checkContains({
+            HomeTrackerSensor: [{ id: 1, name: 'foo', sleepTimeSec: 120 }]
+        });
+    });
+
     it('should read from the db to get the next sleep time of the sensor', async () => {
         th.mysql.fixture({
             HomeTrackerSensor: [
@@ -193,7 +249,8 @@ describe('homeTracker/upload', () => {
                     id: 1,
                     name: 'foo',
                     hexColor: '#FF0000',
-                    sleepTimeSec: 300
+                    sleepTimeSec: 300,
+                    sleepTimeSecDefault: 300
                 }
             ]
         });

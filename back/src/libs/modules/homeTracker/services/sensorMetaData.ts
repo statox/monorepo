@@ -49,29 +49,23 @@ export const updateSensorLastSyncDate = (params: { sensorName: string }) => {
 // The -4 seconds is to try to reduce the drift due to sensors restarting
 const SENSORS_DEFAULT_SLEEP_TIME_SEC = 10 * 60 - 4;
 
-/*
- * To be implemented
- *
- * Input:
- * sensorName
- *
- * Logic:
- *
- * Get from the DB for the sensor:
- *  - sleepTimeSec
- *  - sleepTimeSecDefault
- *  - nextSleepTimeResetUnix
- *
- *  if sleepTimeSec != sleepTimeSecDefault and nextSleepTimeResetUnix is in the past
- *      => reset sleepTimeSec to sleepTimeSecDefault in the DB
- */
-const checkOrResetSensorSleepTime = async (params) => {};
+// Reset a sensor's sleepTimeSec back to its default once a boost has expired.
+// Single atomic UPDATE: the guards make it a no-op when no boost is active
+// (sleepTimeSec already equals the default) or while a boost is still running
+// (nextSleepTimeResetUnix is in the future).
+const checkOrResetSensorSleepTime = async (params: { sensorName: string }) => {
+    await db.execute(
+        `UPDATE HomeTrackerSensor
+         SET sleepTimeSec = sleepTimeSecDefault
+         WHERE name = ?
+           AND sleepTimeSec != sleepTimeSecDefault
+           AND nextSleepTimeResetUnix < UNIX_TIMESTAMP()`,
+        [params.sensorName]
+    );
+};
 
 export const getSensorSleepTimeSec = async (params: { sensorName: string }): Promise<number> => {
-    /*
-     * TODO Update this method to call the new checkOrResetSensorSleepTime first
-     *
-     */
+    await checkOrResetSensorSleepTime({ sensorName: params.sensorName });
 
     const [rows] = await db.query<({ sleepTimeSec: number } & RowDataPacket)[]>(
         `SELECT sleepTimeSec FROM HomeTrackerSensor WHERE name = ?`,
