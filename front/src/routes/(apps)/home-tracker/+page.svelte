@@ -6,6 +6,7 @@
     import WeatherForecast from './components/WeatherForecast.svelte';
     import TimeControls from './components/TimeControls.svelte';
     import { AuthGuard } from '$lib/components/AuthGuard';
+    import { isAllowedForUser, user } from '$lib/auth';
 
     const pageMetadata = {
         name: 'Home Tracker',
@@ -23,6 +24,9 @@
 />
 
 <div class="content">
+    {#if isAllowedForUser('admin', $user)}
+        <a href="/home-tracker/sensor-client">Sensor client</a>
+    {/if}
     <TimeControls />
     <SensorsSummary />
 
