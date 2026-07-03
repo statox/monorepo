@@ -54,7 +54,7 @@
     };
 
     const resetToDefaultSleepTime = async () => {
-        sleepTimeSec = 596;
+        sleepTimeSec = sensor.sleepTimeSecDefault;
         await updateMetadata();
     };
 
