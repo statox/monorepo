@@ -92,7 +92,7 @@
             >
                 {formatedLastLogTimestamp}
                 &nbsp;
-                {#if $user && $user.user.username === 'statox'}
+                {#if $user && $user.user.scopes.includes('admin')}
                     <i>({Duration.fromMillis(sensor.sleepTimeSec * 1000).toFormat("mm'm'ss's'")})</i
                     >
                 {/if}
