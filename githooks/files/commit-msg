@@ -1,12 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 
 MSG_FILE="$1"
 
-# Pattern to remove
-PATTERN='Co-Authored-By'
+# Patterns to remove
+PATTERNS=(
+  '^Co-Authored-By:.*'
+  '^Claude-Session:.*'
+)
 
-# Remove matching lines
-grep -v -E "$PATTERN" "$MSG_FILE" > "$MSG_FILE.tmp" &&
+# Build a single regex alternation from the patterns array
+REGEX=$(IFS='|'; echo "${PATTERNS[*]}")
+
+# Remove lines matching any pattern
+grep -v -E "$REGEX" "$MSG_FILE" > "$MSG_FILE.tmp" &&
 mv "$MSG_FILE.tmp" "$MSG_FILE"
 
 exit 0
