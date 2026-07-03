@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Duration } from 'luxon';
-    import { user } from '$lib/auth';
+    import { isAllowedForUser, user } from '$lib/auth';
     import {
         formatRecordTimestampToHumanWithSeconds,
         formatRecordTimestampToRelative
@@ -92,7 +92,7 @@
             >
                 {formatedLastLogTimestamp}
                 &nbsp;
-                {#if $user && $user.user.scopes.includes('admin')}
+                {#if isAllowedForUser('admin', $user)}
                     <i>({Duration.fromMillis(sensor.sleepTimeSec * 1000).toFormat("mm'm'ss's'")})</i
                     >
                 {/if}

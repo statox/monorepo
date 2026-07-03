@@ -23,6 +23,17 @@ If so you need to edit this function and remove the guard against non-local url
         {
             '@timestamp': now.minus({ minutes: 4 }).toMillis(),
             document: {
+                sensorName: 'dev-chambre',
+                batteryCharge: 3.996,
+                batteryPercent: 69.609,
+                tempCelsius: 26.06,
+                humidity: 63.07,
+                pressurehPa: 1008.591
+            }
+        },
+        {
+            '@timestamp': now.minus({ minutes: 4 }).toMillis(),
+            document: {
                 sensorName: 'dev-salon',
                 batteryCharge: 3.996,
                 batteryPercent: 69.609,
