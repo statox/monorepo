@@ -6,6 +6,9 @@
     import { Duration } from 'luxon';
     import { onDestroy } from 'svelte';
 
+    const BOOST_SLEEP_TIME_SEC = 120;
+    const BOOST_DURATION_SEC = 600;
+
     interface Props {
         sensor: SensorMetadata;
     }
@@ -67,8 +70,8 @@
         try {
             await enableSensorBoost({
                 sensorName: sensor.sensorName,
-                sleepTimeSec: 120,
-                durationSec: 600
+                sleepTimeSec: BOOST_SLEEP_TIME_SEC,
+                durationSec: BOOST_DURATION_SEC
             });
             toast.push('<i class="fas fa-check"></i> Boost enabled');
             const event = new CustomEvent('HomeTracker-RefreshData');
@@ -96,7 +99,9 @@
         <input disabled={!$user} bind:value={sleepTimeSec} type="number" />
         {Duration.fromMillis(sleepTimeSec * 1000).toFormat("mm'm'ss's'")}
         <button onclick={resetToDefaultSleepTime}>Reset</button>
-        <button onclick={enableBoost}>Boost (2min/10min)</button>
+        <button onclick={enableBoost}
+            >Boost ({BOOST_SLEEP_TIME_SEC / 60}min/{BOOST_DURATION_SEC / 60}min)</button
+        >
     </span>
 
     <div>Default sleep time</div>
