@@ -1,4 +1,5 @@
 import { client2 } from '$lib/api';
+import { APIClient, type HomeTracker_Upload_Input } from 'statox-api';
 
 export const getHistogramData = client2.homeTracker.histogramData;
 
@@ -22,3 +23,11 @@ export const getSensorsMetadata = async () => {
 export const updateSensorMetadata = client2.homeTracker.updateSensorMetadata;
 
 export const enableSensorBoost = client2.homeTracker.enableSensorBoost;
+
+export const uploadSensorData = (
+    connection: { apiKey: string; hostname: string },
+    input: HomeTracker_Upload_Input
+) => {
+    const client = APIClient({ baseURL: connection.hostname, apiKey: connection.apiKey });
+    return client.homeTracker.upload(input);
+};
