@@ -174,7 +174,12 @@ describe('periodic task - doHomeTrackerMonitoring', () => {
             'data-home-tracker': [
                 {
                     '@timestamp': DateTime.now().minus({ minute: 10 }).toMillis(),
-                    document: { sensorName: 'dev-salon', batteryCharge: 4, humidity: 30, tempCelsius: 21 }
+                    document: {
+                        sensorName: 'dev-salon',
+                        batteryCharge: 4,
+                        humidity: 30,
+                        tempCelsius: 21
+                    }
                 }
             ]
         });
