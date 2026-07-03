@@ -10,7 +10,9 @@ HOOKS_DIR_DEST='./.git/hooks'
 HOOKS_DIR_SRC='./githooks/files'
 
 if [[ -d $HOOKS_DIR_DEST ]]; then
-    cp "$HOOKS_DIR_SRC"/* "$HOOKS_DIR_DEST/"
+    for hook in "$HOOKS_DIR_SRC"/*; do
+        ln -sf "$(realpath "$hook")" "$HOOKS_DIR_DEST/$(basename "$hook")"
+    done
 
     echo -e "${GREEN}SUCCESS${NC} Git hooks successfully set up"
 else
