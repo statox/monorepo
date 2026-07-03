@@ -37,7 +37,7 @@ const getLast30MinutesLogsForSensor = (sensorName: string) =>
                 must: [
                     {
                         term: {
-                            'document.sensorName': {
+                            'document.sensorName.keyword': {
                                 value: sensorName
                             }
                         }

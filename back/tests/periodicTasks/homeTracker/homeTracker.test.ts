@@ -158,6 +158,32 @@ describe('periodic task - doHomeTrackerMonitoring', () => {
         th.push.checkNbNotifications(1);
     });
 
+    it('Last sync 10 minutes ago with hyphenated sensor name - Do nothing', async () => {
+        await th.mysql.fixture({
+            HomeTrackerSensor: [
+                {
+                    name: 'dev-salon',
+                    isMonitored: true,
+                    lastSyncDateUnix: tenMinutesAgo,
+                    lastAlertDateUnix: null
+                }
+            ]
+        });
+        await th.elk.flush();
+        await th.elk.fixture({
+            'data-home-tracker': [
+                {
+                    '@timestamp': DateTime.now().minus({ minute: 10 }).toMillis(),
+                    document: { sensorName: 'dev-salon', batteryCharge: 4, humidity: 30, tempCelsius: 21 }
+                }
+            ]
+        });
+
+        await doHomeTrackerMonitoring();
+        th.slack.checkNbNotifications(0);
+        th.push.checkNbNotifications(0);
+    });
+
     it('Last sync 10 minutes ago, no logs - Notify', async () => {
         await th.mysql.fixture({
             HomeTrackerSensor: [

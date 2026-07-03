@@ -120,6 +120,53 @@ describe('homeTracker/getSensorsDataForDashboard', () => {
         ]);
     });
 
+    it('Should work with hyphenated sensor names', async () => {
+        const nowMillis = DateTime.now().toMillis();
+        const nowSec = Math.floor(nowMillis / 1000);
+        const oneHourAgoMillis = DateTime.now().minus({ hours: 1 }).toMillis();
+        const oneDayAgoMillis = DateTime.now().minus({ day: 1 }).toMillis();
+
+        await th.mysql.fixture({
+            HomeTrackerSensor: [
+                {
+                    name: 'dev-salon',
+                    hexColor: '#FF0000',
+                    lastSyncDateUnix: nowSec,
+                    isMonitored: true
+                }
+            ]
+        });
+
+        await th.elk.flush();
+        await th.elk.fixture({
+            'data-home-tracker': [
+                {
+                    '@timestamp': nowMillis,
+                    document: { sensorName: 'dev-salon', tempCelsius: 21, humidity: 30 }
+                },
+                {
+                    '@timestamp': oneHourAgoMillis,
+                    document: { sensorName: 'dev-salon', tempCelsius: 20, humidity: 32 }
+                },
+                {
+                    '@timestamp': oneDayAgoMillis,
+                    document: { sensorName: 'dev-salon', tempCelsius: 19, humidity: 35 }
+                }
+            ]
+        });
+
+        const response = await request(app)
+            .get('/homeTracker/getSensorsDataForDashboard')
+            .expect(200);
+
+        const { sensors } = response.body;
+        assert.lengthOf(sensors, 1);
+        assert.equal(sensors[0].sensorName, 'dev-salon');
+        assert.equal(sensors[0].lastLogData.tempCelsius, 21);
+        assert.equal(sensors[0].oneHourAgoLogData.tempCelsius, 20);
+        assert.equal(sensors[0].oneDayAgoLogData.tempCelsius, 19);
+    });
+
     it('Should return one entry by sensor with the last log', async () => {
         const nowMillis = DateTime.now().toMillis();
         const nowSec = Math.floor(nowMillis / 1000);
