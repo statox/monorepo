@@ -4,6 +4,7 @@
     import type { SensorMetadata } from '$lib/HomeTracker';
     import { enableSensorBoost, updateSensorMetadata } from '$lib/HomeTracker';
     import { Duration } from 'luxon';
+    import { onDestroy } from 'svelte';
 
     interface Props {
         sensor: SensorMetadata;
@@ -22,11 +23,15 @@
         sleepTimeSec = sensor.sleepTimeSec;
     });
 
-    const boostIsActive = $derived(sensor.nextSleepTimeResetUnix * 1000 > Date.now());
+    let nowMs = $state(Date.now());
+    const nowMsInterval = setInterval(() => {
+        nowMs = Date.now();
+    }, 1000);
+    onDestroy(() => clearInterval(nowMsInterval));
+
+    const boostIsActive = $derived(sensor.nextSleepTimeResetUnix * 1000 > nowMs);
     const boostRemainingFormatted = $derived(
-        Duration.fromMillis(sensor.nextSleepTimeResetUnix * 1000 - Date.now()).toFormat(
-            "mm'm'ss's'"
-        )
+        Duration.fromMillis(sensor.nextSleepTimeResetUnix * 1000 - nowMs).toFormat("mm'm'ss's'")
     );
 
     const updateMetadata = async () => {
