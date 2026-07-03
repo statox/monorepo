@@ -31,7 +31,7 @@ export const getSensorsDashboardData = async () => {
             size: 1,
             query: {
                 bool: {
-                    filter: [{ term: { 'document.sensorName': sensorName } }]
+                    filter: [{ term: { 'document.sensorName.keyword': sensorName } }]
                 }
             },
             sort: [{ '@timestamp': { order: 'desc' } }]
@@ -52,7 +52,7 @@ export const getSensorsDashboardData = async () => {
             size: 1,
             query: {
                 bool: {
-                    filter: [{ term: { 'document.sensorName': sensorName } }]
+                    filter: [{ term: { 'document.sensorName.keyword': sensorName } }]
                 }
             },
             sort: [
@@ -85,7 +85,7 @@ export const getSensorsDashboardData = async () => {
             size: 1,
             query: {
                 bool: {
-                    filter: [{ term: { 'document.sensorName': sensorName } }]
+                    filter: [{ term: { 'document.sensorName.keyword': sensorName } }]
                 }
             },
             sort: [
