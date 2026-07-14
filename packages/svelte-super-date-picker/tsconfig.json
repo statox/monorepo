@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["es2023", "dom"],
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "noEmit": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "es2022",
+        "types": ["node"]
+    },
+    "exclude": ["eslint.config.mjs", "svelte.config.js", "vitest.config.ts"]
+}
