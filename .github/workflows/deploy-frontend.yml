@@ -57,13 +57,18 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      # packages/sdk is consumed by front/ as a file: symlink. Vite resolves its
-      # TypeScript source directly, which means the SDK's own dependencies (ajv,
-      # json-schema-to-ts) must be installed separately - front/'s npm install
-      # does not descend into linked packages. A proper npm workspaces setup at
-      # the repo root would handle this automatically in the future.
+      # packages/sdk and packages/svelte-super-date-picker are consumed by front/ as
+      # file: symlinks. Vite resolves their TypeScript/Svelte source directly, which
+      # means each package's own dependencies (ajv, json-schema-to-ts, luxon,
+      # @sveltejs/vite-plugin-svelte, ...) must be installed separately - front/'s npm
+      # install does not descend into linked packages. A proper npm workspaces setup
+      # at the repo root would handle this automatically in the future.
       - name: Install SDK dependencies
         working-directory: packages/sdk
+        run: npm ci
+
+      - name: Install svelte-super-date-picker dependencies
+        working-directory: packages/svelte-super-date-picker
         run: npm ci
 
       - name: Install Dependencies
