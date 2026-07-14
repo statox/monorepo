@@ -45,6 +45,7 @@
         "svelte-check": "^4.7.1",
         "svelte-jsoneditor": "^3.12.0",
         "svelte-modals": "^2.0.1",
+        "svelte-super-date-picker": "file:../packages/svelte-super-date-picker",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.62.1",
         "vite": "^8.1.2",
