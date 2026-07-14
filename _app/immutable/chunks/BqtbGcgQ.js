@@ -1,0 +1,1 @@
+import{Gt as e}from"./DAOJESrU.js";import"./DApJgAwD.js";var t=e({name:`My apps`,iconPath:`/favicon.png`,showAuthInHeader:!0}),n=e(!1);export{n,t};
