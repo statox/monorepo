@@ -45,14 +45,14 @@
     };
 
     const commonlyUsedRanges = [
-        { start: 'now-15m', end: 'now', label: '15 minutes ago' },
-        { start: 'now-1h', end: 'now', label: '1 hour ago' },
-        { start: 'now-3h', end: 'now', label: '3 hours ago' },
-        { start: 'now-1d', end: 'now', label: '1 day ago' },
-        { start: 'now-3d', end: 'now', label: '3 days ago' },
-        { start: 'now-7d', end: 'now', label: '7 days ago' },
-        { start: 'now-1M', end: 'now', label: '1 month ago' },
-        { start: 'now-1y', end: 'now', label: '1 year ago' },
+        { start: 'now-30m', end: 'now', label: 'Last 30 minutes' },
+        { start: 'now-1h', end: 'now', label: '1 hour' },
+        { start: 'now-3h', end: 'now', label: '3 hours' },
+        { start: 'now-1d', end: 'now', label: '1 day' },
+        { start: 'now-3d', end: 'now', label: '3 days' },
+        { start: 'now-1w', end: 'now', label: 'Last week' },
+        { start: 'now-1M', end: 'now', label: 'Last month' },
+        { start: 'now-1y', end: 'now', label: 'Last year' },
         { start: '2024-08-29T00:00:00.000Z', end: 'now', label: 'All time' }
     ];
 </script>
