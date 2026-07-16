@@ -5,7 +5,8 @@ export {
     getDateMode,
     isRelativeToNow,
     toAbsoluteString,
-    toRelativeString
+    toRelativeString,
+    toMillisRange
 } from './date-math.js';
 export { prettyDuration, showPrettyDuration } from './pretty-duration.js';
 export { commonDurationRanges } from './time-options.js';

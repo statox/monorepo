@@ -3,7 +3,13 @@
     import { getSensorsMetadata, getHistogramData, type TimeWindow } from '$lib/HomeTracker';
     import { Notice } from '$lib/components/Notice';
     import { MultiSensorsGraph, type GraphType } from './MultiSensorsGraph';
-    import { SuperDatePicker, type OnTimeChangeProps } from 'svelte-super-date-picker';
+    import {
+        SuperDatePicker,
+        toMillisRange,
+        type DurationRange,
+        type OnTimeChangeProps
+    } from 'svelte-super-date-picker';
+    import { persistedDurationRange } from '$lib/components/SuperDatePicker/persistedRange.svelte';
 
     const graphs: GraphType[] = [
         'temperature',
@@ -20,13 +26,13 @@
         return { histogramData, sensorsDetails };
     };
 
-    // Matches the picker's default start="now-15m" end="now" props below.
-    const defaultTimeWindow = (): TimeWindow => {
-        const now = Date.now();
-        return { startDateMs: now - 15 * 60 * 1000, endDateMs: now };
-    };
+    const defaultRange: DurationRange = { start: 'now-15m', end: 'now' };
+    const persistedRange = persistedDurationRange('home-tracker-sensors-histogram', defaultRange);
 
-    let currentTimeWindow = $state<TimeWindow>(defaultTimeWindow());
+    const initialMillisRange = toMillisRange(persistedRange.value.start, persistedRange.value.end);
+    let currentTimeWindow = $state<TimeWindow>(
+        initialMillisRange ?? toMillisRange(defaultRange.start, defaultRange.end)!
+    );
     // svelte-ignore state_referenced_locally
     let apiData = $state(refreshData(currentTimeWindow));
 
@@ -41,6 +47,7 @@
     const handleTimeChange = (props: OnTimeChangeProps) => {
         if (props.isInvalid) return;
         currentTimeWindow = { startDateMs: props.startDateMs, endDateMs: props.endDateMs };
+        persistedRange.value = { start: props.start, end: props.end };
         apiData = refreshData(currentTimeWindow);
     };
 
@@ -61,8 +68,8 @@
     <span>History</span>
 
     <SuperDatePicker
-        start="now-15m"
-        end="now"
+        start={persistedRange.value.start}
+        end={persistedRange.value.end}
         onTimeChange={handleTimeChange}
         {commonlyUsedRanges}
     />

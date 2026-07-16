@@ -43,6 +43,8 @@ export interface TimeRangeMs {
 }
 
 export interface OnTimeChangeProps extends TimeRangeMs {
+    start: ShortDate;
+    end: ShortDate;
     isInvalid: boolean;
     isQuickSelection: boolean;
 }

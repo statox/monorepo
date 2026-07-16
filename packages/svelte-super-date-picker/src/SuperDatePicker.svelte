@@ -78,7 +78,7 @@
             const millisRange = toMillisRange(start, end);
             if (!millisRange) return;
             committedRange = range;
-            onTimeChange({ ...millisRange, isQuickSelection: false, isInvalid });
+            onTimeChange({ ...millisRange, start, end, isQuickSelection: false, isInvalid });
         }
     };
 
@@ -91,6 +91,8 @@
         committedRange = range;
         onTimeChange({
             ...millisRange,
+            start,
+            end,
             isQuickSelection: true,
             isInvalid: false
         });
@@ -99,7 +101,7 @@
     const applyTime = () => {
         const millisRange = toMillisRange(start, end);
         if (!millisRange) return;
-        onTimeChange({ ...millisRange, isQuickSelection: false, isInvalid: false });
+        onTimeChange({ ...millisRange, start, end, isQuickSelection: false, isInvalid: false });
         committedRange = { start, end };
     };
 
