@@ -13,6 +13,10 @@
         toast.push('Quick message!', { duration: 2000 });
     }
 
+    function showPersistentToast() {
+        toast.push('This toast stays until you dismiss it (duration: 0)', { duration: 0 });
+    }
+
     function showInfoToast() {
         toast.push('This is an informational toast', {
             classes: ['toast-info'],
@@ -97,6 +101,7 @@
                 <button onclick={showBasicToast}>Basic Toast</button>
                 <button onclick={showLongToast}>Long Duration (8s)</button>
                 <button onclick={showShortToast}>Short Duration (2s)</button>
+                <button onclick={showPersistentToast}>Persistent (duration: 0)</button>
             </div>
         </div>
 
