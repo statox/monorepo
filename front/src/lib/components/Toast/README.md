@@ -15,6 +15,7 @@ Am I right? Future will say, sorry future me if you read that while trying to fi
 - Remove some hacks the original code had to be retro compatible with its own previous versions
 - Changed the interface of `toast.push()` which accepted either a message or some options as the first argument.
 - Potentially introduced a bug: passing `duration: 0` close the toast immediately maybe before it allowed a never closing toast. TODO Fix that
+- **Update 07/2026:** Fixed - `duration: 0` now persists the toast until manually dismissed instead of auto-closing immediately.
 
 # svelte-toast
 

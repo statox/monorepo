@@ -71,6 +71,11 @@
             if (next === undefined) {
                 throw Error('Toast with undefined next');
             }
+            // duration: 0 means "persist until manually dismissed" - skip the
+            // tween so autoclose() never fires from a same-tick 0ms transition.
+            if (item.duration === 0) {
+                return;
+            }
             progress.set(next).then(autoclose);
         }
     });
