@@ -17,14 +17,18 @@ services:
         tmpfs:
             - /var/lib/mysql:rw
 
-    localstack:
-        container_name: apistatox.localstack
-        image: docker.io/localstack/localstack
+    rustfs:
+        container_name: apistatox.rustfs
+        image: docker.io/rustfs/rustfs:latest
         ports:
-            - '127.0.0.1:24566:4566'
-            - '127.0.0.1:24571:4571'
+            - '127.0.0.1:24566:9000'
         environment:
-            - SERVICES=s3
+            - RUSTFS_VOLUMES=/data/rustfs0
+            - RUSTFS_ACCESS_KEY=test
+            - RUSTFS_SECRET_KEY=test
+            - RUSTFS_CONSOLE_ENABLE=false
+        tmpfs:
+            - /data/rustfs0:rw
 
     elk:
         container_name: apistatox.elk
@@ -56,7 +60,7 @@ services:
     #         - '127.0.0.1:3000:3000'
     #     depends_on:
     #         - db
-    #         - localstack
+    #         - rustfs
     #         - elk
 
     # Uncomment if a Kibana is needed to inspect local ELK

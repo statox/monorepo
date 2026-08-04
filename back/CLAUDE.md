@@ -13,7 +13,7 @@ This is a personal TypeScript/Express API backend serving multiple features (Hom
 These commands are not for you to run, the user should have started them already:
 
 ```bash
-npm run env              # Start docker environment (MySQL, LocalStack S3)
+npm run env              # Start docker environment (MySQL, RustFS S3)
 ./src/tools/init-db.sh   # Initialize database tables
 npm run watch            # TypeScript watcher
 npm run serve            # Start server on port 3000 (watches dist/)
@@ -150,7 +150,7 @@ Configuration is managed by the `src/packages/config/` package:
 
 - **MySQL**: User sessions, application data (dev: docker, test: docker on different port, prod: self-hosted VPS)
 - **Elasticsearch**: Logging via `slog` module + HomeTracker sensor data (dev: stdout only, test: mocked, prod: self-hosted VPS)
-- **S3/R2**: File storage via AWS SDK (dev: LocalStack, test: mocked, prod: Cloudflare R2)
+- **S3/R2**: File storage via AWS SDK (dev: RustFS, test: mocked, prod: Cloudflare R2)
 
 Tables are defined in `src/tools/tables/[table-name].sql` and created via `./src/tools/init-db.sh`.
 

@@ -20,6 +20,8 @@ if (isTests) {
 export const S3 = new S3Client({
     region: isProd ? 'auto' : 'eu-west-1',
     endpoint: config.r2.endpoint,
+    // RustFS (used for local dev) only supports path-style bucket addressing
+    forcePathStyle: !isProd,
     credentials: {
         accessKeyId: config.r2.accessKeyId,
         secretAccessKey: config.r2.secretKey
@@ -97,7 +99,7 @@ const requiredFiles = [
         ])
     }
 ];
-export const initLocalStackS3 = async () => {
+export const initS3 = async () => {
     if (isProd) {
         console.log('dont init local s3 we are in prod');
         return;
