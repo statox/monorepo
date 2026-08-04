@@ -1,0 +1,2 @@
+[bootstrap.packages]
+"apt:default-mysql-client" = "latest"
