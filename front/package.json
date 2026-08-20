@@ -17,7 +17,7 @@
     "devDependencies": {
         "@eslint/compat": "^2.1.0",
         "@eslint/js": "^10.0.1",
-        "@humanspeak/svelte-markdown": "^1.8.5",
+        "@humanspeak/svelte-markdown": "^1.8.6",
         "@sveltejs/adapter-static": "^3.0.10",
         "@sveltejs/kit": "^2.70.2",
         "@sveltejs/vite-plugin-svelte": "^7.1.2",
@@ -29,7 +29,7 @@
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-svelte": "^3.20.0",
         "globals": "^17.6.0",
-        "highlight.js": "^11.11.1",
+        "highlight.js": "^11.12.0",
         "json-schema-to-ts": "^3.1.1",
         "lunarphase-js": "^2.0.3",
         "luxon": "^3.7.2",
