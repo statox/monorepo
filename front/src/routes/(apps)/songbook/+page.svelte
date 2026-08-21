@@ -63,8 +63,8 @@
                     header: `Trying to count missed visits while logged out`
                 });
 
-                for (const url of $failedVisitCounts) {
-                    await uploadLinkVisit({ url });
+                for (const id of $failedVisitCounts) {
+                    await uploadLinkVisit({ id });
                 }
 
                 enqueueNoticeMessage({
@@ -77,9 +77,9 @@
             enqueueNoticeMessage({ level: 'error', header: 'Couldnt upload failed visit counts' });
         }
 
-        const counts = new Map<string, ChordMetadata>(
+        const counts = new Map<number, ChordMetadata>(
             chords.map((chord) => [
-                chord.url,
+                chord.id,
                 { count: chord.visitsCount, lastAccessDateUnix: chord.lastAccessDateUnix ?? 0 }
             ])
         );

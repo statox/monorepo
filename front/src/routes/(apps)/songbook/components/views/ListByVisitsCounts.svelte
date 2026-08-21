@@ -11,15 +11,15 @@
 
     let { searchString, chords = $bindable(), filters }: Props = $props();
 
-    let chordsData: Map<string, ChordMetadata> | undefined = $state();
+    let chordsData: Map<number, ChordMetadata> | undefined = $state();
     visitCountsStore.subscribe((visitCountsMap) => {
         if (!visitCountsMap) {
             return;
         }
         chordsData = visitCountsMap;
         chords = chords.sort((a, b) => {
-            const dataA = visitCountsMap.get(a.url);
-            const dataB = visitCountsMap.get(b.url);
+            const dataA = visitCountsMap.get(a.id);
+            const dataB = visitCountsMap.get(b.id);
 
             if (dataA && dataB) {
                 if (dataA.count !== dataB.count) {
@@ -57,7 +57,7 @@
 {#key chords}
     <ul class="ul2col-container">
         {#each chords as chord}
-            {@const data = chordsData?.get(chord.url)}
+            {@const data = chordsData?.get(chord.id)}
             {#if shouldDisplayChord(chord, searchString, filters)}
                 <li class="ul2col-item">
                     {#if data}({data.count}){/if}
