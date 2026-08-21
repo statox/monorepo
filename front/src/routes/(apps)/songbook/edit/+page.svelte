@@ -1,6 +1,10 @@
 <script lang="ts">
     import { DateTime } from 'luxon';
+    import { untrack } from 'svelte';
     import type { RawChord } from '$lib/Songbook';
+    import { updateExistingChord, deleteExistingChord } from '$lib/Songbook';
+    import { showSuccessToast } from '$lib/components/FormLayout';
+    import { ButtonDelete } from '$lib/components/ButtonDelete';
 
     import { goto } from '$app/navigation';
     import { AuthGuard } from '$lib/components/AuthGuard';
@@ -11,7 +15,9 @@
     }
 
     let { data }: Props = $props();
-    let { chords } = $derived(data);
+    // Seeded once from the load() result, then mutated locally by edit/delete
+    // below — intentionally not a $derived mirror of `data`.
+    let chords: RawChord[] = $state(untrack(() => data.chords));
 
     const sortedChords = $derived(
         [...chords].sort((a, b) => b.creationDateUnix - a.creationDateUnix)
@@ -22,6 +28,66 @@
             return '—';
         }
         return DateTime.fromSeconds(dateUnix).toLocaleString(DateTime.DATETIME_MED);
+    };
+
+    let editingId: number | null = $state(null);
+    let editArtist = $state('');
+    let editTitle = $state('');
+    let editUrl = $state('');
+    let editTags = $state('');
+    let saving = $state(false);
+
+    const startEdit = (chord: RawChord) => {
+        editingId = chord.id;
+        editArtist = chord.artist;
+        editTitle = chord.title;
+        editUrl = chord.url;
+        editTags = chord.tags.join(', ');
+    };
+
+    const cancelEdit = () => {
+        editingId = null;
+    };
+
+    const saveEdit = async (id: number) => {
+        const tags = editTags
+            ? editTags
+                  .split(',')
+                  .map((tag) => tag.trim())
+                  .filter((tag) => tag.length > 0)
+            : [];
+
+        try {
+            saving = true;
+            await updateExistingChord({
+                id,
+                artist: editArtist,
+                title: editTitle,
+                url: editUrl,
+                tags
+            });
+            chords = chords.map((chord) =>
+                chord.id === id
+                    ? { ...chord, artist: editArtist, title: editTitle, url: editUrl, tags }
+                    : chord
+            );
+            showSuccessToast('Song updated successfully');
+            editingId = null;
+        } catch {
+            // updateExistingChord already shows an error toast; stay in edit mode
+        } finally {
+            saving = false;
+        }
+    };
+
+    const deleteRow = async (id: number) => {
+        try {
+            await deleteExistingChord(id);
+            chords = chords.filter((chord) => chord.id !== id);
+            showSuccessToast('Song deleted successfully');
+        } catch {
+            // deleteExistingChord already shows an error toast; leave the row in place
+        }
     };
 </script>
 
@@ -52,21 +118,44 @@
                 <th>Created</th>
                 <th>Visits</th>
                 <th>Last access</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             {#each sortedChords as chord (chord.id)}
                 <tr>
-                    <td>{chord.artist}</td>
-                    <td>{chord.title}</td>
-                    <td>
-                        <a href={chord.url} target="_blank" rel="noopener noreferrer">{chord.url}</a
-                        >
-                    </td>
-                    <td>{chord.tags.join(', ')}</td>
+                    {#if editingId === chord.id}
+                        <td><input type="text" bind:value={editArtist} /></td>
+                        <td><input type="text" bind:value={editTitle} /></td>
+                        <td><input type="text" bind:value={editUrl} /></td>
+                        <td><input type="text" bind:value={editTags} /></td>
+                    {:else}
+                        <td>{chord.artist}</td>
+                        <td>{chord.title}</td>
+                        <td>
+                            <a href={chord.url} target="_blank" rel="noopener noreferrer"
+                                >{chord.url}</a
+                            >
+                        </td>
+                        <td>{chord.tags.join(', ')}</td>
+                    {/if}
                     <td>{formatDate(chord.creationDateUnix)}</td>
                     <td>{chord.visitsCount}</td>
                     <td>{formatDate(chord.lastAccessDateUnix)}</td>
+                    <td>
+                        {#if editingId === chord.id}
+                            <button disabled={saving} onclick={() => saveEdit(chord.id)}>
+                                Save
+                            </button>
+                            <button disabled={saving} onclick={cancelEdit}>Cancel</button>
+                        {:else}
+                            <button onclick={() => startEdit(chord)}>Edit</button>
+                        {/if}
+                    </td>
+                    <td>
+                        <ButtonDelete deleteAction={() => deleteRow(chord.id)} />
+                    </td>
                 </tr>
             {/each}
         </tbody>
