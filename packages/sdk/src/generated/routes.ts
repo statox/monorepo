@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-06-28T21:24:30.184Z
+// Generated on: 2026-07-26T17:31:09.562Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -109,6 +109,40 @@ export const schemas = {
       }
     ]
   },
+  "chords_addEntry_Input": {
+    "type": "object",
+    "required": [
+      "artist",
+      "title",
+      "url",
+      "tags"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "artist": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "url": {
+        "type": "string",
+        "minLength": 1
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "chords_addEntry_Output": {
+    "type": "object",
+    "additionalProperties": false
+  },
   "chords_addLinkVisit_Input": {
     "type": "object",
     "required": [
@@ -152,6 +186,9 @@ export const schemas = {
             "chord": {
               "type": "object",
               "properties": {
+                "id": {
+                  "type": "number"
+                },
                 "artist": {
                   "type": "string"
                 },
@@ -161,7 +198,7 @@ export const schemas = {
                 "url": {
                   "type": "string"
                 },
-                "creationDate": {
+                "creationDateUnix": {
                   "type": "number"
                 },
                 "tags": {
@@ -169,14 +206,26 @@ export const schemas = {
                   "items": {
                     "type": "string"
                   }
+                },
+                "visitsCount": {
+                  "type": "number"
+                },
+                "lastAccessDateUnix": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
                 }
               },
               "required": [
+                "id",
                 "artist",
                 "title",
                 "url",
-                "creationDate",
-                "tags"
+                "creationDateUnix",
+                "tags",
+                "visitsCount",
+                "lastAccessDateUnix"
               ],
               "additionalProperties": false
             },
@@ -206,6 +255,9 @@ export const schemas = {
     "items": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "number"
+        },
         "artist": {
           "type": "string"
         },
@@ -215,7 +267,7 @@ export const schemas = {
         "url": {
           "type": "string"
         },
-        "creationDate": {
+        "creationDateUnix": {
           "type": "number"
         },
         "tags": {
@@ -223,100 +275,29 @@ export const schemas = {
           "items": {
             "type": "string"
           }
-        }
-      },
-      "required": [
-        "artist",
-        "title",
-        "url",
-        "creationDate",
-        "tags"
-      ]
-    }
-  },
-  "chords_getLinksVisitsCount_Output": {
-    "type": "array",
-    "items": {
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string"
         },
-        "count": {
+        "visitsCount": {
           "type": "number"
         },
         "lastAccessDateUnix": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         }
       },
       "required": [
+        "id",
+        "artist",
+        "title",
         "url",
-        "count",
+        "creationDateUnix",
+        "tags",
+        "visitsCount",
         "lastAccessDateUnix"
       ],
       "additionalProperties": false
     }
-  },
-  "chords_updateAll_Input": {
-    "type": "object",
-    "required": [
-      "chords"
-    ],
-    "additionalProperties": false,
-    "properties": {
-      "chords": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "required": [
-            "artist",
-            "title",
-            "url",
-            "creationDate",
-            "tags"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "artist": {
-              "type": "string",
-              "minLength": 1
-            },
-            "title": {
-              "type": "string",
-              "minLength": 1
-            },
-            "url": {
-              "type": "string",
-              "minLength": 1
-            },
-            "creationDate": {
-              "oneOf": [
-                {
-                  "type": "number",
-                  "minimum": 1600000000000
-                },
-                {
-                  "type": "number",
-                  "enum": [
-                    0
-                  ]
-                }
-              ]
-            },
-            "tags": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "chords_updateAll_Output": {
-    "type": "object",
-    "additionalProperties": false
   },
   "clipboard_addEntry_Input": {
     "type": "object",
@@ -1909,23 +1890,20 @@ export type Auth_Me_Input = FromSchema<typeof schemas.auth_me_Input>;
 export type Auth_Me_Output = FromSchema<typeof schemas.auth_me_Output>;
 export type Auth_Me = Endpoint<Auth_Me_Output, Auth_Me_Input>;
 export type Auth_Me_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Chords_AddEntry_Input = FromSchema<typeof schemas.chords_addEntry_Input>;
+export type Chords_AddEntry_Output = FromSchema<typeof schemas.chords_addEntry_Output>;
+export type Chords_AddEntry = Endpoint<Chords_AddEntry_Output, Chords_AddEntry_Input>;
+export type Chords_AddEntry_Errors = 'ITEM_ALREADY_EXISTS' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Chords_AddLinkVisit_Input = FromSchema<typeof schemas.chords_addLinkVisit_Input>;
 export type Chords_AddLinkVisit_Output = FromSchema<typeof schemas.chords_addLinkVisit_Output>;
 export type Chords_AddLinkVisit = Endpoint<Chords_AddLinkVisit_Output, Chords_AddLinkVisit_Input>;
-export type Chords_AddLinkVisit_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Chords_AddLinkVisit_Errors = 'ITEM_NOT_FOUND' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Chords_CheckLinks_Output = FromSchema<typeof schemas.chords_checkLinks_Output>;
 export type Chords_CheckLinks = Endpoint<Chords_CheckLinks_Output>;
 export type Chords_CheckLinks_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Chords_GetAll_Output = FromSchema<typeof schemas.chords_getAll_Output>;
 export type Chords_GetAll = Endpoint<Chords_GetAll_Output>;
 export type Chords_GetAll_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
-export type Chords_GetLinksVisitsCount_Output = FromSchema<typeof schemas.chords_getLinksVisitsCount_Output>;
-export type Chords_GetLinksVisitsCount = Endpoint<Chords_GetLinksVisitsCount_Output>;
-export type Chords_GetLinksVisitsCount_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
-export type Chords_UpdateAll_Input = FromSchema<typeof schemas.chords_updateAll_Input>;
-export type Chords_UpdateAll_Output = FromSchema<typeof schemas.chords_updateAll_Output>;
-export type Chords_UpdateAll = Endpoint<Chords_UpdateAll_Output, Chords_UpdateAll_Input>;
-export type Chords_UpdateAll_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Clipboard_AddEntry_Input = FromSchema<typeof schemas.clipboard_addEntry_Input>;
 export type Clipboard_AddEntry_Output = FromSchema<typeof schemas.clipboard_addEntry_Output>;
 export type Clipboard_AddEntry = Endpoint<Clipboard_AddEntry_Output, Clipboard_AddEntry_Input>;
@@ -2065,6 +2043,13 @@ export function buildModules(fetch: FetchFn) {
 
     chords: {
       /**
+       * POST /chords/addEntry
+       * Auth: user2
+       */
+      addEntry: (input: Chords_AddEntry_Input) =>
+        fetch('/chords/addEntry', input, null, { inputSchema: schemas.chords_addEntry_Input, outputSchema: schemas.chords_addEntry_Output, endpoint: 'chords.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_AddEntry_Output>,
+
+      /**
        * POST /chords/addLinkVisit
        * Auth: user2
        */
@@ -2084,20 +2069,6 @@ export function buildModules(fetch: FetchFn) {
        */
       getAll: () =>
         fetch('/chords/getAll', null, null, { outputSchema: schemas.chords_getAll_Output, endpoint: 'chords.getAll' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetAll_Output>,
-
-      /**
-       * GET /chords/getLinksVisitsCount
-       * Auth: none
-       */
-      getLinksVisitsCount: () =>
-        fetch('/chords/getLinksVisitsCount', null, null, { outputSchema: schemas.chords_getLinksVisitsCount_Output, endpoint: 'chords.getLinksVisitsCount' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetLinksVisitsCount_Output>,
-
-      /**
-       * POST /chords/updateAll
-       * Auth: user2
-       */
-      updateAll: (input: Chords_UpdateAll_Input) =>
-        fetch('/chords/updateAll', input, null, { inputSchema: schemas.chords_updateAll_Input, outputSchema: schemas.chords_updateAll_Output, endpoint: 'chords.updateAll' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_UpdateAll_Output>,
 
     },
 
