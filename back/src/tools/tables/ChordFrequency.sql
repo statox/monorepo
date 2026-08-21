@@ -1,3 +1,4 @@
+-- TODO: superseded by Chord.visitsCount/lastAccessDateUnix, drop this table once confirmed unused.
 CREATE TABLE IF NOT EXISTS `ChordFrequency` (
     `url` varchar(400) NOT NULL,
     `count` int NOT NULL,
