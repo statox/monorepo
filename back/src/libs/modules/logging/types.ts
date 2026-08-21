@@ -32,6 +32,10 @@ export type LoggableProperties = {
     chords_newChordTags?: string[];
     chords_newChordTitle?: string;
     chords_newChordUrl?: string;
+    chords_updatedChordArtist?: string;
+    chords_updatedChordTags?: string[];
+    chords_updatedChordTitle?: string;
+    chords_updatedChordUrl?: string;
     cookbook_duplicateIngredient?: string;
     cookbook_nbIngredients?: number;
     cookbook_newRecipeId?: number;

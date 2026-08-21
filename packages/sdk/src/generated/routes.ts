@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-08-21T21:08:10.618Z
+// Generated on: 2026-08-21T21:12:07.355Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -298,6 +298,44 @@ export const schemas = {
       ],
       "additionalProperties": false
     }
+  },
+  "chords_updateEntry_Input": {
+    "type": "object",
+    "required": [
+      "id",
+      "artist",
+      "title",
+      "url",
+      "tags"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "number"
+      },
+      "artist": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "url": {
+        "type": "string",
+        "minLength": 1
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "chords_updateEntry_Output": {
+    "type": "object",
+    "additionalProperties": false
   },
   "clipboard_addEntry_Input": {
     "type": "object",
@@ -1904,6 +1942,10 @@ export type Chords_CheckLinks_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR'
 export type Chords_GetAll_Output = FromSchema<typeof schemas.chords_getAll_Output>;
 export type Chords_GetAll = Endpoint<Chords_GetAll_Output>;
 export type Chords_GetAll_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Chords_UpdateEntry_Input = FromSchema<typeof schemas.chords_updateEntry_Input>;
+export type Chords_UpdateEntry_Output = FromSchema<typeof schemas.chords_updateEntry_Output>;
+export type Chords_UpdateEntry = Endpoint<Chords_UpdateEntry_Output, Chords_UpdateEntry_Input>;
+export type Chords_UpdateEntry_Errors = 'ITEM_ALREADY_EXISTS' | 'ITEM_NOT_FOUND' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Clipboard_AddEntry_Input = FromSchema<typeof schemas.clipboard_addEntry_Input>;
 export type Clipboard_AddEntry_Output = FromSchema<typeof schemas.clipboard_addEntry_Output>;
 export type Clipboard_AddEntry = Endpoint<Clipboard_AddEntry_Output, Clipboard_AddEntry_Input>;
@@ -2069,6 +2111,13 @@ export function buildModules(fetch: FetchFn) {
        */
       getAll: () =>
         fetch('/chords/getAll', null, null, { outputSchema: schemas.chords_getAll_Output, endpoint: 'chords.getAll' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetAll_Output>,
+
+      /**
+       * POST /chords/updateEntry
+       * Auth: user2
+       */
+      updateEntry: (input: Chords_UpdateEntry_Input) =>
+        fetch('/chords/updateEntry', input, null, { inputSchema: schemas.chords_updateEntry_Input, outputSchema: schemas.chords_updateEntry_Output, endpoint: 'chords.updateEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_UpdateEntry_Output>,
 
     },
 

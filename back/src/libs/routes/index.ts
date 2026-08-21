@@ -6,6 +6,7 @@ import { route as Chords_addEntry } from './chords/addEntry.js';
 import { route as Chords_addLinkVisit } from './chords/addLinkVisit.js';
 import { route as Chords_checkLinks } from './chords/checkLinks.js';
 import { route as Chords_getAll } from './chords/getAll.js';
+import { route as Chords_updateEntry } from './chords/updateEntry.js';
 import { route as Clipboard_addEntry } from './clipboard/addEntry.js';
 import { route as Clipboard_deleteEntry } from './clipboard/deleteEntry.js';
 import { route as Clipboard_geAllEntries } from './clipboard/getAllEntries.js';
@@ -64,6 +65,7 @@ export const routes: {
         Chords_addLinkVisit,
         Chords_checkLinks,
         Chords_getAll,
+        Chords_updateEntry,
         Clipboard_addEntry,
         Clipboard_deleteEntry,
         Clipboard_geAllEntries,
