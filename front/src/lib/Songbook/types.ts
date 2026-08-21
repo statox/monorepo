@@ -3,11 +3,14 @@ export type FilterType = 'link' | 'doc' | 'pdf' | 'youtube';
 export type Filters = Record<FilterType, boolean>;
 
 export type RawChord = {
+    id: number;
     artist: string;
     title: string;
     url: string;
-    creationDate: number;
     tags: string[];
+    creationDateUnix: number;
+    visitsCount: number;
+    lastAccessDateUnix: number | null;
 };
 
 export type Chord = RawChord & {
@@ -15,12 +18,6 @@ export type Chord = RawChord & {
 };
 
 export type ChordMetadata = {
-    count: number;
-    lastAccessDateUnix: number;
-};
-
-export type ChordVisitItem = {
-    url: string;
     count: number;
     lastAccessDateUnix: number;
 };

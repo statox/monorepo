@@ -1,13 +1,5 @@
 import { client2 } from '$lib/api';
-import type { Chord } from './types';
-
-type RawChord = {
-    artist: string;
-    title: string;
-    url: string;
-    creationDate: number;
-    tags: string[];
-};
+import type { Chord, RawChord } from './types';
 
 const getType = (chord: RawChord) => {
     const url = chord.url;
@@ -36,10 +28,8 @@ export const getSongbook = async (): Promise<Chord[]> => {
     });
 };
 
-export const getLinksVisitsCount = client2.chords.getLinksVisitsCount;
-
 export const getLinksChecks = client2.chords.checkLinks;
 
-export const uploadChords = client2.chords.updateAll;
+export const addChord = client2.chords.addEntry;
 
 export const uploadLinkVisit = client2.chords.addLinkVisit;

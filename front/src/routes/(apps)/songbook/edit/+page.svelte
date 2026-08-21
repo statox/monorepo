@@ -1,15 +1,9 @@
 <script lang="ts">
-    import { JSONEditor, Mode, createAjvValidator } from 'svelte-jsoneditor';
-    import type { JSONContent } from 'svelte-jsoneditor';
-    import { ApiError } from '$lib/api';
-    import { UserLoggedOutError } from '$lib/auth';
-    import { toast } from '$lib/components/Toast';
-    import { uploadChords, type RawChord } from '$lib/Songbook';
+    import { DateTime } from 'luxon';
+    import type { RawChord } from '$lib/Songbook';
 
     import { goto } from '$app/navigation';
-    import { Notice } from '$lib/components/Notice';
     import { AuthGuard } from '$lib/components/AuthGuard';
-    import type { Chords_UpdateAll_Errors } from 'statox-api';
 
     interface Props {
         // From +page.ts load() function
@@ -18,85 +12,16 @@
 
     let { data }: Props = $props();
     let { chords } = $derived(data);
-    let content = $derived({
-        json: chords
-    });
 
-    const schema = {
-        type: 'array',
-        items: {
-            type: 'object',
-            required: ['artist', 'title', 'url', 'creationDate', 'tags'],
-            additionalProperties: false,
-            properties: {
-                artist: {
-                    type: 'string'
-                },
-                title: {
-                    type: 'string'
-                },
-                url: {
-                    type: 'string'
-                },
-                creationDate: {
-                    type: 'number'
-                },
-                tags: {
-                    type: 'array',
-                    items: {
-                        type: 'string'
-                    }
-                }
-            }
+    const sortedChords = $derived(
+        [...chords].sort((a, b) => b.creationDateUnix - a.creationDateUnix)
+    );
+
+    const formatDate = (dateUnix: number | null) => {
+        if (dateUnix === null) {
+            return '—';
         }
-    };
-
-    const validator = createAjvValidator({ schema });
-    let editor: JSONEditor | undefined = $state();
-
-    let isValid = $state(true);
-    const onJsonChange = () => {
-        if (editor?.validate()) {
-            isValid = false;
-            return;
-        }
-        isValid = true;
-    };
-
-    const upload = async () => {
-        if (editor?.validate()) {
-            return;
-        }
-
-        try {
-            const content = editor?.get() as JSONContent;
-            await uploadChords({ chords: content.json as RawChord[] });
-            toast.push('<i class="fas fa-check"></i> Uploaded');
-        } catch (error) {
-            let errorMessage = (error as Error).message;
-            if (error instanceof ApiError) {
-                const e = error as ApiError<Chords_UpdateAll_Errors>;
-                if (e.code === 'UNAUTHORIZED') {
-                    errorMessage = 'Invalid logged in user';
-                } else if (e.code === 'INVALID_SCOPE') {
-                    errorMessage = 'Invalid scope';
-                } else if (e.code === 'FORBIDDEN_FOR_USER') {
-                    errorMessage = 'Forbidden for user';
-                } else if (e.code === 'NETWORK_ERROR') {
-                    errorMessage = 'API unreachable';
-                } else if (e.code === 'INTERNAL_SERVER_ERROR') {
-                    errorMessage = 'Server error';
-                }
-            } else if (error instanceof UserLoggedOutError) {
-                errorMessage = 'User is logged out';
-            }
-            const message = `<strong>Upload failed</strong><br/> ${errorMessage}`;
-            toast.push(message, {
-                theme: {
-                    '--toastBarBackground': '#FF0000'
-                }
-            });
-        }
+        return DateTime.fromSeconds(dateUnix).toLocaleString(DateTime.DATETIME_MED);
     };
 </script>
 
@@ -110,28 +35,40 @@
     </span>
 </h2>
 
-<AuthGuard message="Login to upload changes" requiredScope="admin">
+<AuthGuard message="Login to add a new song" requiredScope="admin">
     <button style:position="relative" onclick={() => goto('/songbook/edit/create')}>
         Add a song
     </button>
 </AuthGuard>
 
-{#if chords?.length}
-    {#if isValid}
-        <AuthGuard hideIfForbidden={true} requiredScope="admin">
-            <button onclick={upload}>Upload</button>
-        </AuthGuard>
-    {:else}
-        <Notice item={{ level: 'error', header: 'Fix JSON errors to upload changes' }} />
-    {/if}
-    <div class="json-editor jse-theme-dark" style="width: 100%">
-        <JSONEditor
-            bind:this={editor}
-            bind:content
-            mode={Mode.table}
-            mainMenuBar={true}
-            {validator}
-            onChange={onJsonChange}
-        />
-    </div>
+{#if sortedChords.length}
+    <table>
+        <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Title</th>
+                <th>URL</th>
+                <th>Tags</th>
+                <th>Created</th>
+                <th>Visits</th>
+                <th>Last access</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#each sortedChords as chord (chord.id)}
+                <tr>
+                    <td>{chord.artist}</td>
+                    <td>{chord.title}</td>
+                    <td>
+                        <a href={chord.url} target="_blank" rel="noopener noreferrer">{chord.url}</a
+                        >
+                    </td>
+                    <td>{chord.tags.join(', ')}</td>
+                    <td>{formatDate(chord.creationDateUnix)}</td>
+                    <td>{chord.visitsCount}</td>
+                    <td>{formatDate(chord.lastAccessDateUnix)}</td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
 {/if}

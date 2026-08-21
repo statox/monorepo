@@ -43,7 +43,6 @@
         "statox-api": "file:../packages/sdk",
         "svelte": "^5.56.4",
         "svelte-check": "^4.7.1",
-        "svelte-jsoneditor": "^3.13.0",
         "svelte-modals": "^2.0.1",
         "svelte-super-date-picker": "file:../packages/svelte-super-date-picker",
         "typescript": "^6.0.3",

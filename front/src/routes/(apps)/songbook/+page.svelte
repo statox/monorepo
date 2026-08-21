@@ -1,9 +1,8 @@
 <script lang="ts">
     import {
-        getLinksVisitsCount,
         uploadLinkVisit,
         type Chord,
-        type ChordVisitItem,
+        type ChordMetadata,
         type Filters,
         type FilterType
     } from '$lib/Songbook';
@@ -78,22 +77,13 @@
             enqueueNoticeMessage({ level: 'error', header: 'Couldnt upload failed visit counts' });
         }
 
-        try {
-            const countsData = await getLinksVisitsCount();
-            const counts = countsData.reduce(
-                (counts: Map<string, ChordVisitItem>, count: ChordVisitItem) => {
-                    counts.set(count.url, {
-                        ...count
-                    });
-                    return counts;
-                },
-                new Map()
-            );
-
-            visitCountsStore.set(counts);
-        } catch (_error) {
-            enqueueNoticeMessage({ level: 'error', header: 'Couldnt upload failed visit counts' });
-        }
+        const counts = new Map<string, ChordMetadata>(
+            chords.map((chord) => [
+                chord.url,
+                { count: chord.visitsCount, lastAccessDateUnix: chord.lastAccessDateUnix ?? 0 }
+            ])
+        );
+        visitCountsStore.set(counts);
     });
 
     let searchString = $state('');
