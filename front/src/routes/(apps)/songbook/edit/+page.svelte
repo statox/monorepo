@@ -5,6 +5,9 @@
     import { updateExistingChord, deleteExistingChord } from '$lib/Songbook';
     import { showSuccessToast } from '$lib/components/FormLayout';
     import { ButtonDelete } from '$lib/components/ButtonDelete';
+    import { ButtonEdit } from '$lib/components/ButtonEdit';
+    import { ButtonSave } from '$lib/components/ButtonSave';
+    import { ButtonCancel } from '$lib/components/ButtonCancel';
 
     import { goto } from '$app/navigation';
     import { AuthGuard } from '$lib/components/AuthGuard';
@@ -145,12 +148,10 @@
                     <td>{formatDate(chord.lastAccessDateUnix)}</td>
                     <td>
                         {#if editingId === chord.id}
-                            <button disabled={saving} onclick={() => saveEdit(chord.id)}>
-                                Save
-                            </button>
-                            <button disabled={saving} onclick={cancelEdit}>Cancel</button>
+                            <ButtonSave disabled={saving} saveAction={() => saveEdit(chord.id)} />
+                            <ButtonCancel disabled={saving} cancelAction={cancelEdit} />
                         {:else}
-                            <button onclick={() => startEdit(chord)}>Edit</button>
+                            <ButtonEdit editAction={() => startEdit(chord)} />
                         {/if}
                     </td>
                     <td>
