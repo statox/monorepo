@@ -1,1 +1,0 @@
-import{t as e}from"./BexRozhV.js";var t=e.webWatcher.getAllWatchers,n=e.webWatcher.createWatcher,r=e.webWatcher.deleteWatcher,i=e.webWatcher.toggleWatcherEnabled;export{i,r as n,t as r,n as t};
