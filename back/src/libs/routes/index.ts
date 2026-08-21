@@ -2,11 +2,10 @@ import { Route, type ApiFile } from './types.js';
 import { route as Auth_Login } from './auth/login.js';
 import { route as Auth_Logout } from './auth/logout.js';
 import { route as Auth_Me } from './auth/me.js';
+import { route as Chords_addEntry } from './chords/addEntry.js';
 import { route as Chords_addLinkVisit } from './chords/addLinkVisit.js';
 import { route as Chords_checkLinks } from './chords/checkLinks.js';
 import { route as Chords_getAll } from './chords/getAll.js';
-import { route as Chords_getLinksVisitsCount } from './chords/getLinksVisitsCount.js';
-import { route as Chords_updateAll } from './chords/updateAll.js';
 import { route as Clipboard_addEntry } from './clipboard/addEntry.js';
 import { route as Clipboard_deleteEntry } from './clipboard/deleteEntry.js';
 import { route as Clipboard_geAllEntries } from './clipboard/getAllEntries.js';
@@ -61,11 +60,10 @@ export const routes: {
         Auth_Login,
         Auth_Logout,
         Auth_Me,
+        Chords_addEntry,
         Chords_addLinkVisit,
         Chords_checkLinks,
         Chords_getAll,
-        Chords_getLinksVisitsCount,
-        Chords_updateAll,
         Clipboard_addEntry,
         Clipboard_deleteEntry,
         Clipboard_geAllEntries,

@@ -1,7 +1,10 @@
 export type Chord = {
+    id: number;
     artist: string;
     title: string;
     url: string;
-    creationDate: number;
     tags: string[];
+    creationDateUnix: number;
+    visitsCount: number;
+    lastAccessDateUnix: number | null;
 };
