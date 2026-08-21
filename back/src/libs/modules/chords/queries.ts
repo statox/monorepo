@@ -1,45 +1,37 @@
-import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { RowDataPacket } from 'mysql2';
+import { OkPacket, RowDataPacket } from 'mysql2';
 import { Chord } from './types.js';
 import { db } from '../../databases/db.js';
-import { S3 } from '../../databases/s3.js';
-import { slog } from '../logging/index.js';
+import { ChordNotFoundError } from './errors.js';
 
-export const addLinkVisit = (params: { url: string }) => {
-    return db.query(
-        `
-INSERT INTO ChordFrequency (url, count, lastAccessDateUnix)
-VALUES (?, 1, UNIX_TIMESTAMP())
-ON DUPLICATE KEY UPDATE count = count+1, lastAccessDateUnix = UNIX_TIMESTAMP()
-`,
-        [params.url]
-    );
-};
-
-type ChordVisitItem = {
+type ChordRow = {
+    id: number;
+    artist: string;
+    title: string;
     url: string;
-    count: number;
-    lastAccessDateUnix: number;
-};
-export const getLinksVisitsCount = async () => {
-    const [rows] = await db.query<RowDataPacket[]>(
-        'SELECT url, count, lastAccessDateUnix FROM ChordFrequency ORDER BY count DESC'
-    );
-    return rows as ChordVisitItem[];
+    tags: string;
+    creationDateUnix: number;
+    visitsCount: number;
+    lastAccessDateUnix: number | null;
 };
 
 export const getAllChords = async (): Promise<Chord[]> => {
-    const cmd = new GetObjectCommand({ Bucket: 'songbook', Key: 'index.json' });
-    try {
-        const res = await S3.send(cmd);
-        const str = await res.Body?.transformToString();
-        if (!str) {
-            throw new Error('Empty chords file');
-        }
+    const [rows] = await db.query<RowDataPacket[]>(
+        'SELECT id, artist, title, url, tags, creationDateUnix, visitsCount, lastAccessDateUnix FROM Chord'
+    );
 
-        return JSON.parse(str);
-    } catch (error) {
-        slog.log('chords', 'Error getting all chords from S3', { error: error as Error });
-        throw error;
+    return (rows as ChordRow[]).map((row) => ({
+        ...row,
+        tags: JSON.parse(row.tags)
+    }));
+};
+
+export const addLinkVisit = async (params: { url: string }) => {
+    const [result] = await db.execute(
+        `UPDATE Chord SET visitsCount = visitsCount + 1, lastAccessDateUnix = UNIX_TIMESTAMP() WHERE url = ?`,
+        [params.url]
+    );
+
+    if ((result as OkPacket).affectedRows === 0) {
+        throw new ChordNotFoundError();
     }
 };

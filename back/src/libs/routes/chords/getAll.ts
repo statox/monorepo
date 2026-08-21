@@ -11,26 +11,29 @@ const outputSchema = {
     items: {
         type: 'object',
         properties: {
-            artist: {
-                type: 'string'
-            },
-            title: {
-                type: 'string'
-            },
-            url: {
-                type: 'string'
-            },
-            creationDate: {
-                type: 'number'
-            },
+            id: { type: 'number' },
+            artist: { type: 'string' },
+            title: { type: 'string' },
+            url: { type: 'string' },
+            creationDateUnix: { type: 'number' },
             tags: {
                 type: 'array',
-                items: {
-                    type: 'string'
-                }
-            }
+                items: { type: 'string' }
+            },
+            visitsCount: { type: 'number' },
+            lastAccessDateUnix: { type: ['number', 'null'] }
         },
-        required: ['artist', 'title', 'url', 'creationDate', 'tags']
+        required: [
+            'id',
+            'artist',
+            'title',
+            'url',
+            'creationDateUnix',
+            'tags',
+            'visitsCount',
+            'lastAccessDateUnix'
+        ],
+        additionalProperties: false
     }
 } as const;
 

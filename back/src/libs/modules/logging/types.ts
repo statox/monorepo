@@ -28,6 +28,10 @@ export type LoggableProperties = {
     cfRay?: string;
     clientId?: string;
     code?: number;
+    chords_newChordArtist?: string;
+    chords_newChordTags?: string[];
+    chords_newChordTitle?: string;
+    chords_newChordUrl?: string;
     cookbook_duplicateIngredient?: string;
     cookbook_nbIngredients?: number;
     cookbook_newRecipeId?: number;

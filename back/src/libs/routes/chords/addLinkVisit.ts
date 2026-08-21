@@ -3,6 +3,7 @@ import { EmptyOutput, PostRoute, RouteHandler } from '../types.js';
 import { addLinkVisit } from '../../modules/chords/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 
+// TODO: Update this route to take a link id instead of an url
 const handler: RouteHandler<Input> = async (params) => {
     const { url } = params.input;
     params.loggableContext.addData('visitedUrl', url);
@@ -29,5 +30,6 @@ export const route: PostRoute<Input, EmptyOutput> = {
     handler,
     authentication: 'user2',
     scope: 'admin',
+    clientErrors: ['ITEM_NOT_FOUND'],
     outputSchema: emptyObjectSchema
 };

@@ -4,7 +4,32 @@ import { assert } from 'chai';
 import { th } from '../../../helpers/index.js';
 
 describe('chords/addLinkVisit', () => {
-    it('should create new entry with count 1', async () => {
+    it('should increment visitsCount on an existing chord', async () => {
+        await th.mysql.fixture({
+            Chord: [
+                {
+                    id: 1,
+                    artist: 'artist',
+                    title: 'title',
+                    url: 'https://bar.com',
+                    tags: '[]',
+                    creationDateUnix: 1,
+                    visitsCount: 2,
+                    lastAccessDateUnix: 1
+                },
+                {
+                    id: 2,
+                    artist: 'other artist',
+                    title: 'other title',
+                    url: 'https://foo.com',
+                    tags: '[]',
+                    creationDateUnix: 1,
+                    visitsCount: 1,
+                    lastAccessDateUnix: 1
+                }
+            ]
+        });
+
         await request(app)
             .post('/chords/addLinkVisit')
             .set('Cookie', th.auth2.getPassportSessionCookie())
@@ -18,11 +43,16 @@ describe('chords/addLinkVisit', () => {
             });
 
         await th.mysql.checkContains({
-            ChordFrequency: [
+            Chord: [
                 {
                     url: 'https://bar.com',
-                    count: 1,
+                    visitsCount: 3,
                     lastAccessDateUnix: th.mysql.aroundNowSec
+                },
+                {
+                    url: 'https://foo.com',
+                    visitsCount: 1,
+                    lastAccessDateUnix: 1
                 }
             ]
         });
@@ -34,17 +64,18 @@ describe('chords/addLinkVisit', () => {
             }
         });
     });
-    it('should update existing entry', async () => {
+
+    it('should reject a url with no matching chord', async () => {
         await th.mysql.fixture({
-            ChordFrequency: [
+            Chord: [
                 {
-                    url: 'https://bar.com',
-                    count: 2,
-                    lastAccessDateUnix: 1
-                },
-                {
+                    id: 1,
+                    artist: 'artist',
+                    title: 'title',
                     url: 'https://foo.com',
-                    count: 1,
+                    tags: '[]',
+                    creationDateUnix: 1,
+                    visitsCount: 1,
                     lastAccessDateUnix: 1
                 }
             ]
@@ -55,23 +86,18 @@ describe('chords/addLinkVisit', () => {
             .set('Cookie', th.auth2.getPassportSessionCookie())
             .set('Accept', 'application/json')
             .send({
-                url: 'https://bar.com'
+                url: 'https://unknown.com'
             })
-            .expect(200)
+            .expect(400)
             .then((response) => {
-                assert.deepEqual(response.body, {});
+                assert.deepEqual(response.body, { httpStatus: 400, code: 'ITEM_NOT_FOUND' });
             });
 
         await th.mysql.checkContains({
-            ChordFrequency: [
-                {
-                    url: 'https://bar.com',
-                    count: 3,
-                    lastAccessDateUnix: th.mysql.aroundNowSec
-                },
+            Chord: [
                 {
                     url: 'https://foo.com',
-                    count: 1,
+                    visitsCount: 1,
                     lastAccessDateUnix: 1
                 }
             ]
