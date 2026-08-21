@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-07-26T17:31:09.562Z
+// Generated on: 2026-08-21T21:08:10.618Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -146,12 +146,12 @@ export const schemas = {
   "chords_addLinkVisit_Input": {
     "type": "object",
     "required": [
-      "url"
+      "id"
     ],
     "additionalProperties": false,
     "properties": {
-      "url": {
-        "type": "string"
+      "id": {
+        "type": "number"
       }
     }
   },

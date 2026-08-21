@@ -35,7 +35,7 @@ describe('chords/addLinkVisit', () => {
             .set('Cookie', th.auth2.getPassportSessionCookie())
             .set('Accept', 'application/json')
             .send({
-                url: 'https://bar.com'
+                id: 1
             })
             .expect(200)
             .then((response) => {
@@ -45,12 +45,12 @@ describe('chords/addLinkVisit', () => {
         await th.mysql.checkContains({
             Chord: [
                 {
-                    url: 'https://bar.com',
+                    id: 1,
                     visitsCount: 3,
                     lastAccessDateUnix: th.mysql.aroundNowSec
                 },
                 {
-                    url: 'https://foo.com',
+                    id: 2,
                     visitsCount: 1,
                     lastAccessDateUnix: 1
                 }
@@ -60,12 +60,12 @@ describe('chords/addLinkVisit', () => {
         th.slog.checkLog('app', 'access-log', {
             path: '/chords/addLinkVisit',
             context: {
-                visitedUrl: 'https://bar.com'
+                id: 1
             }
         });
     });
 
-    it('should reject a url with no matching chord', async () => {
+    it('should reject an id with no matching chord', async () => {
         await th.mysql.fixture({
             Chord: [
                 {
@@ -86,7 +86,7 @@ describe('chords/addLinkVisit', () => {
             .set('Cookie', th.auth2.getPassportSessionCookie())
             .set('Accept', 'application/json')
             .send({
-                url: 'https://unknown.com'
+                id: 999
             })
             .expect(400)
             .then((response) => {
@@ -96,7 +96,7 @@ describe('chords/addLinkVisit', () => {
         await th.mysql.checkContains({
             Chord: [
                 {
-                    url: 'https://foo.com',
+                    id: 1,
                     visitsCount: 1,
                     lastAccessDateUnix: 1
                 }
