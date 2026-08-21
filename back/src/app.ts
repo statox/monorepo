@@ -52,6 +52,7 @@ export const initApp = () => {
     app.use(
         cors({
             // TODO have a proper local setup to avoid localhost in prod
+            // this probably requires a proper staging environment for both front and back
             origin: [
                 'https://apps.statox.fr',
                 'https://localhost:8080',
@@ -61,9 +62,7 @@ export const initApp = () => {
         })
     );
 
-    // Default is 100kb, bumped the limit for chords/updateAll
-    // TODO Maybe rework the endpoint to not get the whole file and decrease the limit again
-    app.use(express.json({ limit: '500kb' }));
+    app.use(express.json());
 
     app.set('views', './src/views');
     app.set('view engine', 'mustache');
