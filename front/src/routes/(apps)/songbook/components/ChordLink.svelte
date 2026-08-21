@@ -19,8 +19,8 @@
         if (!visitCountsMap) {
             return;
         }
-        if (visitCountsMap.has(chord.url)) {
-            const data = visitCountsMap.get(chord.url)!;
+        if (visitCountsMap.has(chord.id)) {
+            const data = visitCountsMap.get(chord.id)!;
             const lastVisit = new Date(data.lastAccessDateUnix * 1000);
             toolTipContent = `visits: ${data.count} - last: ${lastVisit.toLocaleDateString()}`;
         }
@@ -38,15 +38,15 @@
 
     const addVisit = async () => {
         try {
-            await uploadLinkVisit({ url: chord.url });
+            await uploadLinkVisit({ id: chord.id });
 
             // Once we made the call and it succeeded update the store
             // to reflect the change without having to call the API again
             const map = get(visitCountsStore);
-            const data = map.get(chord.url) || { count: 0, lastAccessDateUnix: 0 };
+            const data = map.get(chord.id) || { count: 0, lastAccessDateUnix: 0 };
             data.count++;
             data.lastAccessDateUnix = Date.now() / 1000;
-            map.set(chord.url, data);
+            map.set(chord.id, data);
             visitCountsStore.set(map);
         } catch (error) {
             let errorMessage = (error as Error).message;
@@ -57,7 +57,7 @@
             }
 
             // Keep track of the failure so we can try re-uploading it when user logs in
-            $failedVisitCounts = [...$failedVisitCounts, chord.url];
+            $failedVisitCounts = [...$failedVisitCounts, chord.id];
 
             const message = `<strong>Visit not counted</strong><br/> ${errorMessage}`;
             toast.push(message, {

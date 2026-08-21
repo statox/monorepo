@@ -32,4 +32,8 @@ export const getLinksChecks = client2.chords.checkLinks;
 
 export const addChord = client2.chords.addEntry;
 
+export const updateChord = client2.chords.updateEntry;
+
+export const deleteChord = client2.chords.deleteEntry;
+
 export const uploadLinkVisit = client2.chords.addLinkVisit;
