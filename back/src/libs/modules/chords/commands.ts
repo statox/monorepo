@@ -20,6 +20,10 @@ export const addChord = async (params: {
     }
 };
 
+export const deleteChord = async (id: number) => {
+    await db.query(`DELETE FROM Chord WHERE id = ?`, [id]);
+};
+
 export const updateChord = async (params: {
     id: number;
     artist: string;

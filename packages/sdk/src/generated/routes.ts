@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-08-21T21:12:07.355Z
+// Generated on: 2026-08-21T21:19:51.446Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -248,6 +248,23 @@ export const schemas = {
       "timestamp",
       "fails"
     ],
+    "additionalProperties": false
+  },
+  "chords_deleteEntry_Input": {
+    "type": "object",
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "number",
+        "description": "id of the chord to delete"
+      }
+    }
+  },
+  "chords_deleteEntry_Output": {
+    "type": "object",
     "additionalProperties": false
   },
   "chords_getAll_Output": {
@@ -1939,6 +1956,10 @@ export type Chords_AddLinkVisit_Errors = 'ITEM_NOT_FOUND' | 'UNAUTHORIZED' | 'FO
 export type Chords_CheckLinks_Output = FromSchema<typeof schemas.chords_checkLinks_Output>;
 export type Chords_CheckLinks = Endpoint<Chords_CheckLinks_Output>;
 export type Chords_CheckLinks_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Chords_DeleteEntry_Input = FromSchema<typeof schemas.chords_deleteEntry_Input>;
+export type Chords_DeleteEntry_Output = FromSchema<typeof schemas.chords_deleteEntry_Output>;
+export type Chords_DeleteEntry = Endpoint<Chords_DeleteEntry_Output, Chords_DeleteEntry_Input>;
+export type Chords_DeleteEntry_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Chords_GetAll_Output = FromSchema<typeof schemas.chords_getAll_Output>;
 export type Chords_GetAll = Endpoint<Chords_GetAll_Output>;
 export type Chords_GetAll_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
@@ -2104,6 +2125,13 @@ export function buildModules(fetch: FetchFn) {
        */
       checkLinks: () =>
         fetch('/chords/checkLinks', null, null, { outputSchema: schemas.chords_checkLinks_Output, endpoint: 'chords.checkLinks' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_CheckLinks_Output>,
+
+      /**
+       * POST /chords/deleteEntry
+       * Auth: user2
+       */
+      deleteEntry: (input: Chords_DeleteEntry_Input) =>
+        fetch('/chords/deleteEntry', input, null, { inputSchema: schemas.chords_deleteEntry_Input, outputSchema: schemas.chords_deleteEntry_Output, endpoint: 'chords.deleteEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_DeleteEntry_Output>,
 
       /**
        * GET /chords/getAll
