@@ -27,9 +27,9 @@
 
     const chordsWithTags: ChordWithTags[] = $derived(
         chords
-            .filter((c) => c.creationDate)
+            .filter((c) => c.creationDateUnix)
             .sort((a, b) => {
-                return b.creationDate - a.creationDate;
+                return b.creationDateUnix - a.creationDateUnix;
             })
             .map((chord, index, chords) => {
                 const r = {
@@ -38,7 +38,10 @@
                 if (index > 0) {
                     const prev = chords[index - 1];
                     for (const { time, label } of timeSteps) {
-                        if (prev.creationDate > time && chord.creationDate < time) {
+                        if (
+                            prev.creationDateUnix * 1000 > time &&
+                            chord.creationDateUnix * 1000 < time
+                        ) {
                             r.dateTag = label;
                         }
                     }

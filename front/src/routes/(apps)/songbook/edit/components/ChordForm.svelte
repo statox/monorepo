@@ -7,7 +7,7 @@
         showSuccessToast
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
-    import { uploadNewChord, type RawChord } from '$lib/Songbook';
+    import { uploadNewChord, type ChordData } from '$lib/Songbook';
 
     interface Props {
         onUpload: () => void;
@@ -49,7 +49,7 @@
         if (Object.values(fieldErrors).some((e) => e)) return;
 
         const tagList = tags ? tags.replaceAll(' ', '').split(',') : [];
-        const newChord: RawChord = { title, artist, url, tags: tagList, creationDate: Date.now() };
+        const newChord: ChordData = { title, artist, url, tags: tagList };
 
         try {
             uploading = true;

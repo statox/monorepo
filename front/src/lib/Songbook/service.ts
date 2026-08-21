@@ -2,11 +2,12 @@ import Ajv from 'ajv';
 import type { FromSchema } from 'json-schema-to-ts';
 import { ApiError } from '$lib/api';
 import { toast } from '$lib/components/Toast';
-import { getChords, uploadChords } from '$lib/Songbook';
+import { addChord } from '$lib/Songbook';
+import type { Chords_AddEntry_Errors } from 'statox-api';
 
 const chordSchema = {
     type: 'object',
-    required: ['artist', 'title', 'url', 'creationDate', 'tags'],
+    required: ['artist', 'title', 'url', 'tags'],
     additionalProperties: false,
     properties: {
         artist: {
@@ -20,9 +21,6 @@ const chordSchema = {
         url: {
             type: 'string',
             minLength: 1
-        },
-        creationDate: {
-            type: 'number'
         },
         tags: {
             type: 'array',
@@ -44,7 +42,7 @@ const validateData = ajv.compile(chordSchema);
 function validateChordData(data: unknown): asserts data is ChordData {
     if (!validateData(data)) {
         const errors = ajv.errorsText(validateData.errors);
-        throw new Error(`Invalid PersonalTracker data: ${errors}`);
+        throw new Error(`Invalid Songbook data: ${errors}`);
     }
 }
 
@@ -62,15 +60,25 @@ export const uploadNewChord = async (newChord: ChordData) => {
     }
 
     try {
-        // Fetch existing chords and prepend the new one
-        const chords = await getChords();
-        const updatedChords = [newChord, ...chords];
-
-        await uploadChords({ chords: updatedChords });
+        await addChord(newChord);
     } catch (error) {
         let errorMessage = (error as Error).message;
-        if (error instanceof ApiError && error.code === 'UNAUTHORIZED') {
-            errorMessage = 'Invalid logged in user';
+        // TODO: The kind of guard for generic errors (e.g. INVALID_SCOPE) should be factorized in a common module
+        if (error instanceof ApiError) {
+            const e = error as ApiError<Chords_AddEntry_Errors>;
+            if (e.code === 'ITEM_ALREADY_EXISTS') {
+                errorMessage = 'A song with this URL already exists';
+            } else if (e.code === 'UNAUTHORIZED') {
+                errorMessage = 'Invalid logged in user';
+            } else if (e.code === 'INVALID_SCOPE') {
+                errorMessage = 'Invalid scope';
+            } else if (e.code === 'FORBIDDEN_FOR_USER') {
+                errorMessage = 'Forbidden for user';
+            } else if (e.code === 'NETWORK_ERROR') {
+                errorMessage = 'API unreachable';
+            } else if (e.code === 'INTERNAL_SERVER_ERROR') {
+                errorMessage = 'Server error';
+            }
         }
         const message = `<strong>Entry not created</strong><br/> ${errorMessage}`;
         toast.push(message, {
