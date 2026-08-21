@@ -1,6 +1,6 @@
 import { checkChordsUrl } from './urlsChecker.js';
-import { addChord } from './commands.js';
+import { addChord, updateChord } from './commands.js';
 import { addLinkVisit, getAllChords } from './queries.js';
 import { ChordNotFoundError } from './errors.js';
 
-export { addChord, addLinkVisit, checkChordsUrl, getAllChords, ChordNotFoundError };
+export { addChord, updateChord, addLinkVisit, checkChordsUrl, getAllChords, ChordNotFoundError };

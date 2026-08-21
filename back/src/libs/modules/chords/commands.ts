@@ -1,5 +1,7 @@
+import { RowDataPacket } from 'mysql2';
 import { db } from '../../databases/db.js';
 import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
+import { ChordNotFoundError } from './errors.js';
 
 export const addChord = async (params: {
     artist: string;
@@ -13,6 +15,35 @@ export const addChord = async (params: {
              VALUES (?, ?, ?, ?, UNIX_TIMESTAMP(), 0)`,
             [params.artist, params.title, params.url, JSON.stringify(params.tags)]
         );
+    } catch (error) {
+        handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
+    }
+};
+
+export const updateChord = async (params: {
+    id: number;
+    artist: string;
+    title: string;
+    url: string;
+    tags: string[];
+}) => {
+    // Ensure the chord exists
+    const [rows] = await db.query<RowDataPacket[]>('SELECT id FROM Chord WHERE id = ?', [
+        params.id
+    ]);
+
+    if (rows.length === 0) {
+        throw new ChordNotFoundError();
+    }
+
+    try {
+        await db.query(`UPDATE Chord SET artist = ?, title = ?, url = ?, tags = ? WHERE id = ?`, [
+            params.artist,
+            params.title,
+            params.url,
+            JSON.stringify(params.tags),
+            params.id
+        ]);
     } catch (error) {
         handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
     }
