@@ -25,10 +25,10 @@ export const getAllChords = async (): Promise<Chord[]> => {
     }));
 };
 
-export const addLinkVisit = async (params: { url: string }) => {
+export const addLinkVisit = async (params: { id: number }) => {
     const [result] = await db.execute(
-        `UPDATE Chord SET visitsCount = visitsCount + 1, lastAccessDateUnix = UNIX_TIMESTAMP() WHERE url = ?`,
-        [params.url]
+        `UPDATE Chord SET visitsCount = visitsCount + 1, lastAccessDateUnix = UNIX_TIMESTAMP() WHERE id = ?`,
+        [params.id]
     );
 
     if ((result as OkPacket).affectedRows === 0) {

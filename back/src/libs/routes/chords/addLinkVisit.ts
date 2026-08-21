@@ -3,20 +3,19 @@ import { EmptyOutput, PostRoute, RouteHandler } from '../types.js';
 import { addLinkVisit } from '../../modules/chords/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 
-// TODO: Update this route to take a link id instead of an url
 const handler: RouteHandler<Input> = async (params) => {
-    const { url } = params.input;
-    params.loggableContext.addData('visitedUrl', url);
-    await addLinkVisit({ url });
+    const { id } = params.input;
+    params.loggableContext.addData('id', id);
+    await addLinkVisit({ id });
 };
 
 const inputSchema = {
     type: 'object',
-    required: ['url'],
+    required: ['id'],
     additionalProperties: false,
     properties: {
-        url: {
-            type: 'string'
+        id: {
+            type: 'number'
         }
     }
 } as const;

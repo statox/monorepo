@@ -105,7 +105,6 @@ export type LoggableProperties = {
     userId?: number;
     userScopes?: string[];
     validityTime?: string;
-    visitedUrl?: string;
     watcherName?: string;
     xRequestInfo?: xRequestInfo;
     zValue?: number;
