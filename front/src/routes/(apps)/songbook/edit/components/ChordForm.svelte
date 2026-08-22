@@ -70,11 +70,14 @@
     onMount(async () => {
         const chords = await getChords();
 
-        const data = chords.reduce((acc, chord) => {
-            acc.artists.add(chord.artist);
-            acc.titles.add(chord.title);
-            return acc;
-        }, {artists: new Set(), titles: new Set()});
+        const data = chords.reduce(
+            (acc, chord) => {
+                acc.artists.add(chord.artist);
+                acc.titles.add(chord.title);
+                return acc;
+            },
+            { artists: new Set(), titles: new Set() }
+        );
 
         existingArtists = [...data.artists] as string[];
         existingTitles = [...data.titles] as string[];
@@ -83,7 +86,7 @@
 
 <FormLayout
     title="Add a new song"
-    backUrl="/songbook/edit"
+    backUrl="/songbook"
     authMessage="Login to add a new song"
     {noticeMessages}
 >

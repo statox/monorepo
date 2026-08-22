@@ -11,4 +11,4 @@
     pageMetadataStore.set(pageMetadata);
 </script>
 
-<ChordForm onUpload={() => goto('/songbook/edit')} />
+<ChordForm onUpload={() => goto('/songbook')} />

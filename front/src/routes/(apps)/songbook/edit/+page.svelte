@@ -10,7 +10,6 @@
     import { ButtonCancel } from '$lib/components/ButtonCancel';
 
     import { goto } from '$app/navigation';
-    import { AuthGuard } from '$lib/components/AuthGuard';
 
     interface Props {
         // From +page.ts load() function
@@ -103,12 +102,6 @@
         </button>
     </span>
 </h2>
-
-<AuthGuard message="Login to add a new song" requiredScope="admin">
-    <button style:position="relative" onclick={() => goto('/songbook/edit/create')}>
-        Add a song
-    </button>
-</AuthGuard>
 
 {#if sortedChords.length}
     <table>

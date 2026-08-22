@@ -26,6 +26,7 @@
     import { goto } from '$app/navigation';
     import { user } from '$lib/auth';
     import { pageMetadataStore } from '$lib/components/Header';
+    import { AuthGuard } from '$lib/components/AuthGuard';
 
     const pageMetadata = {
         name: 'Songbook',
@@ -113,15 +114,19 @@
     iconPath={pageMetadata.iconPath}
 />
 
-<h2>
+<AuthGuard hideIfForbidden={true} requiredScope="admin">
     <span class="pull-right">
+        <button style:position="relative" onclick={() => goto('/songbook/edit/create')}>
+            Add a song
+        </button>
+
         <button style:position="relative" onclick={() => modals.open(ChordsChecks)}>
             Check dead links
         </button>
 
         <button style:position="relative" onclick={() => goto('/songbook/edit')}> Edit </button>
     </span>
-</h2>
+</AuthGuard>
 
 {#each noticeMessages as item}
     <Notice {item} />
