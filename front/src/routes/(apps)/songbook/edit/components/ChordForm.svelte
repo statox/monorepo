@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { FilteredSelect } from '$lib/components/FilteredSelect';
     import {
         FormLayout,
         FormGrid,
@@ -7,7 +8,8 @@
         showSuccessToast
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
-    import { uploadNewChord, type ChordData } from '$lib/Songbook';
+    import { getChords, uploadNewChord, type ChordData } from '$lib/Songbook';
+    import { onMount } from 'svelte';
 
     interface Props {
         onUpload: () => void;
@@ -22,6 +24,8 @@
     let tags: string = $state('');
     let uploading = $state(false);
     let noticeMessages: NoticeItem[] = $state([]);
+    let existingArtists: string[] = $state([]);
+    let existingTitles: string[] = $state([]);
 
     const validateTitle = () => {
         fieldErrors.title = title ? '' : 'Title is required';
@@ -62,6 +66,19 @@
             uploading = false;
         }
     };
+
+    onMount(async () => {
+        const chords = await getChords();
+
+        const data = chords.reduce((acc, chord) => {
+            acc.artists.add(chord.artist);
+            acc.titles.add(chord.title);
+            return acc;
+        }, {artists: new Set(), titles: new Set()});
+
+        existingArtists = [...data.artists] as string[];
+        existingTitles = [...data.titles] as string[];
+    });
 </script>
 
 <FormLayout
@@ -72,13 +89,13 @@
 >
     <FormGrid onsubmit={upload}>
         <label for="artist">Artist</label>
-        <input id="artist" type="text" bind:value={artist} onblur={validateArtist} />
+        <FilteredSelect bind:value={artist} options={existingArtists} oninput={validateArtist} />
         {#if fieldErrors.artist}
             <span class="field-error">{fieldErrors.artist}</span>
         {/if}
 
         <label for="title">Title</label>
-        <input id="title" type="text" bind:value={title} onblur={validateTitle} />
+        <FilteredSelect bind:value={title} options={existingTitles} oninput={validateTitle} />
         {#if fieldErrors.title}
             <span class="field-error">{fieldErrors.title}</span>
         {/if}

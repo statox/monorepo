@@ -8,9 +8,10 @@
     interface Props {
         value: string;
         options: string[];
+        oninput?: () => void;
     }
 
-    let { value = $bindable(), options }: Props = $props();
+    let { value = $bindable(), options, oninput }: Props = $props();
     let selectionDone = $state(false);
 
     let filteredOptions = $derived(
@@ -29,6 +30,9 @@
 
     const inputChanged = () => {
         selectionDone = false;
+        if (oninput) {
+            oninput();
+        }
     };
 </script>
 
