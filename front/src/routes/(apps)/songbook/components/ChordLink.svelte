@@ -3,7 +3,7 @@
     import { visitCountsStore, failedVisitCounts } from '../store';
     import { get } from 'svelte/store';
     import { toast } from '$lib/components/Toast';
-    import { getTypeIconClass } from '../utils';
+    import { getChordIcon } from '../utils';
     import { ApiError } from '$lib/api';
     import { UserLoggedOutError } from '$lib/auth';
     import { uploadLinkVisit, type Chord } from '$lib/Songbook';
@@ -29,6 +29,10 @@
     const text = $derived((showArtist ? chord.artist + ' - ' : '') + chord.title);
 
     const formatLink = (chord: Chord) => {
+        if (chord.contentB64) {
+            return `${base}/songbook/reader/${chord.id}`;
+        }
+
         if (chord.type === 'doc') {
             return `${base}/docviewer/${chord.url}`;
         }
@@ -71,7 +75,7 @@
     };
 </script>
 
-<span class={getTypeIconClass(chord.type)}></span>
+<span class={getChordIcon(chord)}></span>
 <span>
     <a
         href={formatLink(chord)}
@@ -97,5 +101,9 @@
 
     .fa-youtube {
         color: #e82236;
+    }
+
+    .fa-book-open {
+        color: #2e7d32;
     }
 </style>
