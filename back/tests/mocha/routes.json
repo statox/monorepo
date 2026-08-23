@@ -1,5 +1,6 @@
 {
     "spec": [
+        "dist/tests/modules/**/*.test.js",
         "dist/tests/routes/**/*.test.js",
         "dist/tests/periodicTasks/**/*.test.js"
     ],
