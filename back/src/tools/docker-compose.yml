@@ -28,7 +28,7 @@ services:
             - RUSTFS_SECRET_KEY=test
             - RUSTFS_CONSOLE_ENABLE=false
         tmpfs:
-            - /data/rustfs0:rw
+            - /data/rustfs0:rw,mode=1777
 
     elk:
         container_name: apistatox.elk
