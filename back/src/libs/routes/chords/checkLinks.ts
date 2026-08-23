@@ -42,6 +42,7 @@ const outputSchema = {
                                 type: 'array',
                                 items: { type: 'string' }
                             },
+                            contentB64: { type: ['string', 'null'] },
                             visitsCount: { type: 'number' },
                             lastAccessDateUnix: { type: ['number', 'null'] }
                         },
@@ -52,6 +53,7 @@ const outputSchema = {
                             'url',
                             'creationDateUnix',
                             'tags',
+                            'contentB64',
                             'visitsCount',
                             'lastAccessDateUnix'
                         ],

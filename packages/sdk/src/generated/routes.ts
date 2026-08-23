@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-08-21T21:19:51.446Z
+// Generated on: 2026-08-22T23:21:46.657Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -207,6 +207,12 @@ export const schemas = {
                     "type": "string"
                   }
                 },
+                "contentB64": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "visitsCount": {
                   "type": "number"
                 },
@@ -224,6 +230,7 @@ export const schemas = {
                 "url",
                 "creationDateUnix",
                 "tags",
+                "contentB64",
                 "visitsCount",
                 "lastAccessDateUnix"
               ],
@@ -293,6 +300,12 @@ export const schemas = {
             "type": "string"
           }
         },
+        "contentB64": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "visitsCount": {
           "type": "number"
         },
@@ -310,6 +323,7 @@ export const schemas = {
         "url",
         "creationDateUnix",
         "tags",
+        "contentB64",
         "visitsCount",
         "lastAccessDateUnix"
       ],
