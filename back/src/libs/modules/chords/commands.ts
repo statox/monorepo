@@ -30,6 +30,7 @@ export const updateChord = async (params: {
     title: string;
     url: string;
     tags: string[];
+    contentB64?: string | null;
 }) => {
     // Ensure the chord exists
     const [rows] = await db.query<RowDataPacket[]>('SELECT id FROM Chord WHERE id = ?', [
@@ -41,13 +42,24 @@ export const updateChord = async (params: {
     }
 
     try {
-        await db.query(`UPDATE Chord SET artist = ?, title = ?, url = ?, tags = ? WHERE id = ?`, [
-            params.artist,
-            params.title,
-            params.url,
-            JSON.stringify(params.tags),
-            params.id
-        ]);
+        if (params.contentB64 !== undefined) {
+            await db.query(
+                `UPDATE Chord SET artist = ?, title = ?, url = ?, tags = ?, contentB64 = ? WHERE id = ?`,
+                [
+                    params.artist,
+                    params.title,
+                    params.url,
+                    JSON.stringify(params.tags),
+                    params.contentB64,
+                    params.id
+                ]
+            );
+        } else {
+            await db.query(
+                `UPDATE Chord SET artist = ?, title = ?, url = ?, tags = ? WHERE id = ?`,
+                [params.artist, params.title, params.url, JSON.stringify(params.tags), params.id]
+            );
+        }
     } catch (error) {
         handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
     }
