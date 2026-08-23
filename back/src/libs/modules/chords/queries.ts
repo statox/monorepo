@@ -9,6 +9,7 @@ type ChordRow = {
     title: string;
     url: string;
     tags: string;
+    contentB64: string | null;
     creationDateUnix: number;
     visitsCount: number;
     lastAccessDateUnix: number | null;
@@ -16,7 +17,7 @@ type ChordRow = {
 
 export const getAllChords = async (): Promise<Chord[]> => {
     const [rows] = await db.query<RowDataPacket[]>(
-        'SELECT id, artist, title, url, tags, creationDateUnix, visitsCount, lastAccessDateUnix FROM Chord'
+        'SELECT id, artist, title, url, tags, contentB64, creationDateUnix, visitsCount, lastAccessDateUnix FROM Chord'
     );
 
     return (rows as ChordRow[]).map((row) => ({
