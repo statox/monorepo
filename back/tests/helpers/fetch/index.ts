@@ -1,4 +1,5 @@
 import sinon from 'sinon';
+import { assert } from 'chai';
 import { TestHelper } from '../TestHelper.js';
 
 let fetchStub: sinon.SinonStub;
@@ -24,6 +25,19 @@ class TestHelper_Fetch extends TestHelper {
 
     respondWithNetworkErrorForUrl = (url: string, message = 'Network error') => {
         fetchStub.withArgs(url).rejects(new Error(message));
+    };
+
+    checkCalledWithUrl = (url: string) => {
+        assert.isTrue(
+            fetchStub.calledWith(url),
+            `Expected fetch to have been called with "${url}", actual calls: ${JSON.stringify(
+                fetchStub.args.map((args) => args[0])
+            )}`
+        );
+    };
+
+    checkNotCalled = () => {
+        sinon.assert.notCalled(fetchStub);
     };
 }
 

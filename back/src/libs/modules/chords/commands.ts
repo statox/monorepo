@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { db } from '../../databases/db.js';
 import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
 import { ChordNotFoundError } from './errors.js';
@@ -10,11 +10,13 @@ export const addChord = async (params: {
     tags: string[];
 }) => {
     try {
-        await db.query(
+        const [result] = await db.query<ResultSetHeader>(
             `INSERT INTO Chord (artist, title, url, tags, creationDateUnix, visitsCount)
              VALUES (?, ?, ?, ?, UNIX_TIMESTAMP(), 0)`,
             [params.artist, params.title, params.url, JSON.stringify(params.tags)]
         );
+
+        return result.insertId;
     } catch (error) {
         handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
     }
