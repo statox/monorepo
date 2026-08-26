@@ -388,6 +388,71 @@ export const schemas = {
       "additionalProperties": false
     }
   },
+  "chords_getEntry_Input": {
+    "type": "object",
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "number"
+      }
+    }
+  },
+  "chords_getEntry_Output": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "number"
+      },
+      "artist": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "url": {
+        "type": "string"
+      },
+      "creationDateUnix": {
+        "type": "number"
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "contentB64": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "visitsCount": {
+        "type": "number"
+      },
+      "lastAccessDateUnix": {
+        "type": [
+          "number",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "artist",
+      "title",
+      "url",
+      "creationDateUnix",
+      "tags",
+      "contentB64",
+      "visitsCount",
+      "lastAccessDateUnix"
+    ],
+    "additionalProperties": false
+  },
   "chords_updateEntry_Input": {
     "type": "object",
     "required": [
@@ -2039,6 +2104,10 @@ export type Chords_ExtractEntry_Errors = 'ITEM_NOT_FOUND' | 'UNAUTHORIZED' | 'FO
 export type Chords_GetAll_Output = FromSchema<typeof schemas.chords_getAll_Output>;
 export type Chords_GetAll = Endpoint<Chords_GetAll_Output>;
 export type Chords_GetAll_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Chords_GetEntry_Input = FromSchema<typeof schemas.chords_getEntry_Input>;
+export type Chords_GetEntry_Output = FromSchema<typeof schemas.chords_getEntry_Output>;
+export type Chords_GetEntry = Endpoint<Chords_GetEntry_Output, Chords_GetEntry_Input>;
+export type Chords_GetEntry_Errors = 'ITEM_NOT_FOUND' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Chords_UpdateEntry_Input = FromSchema<typeof schemas.chords_updateEntry_Input>;
 export type Chords_UpdateEntry_Output = FromSchema<typeof schemas.chords_updateEntry_Output>;
 export type Chords_UpdateEntry = Endpoint<Chords_UpdateEntry_Output, Chords_UpdateEntry_Input>;
@@ -2222,6 +2291,13 @@ export function buildModules(fetch: FetchFn) {
        */
       getAll: () =>
         fetch('/chords/getAll', null, null, { outputSchema: schemas.chords_getAll_Output, endpoint: 'chords.getAll' }, { method: 'GET' }, { type: 'none' }) as Promise<Chords_GetAll_Output>,
+
+      /**
+       * POST /chords/getEntry
+       * Auth: none
+       */
+      getEntry: (input: Chords_GetEntry_Input) =>
+        fetch('/chords/getEntry', input, null, { inputSchema: schemas.chords_getEntry_Input, outputSchema: schemas.chords_getEntry_Output, endpoint: 'chords.getEntry' }, { method: 'POST' }, { type: 'none' }) as Promise<Chords_GetEntry_Output>,
 
       /**
        * POST /chords/updateEntry

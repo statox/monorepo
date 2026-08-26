@@ -28,6 +28,17 @@ export const getSongbook = async (): Promise<Chord[]> => {
     });
 };
 
+export const getChordEntry = client2.chords.getEntry;
+
+export const getChord = async (id: number): Promise<Chord> => {
+    const chord = await getChordEntry({ id });
+
+    return {
+        ...chord,
+        type: getType(chord)
+    };
+};
+
 export const getLinksChecks = client2.chords.checkLinks;
 
 export const addChord = client2.chords.addEntry;
