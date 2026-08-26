@@ -4,13 +4,13 @@ import { updateChord } from '../../modules/chords/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 
 const handler: RouteHandler<Input> = async (params) => {
-    const { id, artist, title, url, tags } = params.input;
+    const { id, artist, title, url, tags, contentB64 } = params.input;
     params.loggableContext.addData('id', id);
     params.loggableContext.addData('chords_updatedChordArtist', artist);
     params.loggableContext.addData('chords_updatedChordTitle', title);
     params.loggableContext.addData('chords_updatedChordUrl', url);
     params.loggableContext.addData('chords_updatedChordTags', tags);
-    await updateChord({ id, artist, title, url, tags });
+    await updateChord({ id, artist, title, url, tags, contentB64 });
 };
 
 const inputSchema = {
@@ -38,6 +38,9 @@ const inputSchema = {
             items: {
                 type: 'string'
             }
+        },
+        contentB64: {
+            type: ['string', 'null']
         }
     }
 } as const;

@@ -35,7 +35,7 @@
         if (dateUnix === null) {
             return '—';
         }
-        return DateTime.fromSeconds(dateUnix).toLocaleString(DateTime.DATETIME_MED);
+        return DateTime.fromSeconds(dateUnix).toFormat('dd/MM/yyyy');
     };
 
     let editingId: number | null = $state(null);

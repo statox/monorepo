@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-08-26T19:38:53.284Z
+// Generated on: 2026-08-26T20:18:07.806Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -484,6 +484,12 @@ export const schemas = {
         "items": {
           "type": "string"
         }
+      },
+      "contentB64": {
+        "type": [
+          "string",
+          "null"
+        ]
       }
     }
   },
