@@ -28,6 +28,8 @@
 
     const text = $derived((showArtist ? chord.artist + ' - ' : '') + chord.title);
 
+    const isInternalReaderLink = $derived(Boolean(chord.contentB64));
+
     const formatLink = (chord: Chord) => {
         if (chord.contentB64) {
             return `${base}/songbook/reader/${chord.id}`;
@@ -79,8 +81,8 @@
 <span>
     <a
         href={formatLink(chord)}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={isInternalReaderLink ? undefined : '_blank'}
+        rel={isInternalReaderLink ? undefined : 'noopener noreferrer'}
         title={toolTipContent}
         onclick={addVisit}>{text}</a
     >

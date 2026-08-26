@@ -1,6 +1,6 @@
 <script lang="ts">
     import { untrack } from 'svelte';
-    import { Markdown } from '$lib/components/Markdown';
+    import { MonospaceColumns } from '$lib/components/MonospaceColumns';
     import { pageMetadataStore } from '$lib/components/Header';
     import type { Chord } from '$lib/Songbook';
     import { updateExistingChord } from '$lib/Songbook';
@@ -26,11 +26,6 @@
                   Uint8Array.from(atob(chord.contentB64), (c) => c.charCodeAt(0))
               )
             : undefined
-    );
-    // Tag the fence as `text` so highlight.js doesn't auto-detect a language and
-    // apply (sometimes wrong) syntax highlighting to the chords/lyrics.
-    const markdownSource = $derived(
-        decodedContent !== undefined ? '```text\n' + decodedContent + '\n```' : undefined
     );
 
     let editMode = $state(false);
@@ -92,14 +87,14 @@
     <span class={getTypeIconClass(chord.type)}></span>
     <span>
         <a href={chord.url} target="_blank" rel="noopener noreferrer" title={chord.url}
-            >{chord.url}</a
+            >{new URL(chord.url).hostname}</a
         >
     </span>
 {/if}
 {#if editMode}
     <textarea bind:value={editedContent}></textarea>
-{:else if markdownSource}
-    <Markdown source={markdownSource} />
+{:else if decodedContent}
+    <MonospaceColumns content={decodedContent} />
 {:else}
     <p>No extracted content available for this song.</p>
 {/if}
