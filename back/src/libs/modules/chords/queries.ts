@@ -26,6 +26,31 @@ export const getAllChords = async (): Promise<Chord[]> => {
     }));
 };
 
+export const getChordById = async (chordId: number): Promise<Chord> => {
+    const [rows] = await db.query<RowDataPacket[]>(
+        `SELECT
+            id,
+            artist,
+            title,
+            url,
+            tags,
+            contentB64,
+            creationDateUnix,
+            visitsCount,
+            lastAccessDateUnix
+            FROM Chord
+            WHERE id = ?`,
+        [chordId]
+    );
+
+    if (rows.length === 0) {
+        throw new ChordNotFoundError();
+    }
+
+    const row = rows[0] as ChordRow;
+    return { ...row, tags: JSON.parse(row.tags) };
+};
+
 export const addLinkVisit = async (params: { id: number }) => {
     const [result] = await db.execute(
         `UPDATE Chord SET visitsCount = visitsCount + 1, lastAccessDateUnix = UNIX_TIMESTAMP() WHERE id = ?`,

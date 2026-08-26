@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-08-22T23:21:46.657Z
+// Generated on: 2026-08-26T19:38:53.284Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -141,7 +141,28 @@ export const schemas = {
   },
   "chords_addEntry_Output": {
     "type": "object",
-    "additionalProperties": false
+    "required": [
+      "status",
+      "label",
+      "reason"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "OK",
+          "SKIPPED",
+          "FAILED"
+        ]
+      },
+      "label": {
+        "type": "string"
+      },
+      "reason": {
+        "type": "string"
+      }
+    }
   },
   "chords_addLinkVisit_Input": {
     "type": "object",
@@ -273,6 +294,43 @@ export const schemas = {
   "chords_deleteEntry_Output": {
     "type": "object",
     "additionalProperties": false
+  },
+  "chords_extractEntry_Input": {
+    "type": "object",
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "number"
+      }
+    }
+  },
+  "chords_extractEntry_Output": {
+    "type": "object",
+    "required": [
+      "status",
+      "label",
+      "reason"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "OK",
+          "SKIPPED",
+          "FAILED"
+        ]
+      },
+      "label": {
+        "type": "string"
+      },
+      "reason": {
+        "type": "string"
+      }
+    }
   },
   "chords_getAll_Output": {
     "type": "array",
@@ -1974,6 +2032,10 @@ export type Chords_DeleteEntry_Input = FromSchema<typeof schemas.chords_deleteEn
 export type Chords_DeleteEntry_Output = FromSchema<typeof schemas.chords_deleteEntry_Output>;
 export type Chords_DeleteEntry = Endpoint<Chords_DeleteEntry_Output, Chords_DeleteEntry_Input>;
 export type Chords_DeleteEntry_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Chords_ExtractEntry_Input = FromSchema<typeof schemas.chords_extractEntry_Input>;
+export type Chords_ExtractEntry_Output = FromSchema<typeof schemas.chords_extractEntry_Output>;
+export type Chords_ExtractEntry = Endpoint<Chords_ExtractEntry_Output, Chords_ExtractEntry_Input>;
+export type Chords_ExtractEntry_Errors = 'ITEM_NOT_FOUND' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Chords_GetAll_Output = FromSchema<typeof schemas.chords_getAll_Output>;
 export type Chords_GetAll = Endpoint<Chords_GetAll_Output>;
 export type Chords_GetAll_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
@@ -2146,6 +2208,13 @@ export function buildModules(fetch: FetchFn) {
        */
       deleteEntry: (input: Chords_DeleteEntry_Input) =>
         fetch('/chords/deleteEntry', input, null, { inputSchema: schemas.chords_deleteEntry_Input, outputSchema: schemas.chords_deleteEntry_Output, endpoint: 'chords.deleteEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_DeleteEntry_Output>,
+
+      /**
+       * POST /chords/extractEntry
+       * Auth: user2
+       */
+      extractEntry: (input: Chords_ExtractEntry_Input) =>
+        fetch('/chords/extractEntry', input, null, { inputSchema: schemas.chords_extractEntry_Input, outputSchema: schemas.chords_extractEntry_Output, endpoint: 'chords.extractEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Chords_ExtractEntry_Output>,
 
       /**
        * GET /chords/getAll

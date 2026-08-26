@@ -2,10 +2,16 @@
     import { DateTime } from 'luxon';
     import { untrack } from 'svelte';
     import type { RawChord } from '$lib/Songbook';
-    import { updateExistingChord, deleteExistingChord } from '$lib/Songbook';
+    import {
+        updateExistingChord,
+        deleteExistingChord,
+        extractExistingChordData,
+        getChordEntry
+    } from '$lib/Songbook';
     import { showSuccessToast } from '$lib/components/FormLayout';
     import { ButtonDelete } from '$lib/components/ButtonDelete';
     import { ButtonEdit } from '$lib/components/ButtonEdit';
+    import { ButtonExtractData } from '$lib/components/ButtonExtractData';
     import { ButtonSave } from '$lib/components/ButtonSave';
     import { ButtonCancel } from '$lib/components/ButtonCancel';
 
@@ -82,6 +88,22 @@
         }
     };
 
+    let extractingIds: number[] = $state([]);
+
+    const extractData = async (id: number) => {
+        extractingIds = [...extractingIds, id];
+
+        const result = await extractExistingChordData(id);
+        if (result?.status === 'OK') {
+            const updated = await getChordEntry({ id });
+            chords = chords.map((chord) =>
+                chord.id === id ? { ...chord, contentB64: updated.contentB64 } : chord
+            );
+        }
+
+        extractingIds = extractingIds.filter((extractingId) => extractingId !== id);
+    };
+
     const deleteRow = async (id: number) => {
         try {
             await deleteExistingChord(id);
@@ -114,6 +136,7 @@
                 <th>Created</th>
                 <th>Visits</th>
                 <th>Last access</th>
+                <th>Extract data</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -139,6 +162,14 @@
                     <td>{formatDate(chord.creationDateUnix)}</td>
                     <td>{chord.visitsCount}</td>
                     <td>{formatDate(chord.lastAccessDateUnix)}</td>
+                    <td>
+                        {#if !chord.contentB64}
+                            <ButtonExtractData
+                                loading={extractingIds.includes(chord.id)}
+                                extractAction={() => extractData(chord.id)}
+                            />
+                        {/if}
+                    </td>
                     <td>
                         {#if editingId === chord.id}
                             <ButtonSave disabled={saving} saveAction={() => saveEdit(chord.id)} />

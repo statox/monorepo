@@ -36,4 +36,6 @@ export const updateChord = client2.chords.updateEntry;
 
 export const deleteChord = client2.chords.deleteEntry;
 
+export const extractChordEntry = client2.chords.extractEntry;
+
 export const uploadLinkVisit = client2.chords.addLinkVisit;

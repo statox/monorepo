@@ -1,16 +1,19 @@
-import { checkChordsUrl } from './urlsChecker.js';
 import { addChord, updateChord, deleteChord } from './commands.js';
-import { addLinkVisit, getAllChords } from './queries.js';
 import { ChordNotFoundError } from './errors.js';
-import { updateChordsExtractedData } from './extraction.js';
+import { extractChordData, updateChordsExtractedData } from './extraction.js';
+import { addLinkVisit, getAllChords } from './queries.js';
+import { insertChordAndExtractContent } from './service.js';
+import { checkChordsUrl } from './urlsChecker.js';
 
 export {
+    ChordNotFoundError,
     addChord,
-    updateChord,
-    deleteChord,
     addLinkVisit,
     checkChordsUrl,
+    deleteChord,
+    extractChordData,
     getAllChords,
-    updateChordsExtractedData,
-    ChordNotFoundError
+    insertChordAndExtractContent,
+    updateChord,
+    updateChordsExtractedData
 };

@@ -2,11 +2,13 @@ import Ajv from 'ajv';
 import type { FromSchema } from 'json-schema-to-ts';
 import { ApiError } from '$lib/api';
 import { toast } from '$lib/components/Toast';
-import { addChord, updateChord, deleteChord } from '$lib/Songbook';
+import { showSuccessToast } from '$lib/components/FormLayout';
+import { addChord, updateChord, deleteChord, extractChordEntry } from '$lib/Songbook';
 import type {
     Chords_AddEntry_Errors,
     Chords_UpdateEntry_Errors,
-    Chords_DeleteEntry_Errors
+    Chords_DeleteEntry_Errors,
+    Chords_ExtractEntry_Errors
 } from 'statox-api';
 
 const chordSchema = {
@@ -55,7 +57,10 @@ const describeApiError = (error: unknown): string => {
     // TODO: The kind of guard for generic errors (e.g. INVALID_SCOPE) should be factorized in a common module
     if (error instanceof ApiError) {
         const e = error as ApiError<
-            Chords_AddEntry_Errors | Chords_UpdateEntry_Errors | Chords_DeleteEntry_Errors
+            | Chords_AddEntry_Errors
+            | Chords_UpdateEntry_Errors
+            | Chords_DeleteEntry_Errors
+            | Chords_ExtractEntry_Errors
         >;
         if (e.code === 'ITEM_ALREADY_EXISTS') {
             errorMessage = 'A song with this URL already exists';
@@ -92,7 +97,15 @@ export const uploadNewChord = async (newChord: ChordData) => {
     }
 
     try {
-        await addChord(newChord);
+        const result = await addChord(newChord);
+        if (result.status !== 'OK') {
+            const message = `<strong>Content not extracted</strong><br/> ${result.reason}`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF9900'
+                }
+            });
+        }
     } catch (error) {
         const message = `<strong>Entry not created</strong><br/> ${describeApiError(error)}`;
         toast.push(message, {
@@ -127,6 +140,31 @@ export const updateExistingChord = async (chord: ChordData & { id: number }) => 
             }
         });
         throw error;
+    }
+};
+
+export const extractExistingChordData = async (id: number) => {
+    try {
+        const result = await extractChordEntry({ id });
+        if (result.status === 'OK') {
+            showSuccessToast('Chord content extracted successfully');
+        } else {
+            const message = `<strong>Content not extracted</strong><br/> ${result.reason}`;
+            toast.push(message, {
+                theme: {
+                    '--toastBarBackground': '#FF9900'
+                }
+            });
+        }
+        return result;
+    } catch (error) {
+        const message = `<strong>Content not extracted</strong><br/> ${describeApiError(error)}`;
+        toast.push(message, {
+            theme: {
+                '--toastBarBackground': '#FF0000'
+            }
+        });
+        return undefined;
     }
 };
 

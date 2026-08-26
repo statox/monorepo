@@ -1,9 +1,9 @@
-import { Chord, ExtractionResult } from './types.js';
+import { ExtractionResult } from './types.js';
 
 import * as ultimateGuitar from './extractors/ultimateGuitar.js';
 import * as boiteachansons from './extractors/boiteachansons.js';
 import { updateChord } from './commands.js';
-import { getAllChords } from './queries.js';
+import { getAllChords, getChordById } from './queries.js';
 import { slog } from '../logging/index.js';
 
 const extractors = [ultimateGuitar, boiteachansons];
@@ -15,7 +15,7 @@ export const updateChordsExtractedData = async () => {
 
     const counts: Record<string, number> = {};
     for (const entry of entries) {
-        const res = await extractChordData(entry);
+        const res = await extractChordData(entry.id);
         results.push(res);
         counts[res.status] = (counts[res.status] ?? 0) + 1;
         slog.log('chords', `Extraction ${res.status}: ${res.label} -> ${res.reason}`, {
@@ -29,8 +29,18 @@ export const updateChordsExtractedData = async () => {
     );
 };
 
-const extractChordData = async (chord: Chord): Promise<ExtractionResult> => {
+export const extractChordData = async (chordId: number): Promise<ExtractionResult> => {
+    const chord = await getChordById(chordId);
     const label = `${chord.title} (${chord.artist})`;
+
+    if (chord.contentB64 !== null) {
+        return {
+            status: 'SKIPPED',
+            label,
+            reason: 'chord already has extracted content, skipping to avoid overriding it'
+        };
+    }
+
     const extractor = extractors.find((e) => e.matches(chord.url));
 
     if (!extractor) {
