@@ -110,6 +110,79 @@ describe('chords/updateEntry', () => {
         });
     });
 
+    it('should update the contentB64 when provided', async () => {
+        await th.mysql.fixture({
+            Chord: [
+                {
+                    id: 1,
+                    artist: 'artist',
+                    title: 'title',
+                    url: 'https://site.com/x',
+                    tags: '[]',
+                    contentB64: 'b2xk',
+                    creationDateUnix: 10,
+                    visitsCount: 0,
+                    lastAccessDateUnix: null
+                }
+            ]
+        });
+
+        await request(app)
+            .post('/chords/updateEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('Accept', 'application/json')
+            .send({
+                id: 1,
+                artist: 'artist',
+                title: 'title',
+                url: 'https://site.com/x',
+                tags: [],
+                contentB64: 'bmV3'
+            })
+            .expect(200)
+            .then((response) => {
+                assert.deepEqual(response.body, {});
+            });
+
+        await th.mysql.checkContains({ Chord: [{ id: 1, contentB64: 'bmV3' }] });
+    });
+
+    it('should leave the existing contentB64 untouched when not provided', async () => {
+        await th.mysql.fixture({
+            Chord: [
+                {
+                    id: 1,
+                    artist: 'artist',
+                    title: 'title',
+                    url: 'https://site.com/x',
+                    tags: '[]',
+                    contentB64: 'b2xk',
+                    creationDateUnix: 10,
+                    visitsCount: 0,
+                    lastAccessDateUnix: null
+                }
+            ]
+        });
+
+        await request(app)
+            .post('/chords/updateEntry')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('Accept', 'application/json')
+            .send({
+                id: 1,
+                artist: 'new artist',
+                title: 'title',
+                url: 'https://site.com/x',
+                tags: []
+            })
+            .expect(200)
+            .then((response) => {
+                assert.deepEqual(response.body, {});
+            });
+
+        await th.mysql.checkContains({ Chord: [{ id: 1, contentB64: 'b2xk' }] });
+    });
+
     it('should reject updating to a url used by another chord', async () => {
         await th.mysql.fixture({
             Chord: [

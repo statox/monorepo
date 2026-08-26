@@ -116,7 +116,9 @@ export const uploadNewChord = async (newChord: ChordData) => {
     }
 };
 
-export const updateExistingChord = async (chord: ChordData & { id: number }) => {
+export const updateExistingChord = async (
+    chord: ChordData & { id: number; contentB64?: string | null }
+) => {
     try {
         const { artist, title, url, tags } = chord;
         validateChordData({ artist, title, url, tags });
