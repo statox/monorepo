@@ -44,10 +44,17 @@ export const extractChordData = async (chordId: number): Promise<ExtractionResul
     const extractor = extractors.find((e) => e.matches(chord.url));
 
     if (!extractor) {
+        let hostname = chord.url;
+        try {
+            hostname = new URL(chord.url).hostname;
+        } catch {
+            // Malformed url: fall back to the raw value for the log.
+        }
+
         return {
             status: 'SKIPPED',
             label,
-            reason: `no extractor for ${new URL(chord.url).hostname}`
+            reason: `no extractor for ${hostname}`
         };
     }
 
