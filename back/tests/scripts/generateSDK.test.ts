@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import ts from 'typescript';
 import { groupRoutes, generateSDK } from '../../scripts/generateSDK.js';
 import type { Route } from '../../src/libs/routes/types.js';
 
@@ -287,16 +287,41 @@ describe('scripts/generateSDK', () => {
             const grouped = groupRoutes([getDashboardRoute, addEntryRoute, sensorDataRoute]);
             const sdk = generateSDK(grouped);
 
-            const result = ts.transpileModule(sdk, {
-                compilerOptions: {
-                    target: ts.ScriptTarget.ES2022,
-                    module: ts.ModuleKind.CommonJS,
-                    esModuleInterop: true
-                }
-            });
+            // Written alongside the real generated SDK (packages/sdk/src/generated/routes.ts)
+            // so relative imports (../types.js) and package imports (json-schema-to-ts)
+            // resolve against the sdk package's own node_modules, same as the real file.
+            const tmpFile = fileURLToPath(
+                new URL(
+                    '../../../../packages/sdk/src/generated/__generateSDK_test_tmp__.ts',
+                    import.meta.url
+                )
+            );
+            const tscBin = fileURLToPath(
+                new URL('../../../node_modules/.bin/tsc', import.meta.url)
+            );
+            // Use -p rather than passing this file + loose CLI compiler-option flags: that
+            // way the check runs under the sdk package's real tsconfig.json (strict, lib,
+            // checkJs, ...) instead of a hand-picked subset that can silently drift from it.
+            const sdkTsconfig = fileURLToPath(
+                new URL('../../../../packages/sdk/tsconfig.json', import.meta.url)
+            );
 
-            assert.deepEqual(result.diagnostics, []);
-            assert.include(result.outputText, 'buildModules');
+            fs.writeFileSync(tmpFile, sdk);
+            try {
+                const result = spawnSync(tscBin, ['--noEmit', '-p', sdkTsconfig], {
+                    encoding: 'utf8'
+                });
+
+                assert.equal(
+                    result.status,
+                    0,
+                    `tsc reported diagnostics:\n${result.stdout}${result.stderr}`
+                );
+            } finally {
+                fs.rmSync(tmpFile, { force: true });
+            }
+
+            assert.include(sdk, 'buildModules');
         });
     });
 });
