@@ -57,7 +57,7 @@ export const configSchema = {
             required: ['isProd', 'isTests', 'isDebug'],
             properties: {
                 isProd: {
-                    description: 'True only on heroku production',
+                    description: 'True only in production (VPS, set via docker-compose.prod.yml)',
                     type: 'boolean'
                 },
                 isTests: {

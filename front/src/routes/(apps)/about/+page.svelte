@@ -62,7 +62,7 @@
     <p>
         You can also find the sources of
         <a target="_blank" href="https://github.com/statox/api.statox.fr">the api I created</a> to
-        power this website (and other projects). The API is hosted on Heroku, is made with
+        power this website (and other projects). The API is hosted on my own VPS, is made with
         <a target="_blank" href="https://expressjs.com/">ExpressJS</a> and uses a MySQL db, cloudflare
         R2 storage and various other technologies.
     </p>

@@ -133,6 +133,9 @@ export const initApp = () => {
         // so that only https frontend get the cookie. When running on heroku the app
         // doesn't set the cookie on the https frontend without this trust proxy setting
         // See the doc for details: https://expressjs.com/en/guide/behind-proxies.html
+        // TODO 08/2026
+        // We don't use heroku anymore and need to check if this is still required by
+        // our traefik setup
         app.set('trust proxy', true);
     }
 };

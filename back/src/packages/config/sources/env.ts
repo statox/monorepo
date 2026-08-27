@@ -1,4 +1,4 @@
-// process.env.ENV = 'prod' is set via the heroku cli¶
+// process.env.ENV = 'prod' is set in src/tools/docker-compose.prod.yml
 export const isProd = process.env.ENV === 'prod';
 
 // process.env.ENV = 'tests' is set via npm script "tests"

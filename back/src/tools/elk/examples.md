@@ -94,7 +94,16 @@ curl -u "$LOGGER_USER:$LOGGER_PASSWORD" \
 
 ## Call logstash from an external network
 
-## From the heroku instance
+## From the VPS
+
+SSH into the server and run the command inside the running container (or use `src/tools/elk/client-cli.ts` directly, see its header comment):
+
+```
+ssh -i ~/.ssh/panda ubuntu@panda.statox.fr
+sudo docker exec -it apistatox.api sh
+```
+
+Then, inside the container:
 
 ```
 curl -u "$LOGGER_USER:$LOGGER_PASSWORD" \
@@ -102,12 +111,12 @@ curl -u "$LOGGER_USER:$LOGGER_PASSWORD" \
   -H 'Content-Type: application/json' \
   -d '{
     "@timestamp": "'"$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)"'",
-    "message": "test message via Logstash from Heroku",
+    "message": "test message via Logstash from the VPS",
     "component": "debug"
   }'
 ```
 
 ## From the local dev machine
 
-The same command as the one for the heroku instance can be used.
-The 3 variables are stored in the config variables on heroku.
+The same command as the one for the VPS can be used.
+The 3 variables are read from the app's config (decrypted via `dotenvx`, see `.env`).

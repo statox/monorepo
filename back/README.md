@@ -37,7 +37,7 @@ To create the tables:
 - Add a table in `./src/tools/tables/[new-table].sql`
 - Run `./src/tools/init-db.sh [--prod]`
     - Without any arguments the script connects to docker
-    - With `--prod` connects to prod db (Requires `npm run heroku:login`
+    - With `--prod` connects to prod db directly using the `APIDB_URL` secret decrypted via `dotenvx` (see `src/tools/mysql-prod`)
 
 ### Elasticsearch
 

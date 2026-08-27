@@ -5,9 +5,9 @@ import { config } from '../../packages/config/index.js';
  * Makes a call to the logstash server to create a log in the
  * ELK datastream of the application logs
  *
- * Can be run from an heroku instance to create a log in prod stack:
- *      (Make sure you deployed the script on heroku before running)
- *      npx heroku run node dist/src/tools/elk/client-cli.js
+ * Can be run from the VPS to create a log in the prod stack:
+ *      ssh -i ~/.ssh/panda ubuntu@panda.statox.fr
+ *      sudo docker exec -it apistatox.api node dist/src/tools/elk/client-cli.js
  */
 export const callELK = (data: LogObject) => {
     try {

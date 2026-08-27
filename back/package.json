@@ -31,7 +31,7 @@
         "tests:scripts": "mocha --config tests/mocha/scripts.json",
         "tests:packages": "mocha --config tests/mocha/packages.json",
         "user:create": "node dist/src/tools/auth/createUser.js",
-        "user:create:prod": "npx heroku@latest run node dist/src/tools/auth/createUser.js"
+        "user:create:prod": "ENV=prod npx dotenvx run -- node dist/src/tools/auth/createUser.js"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1114.0",

@@ -63,10 +63,11 @@ The SDK is generated from route definitions and synced to the frontend codebase.
 This must be run exclusively by the user directly on their terminal.
 
 ```bash
-npm run heroku:deploy            # Deploy to production (runs checks + tests)
-npm run heroku:deploy:skip-tests # Deploy without running tests
-npm run heroku:ssh               # SSH into production
+npm run prod:deploy              # Deploy to production (runs checks + tests, then SSH + Docker Compose on the VPS)
+npm run prod:deploy:skip-tests   # Deploy without running tests
 ```
+
+See [DEPLOY.md](./DEPLOY.md) for details. SSH into production is manual: `ssh -i ~/.ssh/panda ubuntu@panda.statox.fr` (see `src/tools/release/deploy.sh`).
 
 ### User Management
 
@@ -444,7 +445,7 @@ When adding a new `AppError` subclass that a route can throw intentionally:
 
 1. Create SQL file in `src/tools/tables/[table-name].sql`
 2. Run `./src/tools/init-db.sh` locally
-3. Run `./src/tools/init-db.sh --prod` for production (requires heroku login)
+3. Run `./src/tools/init-db.sh --prod` for production (connects to the prod db via `APIDB_URL`)
 
 ### OpenAPI Generation
 
