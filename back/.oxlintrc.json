@@ -7,7 +7,27 @@
         "correctness": "error"
     },
     "rules": {
-        "no-unused-vars": ["error", { "caughtErrorsIgnorePattern": "^_" }]
+        "no-unused-vars": ["error", { "caughtErrorsIgnorePattern": "^_" }],
+
+        "typescript/no-explicit-any": "error",
+        "typescript/no-namespace": "error",
+        "typescript/no-require-imports": "error",
+        "typescript/no-empty-object-type": "error",
+        "no-empty": "error",
+        "no-regex-spaces": "error",
+        "no-var": "error",
+        "typescript/ban-ts-comment": "error",
+        "no-array-constructor": "error",
+        "typescript/no-unsafe-function-type": "error",
+        "no-case-declarations": "error",
+        "no-fallthrough": "error",
+        "no-prototype-builtins": "error",
+        "typescript/require-await": "error",
+        "typescript/no-unnecessary-type-constraint": "error",
+        "preserve-caught-error": "error",
+        "prefer-const": "warn",
+        "prefer-rest-params": "warn",
+        "prefer-spread": "warn"
     },
     "ignorePatterns": ["dist/**"]
 }
