@@ -22,7 +22,7 @@ describe('errors middleware - errorHandler', () => {
         const nextSpy = sinon.spy() as unknown as NextFunction;
         const request = { url: '/test' } as unknown as Request;
 
-        await errorHandler(new Error('unexpected failure'), request, response, nextSpy);
+        errorHandler(new Error('unexpected failure'), request, response, nextSpy);
 
         assert.isFalse(
             (nextSpy as sinon.SinonSpy).called,

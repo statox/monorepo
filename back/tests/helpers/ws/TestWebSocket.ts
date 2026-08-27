@@ -14,8 +14,8 @@ export class TestWebSocket extends WebSocket {
 
         this._messages = [];
 
-        const addNewMessage = (event: MessageEvent) =>
-            this._messages.push(event.data.toString('utf8'));
+        // Routes only ever send text (JSON) frames, so event.data is always a string here.
+        const addNewMessage = (event: MessageEvent) => this._messages.push(event.data as string);
 
         this.addEventListener('message', addNewMessage);
         this.addEventListener('close', () => this.removeEventListener('message', addNewMessage), {
@@ -67,7 +67,7 @@ export class TestWebSocket extends WebSocket {
 
         return new Promise<void>((resolve, reject) => {
             const checkForMessage = (event: MessageEvent) => {
-                if (event.data.toString('utf8') !== message) {
+                if ((event.data as string) !== message) {
                     return;
                 }
 
@@ -105,7 +105,7 @@ export class TestWebSocket extends WebSocket {
             const checkForMessage = (event: MessageEvent) => {
                 clearTimeout(timerId);
                 this.removeEventListener('message', checkForMessage);
-                resolve(event.data.toString('utf8'));
+                resolve(event.data as string);
             };
 
             this.addEventListener('message', checkForMessage);

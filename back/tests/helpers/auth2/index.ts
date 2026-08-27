@@ -42,7 +42,7 @@ const setupAuth2User = async (user: { username: string; password: string; scopes
     const userId = await createUser(username, password, scopes);
 
     // Generate the cookie, store it in the session/sore and make it available to tests
-    const cookie = await makeSessionCookie(sessionStore, userId);
+    const cookie = makeSessionCookie(sessionStore, userId);
     passportSessionCookies[username] = cookie;
     return { userId, cookie };
 };
@@ -66,14 +66,14 @@ class TestHelper_Auth2 extends TestHelper {
     setupAuth2User = setupAuth2User;
 
     /**
-     * @returns The session cookie of a user too be used in tests
+     * @returns The session cookie of a user to be used in tests
      * @param username Default is 'user' which is created by `setupAuth2User` by default in beforeEach hook.
      *                 This param is useful to get the cookie of a user created specifically for a test
      *                 with a custom call to `setupAuth2User`
      */
     getPassportSessionCookie = (username = 'user') => {
         if (!passportSessionCookies[username]) {
-            new Error(`Setup Auth2 before trying to get the cookie for user ${username}`);
+            throw new Error(`No cookie for user ${username}. Make sure to setup Auth2 first`);
         }
 
         return passportSessionCookies[username];

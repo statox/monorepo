@@ -60,7 +60,7 @@ export const errorHandler = (
         });
 
         if (!isClientError) {
-            slackNotifier.notifySlack({
+            void slackNotifier.notifySlack({
                 error,
                 message: `Unexpected AppError ${error.code} on ${request.url}`
             });
@@ -79,7 +79,7 @@ export const errorHandler = (
 
     // Unrecognized error — unexpected failure
     slog.log('middleware', 'Unexpected error', { url: request.url, error });
-    slackNotifier.notifySlack({ error, message: `Unexpected error on ${request.url}` });
+    void slackNotifier.notifySlack({ error, message: `Unexpected error on ${request.url}` });
     response.status(500).json({
         httpStatus: 500,
         code: 'INTERNAL_SERVER_ERROR'

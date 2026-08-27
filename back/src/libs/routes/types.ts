@@ -14,7 +14,10 @@ type RouteParams<Input> = {
 type RouteWithFileParams<Input> = RouteParams<Input> & {
     file?: ApiFile;
 };
-export type RouteHandler<Input> = (params: RouteParams<Input>) => Promise<unknown> | unknown;
+// TODO: Use the Output type instead of unkown.
+// TODO: The type is never checked only validated at runtime via AJV, drift between the
+// output schema and the Output type probably already exist in some endpoints
+export type RouteHandler<Input> = (params: RouteParams<Input>) => unknown;
 
 /*
  * The multipart handler fills the file field with the file it parsed.
@@ -37,9 +40,8 @@ export interface ApiFile {
     /** `DiskStorage` only: Full path to the uploaded file. */
     path: string;
 }
-export type RouteWithFileHandler<Input> = (
-    params: RouteWithFileParams<Input>
-) => Promise<unknown> | unknown;
+// TODO: see RouteHandler above - same unchecked-Output tradeoff applies here.
+export type RouteWithFileHandler<Input> = (params: RouteWithFileParams<Input>) => unknown;
 
 export type ApiJsonSchema = JSONSchema;
 

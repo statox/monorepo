@@ -50,7 +50,7 @@ passport.deserializeUser(function (userId: number, cb) {
             // and Error and find a way to handler that properly when the case happens.
             //
             slog.log('auth', "Couldn't find user when deserializing a session", { userId });
-            slackNotifier.notifySlack({
+            void slackNotifier.notifySlack({
                 directMention: true,
                 message: `Error in auth proces - Couldn't find user when deserializing a session. UserId: ${userId}`
             });

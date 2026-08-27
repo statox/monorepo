@@ -165,11 +165,11 @@ export const ingestSensorData = async (sensorRawData: SensorRawData) => {
         });
     } catch (error) {
         // TODO Add tests for this behavior
-        slackNotifier.notifySlack({
+        void slackNotifier.notifySlack({
             message: 'error ingesting home tracker data',
             error: error as Error
         });
-        slackNotifier.notifySlack({
+        void slackNotifier.notifySlack({
             message: `missing data: ${JSON.stringify(newDocument)}`
         });
     }
