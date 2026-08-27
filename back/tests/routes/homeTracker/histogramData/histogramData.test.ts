@@ -118,7 +118,7 @@ describe('/homeTracker/histogramData', () => {
 
         await th.elk.fixture({
             // Create logs every 5 minutes for the past 4 hours
-            'data-home-tracker': new Array(4 * 6 * 2)
+            'data-home-tracker': Array.from({ length: 4 * 6 * 2 })
                 .fill(0)
                 .map((_, i) =>
                     DateTime.now()

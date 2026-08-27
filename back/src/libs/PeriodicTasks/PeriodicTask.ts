@@ -43,7 +43,7 @@ export class PeriodicTask {
             });
 
             if (this.notifyOnFailure) {
-                slackNotifier.notifySlack({
+                void slackNotifier.notifySlack({
                     message: `error in periodic task ${this.taskName}`,
                     error: error as Error
                 });

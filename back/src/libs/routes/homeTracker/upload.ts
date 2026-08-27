@@ -14,7 +14,7 @@ const handler: RouteHandler<Input> = async (params) => {
     await updateSensorLastSyncDate({ sensorName: params.input.sensorName });
     // Don't await for data ingestion to avoid keeping the sensor up for too long
     // I think it should make tests flaky but it doesn't seem to be the case. Not sure why.
-    ingestSensorData(params.input);
+    void ingestSensorData(params.input);
 
     const instructSleepSec = await getSensorSleepTimeSec({ sensorName: params.input.sensorName });
     params.loggableContext.addData('instructSleepSec', instructSleepSec);

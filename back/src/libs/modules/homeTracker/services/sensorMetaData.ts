@@ -39,7 +39,7 @@ export const getAllSensorsMetadata = async (): Promise<SensorMetaData[]> => {
 };
 
 export const updateSensorLastSyncDate = (params: { sensorName: string }) => {
-    db.query(
+    return db.query(
         `UPDATE HomeTrackerSensor
         SET lastSyncDateUnix = UNIX_TIMESTAMP()
         WHERE name = ?

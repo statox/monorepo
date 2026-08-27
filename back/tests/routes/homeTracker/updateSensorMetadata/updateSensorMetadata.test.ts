@@ -5,7 +5,7 @@ import { th } from '../../../helpers/index.js';
 
 describe('homeTracker/updateSensorMetadata', () => {
     it('Should update the metadata of an existing sensor', async () => {
-        th.mysql.fixture({
+        await th.mysql.fixture({
             HomeTrackerSensor: [
                 {
                     id: 1,
@@ -58,7 +58,7 @@ describe('homeTracker/updateSensorMetadata', () => {
     });
 
     it('Should fail for a non-existing sensor', async () => {
-        th.mysql.fixture({
+        await th.mysql.fixture({
             HomeTrackerSensor: []
         });
 

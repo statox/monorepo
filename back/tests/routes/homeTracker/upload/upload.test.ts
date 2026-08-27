@@ -5,7 +5,7 @@ import { assert } from 'chai';
 
 describe('homeTracker/upload', () => {
     it('should log the sent value to home tracker index, add sensor name in access log and update the metadata table', async () => {
-        th.mysql.fixture({
+        await th.mysql.fixture({
             HomeTrackerSensor: [
                 {
                     id: 1,
@@ -80,7 +80,7 @@ describe('homeTracker/upload', () => {
     });
 
     it('should log the sent value to home tracker index, add sensor name in access log and still work even if missing an entry in the metadata table', async () => {
-        th.mysql.fixture({
+        await th.mysql.fixture({
             HomeTrackerSensor: []
         });
 
@@ -138,7 +138,7 @@ describe('homeTracker/upload', () => {
     });
 
     it('should add log for incorrect value but still log what is correct', async () => {
-        th.mysql.fixture({
+        await th.mysql.fixture({
             HomeTrackerSensor: [
                 {
                     id: 1,
@@ -243,7 +243,7 @@ describe('homeTracker/upload', () => {
     });
 
     it('should read from the db to get the next sleep time of the sensor', async () => {
-        th.mysql.fixture({
+        await th.mysql.fixture({
             HomeTrackerSensor: [
                 {
                     id: 1,

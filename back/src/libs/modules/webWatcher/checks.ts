@@ -27,11 +27,11 @@ const recordContentChanged = (params: {
         previousStatus: previousContent
     });
 
-    slackNotifier.notifySlack({
+    void slackNotifier.notifySlack({
         message: c.name + ' - ' + c.notificationMessage,
         directMention: true
     });
-    pushNotifier.notify({
+    void pushNotifier.notify({
         title: 'Web Watcher',
         message: c.name + ' - ' + c.notificationMessage
     });
@@ -64,7 +64,7 @@ const recordContentChecked = (c: WatchedContent) => {
 };
 
 const recordContentCheckFailed = (c: WatchedContent, error: Error) => {
-    slackNotifier.notifySlack({
+    void slackNotifier.notifySlack({
         message: 'FAILED TO RUN WebWatcher - ' + c.name,
         directMention: true,
         error

@@ -39,9 +39,3 @@ export const initDb = async () => {
         await populateFakeChordsData();
     }
 };
-
-export type SQLError = Error & { code: string };
-
-export const isSQLError = (error: SQLError | Error | unknown): error is SQLError => {
-    return Boolean((error as SQLError).code) && typeof (error as SQLError).code === 'string';
-};
