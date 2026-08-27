@@ -10,6 +10,7 @@
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "outDir": "dist",
+        "rootDir": ".",
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
