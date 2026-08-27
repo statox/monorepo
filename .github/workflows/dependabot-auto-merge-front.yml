@@ -68,9 +68,17 @@ jobs:
         working-directory: packages/svelte-super-date-picker
         run: npm ci
 
-      - name: svelte-super-date-picker check
+      - name: svelte-super-date-picker svelte-check
         working-directory: packages/svelte-super-date-picker
-        run: npm run check
+        run: npm run svelte-check
+
+      - name: svelte-super-date-picker lint
+        working-directory: packages/svelte-super-date-picker
+        run: npm run lint
+
+      - name: svelte-super-date-picker format
+        working-directory: packages/svelte-super-date-picker
+        run: npm run format
 
       - name: svelte-super-date-picker tests
         working-directory: packages/svelte-super-date-picker
@@ -85,13 +93,13 @@ jobs:
         working-directory: front
         run: npm run lint
 
-      - name: prettier check
+      - name: format check
         working-directory: front
-        run: npm run prettier
+        run: npm run format
 
       - name: svelte check
         working-directory: front
-        run: npm run check
+        run: npm run svelte-check
 
   build:
     runs-on: ubuntu-latest

@@ -6,12 +6,13 @@
         "dev": "vite dev --port 8080",
         "build": "vite build",
         "preview": "vite preview",
-        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "svelte-check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "svelte-check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "eslint src",
         "lint:fix": "eslint --fix src",
-        "prettier": "prettier --check .",
-        "prettier:fix": "prettier --write .",
+        "format": "prettier --check .",
+        "format:fix": "prettier --write .",
+        "check": "npm run svelte-check && npm run lint && npm run format",
         "setup-githooks": "./githooks/setup.sh"
     },
     "devDependencies": {

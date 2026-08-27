@@ -43,11 +43,12 @@ debug=true npm run tests -- -f 'personalTracker'
 ### Code Quality
 
 ```bash
-npm run check                    # Run lint + prettier
+npm run check                    # Run types + lint + format (convenience, runs everything)
+npm run types                    # TypeScript type-check (tsc --noEmit)
 npm run lint                     # ESLint
 npm run lint:fix                 # Fix ESLint issues
-npm run prettier                 # Check formatting
-npm run prettier:fix             # Fix formatting
+npm run format                   # Check formatting
+npm run format:fix               # Fix formatting
 ```
 
 ### SDK Generation
@@ -455,7 +456,7 @@ OpenAPI definitions are auto-generated from route schemas in `src/tools/openapi/
 
 - **Timezone**: App requires UTC timezone (validated at startup in src/app.ts:43-48)
 - **Node version**: 24.x (specified in package.json engines)
-- **TypeScript**: Code is compiled to `dist/` via `tsc`. Both `watch` (for dev) and `postinstall` (for prod) compile the code.
+- **TypeScript**: Code is compiled to `dist/` via `tsc`. `watch` compiles for dev, `build` compiles for prod (run explicitly in the Dockerfile and in `deploy.sh`).
 - **ES Modules**: Project uses `"type": "module"` - all imports must use `.js` extensions even for `.ts` files
 
 ## CI/CD

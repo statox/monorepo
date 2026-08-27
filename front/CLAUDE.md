@@ -14,11 +14,11 @@ npm run preview          # Preview production build
 ### Code Quality
 
 ```bash
-npm run check            # Run svelte-check with TypeScript validation
+npm run svelte-check     # Run svelte-check with TypeScript validation
 npm run lint             # Run ESLint on src/
 npm run lint:fix         # Auto-fix ESLint issues
-npm run prettier         # Check Prettier formatting
-npm run prettier:fix     # Auto-fix Prettier formatting
+npm run format           # Check Prettier formatting
+npm run format:fix       # Auto-fix Prettier formatting
 ```
 
 ### Git Hooks

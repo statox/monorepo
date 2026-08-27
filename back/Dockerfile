@@ -5,6 +5,7 @@ WORKDIR /api
 COPY . .
 
 RUN npm ci
+RUN npm run build
 RUN npm run check
 
 # CMD ["npm", "run", "serve"]

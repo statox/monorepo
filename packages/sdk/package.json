@@ -6,10 +6,12 @@
         ".": "./src/index.ts"
     },
     "scripts": {
-        "check": "npm run lint && npm run prettier",
+        "check": "npm run types && npm run lint && npm run format",
+        "types": "tsc --noEmit",
         "lint": "eslint",
-        "prettier": "prettier --check 'src/**/*.ts' 'tests/**/*.ts'",
-        "prettier:fix": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'",
+        "lint:fix": "eslint --fix",
+        "format": "prettier --check 'src/**/*.ts' 'tests/**/*.ts'",
+        "format:fix": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'",
         "tests": "mocha --config tests/mocha/sdk.json"
     },
     "dependencies": {
@@ -21,6 +23,7 @@
         "@eslint/js": "^10.0.1",
         "@types/chai": "^5.2.3",
         "@types/mocha": "^10.0.10",
+        "@types/node": "^25",
         "@types/sinon": "^21.0.1",
         "@typescript-eslint/eslint-plugin": "^8.59.3",
         "@typescript-eslint/parser": "^8.32.1",

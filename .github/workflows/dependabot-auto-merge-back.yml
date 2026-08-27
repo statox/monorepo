@@ -60,13 +60,17 @@ jobs:
               if: steps.cache-nodemodules.outputs.cache-hit != 'true'
               run: npm ci
 
+            - name: Check types
+              working-directory: back
+              run: npm run types
+
             - name: Check lint
               working-directory: back
               run: npm run lint
 
-            - name: Check prettier
+            - name: Check format
               working-directory: back
-              run: npm run prettier
+              run: npm run format
 
     tests:
         runs-on: ubuntu-latest
@@ -107,7 +111,7 @@ jobs:
 
             - name: Build app
               working-directory: back
-              run: npm run postinstall
+              run: npm run build
 
             - name: Init mysql
               working-directory: back
@@ -124,7 +128,7 @@ jobs:
             - name: Merge test reports
               working-directory: back
               if: always()
-              run: npx ctrf merge ctrf/
+              run: npm run ci:merge-reports
 
             - name: Publish test report
               uses: ctrf-io/github-test-reporter@v1.1.1
