@@ -17,7 +17,7 @@ const makeMockResponse = () => {
 };
 
 describe('errors middleware - errorHandler', () => {
-    it('does not call next() after sending a 500 for an unrecognized error', async () => {
+    it('does not call next() after sending a 500 for an unrecognized error', () => {
         const { response } = makeMockResponse();
         const nextSpy = sinon.spy() as unknown as NextFunction;
         const request = { url: '/test' } as unknown as Request;
