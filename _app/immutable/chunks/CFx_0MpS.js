@@ -1,1 +1,0 @@
-import{t as e}from"./BBIFpDDw.js";var t=e.cookbook.addRecipe,n=e.cookbook.listRecipes,r=e.cookbook.listIngredients,i=e.cookbook.getRecipe;export{n as i,i as n,r,t};

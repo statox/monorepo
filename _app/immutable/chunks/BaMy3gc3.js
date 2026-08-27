@@ -1,0 +1,1 @@
+var e=e=>e===`doc`?`fas fa-file-word`:e===`pdf`?`fas fa-file-pdf`:e===`youtube`?`fa fa-youtube`:`fas fa-link`,t=t=>t.contentB64?`fas fa-book-open`:e(t.type);export{e as n,t};
