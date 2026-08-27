@@ -45,8 +45,8 @@ debug=true npm run tests -- -f 'personalTracker'
 ```bash
 npm run check                    # Run types + lint + format (convenience, runs everything)
 npm run types                    # TypeScript type-check (tsc --noEmit)
-npm run lint                     # ESLint
-npm run lint:fix                 # Fix ESLint issues
+npm run lint                     # oxlint
+npm run lint:fix                 # Fix oxlint issues
 npm run format                   # Check formatting
 npm run format:fix               # Fix formatting
 ```
