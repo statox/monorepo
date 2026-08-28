@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-COMPOSE_FILE='src/tools/docker-compose.yml'
+COMPOSE_FILE_LOCAL='src/tools/docker-compose.yml'
+COMPOSE_FILE_CI='src/tools/docker-compose.ci.yml'
+
+COMPOSE_FILE="$COMPOSE_FILE_LOCAL"
+if [[ -n "${CI}" && "${CI}" == true ]]; then
+    COMPOSE_FILE="$COMPOSE_FILE_CI"
+fi
 
 CMD=''
 case "$1" in
