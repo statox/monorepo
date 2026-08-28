@@ -27,7 +27,7 @@ class TestHelper_Push extends TestHelper {
         });
     }
 
-    checkNotification = (params: { message: string; title?: string }) => {
+    checkNotification = (params: { message: string | sinon.SinonMatcher; title?: string }) => {
         const calledWithCorrectArgs = pushStub.calledWithMatch(params);
         if (!calledWithCorrectArgs) {
             if (isDebug) {

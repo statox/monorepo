@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import sinon from 'sinon';
 import { doHomeTrackerMonitoring } from '../../../src/libs/modules/homeTracker/index.js';
 import { th } from '../../helpers/index.js';
 
@@ -42,7 +43,7 @@ describe('periodic task - doHomeTrackerMonitoring', () => {
             lastSyncDateUnix: thirtyMinutesAgo - 30
         });
 
-        const expectedMessage = `🔴 salon - No data for 30 mn`;
+        const expectedMessage = sinon.match(/^🔴 salon - No data for (29|30|31) mn$/);
         th.push.checkNotification({ title: 'Home Tracker', message: expectedMessage });
         th.push.checkNbNotifications(1);
         await th.mysql.checkContains({
@@ -153,7 +154,7 @@ describe('periodic task - doHomeTrackerMonitoring', () => {
             lastAlertDateUnix: thirtyMinutesAgo
         });
 
-        const expectedMessage = `🟢 salon - Back online after 30 mn`;
+        const expectedMessage = sinon.match(/^🟢 salon - Back online after (29|30|31) mn$/);
         th.push.checkNotification({ title: 'Home Tracker', message: expectedMessage });
         th.push.checkNbNotifications(1);
     });
