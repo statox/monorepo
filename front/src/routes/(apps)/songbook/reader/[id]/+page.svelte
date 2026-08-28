@@ -1,5 +1,6 @@
 <script lang="ts">
     import { untrack } from 'svelte';
+    import { ChordSheetJSPreview } from '$lib/components/ChordSheetJSPreview';
     import { MonospaceColumns } from '$lib/components/MonospaceColumns';
     import { pageMetadataStore } from '$lib/components/Header';
     import type { Chord } from '$lib/Songbook';
@@ -30,6 +31,8 @@
     let editMode = $state(untrack(() => !decodedContent));
     let editedContent = $state(untrack(() => decodedContent ?? ''));
     let saving = $state(false);
+    // POC: naive chordsheetjs transform preview, no format detection/cleanup.
+    let useChordSheetJSPreview = $state(true);
 
     const toggleEdit = () => {
         if (editMode) {
@@ -81,6 +84,14 @@
 <button onclick={toggleEdit}> {editMode ? 'Cancel' : 'Edit'} </button>
 {#if editMode}
     <button disabled={saving} onclick={saveContent}> Save </button>
+{:else if decodedContent}
+    <button
+        onclick={() => (useChordSheetJSPreview = !useChordSheetJSPreview)}
+        aria-label={useChordSheetJSPreview ? 'Plain view' : 'Preview chordsheetjs'}
+        title={useChordSheetJSPreview ? 'Plain view' : 'Preview chordsheetjs'}
+    >
+        <i class={useChordSheetJSPreview ? 'fas fa-align-left' : 'fas fa-guitar'}></i>
+    </button>
 {/if}
 {#if chord}
     <span class={getTypeIconClass(chord.type)}></span>
@@ -97,6 +108,8 @@
 
 {#if editMode}
     <textarea bind:value={editedContent}></textarea>
+{:else if decodedContent && useChordSheetJSPreview}
+    <ChordSheetJSPreview content={decodedContent} />
 {:else if decodedContent}
     <MonospaceColumns content={decodedContent} />
 {/if}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { tick } from 'svelte';
-    import { computeLayout, chunkLines, type LayoutResult } from './layout';
+    import { computeLayout, chunkItems, type LayoutResult } from './layout';
 
     interface Props {
         content: string;
@@ -16,7 +16,7 @@
     let containerEl: HTMLDivElement | undefined = $state();
     let probeEl: HTMLSpanElement | undefined = $state();
 
-    let layout: LayoutResult = $state({ mode: 'single', linesPerColumn: 0, columnsPerRow: 1 });
+    let layout: LayoutResult = $state({ mode: 'single', itemsPerColumn: 0, columnsPerRow: 1 });
 
     // Measures the pixel width of one monospace character via a hidden
     // 1ch-wide probe, since ch-to-px conversion depends on the actual
@@ -37,17 +37,16 @@
         if (!lineHeightPx || !charWidthPx) return;
 
         layout = computeLayout({
-            totalLines: lines.length,
-            maxLineLength,
-            charWidthPx,
-            lineHeightPx,
+            totalItems: lines.length,
+            columnWidthPx: maxLineLength * charWidthPx,
+            itemHeightPx: lineHeightPx,
             bodyWidthPx,
             availableHeightPx,
             gapPx
         });
     };
 
-    const chunks = $derived(chunkLines(lines, layout.linesPerColumn || lines.length));
+    const chunks = $derived(chunkItems(lines, layout.itemsPerColumn || lines.length));
 
     $effect(() => {
         // Wait a tick so the DOM reflects the current content before measuring it.
@@ -72,7 +71,7 @@
             return;
         }
 
-        const firstColumn = containerEl.querySelector<HTMLElement>(':scope > .column');
+        const firstColumn = containerEl.querySelector<HTMLElement>(':scope > .column-wrapper');
         if (!firstColumn) return;
 
         const rowGapPx = parseFloat(getComputedStyle(containerEl).rowGap) || 0;
@@ -128,12 +127,13 @@
 >
     <span bind:this={probeEl} class="char-probe"></span>
     {#each chunks as chunk, i (i)}
-        <pre
-            class="column"
-            class:wrap={layout.mode === 'wrap'}
-            style:width={layout.mode === 'wrap' ? '100%' : `${maxLineLength}ch`}>{chunk.join(
-                '\n'
-            )}</pre>
+        <div
+            class="column-wrapper"
+            style:width={layout.mode === 'wrap' ? '100%' : `${maxLineLength}ch`}
+        >
+            <div class="page-indicator">{i + 1}/{chunks.length}</div>
+            <pre class="column" class:wrap={layout.mode === 'wrap'}>{chunk.join('\n')}</pre>
+        </div>
     {/each}
 </div>
 
@@ -147,6 +147,10 @@
         line-height: 1.4;
     }
 
+    .column-wrapper {
+        flex: 0 0 auto;
+    }
+
     .column {
         /* new.css and new_override.css style all <pre> elements
            (background, border, padding, font-size, max-width, max-height,
@@ -155,22 +159,26 @@
            gets its own scrollbar. */
         margin: 0;
         padding: 0;
-        padding-bottom: 0.3em;
         border: none;
         border-top: solid 1px var(--nc-tx-3);
         border-radius: 0;
         background: none;
         font-size: inherit;
+        width: 100%;
         max-width: none;
         max-height: none;
         overflow: visible;
         white-space: pre;
-        flex: 0 0 auto;
     }
 
     .column.wrap {
         white-space: pre-wrap;
         word-break: break-word;
+    }
+
+    .page-indicator {
+        text-align: center;
+        color: var(--nc-tx-3);
     }
 
     .char-probe {
