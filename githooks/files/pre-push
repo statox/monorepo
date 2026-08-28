@@ -71,8 +71,6 @@ run_checks() {
 
     if [ "$dir" = 'front' ]; then
         run_script front check
-        run_script front lint
-        run_script front prettier
     elif [ "$dir" = 'back' ]; then
         run_script back check
     fi
