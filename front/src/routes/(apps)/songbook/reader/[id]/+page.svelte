@@ -4,7 +4,6 @@
     import { pageMetadataStore } from '$lib/components/Header';
     import type { Chord } from '$lib/Songbook';
     import { updateExistingChord } from '$lib/Songbook';
-    import { goto } from '$app/navigation';
     import { getTypeIconClass } from '../../utils';
 
     interface Props {
@@ -28,8 +27,8 @@
             : undefined
     );
 
-    let editMode = $state(false);
-    let editedContent = $state('');
+    let editMode = $state(untrack(() => !decodedContent));
+    let editedContent = $state(untrack(() => decodedContent ?? ''));
     let saving = $state(false);
 
     const toggleEdit = () => {
@@ -78,7 +77,7 @@
     });
 </script>
 
-<button onclick={() => goto('/songbook')}> Back </button>
+<button onclick={() => history.back()}> Back </button>
 <button onclick={toggleEdit}> {editMode ? 'Cancel' : 'Edit'} </button>
 {#if editMode}
     <button disabled={saving} onclick={saveContent}> Save </button>
@@ -91,17 +90,21 @@
         >
     </span>
 {/if}
+
+{#if !chord?.contentB64}
+    <div>No content extracted for this song, create it</div>
+{/if}
+
 {#if editMode}
     <textarea bind:value={editedContent}></textarea>
 {:else if decodedContent}
     <MonospaceColumns content={decodedContent} />
-{:else}
-    <p>No extracted content available for this song.</p>
 {/if}
 
 <style>
     textarea {
         width: 100%;
         height: 100vh;
+        font-family: monospace;
     }
 </style>

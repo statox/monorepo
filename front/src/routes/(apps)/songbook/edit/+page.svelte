@@ -16,6 +16,7 @@
     import { ButtonCancel } from '$lib/components/ButtonCancel';
 
     import { goto } from '$app/navigation';
+    import { base } from '$app/paths';
     import ChordLink from '../components/ChordLink.svelte';
 
     interface Props {
@@ -140,6 +141,7 @@
                 <th>Last access</th>
                 <th>Extract data</th>
                 <th>Edit</th>
+                <th>Reader</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -183,6 +185,13 @@
                         {/if}
                     </td>
                     <td>
+                        <a href={`${base}/songbook/reader/${chord.id}`} title="Open in reader">
+                            <button aria-label="Open in reader">
+                                <span class="fas fa-book-open"></span>
+                            </button>
+                        </a>
+                    </td>
+                    <td>
                         <ButtonDelete deleteAction={() => deleteRow(chord.id)} />
                     </td>
                 </tr>
@@ -190,3 +199,9 @@
         </tbody>
     </table>
 {/if}
+
+<style>
+    .fa-book-open {
+        color: #2e7d32;
+    }
+</style>
