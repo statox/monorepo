@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { RowDataPacket } from 'mysql2/promise';
 import { db } from '../../../databases/db.js';
 import { elk } from '../../../databases/elk.js';
@@ -60,7 +61,7 @@ export const doHomeTrackerMonitoring = async () => {
 
     for (const sensor of monitoredSensors) {
         const { lastSyncDateUnix, name, lastAlertDateUnix } = sensor;
-        const secondsSinceLastSync = Date.now() / 1000 - lastSyncDateUnix;
+        const secondsSinceLastSync = DateTime.now().toSeconds() - lastSyncDateUnix;
         const isInAlert = lastAlertDateUnix != null;
 
         if (secondsSinceLastSync > MAX_SEC_WITHOUT_SYNC) {
@@ -76,7 +77,7 @@ export const doHomeTrackerMonitoring = async () => {
 
         // Info if sensor is back online
         if (isInAlert) {
-            const secondsSinceLastAlert = Date.now() / 1000 - lastAlertDateUnix;
+            const secondsSinceLastAlert = DateTime.now().toSeconds() - lastAlertDateUnix;
             const message = `🟢 ${name} - Back online after ${Math.floor(secondsSinceLastAlert / 60)} mn`;
             slog.log('home-tracker', 'Back online', { sensorName: name, lastAlertDateUnix });
             await pushNotifier.notify({ title: 'Home Tracker', message });

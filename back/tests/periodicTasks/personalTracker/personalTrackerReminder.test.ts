@@ -4,10 +4,6 @@ import { MONITORED_USER_ID } from '../../../src/libs/modules/personalTracker/con
 import { th } from '../../helpers/index.js';
 
 describe('periodic task - doPersonalTrackerReminder', () => {
-    afterEach(() => {
-        th.time.restoreDateTimeNow();
-    });
-
     it('Before 21:00 - Do nothing', async () => {
         // Mock time to 20:59 on a specific day
         const testDate = DateTime.fromISO('2026-01-15T20:59:00.000Z');

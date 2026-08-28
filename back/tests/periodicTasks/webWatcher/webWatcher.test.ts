@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import sinon from 'sinon';
 import { doWebWatcher } from '../../../src/libs/modules/webWatcher/index.js';
 import { th } from '../../helpers/index.js';
@@ -186,7 +187,9 @@ describe('periodic task - webWatcher', () => {
     });
 
     it('should respect the check interval and not check too often', async () => {
-        const oneHourAgo = Math.round(Date.now() / 1000) - 3600;
+        const now = DateTime.fromISO('2026-01-15T12:00:00.000Z');
+        th.time.fakeSinonDateTimeNow(now.toUnixInteger());
+        const oneHourAgo = now.toUnixInteger() - 3600;
         await th.mysql.fixture({
             WebWatcher: [
                 {

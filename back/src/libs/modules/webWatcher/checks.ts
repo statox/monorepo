@@ -1,4 +1,5 @@
 import jsdom from 'jsdom';
+import { DateTime } from 'luxon';
 import { db } from '../../databases/db.js';
 import { slog } from '../logging/index.js';
 import { createHash } from 'node:crypto';
@@ -86,7 +87,7 @@ const checkWatchedContent = async (c: WatchedContent) => {
     try {
         const { lastCheckDateUnix, lastContent, checkIntervalSeconds } = c;
 
-        if (Date.now() / 1000 < lastCheckDateUnix + checkIntervalSeconds) {
+        if (DateTime.now().toSeconds() < lastCheckDateUnix + checkIntervalSeconds) {
             return;
         }
 

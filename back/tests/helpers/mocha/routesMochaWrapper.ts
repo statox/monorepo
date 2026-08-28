@@ -11,6 +11,7 @@ import { testHelper_PushNotifier } from '../notifier/push.js';
 import { testHelper_S3 } from '../s3/index.js';
 import { testHelper_SlackNotifier } from '../notifier/slack.js';
 import { testHelper_Slog } from '../slog/index.js';
+import { testHelper_Time } from '../time/index.js';
 
 // TODO Maybe implement a dependency mechanism. For now this is
 // handled only with the order of this array.
@@ -25,7 +26,8 @@ const helpers: TestHelper[] = [
     testHelper_Fetch,
     testHelper_S3,
     testHelper_Slog,
-    testHelper_ELK
+    testHelper_ELK,
+    testHelper_Time
 ];
 
 // Used for tests of the routes

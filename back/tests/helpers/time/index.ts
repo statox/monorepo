@@ -5,11 +5,18 @@ import { assert } from 'chai';
 
 let sinonDateTimeNowStub: sinon.SinonStub | undefined;
 
+const restoreDateTimeNow = () => {
+    sinonDateTimeNowStub?.restore();
+    sinonDateTimeNowStub = undefined;
+};
+
 class TestHelper_Time extends TestHelper {
     constructor() {
         super({
             name: 'Time',
-            hooks: {}
+            hooks: {
+                afterEach: restoreDateTimeNow
+            }
         });
     }
 
@@ -19,10 +26,7 @@ class TestHelper_Time extends TestHelper {
         sinonDateTimeNowStub.returns(newNow);
     };
 
-    restoreDateTimeNow = () => {
-        sinonDateTimeNowStub?.restore();
-        sinonDateTimeNowStub = undefined;
-    };
+    restoreDateTimeNow = restoreDateTimeNow;
 
     isAroundNowSec = (ts: number, maxDelayInSeconds = 2) => {
         const diffFromNow = DateTime.fromSeconds(ts).diffNow('seconds').seconds;
