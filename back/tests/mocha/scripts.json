@@ -4,7 +4,5 @@
     "timeout": 10000,
     "parallel": false,
     "jobs": 1,
-    "node-option": [
-        "unhandled-rejections=strict"
-    ]
+    "node-option": ["unhandled-rejections=strict"]
 }

@@ -76,7 +76,8 @@ type BaseRouteNotUser2<Input, Output> = BaseRouteCommon<Input, Output> & {
 };
 
 export type BaseRoute<Input, Output> =
-    BaseRouteUser2<Input, Output> | BaseRouteNotUser2<Input, Output>;
+    | BaseRouteUser2<Input, Output>
+    | BaseRouteNotUser2<Input, Output>;
 
 export type GetRoute<Input, Output> = BaseRoute<Input, Output> & {
     method: 'get';
@@ -104,7 +105,9 @@ export const isPostWithFileRoute = (
 };
 
 export type Route<Input, Output> =
-    GetRoute<Input, Output> | PostRoute<Input, Output> | PostWithFileRoute<Input, Output>;
+    | GetRoute<Input, Output>
+    | PostRoute<Input, Output>
+    | PostWithFileRoute<Input, Output>;
 
 export type RouteWS = {
     onConnection: (ws: WebSocket, gameId: string) => void;
