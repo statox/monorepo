@@ -8,7 +8,7 @@
         showSuccessToast
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
-    import { getChords, uploadNewChord, type ChordData } from '$lib/Songbook';
+    import { getSongbook, uploadNewChord, type ChordData } from '$lib/Songbook';
     import { onMount } from 'svelte';
 
     interface Props {
@@ -68,7 +68,7 @@
     };
 
     onMount(async () => {
-        const chords = await getChords();
+        const chords = await getSongbook();
 
         const data = chords.reduce(
             (acc, chord) => {

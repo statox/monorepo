@@ -15,10 +15,8 @@ const getType = (chord: RawChord) => {
     return 'link';
 };
 
-export const getChords = client2.chords.getAll;
-
 export const getSongbook = async (): Promise<Chord[]> => {
-    const chords = await getChords();
+    const chords = await client2.chords.getAll();
 
     return chords.map((chord: RawChord) => {
         return {

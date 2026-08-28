@@ -1,7 +1,7 @@
 <script lang="ts">
     import { DateTime } from 'luxon';
     import { untrack } from 'svelte';
-    import type { RawChord } from '$lib/Songbook';
+    import type { Chord, RawChord } from '$lib/Songbook';
     import {
         updateExistingChord,
         deleteExistingChord,
@@ -16,16 +16,17 @@
     import { ButtonCancel } from '$lib/components/ButtonCancel';
 
     import { goto } from '$app/navigation';
+    import ChordLink from '../components/ChordLink.svelte';
 
     interface Props {
         // From +page.ts load() function
-        data: { chords: RawChord[] };
+        data: { chords: Chord[] };
     }
 
     let { data }: Props = $props();
     // Seeded once from the load() result, then mutated locally by edit/delete
     // below — intentionally not a $derived mirror of `data`.
-    let chords: RawChord[] = $state(untrack(() => data.chords));
+    let chords: Chord[] = $state(untrack(() => data.chords));
 
     const sortedChords = $derived(
         [...chords].sort((a, b) => b.creationDateUnix - a.creationDateUnix)
@@ -132,6 +133,7 @@
                 <th>Artist</th>
                 <th>Title</th>
                 <th>URL</th>
+                <th>Original URL</th>
                 <th>Tags</th>
                 <th>Created</th>
                 <th>Visits</th>
@@ -147,15 +149,17 @@
                     {#if editingId === chord.id}
                         <td><input type="text" bind:value={editArtist} /></td>
                         <td><input type="text" bind:value={editTitle} /></td>
+                        <td>-</td>
                         <td><input type="text" bind:value={editUrl} /></td>
                         <td><input type="text" bind:value={editTags} /></td>
                     {:else}
                         <td>{chord.artist}</td>
                         <td>{chord.title}</td>
                         <td>
-                            <a href={chord.url} target="_blank" rel="noopener noreferrer"
-                                >{chord.url}</a
-                            >
+                            <ChordLink {chord} />
+                        </td>
+                        <td>
+                            <a href={chord.url}>{new URL(chord.url).hostname}</a>
                         </td>
                         <td>{chord.tags.join(', ')}</td>
                     {/if}
