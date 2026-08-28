@@ -1,2 +1,5 @@
 [bootstrap.packages]
 "apt:default-mysql-client" = "latest"
+
+[tools]
+aws = { version = "latest", symlink_bins = "true" }
