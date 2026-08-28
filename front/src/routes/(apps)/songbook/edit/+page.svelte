@@ -29,15 +29,53 @@
     // below — intentionally not a $derived mirror of `data`.
     let chords: Chord[] = $state(untrack(() => data.chords));
 
-    const sortedChords = $derived(
-        [...chords].sort((a, b) => b.creationDateUnix - a.creationDateUnix)
-    );
+    type SortColumn = 'CreationDateUnix' | 'Artist' | 'ExtractedData';
+    let sortColumn: SortColumn = $state('CreationDateUnix');
+    type SortOrder = 'asc' | 'desc';
+    let sortOrder: SortOrder = $state('desc');
+
+    const updateSort = (newValue: SortColumn) => {
+        if (sortColumn === newValue) {
+            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            return;
+        }
+        sortColumn = newValue;
+    };
+
+    const sortedChords = $derived.by(() => {
+        const order = sortOrder === 'asc' ? 1 : -1;
+        return [...chords].sort((a, b) => {
+            if (sortColumn === 'CreationDateUnix') {
+                return (a.creationDateUnix - b.creationDateUnix) * order;
+            }
+            if (sortColumn === 'Artist') {
+                if (b.artist === a.artist) {
+                    return b.title < a.title ? -order : order;
+                }
+                return b.artist < a.artist ? -order : order;
+            }
+            if (sortColumn === 'ExtractedData') {
+                if (b.contentB64 && a.contentB64) {
+                    return b.artist < a.artist ? -order : order;
+                }
+                if (b.contentB64 && !a.contentB64) {
+                    return order;
+                }
+                if (a.contentB64 && !b.contentB64) {
+                    return -order;
+                }
+                return b.artist < a.artist ? -order : order;
+            }
+
+            return (b.creationDateUnix - a.creationDateUnix) * order;
+        });
+    });
 
     const formatDate = (dateUnix: number | null) => {
         if (dateUnix === null) {
             return '—';
         }
-        return DateTime.fromSeconds(dateUnix).toFormat('dd/MM/yyyy');
+        return DateTime.fromSeconds(dateUnix).toFormat('dd/MM/yy');
     };
 
     let editingId: number | null = $state(null);
@@ -131,15 +169,16 @@
     <table>
         <thead>
             <tr>
-                <th>Artist</th>
+                <th>id></th>
+                <th onclick={() => updateSort('Artist')}>Artist</th>
                 <th>Title</th>
                 <th>URL</th>
                 <th>Original URL</th>
                 <th>Tags</th>
-                <th>Created</th>
+                <th onclick={() => updateSort('CreationDateUnix')}>Created</th>
                 <th>Visits</th>
                 <th>Last access</th>
-                <th>Extract data</th>
+                <th onclick={() => updateSort('ExtractedData')}>Extract data</th>
                 <th>Edit</th>
                 <th>Reader</th>
                 <th>Delete</th>
@@ -147,7 +186,8 @@
         </thead>
         <tbody>
             {#each sortedChords as chord (chord.id)}
-                <tr>
+                <tr class:editing={editingId === chord.id}>
+                    <td>{chord.id}</td>
                     {#if editingId === chord.id}
                         <td><input type="text" bind:value={editArtist} /></td>
                         <td><input type="text" bind:value={editTitle} /></td>
@@ -201,6 +241,13 @@
 {/if}
 
 <style>
+    tr:hover {
+        background-color: var(--nc-bg-3);
+    }
+
+    tr.editing {
+        background-color: var(--nc-bg-3);
+    }
     .fa-book-open {
         color: #2e7d32;
     }
