@@ -19,7 +19,7 @@ done
 echo "Building..."
 npm run build
 
-# Lint + Prettier
+# Lint + Formatting
 echo "Checking lint and formatting..."
 npm run check
 

@@ -8,9 +8,9 @@ Personal TypeScript/Express API serving several small hobby features (HomeTracke
 - **Framework**: Express 5, plus a `ws` WebSocket server on the same HTTP port.
 - **Package manager**: npm, lockfile [`package-lock.json`](package-lock.json).
 - **Key dependencies**: `mysql2`, `@elastic/elasticsearch`, `@aws-sdk/client-s3`, `passport`/`passport-local`, `ajv` + `express-json-validator-middleware`, `luxon`, `@dotenvx/dotenvx`, `@slack/webhook`, `mustache-express`.
-- **Dev tooling**: ESLint ([`eslint.config.mjs`](eslint.config.mjs), flat config, `eslint:recommended` + `@typescript-eslint/recommended` + prettier), Prettier ([`.prettierrc`](.prettierrc)), `tsc` for compilation ([`tsconfig.json`](tsconfig.json), target es2022, strict mode).
+- **Dev tooling**: oxlint ([`.oxlintrc.json`](.oxlintrc.json)), oxfmt ([`.oxfmtrc.json`](.oxfmtrc.json)), `tsc` for compilation ([`tsconfig.json`](tsconfig.json), target es2022, strict mode).
 - **Test tooling**: Mocha + Chai + Supertest + Sinon.
-- **CI**: GitHub Actions at [`.github/workflows/dependabot-auto-merge-back.yml`](../.github/workflows/dependabot-auto-merge-back.yml) - runs lint, prettier check, and tests on dependabot PRs touching `back/**`, then auto-approves/merges if green. No general PR-check workflow was found for human-authored PRs; CI here is dependabot-specific.
+- **CI**: GitHub Actions at [`.github/workflows/dependabot-auto-merge-back.yml`](../.github/workflows/dependabot-auto-merge-back.yml) - runs lint, oxfmt format check, and tests on dependabot PRs touching `back/**`, then auto-approves/merges if green. This workflow is also used for human-authored PRs skipping the dependabot auto approval step
 - **Runtime/deploy target**: containerized. Built and deployed via Docker Compose to a self-hosted VPS (see [Build Process](#build-process)).
 
 ## Architecture
@@ -153,7 +153,7 @@ A custom helper framework in [`tests/helpers/`](tests/helpers) exposes a `th` ob
 
 **Coverage gap**: `src/libs/routes/auth/` has no `tests/routes/auth/` directory. Auth is exercised only indirectly, at the middleware level, via [`tests/framework/auth.test.ts`](tests/framework/auth.test.ts) and `auth2.test.ts` - not as route-level supertest tests like every other module has.
 
-CI enforces lint + prettier + tests on dependabot PRs (see [Stack & Tooling](#stack--tooling)); no coverage threshold is configured.
+CI enforces lint + oxfmt format + tests on dependabot PRs (see [Stack & Tooling](#stack--tooling)); no coverage threshold is configured.
 
 ## Patterns
 
