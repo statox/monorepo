@@ -18,6 +18,7 @@
     import { goto } from '$app/navigation';
     import { base } from '$app/paths';
     import ChordLink from '../components/ChordLink.svelte';
+    import { BackToTop } from '$lib/components/BackToTop';
 
     interface Props {
         // From +page.ts load() function
@@ -154,6 +155,8 @@
         }
     };
 </script>
+
+<BackToTop />
 
 <h2>
     Edit song book
