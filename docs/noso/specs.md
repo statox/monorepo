@@ -1,7 +1,5 @@
 NoSo - A NOt SOcial network for my family
 
-TODO: Change the upload flow: We'll use presigned urls too so that the files don't go through the server
-
 # Project
 
 ## Goal
@@ -25,22 +23,35 @@ Keep the code as minimal as possible we aim for a "small web" approach we want t
     `NOSO_User` table referencing `User` id.
 
 - New table `NOSO_Post`
-    - Represent a post created by a user, which can be associated to one or several media in `NOSO_Media`
+    - Represent a post created by a user
+    - Can be associated to one or several media in `NOSO_Media` through the `id` column
     - Columns:
         - id: autoincrement number. index
         - userId: Reference to `User` and potential `NOSO_User` tables. index
         - creationDateUnix: Timestamp created by the server
         - updateDateUnix: Timestamp created by the server
-        - archiveDateUnix: Null by default, will be set by a `deletePost` endpoint. Used to allow the user to soft delete a post.
+        - archiveDateUnix: Null by default, will be set by a `deletePost` endpoint.
+            - Used to allow the user to soft delete a post.
+            - Soft deleted posts are not visible by any user anymore
+            - They are never deleted and their associated media are not changed
         - content: A simple string. We will limit the text to 300 char but we want to occasionally allow larger text. SQL Type TBD
+    - Index:
+        - We all query the post on `(creationDateUnix, id)` where close (select the 
 
 - New table `NOSO_Media`
     - The images will be stored on R2 using the existing client `back/src/libs/databases/s3.ts`
     - Columns:
         - id: autoincrement number. index
+        - postId: The post this media is associated with
         - userId: Reference to `User` and potential `NOSO_User` tables. index
         - creationDateUnix: Timestamp created by the server
         - `s3link`: A link to the S3 bucket similar to what is done in `S3Files` currently
+`NOSO_Media` items can be associated with 0 or 1 `NOSO_Post`
+`NOSO_Media` items can get orphaned if the client uploaded a media but failed to create a post.
+`NOSO_Media` items can be associated with archived `NOSO_Posts`
+For now we do not clean up any entry for this table. In a next version we'll create a periodic task for that.
+There is no order of the media in the post, for now the client will order them following their id
+
 
 R2 for file storage
     - Very similar to how its used in clipboard and reactor
@@ -67,27 +78,38 @@ No caching, no CDN.
 - `noso/addPost` - Let a user create a new post
     - Accept some text (we want to support utf8 properly with emojis)
     - Accept one or several `NOSO_Media` id. We'll reject the post creation if the media are not owned by the user creating the post
+    - Reject if any of the attached media already has a `postId` in `NOSO_Media`
+    - Store the post
+    - Update the `postId` of the relevant `NOSO_Media` with the new postId
 
 - `noso/deletePost` - Let a user soft delete a post
     - Reject if the post to delete is not owned by the user
     - Set the `archiveDateUnix` to now in `NOSO_Post`
 
 - `noso/getFeed` - Return the posts to display to the user
+    - input:
+        - `feed: { "feedType": "all" } | { feedType: "user", feedUserId: number }`
+        - `since: { "sinceType": "now" } | { sinceType: "beforePost", postId: number }`
     - Pagination logic
-        - Take a timestamp for the latest post return
-        - Return the 10 latests posts at this date
-        - If the client wants to get the whole feed it takes the timestamp of the oldest post returned and calls the endpoint again with this timestamp.
-    - Filtering: The endpoint takes an optional `feedUserId`
-        - If the argument is not defined we return the posts of all of the users
-        - If the argument is defined we return only the posts made by the specified `userId`
+        - If `sinceType === "now"` use the max `NOSO_Post` id for `postId`
+        - If `sinceType === "now"` include the latest post to the results
+        - Retrieve the 9 posts created before `postId`
+            - Order posts by `id` desc
+            - Always exclude the soft deleted posts (non null `archiveDateUnix`)
+            - If `feedType == "user"` exclude posts not created by `feedUserId`
+
+        - To get the next chunk of feed the client send the id of the oldest post it knows
+        - If there are less than 9 posts created before `postId` only return the remaining ones
+        - If the client sends the id of the first post return an empty array
+        - If there is no posts in the db return an empty array
     - Posts retrieval:
-        - Select in `NOSO_Post` ordered by creation date (we don't consider the update date for now) and potentially with a WHERE clause on `userId`
-        - Select in `NOSO_Media` the ids of the media associated with each post (we'll pass all the posts as parameters and return grouped (postId, mediaId) then turned into a map
-        - Add a `mediaIds` add to the posts retrieved in db with the ids from `NOSO_Media`
+        - Select in `NOSO_Media` the ids of the media associated with each post
+            - we'll pass all the posts as parameters and return grouped (postId, mediaId) then turned into a map
+        - Add a `mediaIds` property to the posts retrieved in db with the ids from `NOSO_Media`
 
 - `noso/getMedia` - Returns a pre-signed link for a give `NOSO_Media`
     - Similar to the `clipboard`/`reactor` endpoint
-    - For now, user ownership check
+    - For now, no user ownership check
 
 ### Tests
 
@@ -148,7 +170,7 @@ The following services should wrap around `api.ts` to provide the logic around t
         - `UserIcon` for the author of the post
         - The creation date (or update date instead)
         - The text content
-        - A gallery of media using the `Media` component
+        - A gallery of media using the `Media` component ordered by ascending media id
         - A button to delete the post (Reuse the `ButtonDelete` component) calling `/noso/deletePost`)
 
 - `Media`

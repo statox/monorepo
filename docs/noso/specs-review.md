@@ -2,15 +2,19 @@ I read the doc and checked its assumptions against the actual code. Here's what 
 
 ---
 
+## 0. TODO
+
+- [ ] Change the upload flow: We'll use presigned urls too so that the files don't go through the server
+
 ## 1. Implicit questions
 
-- [ ] **The post↔media association doesn't exist in the data model.** `NOSO_Media` (lines 35-41) has `id`, `userId`, `creationDateUnix`, `s3link` — no `postId`, and there's no join table. But `getFeed` (line 83) says "Select in `NOSO_Media` the ids of the media associated with each post". Nothing associates them. This is the single biggest hole; it also decides several downstream questions: can one media be attached to two posts? Is the media order within a post preserved (nothing stores rank)? Does `addPost` reject a mediaId that's already attached?
+- [x] **The post↔media association doesn't exist in the data model.** `NOSO_Media` (lines 35-41) has `id`, `userId`, `creationDateUnix`, `s3link` — no `postId`, and there's no join table. But `getFeed` (line 83) says "Select in `NOSO_Media` the ids of the media associated with each post". Nothing associates them. This is the single biggest hole; it also decides several downstream questions: can one media be attached to two posts? Is the media order within a post preserved (nothing stores rank)? Does `addPost` reject a mediaId that's already attached?
 
-- [ ] **`noso/getMedia` — "For now, user ownership check" (line 88) contradicts the feature.** A shared family feed means everyone views everyone else's images. If `getMedia` is owner-only, `Post` (line 149) can only render your own media. Is this a typo for "*no* ownership check" (i.e. any `noso`-scoped user can fetch any noso media)? Either way, the actual authorization rule needs stating.
+- [x] **`noso/getMedia` — "For now, user ownership check" (line 88) contradicts the feature.** A shared family feed means everyone views everyone else's images. If `getMedia` is owner-only, `Post` (line 149) can only render your own media. Is this a typo for "*no* ownership check" (i.e. any `noso`-scoped user can fetch any noso media)? Either way, the actual authorization rule needs stating.
 
-- [ ] **`getFeed` never mentions `archiveDateUnix`.** Soft delete is defined (line 32) but the retrieval steps (lines 81-84) don't filter archived posts. Also: does a user see their *own* archived posts on `/user/[id]`? And should `getMedia` still serve media belonging to a deleted post?
+- [x] **`getFeed` never mentions `archiveDateUnix`.** Soft delete is defined (line 32) but the retrieval steps (lines 81-84) don't filter archived posts. Also: does a user see their *own* archived posts on `/user/[id]`? And should `getMedia` still serve media belonging to a deleted post?
 
-- [ ] **Pagination cursor is not unique.** Every existing table stores timestamps as `int(11) unsigned` seconds. Two posts in the same second means `<` skips one and `<=` duplicates one. Is the cursor a bare timestamp or a `(creationDateUnix, id)` tuple? Is the boundary inclusive? And how does `Feed` (line 140) know it's reached the end — is "fewer than 10 returned" the contract, or is there an explicit `hasMore`?
+- [x] **Pagination cursor is not unique.** Every existing table stores timestamps as `int(11) unsigned` seconds. Two posts in the same second means `<` skips one and `<=` duplicates one. Is the cursor a bare timestamp or a `(creationDateUnix, id)` tuple? Is the boundary inclusive? And how does `Feed` (line 140) know it's reached the end — is "fewer than 10 returned" the contract, or is there an explicit `hasMore`?
 
 - [ ] **Nothing resolves a userId to a username.** `UserIcon` (line 159-161) shows "the initials of the user" and `/user/[id]` (line 181) shows "the username" — but no endpoint returns it, and `getFeed`'s per-post payload is never specified. Related: how does a user *discover* other users to navigate to `/user/[id]`? There's no user-list endpoint.
 
