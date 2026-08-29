@@ -125,6 +125,7 @@ Test cases TBD.
 
 ## Front end
 
+The noso app will be served from `https://apps.statox.fr/` like the other apps.
 We already have a barebone `front/src/routes/(noso)/` route.
 It has an independent style for the other apps so that we can taylor the UI exactly how we want for this app.
 
@@ -193,12 +194,13 @@ The following services should wrap around `api.ts` to provide the logic around t
     - Use the `Post` component to display the posts
 
 - `Post`
-    - Displays a post in the feed with:
+    - Displays a post.
+    - Used in `Feed` and `NOSOPostForm` after the creation succeeded
         - `UserIcon` for the author of the post
-        - The creation date (or update date instead)
+        - The creation date
         - The text content
         - A gallery of media using the `Media` component ordered by ascending media id
-        - A button to delete the post (Reuse the `ButtonDelete` component) calling `/noso/deletePost`)
+        - A `ButtonDelete` to delete the post if the post belongs to the user
 
 - `Media`
     - Takes a SQL `NOSO_Media` id as argument.

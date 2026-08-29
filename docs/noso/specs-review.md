@@ -1,4 +1,17 @@
-I read the doc and checked its assumptions against the actual code. Here's what I found, in your three buckets. I haven't designed or changed anything.
+> [!INFO] Generated with the following prompt:
+>
+> ```
+> Check @docs/noso/specs.md
+> 
+> I don't want you to design or implement anything for now, we are reviewing this document.
+> 
+> Outside of the questions already present in the document do you see
+> 
+> - Implicit questions
+> - Uncertain statements which would require more investigation
+> - Gaps in the document
+> ```
+> With Opus 5 and effort high
 
 ---
 
@@ -6,8 +19,11 @@ I read the doc and checked its assumptions against the actual code. Here's what 
 
 - [ ] Change the upload flow: We'll use presigned urls too so that the files don't go through the server
 - [ ] Describe local storage service. Check if we should reuse existing helpers/patterns from the other apps.
+- [ ] Spike authentication
 
 ## 1. Implicit questions
+
+- [ ] **Nothing resolves a userId to a username.** `UserIcon` (line 159-161) shows "the initials of the user" and `/user/[id]` (line 181) shows "the username" — but no endpoint returns it, and `getFeed`'s per-post payload is never specified. Related: how does a user *discover* other users to navigate to `/user/[id]`? There's no user-list endpoint.
 
 - [x] **The post↔media association doesn't exist in the data model.** `NOSO_Media` (lines 35-41) has `id`, `userId`, `creationDateUnix`, `s3link` — no `postId`, and there's no join table. But `getFeed` (line 83) says "Select in `NOSO_Media` the ids of the media associated with each post". Nothing associates them. This is the single biggest hole; it also decides several downstream questions: can one media be attached to two posts? Is the media order within a post preserved (nothing stores rank)? Does `addPost` reject a mediaId that's already attached?
 
@@ -17,17 +33,15 @@ I read the doc and checked its assumptions against the actual code. Here's what 
 
 - [x] **Pagination cursor is not unique.** Every existing table stores timestamps as `int(11) unsigned` seconds. Two posts in the same second means `<` skips one and `<=` duplicates one. Is the cursor a bare timestamp or a `(creationDateUnix, id)` tuple? Is the boundary inclusive? And how does `Feed` (line 140) know it's reached the end — is "fewer than 10 returned" the contract, or is there an explicit `hasMore`?
 
-- [ ] **Nothing resolves a userId to a username.** `UserIcon` (line 159-161) shows "the initials of the user" and `/user/[id]` (line 181) shows "the username" — but no endpoint returns it, and `getFeed`'s per-post payload is never specified. Related: how does a user *discover* other users to navigate to `/user/[id]`? There's no user-list endpoint.
-
 - [x] **The 300-character limit has two different statements.** Line 16 says "Max 300 characters" as a hard rule; line 33 says "we'll limit to 300 char but we want to occasionally allow larger text". Enforced where — JSON schema `maxLength`, UI only, or both? And "occasionally allow larger" by what mechanism?
 
 - [x] **`/createPost` abort semantics leave orphans and have no retry story** (lines 174-176). If media 3 of 4 fails, media 1-2 are already in R2 and `NOSO_Media`. "Media cleanup" is deferred (line 199) — but that item is about media never attached, which is the same class of garbage. Separately: if `addPost` fails *after* all uploads succeed and the user hits submit again, do the files get re-uploaded (duplicates)?
 
-- [ ] **Front-end URLs don't match the doc.** The scaffold is `front/src/routes/(noso)/noso/`, so the real paths are `/noso`, `/noso/createPost`, `/noso/user/[id]` — not `/` and `/createPost` (lines 165-182). Is NoSo meant to live under `apps.statox.fr/noso`, or eventually its own host? That decision affects the "independent style" claim and where an unauthenticated visitor gets redirected.
+- [x] **Front-end URLs don't match the doc.** The scaffold is `front/src/routes/(noso)/noso/`, so the real paths are `/noso`, `/noso/createPost`, `/noso/user/[id]` — not `/` and `/createPost` (lines 165-182). Is NoSo meant to live under `apps.statox.fr/noso`, or eventually its own host? That decision affects the "independent style" claim and where an unauthenticated visitor gets redirected.
 
-- [ ] **Where does a logged-out family member land?** The login page is `front/src/routes/(apps)/auth/login/+page.svelte` — inside the `(apps)` group, with the apps `<Header />` and apps stylesheets. "Reuse the existing auth component from apps as much as possible" (line 104) doesn't say whether family users see the apps-branded login and app index.
+- [x] **Where does a logged-out family member land?** The login page is `front/src/routes/(apps)/auth/login/+page.svelte` — inside the `(apps)` group, with the apps `<Header />` and apps stylesheets. "Reuse the existing auth component from apps as much as possible" (line 104) doesn't say whether family users see the apps-branded login and app index.
 
-- [ ] **`Post` shows "the creation date (or update date instead)" (line 147)** — undecided, and `updateDateUnix` (line 30) is written by no endpoint in this phase (edition is deferred, line 197).
+- [x] **`Post` shows "the creation date (or update date instead)" (line 147)** — undecided, and `updateDateUnix` (line 30) is written by no endpoint in this phase (edition is deferred, line 197).
 
 ---
 
@@ -78,7 +92,3 @@ I read the doc and checked its assumptions against the actual code. Here's what 
 - [ ] **Unspecified UI states**: empty feed, loading, error, end-of-feed (when to hide "load more"), and a user with zero posts. Also no `<svelte:head>` title/favicon or `+error.svelte` for the `(noso)` group, and no alt-text/a11y story for images.
 
 - [ ] **Local dev S3**: the `noso` bucket needs adding to `requiredBuckets` for RustFS, and the test fixtures need a `noso`-bucket path — neither is mentioned alongside the Terraform note.
-
----
-
-Two things I'd resolve before anything else, since they change the shape of the schema and the API surface: the **post↔media association**, and the **`getMedia` authorization rule**. Want me to move into a brainstorming pass on those, or keep reviewing?
