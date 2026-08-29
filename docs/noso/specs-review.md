@@ -5,6 +5,7 @@ I read the doc and checked its assumptions against the actual code. Here's what 
 ## 0. TODO
 
 - [ ] Change the upload flow: We'll use presigned urls too so that the files don't go through the server
+- [ ] Describe local storage service. Check if we should reuse existing helpers/patterns from the other apps.
 
 ## 1. Implicit questions
 
@@ -18,9 +19,9 @@ I read the doc and checked its assumptions against the actual code. Here's what 
 
 - [ ] **Nothing resolves a userId to a username.** `UserIcon` (line 159-161) shows "the initials of the user" and `/user/[id]` (line 181) shows "the username" — but no endpoint returns it, and `getFeed`'s per-post payload is never specified. Related: how does a user *discover* other users to navigate to `/user/[id]`? There's no user-list endpoint.
 
-- [ ] **The 300-character limit has two different statements.** Line 16 says "Max 300 characters" as a hard rule; line 33 says "we'll limit to 300 char but we want to occasionally allow larger text". Enforced where — JSON schema `maxLength`, UI only, or both? And "occasionally allow larger" by what mechanism?
+- [x] **The 300-character limit has two different statements.** Line 16 says "Max 300 characters" as a hard rule; line 33 says "we'll limit to 300 char but we want to occasionally allow larger text". Enforced where — JSON schema `maxLength`, UI only, or both? And "occasionally allow larger" by what mechanism?
 
-- [ ] **`/createPost` abort semantics leave orphans and have no retry story** (lines 174-176). If media 3 of 4 fails, media 1-2 are already in R2 and `NOSO_Media`. "Media cleanup" is deferred (line 199) — but that item is about media never attached, which is the same class of garbage. Separately: if `addPost` fails *after* all uploads succeed and the user hits submit again, do the files get re-uploaded (duplicates)?
+- [x] **`/createPost` abort semantics leave orphans and have no retry story** (lines 174-176). If media 3 of 4 fails, media 1-2 are already in R2 and `NOSO_Media`. "Media cleanup" is deferred (line 199) — but that item is about media never attached, which is the same class of garbage. Separately: if `addPost` fails *after* all uploads succeed and the user hits submit again, do the files get re-uploaded (duplicates)?
 
 - [ ] **Front-end URLs don't match the doc.** The scaffold is `front/src/routes/(noso)/noso/`, so the real paths are `/noso`, `/noso/createPost`, `/noso/user/[id]` — not `/` and `/createPost` (lines 165-182). Is NoSo meant to live under `apps.statox.fr/noso`, or eventually its own host? That decision affects the "independent style" claim and where an unauthenticated visitor gets redirected.
 

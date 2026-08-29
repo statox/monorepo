@@ -34,7 +34,10 @@ Keep the code as minimal as possible we aim for a "small web" approach we want t
             - Used to allow the user to soft delete a post.
             - Soft deleted posts are not visible by any user anymore
             - They are never deleted and their associated media are not changed
-        - content: A simple string. We will limit the text to 300 char but we want to occasionally allow larger text. SQL Type TBD
+        - content: The text content of the post
+            - The frontend will impose the 300 char limit for regular users
+            - We want to be able to store longer posts (for now only created manually in DB)
+            - Use a type `text` (64KB)
     - Index:
         - We all query the post on `(creationDateUnix, id)` where close (select the 
 
@@ -81,6 +84,8 @@ No caching, no CDN.
     - Reject if any of the attached media already has a `postId` in `NOSO_Media`
     - Store the post
     - Update the `postId` of the relevant `NOSO_Media` with the new postId
+    - Output
+        - `postId` the id of the created post
 
 - `noso/deletePost` - Let a user soft delete a post
     - Reject if the post to delete is not owned by the user
@@ -145,9 +150,31 @@ The following services should wrap around `api.ts` to provide the logic around t
 ### Components
 
 - `NOSOHeader` - App header
-    - NoSo `<h1>` title and auth button similar to `<Header />` in `front/src/routes/(apps)/+layout.svelte`
+    - NoSo `<h1>` title
+    - Home button to navigate to `/noso`
+    - If the user is logged in:
+        - A `UserIcon` component for the user which logs out when clicked
+        - At logout navigate the `/noso`
 
-- One post creation page with a simple form like @front/src/routes/(apps)/clipboard/components/ClipboardForm.svelte
+- `NOSOPostForm` - Create a new post
+    - A text input limited to 300 characters
+    - A `FilesSelector` component to let the user select up to 4 images
+    - Check for form completeness display warnings and disable submit until they are fixed
+        - Input exists
+        - Input is less than 301 characters long
+        - There are no more than 4 images
+    - When input changes and is valid persist the data to local storage
+        - Use the `localStorage` service helpers
+    - When the user submits the post:
+        - Call `addMedia` with each selected file
+        - Call `addPost` with the ids returned by the `addMedia` calls
+    - If post creation succeeds
+        - clean up the local storage from inputs
+        - call `onSuccess(postId)` with `postId` returned by `addPost`
+    - If any call fails:
+        - Abort the whole post creation
+        - Display notices with the API error message
+        - Make sure to keep the content of the post available and unchanged in the UI
 
 - `FilesSelector`
     - Allow to select one or several files from the device
@@ -188,20 +215,27 @@ The following services should wrap around `api.ts` to provide the logic around t
 
 - One home page with an auth guard displaying the feed if the user is logged in and one button to go to the post creation page
 
-- `/` - The user home
+- `/noso/` - The home page
+    - This is the only page which doesn't require authentication
+    - Title of the app `Noso` 
+    - if user is logged out: `Login` component
+    - if user is logged in:
+        - Link to `/noso/feed`
+        - Logout button
+
+- `/noso/feed` - The user home
     - Display the complete feed (Component `Feed` without `feedUserId` argument)
 
-- `/createPost` - Create a post and submit it
-    - Uses the `FilesSelector` component
-    - Input for the text content of the post
-    - When the user submits the post:
-        - Call `addMedia` with each selected file
-            - If one call fails abort the whole post creation
-        - Call `addPost` with the ids returned by the `addMedia` calls
-    - If the call succeed we go to the user home feed with a success message (See `front/src/lib/components/Toast`)
-    - If the call fails show an error message but make sure the selected files and inputs are conserved
+- `/noso/createPost` - Create a post and submit it
+    - Uses `NOSOPostForm`
+    - On `NOSOPostForm` `onSuccess` replace the form with
+        - A success message
+        - A link back to `/noso/feed`
+        - The `Post` component of the newly created post
+    - The `NOSOPostForm` is responsible for displaying potential error message
+    - When navigating back to `/noso/feed` the page should call the `getFeed` endpoint with `sinceType: "now"` which should display the newly created post
 
-- `/user/[id]` - A user's feed
+- `/noso/user/[id]` - A user's feed
     - A first section with `UserIcon` and the username
     - A `Feed` component with the `feedUserId` argument set to the current id in path.
 
