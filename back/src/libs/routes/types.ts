@@ -90,18 +90,13 @@ export type PostRoute<Input, Output> = BaseRoute<Input, Output> & {
 
 export type PostWithFileRoute<Input, Output> = PostRoute<Input, Output> & {
     handler: RouteWithFileHandler<Input>;
-    file: {
-        maxSize: number;
-        allowedMimes: string[];
-    };
+    file: true;
 };
 
 export const isPostWithFileRoute = (
     route: Route<unknown, unknown>
 ): route is PostWithFileRoute<unknown, unknown> => {
-    return (
-        'file' in route && typeof (route as PostWithFileRoute<unknown, unknown>).file === 'object'
-    );
+    return 'file' in route && (route as PostWithFileRoute<unknown, unknown>).file === true;
 };
 
 export type Route<Input, Output> =

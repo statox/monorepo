@@ -184,10 +184,7 @@ const postRouteWithFile: PostWithFileRoute<EmptyInput, EmptyOutput> = {
     inputSchema: emptyObjectSchema,
     handler: async () => {},
     outputSchema: emptyObjectSchema,
-    file: {
-        maxSize: 200,
-        allowedMimes: []
-    }
+    file: true
 };
 
 const testRoutes = [

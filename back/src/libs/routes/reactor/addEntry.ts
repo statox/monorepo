@@ -45,8 +45,5 @@ export const route: PostWithFileRoute<Input, EmptyOutput> = {
     scope: 'admin',
     clientErrors: ['ITEM_ALREADY_EXISTS', 'FILE_REQUIRED'],
     outputSchema: emptyObjectSchema,
-    file: {
-        maxSize: 200,
-        allowedMimes: ['image']
-    }
+    file: true
 };
