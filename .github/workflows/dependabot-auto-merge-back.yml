@@ -133,7 +133,7 @@ jobs:
               run: npm run ci:merge-reports
 
             - name: Publish test report
-              uses: ctrf-io/github-test-reporter@v1.1.1
+              uses: ctrf-io/github-test-reporter@v1.3.0
               with:
                   report-path: 'back/ctrf/ctrf-report.json'
                   summary-report: true
