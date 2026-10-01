@@ -53,7 +53,7 @@
     },
     "type": "module",
     "dependencies": {
-        "chordsheetjs": "^16.2.2",
+        "chordsheetjs": "^17.0.0",
         "libsodium": "^0.8.4",
         "libsodium-wrappers": "^0.8.4",
         "libsodium-wrappers-sumo": "^0.8.4"
