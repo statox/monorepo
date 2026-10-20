@@ -1,5 +1,6 @@
 import {
     DeleteObjectCommand,
+    DeleteObjectCommandInput,
     GetObjectCommand,
     HeadObjectCommand,
     HeadObjectCommandInput,
@@ -28,6 +29,13 @@ class TestHelper_S3 extends TestHelper {
                     // TODO See if we want to have a finer way to fail calls to S3
                     // For now any call with a key containing shouldfail will fail
                     s3Mock.on(PutObjectCommand).callsFake((input: PutObjectCommandInput) => {
+                        if (input.Key?.includes('shouldfail')) {
+                            throw new Error('Simulated failure');
+                        }
+                        return {};
+                    });
+
+                    s3Mock.on(DeleteObjectCommand).callsFake((input: DeleteObjectCommandInput) => {
                         if (input.Key?.includes('shouldfail')) {
                             throw new Error('Simulated failure');
                         }

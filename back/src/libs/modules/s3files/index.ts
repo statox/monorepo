@@ -120,6 +120,21 @@ export const confirmS3FileUpload = async (params: { bucket: ManagedBuckets; s3Ke
     );
 };
 
+// Removes a never-confirmed upload. DeleteObject succeeds even if nothing was uploaded.
+// The row is hard-deleted: the file never existed from the app's point of view,
+// deletionDateUnix keeps meaning "was live, then deleted".
+export const deleteAbandonedS3FileInTransaction = async (
+    conn: PoolConnection,
+    params: { bucket: ManagedBuckets; s3Key: string }
+) => {
+    const { bucket, s3Key } = params;
+    await S3.send(new DeleteObjectCommand({ Bucket: bucket, Key: s3Key }));
+    await conn.query(
+        'DELETE FROM S3Files WHERE bucket = ? AND s3Key = ? AND uploadedDateUnix IS NULL',
+        [bucket, s3Key]
+    );
+};
+
 // TODO: Decide if we want to use a transaction or not
 export const deleteS3File = async (params: { bucket: ManagedBuckets; s3Key: string }) => {
     const { bucket, s3Key } = params;
