@@ -27,12 +27,14 @@ describe('reactor/getEntriesForPublic', () => {
                 {
                     bucket: 'reactor',
                     s3Key: 'foo',
-                    creationDateUnix: 10
+                    creationDateUnix: 10,
+                    uploadedDateUnix: 10
                 },
                 {
                     bucket: 'reactor',
                     s3Key: 'bar',
-                    creationDateUnix: 50
+                    creationDateUnix: 50,
+                    uploadedDateUnix: 50
                 }
             ]
         });
@@ -88,7 +90,8 @@ describe('reactor/getEntriesForPublic', () => {
                 {
                     bucket: 'reactor',
                     s3Key: 'foo',
-                    creationDateUnix: 10
+                    creationDateUnix: 10,
+                    uploadedDateUnix: 10
                 }
             ]
         });

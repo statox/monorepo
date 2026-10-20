@@ -250,7 +250,8 @@ describe('clipboard/addEntry', () => {
                     {
                         bucket: 'clipboard',
                         s3Key: (value: string) => value.match(/.*entry-name/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec
+                        creationDateUnix: th.mysql.aroundNowSec,
+                        uploadedDateUnix: th.mysql.aroundNowSec
                     }
                 ]
             });
@@ -292,7 +293,8 @@ describe('clipboard/addEntry', () => {
                     {
                         bucket: 'clipboard',
                         s3Key: (value: string) => value.match(/.*entry-name/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec
+                        creationDateUnix: th.mysql.aroundNowSec,
+                        uploadedDateUnix: th.mysql.aroundNowSec
                     }
                 ]
             });
@@ -328,7 +330,8 @@ describe('clipboard/addEntry', () => {
                     {
                         bucket: 'clipboard',
                         s3Key: (value: string) => value.match(/.*image.png/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec
+                        creationDateUnix: th.mysql.aroundNowSec,
+                        uploadedDateUnix: th.mysql.aroundNowSec
                     }
                 ]
             });
@@ -362,7 +365,8 @@ describe('clipboard/addEntry', () => {
                     {
                         bucket: 'clipboard',
                         s3Key: (value: string) => value.match(/.*animatedimage.gif/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec
+                        creationDateUnix: th.mysql.aroundNowSec,
+                        uploadedDateUnix: th.mysql.aroundNowSec
                     }
                 ]
             });

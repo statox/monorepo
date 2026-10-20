@@ -53,7 +53,8 @@ describe('clipboard/getPublicEntries', () => {
                 {
                     bucket: 'clipboard',
                     s3Key: 'foo',
-                    creationDateUnix: th.mysql.nowSec()
+                    creationDateUnix: th.mysql.nowSec(),
+                    uploadedDateUnix: th.mysql.nowSec()
                 }
             ]
         });

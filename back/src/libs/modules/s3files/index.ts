@@ -53,7 +53,7 @@ export const createS3FileInTransaction = async (
             })
         );
         await conn.query(
-            `INSERT INTO S3Files (bucket, s3Key, creationDateUnix) VALUES (?, ?, UNIX_TIMESTAMP())`,
+            `INSERT INTO S3Files (bucket, s3Key, creationDateUnix, uploadedDateUnix) VALUES (?, ?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP())`,
             [bucket, s3Key]
         );
     } finally {
@@ -81,11 +81,12 @@ export const deleteS3File = async (params: { bucket: ManagedBuckets; s3Key: stri
 interface s3FileResult extends RowDataPacket {
     s3Key: string;
     deletionDateUnix?: number;
+    uploadedDateUnix: number | null;
 }
 export const getPresignedURLForKey = async (params: { bucket: ManagedBuckets; s3Key: string }) => {
     const { bucket, s3Key } = params;
     const [rows] = await db.query<s3FileResult[]>(
-        'SELECT s3Key, deletionDateUnix FROM S3Files WHERE s3Key = ? AND bucket = ?',
+        'SELECT s3Key, deletionDateUnix, uploadedDateUnix FROM S3Files WHERE s3Key = ? AND bucket = ?',
         [s3Key, bucket]
     );
 
@@ -98,6 +99,10 @@ export const getPresignedURLForKey = async (params: { bucket: ManagedBuckets; s3
     }
     if (rows[0].deletionDateUnix) {
         throw new ExpiredItemError();
+    }
+    // Pending: prepared but never confirmed as present in the bucket
+    if (rows[0].uploadedDateUnix === null) {
+        throw new ItemNotFoundError();
     }
 
     return getPresignedGetUrl({ bucket, key: s3Key });

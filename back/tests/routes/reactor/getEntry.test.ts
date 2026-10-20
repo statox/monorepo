@@ -19,7 +19,8 @@ describe('r/:linkId', () => {
                 {
                     bucket: 'reactor',
                     s3Key: 'foo',
-                    creationDateUnix: 10
+                    creationDateUnix: 10,
+                    uploadedDateUnix: 10
                 }
             ]
         });
@@ -39,6 +40,37 @@ describe('r/:linkId', () => {
     it('should return an error for an unknown linkId', async () => {
         await th.mysql.fixture({
             Reactor: []
+        });
+
+        await request(app)
+            .get('/r/aaaaaaaa')
+            .set('Accept', 'application/json')
+            .expect(400)
+            .then((response) => {
+                assert.deepEqual(response.body, { httpStatus: 400, code: 'ITEM_NOT_FOUND' });
+            });
+    });
+
+    it('should return an error for a linkId whose S3File is still pending upload', async () => {
+        await th.mysql.fixture({
+            Reactor: [
+                {
+                    id: 1,
+                    name: 'entry 1',
+                    tags: '["tag1","tag2"]',
+                    creationDateUnix: 10,
+                    linkId: 'aaaaaaaa',
+                    s3Key: 'foo'
+                }
+            ],
+            S3Files: [
+                {
+                    bucket: 'reactor',
+                    s3Key: 'foo',
+                    creationDateUnix: 10,
+                    uploadedDateUnix: null
+                }
+            ]
         });
 
         await request(app)

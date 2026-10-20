@@ -74,12 +74,14 @@ describe('clipboard/view', () => {
                 {
                     bucket: 'clipboard',
                     s3Key: 'bar',
-                    creationDateUnix: th.mysql.nowSec()
+                    creationDateUnix: th.mysql.nowSec(),
+                    uploadedDateUnix: th.mysql.nowSec()
                 },
                 {
                     bucket: 'clipboard',
                     s3Key: 'foo',
-                    creationDateUnix: th.mysql.nowSec() - 120
+                    creationDateUnix: th.mysql.nowSec() - 120,
+                    uploadedDateUnix: th.mysql.nowSec() - 120
                 }
             ]
         });

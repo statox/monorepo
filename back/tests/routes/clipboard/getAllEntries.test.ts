@@ -48,6 +48,7 @@ describe('clipboard/getAllEntries', () => {
                         bucket: 'clipboard',
                         s3Key: 'foo',
                         creationDateUnix: 10,
+                        uploadedDateUnix: 10,
                         deletionDateUnix: 1000
                     }
                 ]
@@ -128,12 +129,14 @@ describe('clipboard/getAllEntries', () => {
                 {
                     bucket: 'clipboard',
                     s3Key: 'bar',
-                    creationDateUnix: th.mysql.nowSec()
+                    creationDateUnix: th.mysql.nowSec(),
+                    uploadedDateUnix: th.mysql.nowSec()
                 },
                 {
                     bucket: 'clipboard',
                     s3Key: 'foo',
-                    creationDateUnix: th.mysql.nowSec()
+                    creationDateUnix: th.mysql.nowSec(),
+                    uploadedDateUnix: th.mysql.nowSec()
                 }
             ]
         });

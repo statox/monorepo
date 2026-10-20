@@ -70,7 +70,8 @@ describe('clipboard/deleteEntry', () => {
                 {
                     bucket: 'clipboard',
                     s3Key: 'foo.png',
-                    creationDateUnix: 10
+                    creationDateUnix: 10,
+                    uploadedDateUnix: 10
                 }
             ]
         });
