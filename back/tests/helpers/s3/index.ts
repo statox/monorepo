@@ -17,16 +17,13 @@ class TestHelper_S3 extends TestHelper {
                     s3Mock.reset();
 
                     // TODO See if we want to have a finer way to fail calls to S3
-                    // For now any call with a key containing should_fail will fail
-                    s3Mock
-                        .on(
-                            PutObjectCommand,
-                            // @ts-expect-error looks like .on is not typed to expect a matcher even if it works
-                            (params: Partial<PutObjectCommandInput>) => {
-                                return params.Key?.includes('shouldfail');
-                            }
-                        )
-                        .rejects(new Error('Simulated failure'));
+                    // For now any call with a key containing shouldfail will fail
+                    s3Mock.on(PutObjectCommand).callsFake((input: PutObjectCommandInput) => {
+                        if (input.Key?.includes('shouldfail')) {
+                            throw new Error('Simulated failure');
+                        }
+                        return {};
+                    });
                 }
             }
         });
