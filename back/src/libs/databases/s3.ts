@@ -2,6 +2,7 @@ import {
     CreateBucketCommand,
     GetObjectCommand,
     ListBucketsCommand,
+    PutBucketCorsCommand,
     PutObjectCommand,
     S3Client
 } from '@aws-sdk/client-s3';
@@ -57,7 +58,38 @@ export const getPresignedPutUrl = async (params: {
     });
 };
 
+// Browsers upload files straight to these buckets with presigned PUT URLs.
+// In prod the equivalent rules are managed in terraform (cloudflare_r2_bucket_cors).
+export const setLocalBucketsCors = async (buckets: string[]) => {
+    for (const bucket of buckets) {
+        try {
+            console.log('S3 init - Set bucket CORS', bucket);
+            await S3.send(
+                new PutBucketCorsCommand({
+                    Bucket: bucket,
+                    CORSConfiguration: {
+                        CORSRules: [
+                            {
+                                AllowedMethods: ['PUT'],
+                                AllowedOrigins: ['https://localhost:8080'],
+                                AllowedHeaders: ['content-type'],
+                                ExposeHeaders: ['ETag'],
+                                MaxAgeSeconds: 3600
+                            }
+                        ]
+                    }
+                })
+            );
+        } catch (error) {
+            // Not fatal: only browser uploads to this local bucket are affected
+            console.log('S3 init - Failed to set bucket CORS', bucket, error);
+        }
+    }
+};
+
 const requiredBuckets = ['clipboard', 'reactor'];
+// Buckets receiving direct browser uploads through presigned PUT URLs
+const directUploadBuckets = ['reactor'];
 
 export const initS3 = async () => {
     if (isProd) {
@@ -81,4 +113,6 @@ export const initS3 = async () => {
         console.log('S3 init - Create bucket', bucket);
         await S3.send(new CreateBucketCommand({ Bucket: bucket }));
     }
+
+    await setLocalBucketsCors(directUploadBuckets);
 };
