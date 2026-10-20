@@ -9,6 +9,7 @@ interface DBReactorEntryForPublic extends RowDataPacket {
     tags: string;
     creationDateUnix: number;
     s3Key: string;
+    linkId: string;
 }
 interface ReactorEntryForPublic {
     name: string;
@@ -19,8 +20,13 @@ interface ReactorEntryForPublic {
 }
 
 export const getEntriesForPublic = async () => {
+    // Only entries whose file is confirmed in the bucket: pending uploads are not listed
     const [entries] = await db.query<DBReactorEntryForPublic[]>(
-        'SELECT name, tags, creationDateUnix, s3Key, linkId FROM Reactor'
+        `SELECT r.name, r.tags, r.creationDateUnix, r.s3Key, r.linkId
+        FROM Reactor r
+        JOIN S3Files s ON s.bucket = 'reactor' AND s.s3Key = r.s3Key
+        WHERE s.uploadedDateUnix IS NOT NULL
+        ORDER BY r.id`
     );
     return await enrichEntries(entries);
 };

@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-08-26T20:18:07.806Z
+// Generated on: 2026-10-20T16:03:21.376Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -1806,6 +1806,76 @@ export const schemas = {
       "additionalProperties": false
     }
   },
+  "reactor_prepareUpload_Input": {
+    "type": "object",
+    "required": [
+      "name",
+      "tags",
+      "mimetype",
+      "sizeBytes"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "mimetype": {
+        "type": "string",
+        "enum": [
+          "image/png",
+          "image/jpeg",
+          "image/gif",
+          "image/webp"
+        ]
+      },
+      "sizeBytes": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10485760
+      }
+    }
+  },
+  "reactor_prepareUpload_Output": {
+    "type": "object",
+    "required": [
+      "linkId",
+      "uploadUrl"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "linkId": {
+        "type": "string"
+      },
+      "uploadUrl": {
+        "type": "string",
+        "description": "Presigned PUT URL. The upload must use the declared Content-Type and size."
+      }
+    }
+  },
+  "reactor_confirmUpload_Input": {
+    "type": "object",
+    "required": [
+      "linkId"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "linkId": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "reactor_confirmUpload_Output": {
+    "type": "object",
+    "additionalProperties": false
+  },
   "misc_r_Output": {
     "type": "string",
     "description": "A S3 presigned URL to redirect to"
@@ -2201,6 +2271,14 @@ export type Reactor_AddEntry_Errors = 'ITEM_ALREADY_EXISTS' | 'FILE_REQUIRED' | 
 export type Reactor_GetEntriesForPublic_Output = FromSchema<typeof schemas.reactor_getEntriesForPublic_Output>;
 export type Reactor_GetEntriesForPublic = Endpoint<Reactor_GetEntriesForPublic_Output>;
 export type Reactor_GetEntriesForPublic_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Reactor_PrepareUpload_Input = FromSchema<typeof schemas.reactor_prepareUpload_Input>;
+export type Reactor_PrepareUpload_Output = FromSchema<typeof schemas.reactor_prepareUpload_Output>;
+export type Reactor_PrepareUpload = Endpoint<Reactor_PrepareUpload_Output, Reactor_PrepareUpload_Input>;
+export type Reactor_PrepareUpload_Errors = 'ITEM_ALREADY_EXISTS' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Reactor_ConfirmUpload_Input = FromSchema<typeof schemas.reactor_confirmUpload_Input>;
+export type Reactor_ConfirmUpload_Output = FromSchema<typeof schemas.reactor_confirmUpload_Output>;
+export type Reactor_ConfirmUpload = Endpoint<Reactor_ConfirmUpload_Output, Reactor_ConfirmUpload_Input>;
+export type Reactor_ConfirmUpload_Errors = 'ITEM_NOT_FOUND' | 'UPLOAD_NOT_FOUND' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Misc_R_Output = FromSchema<typeof schemas.misc_r_Output>;
 export type Misc_R = Endpoint<Misc_R_Output>;
 export type Misc_R_Errors = 'ITEM_NOT_FOUND' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
@@ -2506,6 +2584,20 @@ export function buildModules(fetch: FetchFn) {
        */
       getEntriesForPublic: () =>
         fetch('/reactor/getEntriesForPublic', null, null, { outputSchema: schemas.reactor_getEntriesForPublic_Output, endpoint: 'reactor.getEntriesForPublic' }, { method: 'GET' }, { type: 'none' }) as Promise<Reactor_GetEntriesForPublic_Output>,
+
+      /**
+       * POST /reactor/prepareUpload
+       * Auth: user2
+       */
+      prepareUpload: (input: Reactor_PrepareUpload_Input) =>
+        fetch('/reactor/prepareUpload', input, null, { inputSchema: schemas.reactor_prepareUpload_Input, outputSchema: schemas.reactor_prepareUpload_Output, endpoint: 'reactor.prepareUpload' }, { method: 'POST' }, { type: 'user2' }) as Promise<Reactor_PrepareUpload_Output>,
+
+      /**
+       * POST /reactor/confirmUpload
+       * Auth: user2
+       */
+      confirmUpload: (input: Reactor_ConfirmUpload_Input) =>
+        fetch('/reactor/confirmUpload', input, null, { inputSchema: schemas.reactor_confirmUpload_Input, outputSchema: schemas.reactor_confirmUpload_Output, endpoint: 'reactor.confirmUpload' }, { method: 'POST' }, { type: 'user2' }) as Promise<Reactor_ConfirmUpload_Output>,
 
     },
 

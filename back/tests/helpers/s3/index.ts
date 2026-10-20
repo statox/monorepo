@@ -1,12 +1,21 @@
 import {
     DeleteObjectCommand,
     GetObjectCommand,
+    HeadObjectCommand,
+    HeadObjectCommandInput,
     PutObjectCommand,
     PutObjectCommandInput
 } from '@aws-sdk/client-s3';
 import { assert } from 'chai';
 import { s3Mock } from '../../../src/libs/databases/s3.js';
 import { TestHelper } from '../TestHelper.js';
+
+const commandsByType = {
+    DeleteObject: DeleteObjectCommand,
+    GetObject: GetObjectCommand,
+    HeadObject: HeadObjectCommand,
+    PutObject: PutObjectCommand
+};
 
 class TestHelper_S3 extends TestHelper {
     constructor() {
@@ -24,6 +33,17 @@ class TestHelper_S3 extends TestHelper {
                         }
                         return {};
                     });
+
+                    // HeadObject on a key containing notuploaded behaves like a missing object
+                    s3Mock.on(HeadObjectCommand).callsFake((input: HeadObjectCommandInput) => {
+                        if (input.Key?.includes('notuploaded')) {
+                            throw Object.assign(new Error('NotFound'), {
+                                name: 'NotFound',
+                                $metadata: { httpStatusCode: 404 }
+                            });
+                        }
+                        return {};
+                    });
                 }
             }
         });
@@ -34,16 +54,10 @@ class TestHelper_S3 extends TestHelper {
     };
 
     checkCall = (params: {
-        commandType: 'DeleteObject' | 'PutObject';
+        commandType: keyof typeof commandsByType;
         input: { [key: string]: string };
     }) => {
-        if (params.commandType === 'DeleteObject') {
-            assert.exists(s3Mock.commandCalls(DeleteObjectCommand));
-        } else if (params.commandType === 'PutObject') {
-            assert.exists(s3Mock.commandCalls(PutObjectCommand));
-        } else if (params.commandType === 'GetObject') {
-            assert.exists(s3Mock.commandCalls(GetObjectCommand));
-        }
+        assert.isNotEmpty(s3Mock.commandCalls(commandsByType[params.commandType]));
 
         if (params.input) {
             const c = s3Mock.calls().pop();

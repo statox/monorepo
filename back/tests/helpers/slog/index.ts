@@ -32,6 +32,7 @@ class TestHelper_Slog extends TestHelper {
         });
     }
 
+    // Make sure the expected log happened
     checkLog = (component: string, message: string, data?: TestLogObject) => {
         const calledWithCorrectArgs = data
             ? slogSpy.calledWithMatch(component, message, data)
@@ -53,6 +54,12 @@ class TestHelper_Slog extends TestHelper {
         assert(calledWithCorrectArgs, "Logged data doesn't match");
     };
 
+    // Make sure a specific log did not happen
+    checkNoLog = (component: string, message: string) => {
+        sinon.assert.neverCalledWith(slogSpy, component, message);
+    };
+
+    // Make sure no log happened at all
     checkNoLogs = () => {
         const notCalled = slogSpy.notCalled;
 

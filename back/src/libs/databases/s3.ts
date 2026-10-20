@@ -2,6 +2,7 @@ import {
     CreateBucketCommand,
     GetObjectCommand,
     ListBucketsCommand,
+    PutObjectCommand,
     S3Client
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -21,6 +22,9 @@ export const S3 = new S3Client({
     endpoint: config.r2.endpoint,
     // RustFS (used for local dev) only supports path-style bucket addressing
     forcePathStyle: !isProd,
+    // By default the SDK adds a CRC32 of the body to presigned URLs. The body doesn't exist
+    // at signing time so it signs the checksum of an empty body, which R2 rejects.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
     credentials: {
         accessKeyId: config.r2.accessKeyId,
         secretAccessKey: config.r2.secretKey
@@ -31,6 +35,26 @@ export const getPresignedGetUrl = async (params: { bucket: string; key: string }
     const cmd = new GetObjectCommand({ Bucket: params.bucket, Key: params.key });
     const url = await getSignedUrl(S3, cmd, { expiresIn: 3600 });
     return url;
+};
+
+export const getPresignedPutUrl = async (params: {
+    bucket: string;
+    key: string;
+    contentType: string;
+    contentLength: number;
+}) => {
+    const cmd = new PutObjectCommand({
+        Bucket: params.bucket,
+        Key: params.key,
+        ContentType: params.contentType,
+        ContentLength: params.contentLength
+    });
+    // Content-Type is not signed by default: without signableHeaders the URL accepts any
+    // mime type. Content-Length is signed automatically once ContentLength is set.
+    return getSignedUrl(S3, cmd, {
+        expiresIn: 900,
+        signableHeaders: new Set(['content-type'])
+    });
 };
 
 const requiredBuckets = ['clipboard', 'reactor'];

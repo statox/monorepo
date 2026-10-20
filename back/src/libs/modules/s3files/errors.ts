@@ -17,3 +17,9 @@ export class ExpiredItemError extends AppError {
         super({ code: 'ITEM_IS_EXPIRED', httpStatus: 400 });
     }
 }
+
+export class UploadNotFoundError extends AppError {
+    constructor() {
+        super({ code: 'UPLOAD_NOT_FOUND', httpStatus: 400 });
+    }
+}

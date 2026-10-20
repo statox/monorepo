@@ -1,9 +1,19 @@
-import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import {
+    DeleteObjectCommand,
+    HeadObjectCommand,
+    PutObjectCommand,
+    S3ServiceException
+} from '@aws-sdk/client-s3';
 import * as fs from 'fs';
 import { PoolConnection, RowDataPacket } from 'mysql2/promise';
-import { getPresignedGetUrl, S3 } from '../../databases/s3.js';
+import { getPresignedGetUrl, getPresignedPutUrl, S3 } from '../../databases/s3.js';
 import { db } from '../../databases/db.js';
-import { ExpiredItemError, ItemNotFoundError, TooManyEntriesError } from './errors.js';
+import {
+    ExpiredItemError,
+    ItemNotFoundError,
+    TooManyEntriesError,
+    UploadNotFoundError
+} from './errors.js';
 import { slog } from '../logging/index.js';
 import slug from 'slug';
 import { generate4BytesHex } from '../random.js';
@@ -61,6 +71,53 @@ export const createS3FileInTransaction = async (
             slog.log('s3Files', 'Failed to delete temp file', { error: err });
         });
     }
+};
+
+// Inserts a pending S3Files row (uploadedDateUnix = NULL) and returns a presigned PUT URL.
+// The client uploads to that URL, then confirmS3FileUpload() marks the row uploaded.
+export const prepareS3FileInTransaction = async (
+    conn: PoolConnection,
+    params: {
+        bucket: ManagedBuckets;
+        s3Key: string;
+        contentType: string;
+        sizeBytes: number;
+    }
+) => {
+    const { bucket, s3Key, contentType, sizeBytes } = params;
+
+    await conn.query(
+        `INSERT INTO S3Files (bucket, s3Key, creationDateUnix, uploadedDateUnix) VALUES (?, ?, UNIX_TIMESTAMP(), NULL)`,
+        [bucket, s3Key]
+    );
+
+    return getPresignedPutUrl({
+        bucket,
+        key: s3Key,
+        contentType,
+        contentLength: sizeBytes
+    });
+};
+
+// Checks the object really is in the bucket before marking the row uploaded.
+// Size and content type are not compared: they are pinned by the presigned URL signature.
+export const confirmS3FileUpload = async (params: { bucket: ManagedBuckets; s3Key: string }) => {
+    const { bucket, s3Key } = params;
+
+    try {
+        await S3.send(new HeadObjectCommand({ Bucket: bucket, Key: s3Key }));
+    } catch (error) {
+        if ((error as S3ServiceException).$metadata?.httpStatusCode === 404) {
+            slog.log('s3Files', 'Upload to confirm is not in the bucket', { bucket, s3Key });
+            throw new UploadNotFoundError();
+        }
+        throw error;
+    }
+
+    await db.query(
+        'UPDATE S3Files SET uploadedDateUnix = UNIX_TIMESTAMP() WHERE bucket = ? AND s3Key = ? AND uploadedDateUnix IS NULL',
+        [bucket, s3Key]
+    );
 };
 
 // TODO: Decide if we want to use a transaction or not

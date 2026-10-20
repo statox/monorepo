@@ -19,6 +19,7 @@ export const ERROR_CODES = [
     'FILE_TOO_LARGE',
     'ITEM_IS_EXPIRED',
     'TOO_MANY_ENTRIES',
+    'UPLOAD_NOT_FOUND',
     // Cookbook
     'DUPLICATE_INGREDIENT',
     // Ephemerides
