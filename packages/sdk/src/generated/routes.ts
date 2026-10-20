@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-10-20T16:03:21.376Z
+// Generated on: 2026-10-13T10:09:38.676Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -1752,26 +1752,6 @@ export const schemas = {
     "type": "object",
     "additionalProperties": false
   },
-  "reactor_addEntry_Input": {
-    "type": "object",
-    "required": [
-      "name",
-      "commaSeparatedTags"
-    ],
-    "additionalProperties": false,
-    "properties": {
-      "name": {
-        "type": "string"
-      },
-      "commaSeparatedTags": {
-        "type": "string"
-      }
-    }
-  },
-  "reactor_addEntry_Output": {
-    "type": "object",
-    "additionalProperties": false
-  },
   "reactor_getEntriesForPublic_Output": {
     "type": "array",
     "items": {
@@ -2264,10 +2244,6 @@ export type PersonalTracker_Upload_Input = FromSchema<typeof schemas.personalTra
 export type PersonalTracker_Upload_Output = FromSchema<typeof schemas.personalTracker_upload_Output>;
 export type PersonalTracker_Upload = Endpoint<PersonalTracker_Upload_Output, PersonalTracker_Upload_Input>;
 export type PersonalTracker_Upload_Errors = 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
-export type Reactor_AddEntry_Input = FromSchema<typeof schemas.reactor_addEntry_Input>;
-export type Reactor_AddEntry_Output = FromSchema<typeof schemas.reactor_addEntry_Output>;
-export type Reactor_AddEntry = Endpoint<Reactor_AddEntry_Output, Reactor_AddEntry_Input>;
-export type Reactor_AddEntry_Errors = 'ITEM_ALREADY_EXISTS' | 'FILE_REQUIRED' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Reactor_GetEntriesForPublic_Output = FromSchema<typeof schemas.reactor_getEntriesForPublic_Output>;
 export type Reactor_GetEntriesForPublic = Endpoint<Reactor_GetEntriesForPublic_Output>;
 export type Reactor_GetEntriesForPublic_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
@@ -2571,13 +2547,6 @@ export function buildModules(fetch: FetchFn) {
     },
 
     reactor: {
-      /**
-       * POST /reactor/addEntry
-       * Auth: user2
-       */
-      addEntry: (input: Reactor_AddEntry_Input, file: null | File) =>
-        fetch('/reactor/addEntry', input, file, { inputSchema: schemas.reactor_addEntry_Input, outputSchema: schemas.reactor_addEntry_Output, endpoint: 'reactor.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Reactor_AddEntry_Output>,
-
       /**
        * GET /reactor/getEntriesForPublic
        * Auth: none

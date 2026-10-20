@@ -7,7 +7,7 @@
         handleFormError
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
-    import { uploadToReactor } from '$lib/Reactor';
+    import { isReactorMime, REACTOR_MAX_SIZE_BYTES, uploadToReactor } from '$lib/Reactor';
 
     interface Props {
         onUpload: () => void;
@@ -26,14 +26,24 @@
         fieldErrors.name = name?.length ? '' : 'Name is required';
     };
 
+    const validateFile = (file: File | undefined) => {
+        if (!file) {
+            fieldErrors.file = 'A file must be uploaded';
+        } else if (!isReactorMime(file.type)) {
+            fieldErrors.file = 'Only png, jpeg, gif and webp images are allowed';
+        } else if (file.size > REACTOR_MAX_SIZE_BYTES) {
+            fieldErrors.file = 'The file must be 10 MB or less';
+        } else {
+            fieldErrors.file = '';
+        }
+    };
+
     const upload = async () => {
         noticeMessages = [];
         validateName();
 
         const file = files?.[0];
-        if (!file) {
-            noticeMessages.push({ level: 'error', header: 'A file must be uploaded' });
-        }
+        validateFile(file);
 
         if (Object.values(fieldErrors).some((e) => e) || !file) {
             return;
@@ -41,7 +51,11 @@
 
         try {
             uploading = true;
-            await uploadToReactor({ name, commaSeparatedTags: tags }, file);
+            const tagList = tags
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter((tag) => tag.length);
+            await uploadToReactor({ name, tags: tagList }, file);
             onUpload();
         } catch (error) {
             handleFormError(error);
@@ -64,6 +78,9 @@
 
         <label for="file">File</label>
         <FormFileInput bind:files />
+        {#if fieldErrors.file}
+            <span class="field-error">{fieldErrors.file}</span>
+        {/if}
 
         <FormSubmitButton loading={uploading} />
     </FormGrid>

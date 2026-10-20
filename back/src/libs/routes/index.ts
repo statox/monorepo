@@ -32,7 +32,6 @@ import { route as HomeTracker_upload } from './homeTracker/upload.js';
 import { route as Openapi_Definition } from './openapi/definition.js';
 import { route as PersonalTracker_GetAll } from './personalTracker/getAll.js';
 import { route as PersonalTracker_Upload } from './personalTracker/upload.js';
-import { route as Reactor_addEntry } from './reactor/addEntry.js';
 import { route as Reactor_getEntriesForPublic } from './reactor/getEntriesForPublic.js';
 import { route as Reactor_getEntry } from './reactor/getEntry.js';
 import { route as Reactor_prepareUpload } from './reactor/prepareUpload.js';
@@ -96,7 +95,6 @@ export const routes: {
         Openapi_Definition,
         PersonalTracker_GetAll,
         PersonalTracker_Upload,
-        Reactor_addEntry,
         Reactor_getEntriesForPublic,
         Reactor_getEntry,
         Reactor_prepareUpload,

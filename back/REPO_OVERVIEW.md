@@ -89,7 +89,7 @@ Build/compile detail is covered in [Build Process](#build-process), not here.
     - Small.
 
 - **Reactor** - Tagged image/file entries stored in S3, with a public listing endpoint.
-    - Endpoints: `addEntry`, `getEntriesForPublic`, `getEntry`.
+    - Endpoints: `prepareUpload`, `confirmUpload` (direct browser → R2 upload through presigned PUT URLs), `getEntriesForPublic`, `getEntry`. Abandoned uploads are deleted by a periodic task.
     - Files: [`src/libs/routes/reactor/`](src/libs/routes/reactor), [`src/libs/modules/reactor/`](src/libs/modules/reactor).
     - Logic overlaps with Clipboard - see [Patterns](#patterns).
 
