@@ -1,10 +1,4 @@
-import {
-    DeleteObjectCommand,
-    HeadObjectCommand,
-    PutObjectCommand,
-    S3ServiceException
-} from '@aws-sdk/client-s3';
-import * as fs from 'fs';
+import { DeleteObjectCommand, HeadObjectCommand, S3ServiceException } from '@aws-sdk/client-s3';
 import { PoolConnection, RowDataPacket } from 'mysql2/promise';
 import { getPresignedGetUrl, getPresignedPutUrl, S3 } from '../../databases/s3.js';
 import { db } from '../../databases/db.js';
@@ -17,7 +11,6 @@ import {
 import { slog } from '../logging/index.js';
 import slug from 'slug';
 import { generate4BytesHex } from '../random.js';
-import { ApiFile } from '../../routes/index.js';
 
 export type ManagedBuckets = 'clipboard' | 'reactor';
 
@@ -37,40 +30,6 @@ export const createS3Key = (params: {
     }
 
     return { linkId, s3Key };
-};
-
-export const createS3FileInTransaction = async (
-    conn: PoolConnection, //TODO probably a better way to get just a transaction
-    params: {
-        file: ApiFile;
-        bucket: ManagedBuckets;
-        s3Key: string;
-    }
-) => {
-    const { file, bucket, s3Key } = params;
-
-    // Read the file into a buffer before the try/finally so the temp file can
-    // be safely deleted in finally without racing against a lazy ReadStream open.
-    const fileBuffer = await fs.promises.readFile(file.path);
-
-    try {
-        await S3.send(
-            new PutObjectCommand({
-                Bucket: bucket,
-                Key: s3Key,
-                Body: fileBuffer,
-                ContentType: file.mimetype ?? undefined
-            })
-        );
-        await conn.query(
-            `INSERT INTO S3Files (bucket, s3Key, creationDateUnix, uploadedDateUnix) VALUES (?, ?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP())`,
-            [bucket, s3Key]
-        );
-    } finally {
-        await fs.promises.unlink(file.path).catch((err: Error) => {
-            slog.log('s3Files', 'Failed to delete temp file', { error: err });
-        });
-    }
 };
 
 // Inserts a pending S3Files row (uploadedDateUnix = NULL) and returns a presigned PUT URL.

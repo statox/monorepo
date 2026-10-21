@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit. Run: cd back && npm run generate:sdk
-// Generated on: 2026-10-13T10:09:38.676Z
+// Generated on: 2026-10-21T12:24:01.844Z
 
 import type { FromSchema } from 'json-schema-to-ts';
 import type { Endpoint, FetchFn } from '../types.js';
@@ -500,32 +500,46 @@ export const schemas = {
   "clipboard_addEntry_Input": {
     "type": "object",
     "required": [
-      "name"
+      "name",
+      "content"
     ],
     "additionalProperties": false,
     "properties": {
       "name": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       },
       "content": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       },
       "ttlSeconds": {
-        "type": [
-          "number",
-          "string"
-        ],
+        "type": "number",
         "minimum": 0
       },
       "isPublic": {
-        "type": [
-          "boolean",
-          "string"
-        ]
+        "type": "boolean"
       }
     }
   },
   "clipboard_addEntry_Output": {
+    "type": "object",
+    "additionalProperties": false
+  },
+  "clipboard_confirmUpload_Input": {
+    "type": "object",
+    "required": [
+      "linkId"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "linkId": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "clipboard_confirmUpload_Output": {
     "type": "object",
     "additionalProperties": false
   },
@@ -635,6 +649,57 @@ export const schemas = {
         "linkId"
       ],
       "additionalProperties": false
+    }
+  },
+  "clipboard_prepareUpload_Input": {
+    "type": "object",
+    "required": [
+      "name",
+      "mimetype",
+      "sizeBytes"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "mimetype": {
+        "type": "string",
+        "minLength": 1
+      },
+      "sizeBytes": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 5242880
+      },
+      "content": {
+        "type": "string"
+      },
+      "ttlSeconds": {
+        "type": "number",
+        "minimum": 0
+      },
+      "isPublic": {
+        "type": "boolean"
+      }
+    }
+  },
+  "clipboard_prepareUpload_Output": {
+    "type": "object",
+    "required": [
+      "linkId",
+      "uploadUrl"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "linkId": {
+        "type": "string"
+      },
+      "uploadUrl": {
+        "type": "string",
+        "description": "Presigned PUT URL. The upload must use the declared Content-Type and size."
+      }
     }
   },
   "clipboard_view_Output": {
@@ -2171,7 +2236,11 @@ export type Chords_UpdateEntry_Errors = 'ITEM_ALREADY_EXISTS' | 'ITEM_NOT_FOUND'
 export type Clipboard_AddEntry_Input = FromSchema<typeof schemas.clipboard_addEntry_Input>;
 export type Clipboard_AddEntry_Output = FromSchema<typeof schemas.clipboard_addEntry_Output>;
 export type Clipboard_AddEntry = Endpoint<Clipboard_AddEntry_Output, Clipboard_AddEntry_Input>;
-export type Clipboard_AddEntry_Errors = 'FILE_OR_CONTENT_REQUIRED' | 'ITEM_ALREADY_EXISTS' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Clipboard_AddEntry_Errors = 'ITEM_ALREADY_EXISTS' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Clipboard_ConfirmUpload_Input = FromSchema<typeof schemas.clipboard_confirmUpload_Input>;
+export type Clipboard_ConfirmUpload_Output = FromSchema<typeof schemas.clipboard_confirmUpload_Output>;
+export type Clipboard_ConfirmUpload = Endpoint<Clipboard_ConfirmUpload_Output, Clipboard_ConfirmUpload_Input>;
+export type Clipboard_ConfirmUpload_Errors = 'ITEM_NOT_FOUND' | 'UPLOAD_NOT_FOUND' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Clipboard_DeleteEntry_Input = FromSchema<typeof schemas.clipboard_deleteEntry_Input>;
 export type Clipboard_DeleteEntry_Output = FromSchema<typeof schemas.clipboard_deleteEntry_Output>;
 export type Clipboard_DeleteEntry = Endpoint<Clipboard_DeleteEntry_Output, Clipboard_DeleteEntry_Input>;
@@ -2182,6 +2251,10 @@ export type Clipboard_GetAllEntries_Errors = 'ITEM_NOT_FOUND' | 'UNAUTHORIZED' |
 export type Clipboard_GetPublicEntries_Output = FromSchema<typeof schemas.clipboard_getPublicEntries_Output>;
 export type Clipboard_GetPublicEntries = Endpoint<Clipboard_GetPublicEntries_Output>;
 export type Clipboard_GetPublicEntries_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
+export type Clipboard_PrepareUpload_Input = FromSchema<typeof schemas.clipboard_prepareUpload_Input>;
+export type Clipboard_PrepareUpload_Output = FromSchema<typeof schemas.clipboard_prepareUpload_Output>;
+export type Clipboard_PrepareUpload = Endpoint<Clipboard_PrepareUpload_Output, Clipboard_PrepareUpload_Input>;
+export type Clipboard_PrepareUpload_Errors = 'ITEM_ALREADY_EXISTS' | 'UNAUTHORIZED' | 'FORBIDDEN_FOR_USER' | 'INVALID_SCOPE' | 'INPUT_VALIDATION_FAILED' | 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
 export type Clipboard_View_Output = FromSchema<typeof schemas.clipboard_view_Output>;
 export type Clipboard_View = Endpoint<Clipboard_View_Output>;
 export type Clipboard_View_Errors = 'INTERNAL_SERVER_ERROR' | 'NETWORK_ERROR';
@@ -2373,8 +2446,15 @@ export function buildModules(fetch: FetchFn) {
        * POST /clipboard/addEntry
        * Auth: user2
        */
-      addEntry: (input: Clipboard_AddEntry_Input, file: null | File) =>
-        fetch('/clipboard/addEntry', input, file, { inputSchema: schemas.clipboard_addEntry_Input, outputSchema: schemas.clipboard_addEntry_Output, endpoint: 'clipboard.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_AddEntry_Output>,
+      addEntry: (input: Clipboard_AddEntry_Input) =>
+        fetch('/clipboard/addEntry', input, null, { inputSchema: schemas.clipboard_addEntry_Input, outputSchema: schemas.clipboard_addEntry_Output, endpoint: 'clipboard.addEntry' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_AddEntry_Output>,
+
+      /**
+       * POST /clipboard/confirmUpload
+       * Auth: user2
+       */
+      confirmUpload: (input: Clipboard_ConfirmUpload_Input) =>
+        fetch('/clipboard/confirmUpload', input, null, { inputSchema: schemas.clipboard_confirmUpload_Input, outputSchema: schemas.clipboard_confirmUpload_Output, endpoint: 'clipboard.confirmUpload' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_ConfirmUpload_Output>,
 
       /**
        * POST /clipboard/deleteEntry
@@ -2396,6 +2476,13 @@ export function buildModules(fetch: FetchFn) {
        */
       getPublicEntries: () =>
         fetch('/clipboard/getPublicEntries', null, null, { outputSchema: schemas.clipboard_getPublicEntries_Output, endpoint: 'clipboard.getPublicEntries' }, { method: 'GET' }, { type: 'none' }) as Promise<Clipboard_GetPublicEntries_Output>,
+
+      /**
+       * POST /clipboard/prepareUpload
+       * Auth: user2
+       */
+      prepareUpload: (input: Clipboard_PrepareUpload_Input) =>
+        fetch('/clipboard/prepareUpload', input, null, { inputSchema: schemas.clipboard_prepareUpload_Input, outputSchema: schemas.clipboard_prepareUpload_Output, endpoint: 'clipboard.prepareUpload' }, { method: 'POST' }, { type: 'user2' }) as Promise<Clipboard_PrepareUpload_Output>,
 
       /**
        * GET /clipboard/view

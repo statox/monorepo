@@ -1,4 +1,4 @@
-import { client2 } from '$lib/api';
+import { client2, putFileToPresignedUrl } from '$lib/api';
 
 // Must match the backend limits in back/src/libs/modules/reactor/constants.ts
 // TODO: Move this in the SDK in `client.reactor.ALLOWED_MIMES` that will require changing the templating of the SDK
@@ -30,18 +30,12 @@ export const uploadToReactor = async (input: { name: string; tags: string[] }, f
         sizeBytes: file.size
     });
 
-    // TODO: Have the SDK provide an helper
-    // Plain fetch, not client2: this goes to the bucket, not our API, and must not carry cookies
-    const response = await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': file.type },
-        body: file
+    await putFileToPresignedUrl({
+        uploadUrl,
+        file,
+        contentType: file.type,
+        failureHint: `The name "${input.name}" stays reserved for up to 2 hours: retry later or use another name.`
     });
-    if (!response.ok) {
-        throw new Error(
-            `Upload to storage failed (HTTP ${response.status}). The name "${input.name}" stays reserved for up to 2 hours: retry later or use another name.`
-        );
-    }
 
     await client2.reactor.confirmUpload({ linkId });
 };

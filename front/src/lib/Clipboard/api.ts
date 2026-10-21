@@ -1,6 +1,6 @@
 import { DateTime, type DurationUnit } from 'luxon';
 import type { ClipboardEntryEnriched, ExpirationStatus } from './types';
-import { client2 } from '$lib/api';
+import { client2, putFileToPresignedUrl } from '$lib/api';
 
 const enrichEntry = (entry: {
     id: number;
@@ -74,5 +74,40 @@ export const getAllClipboard = async () => {
     return entries.map((entry) => enrichEntry(entry));
 };
 
-export const uploadToClipboard = client2.clipboard.addEntry;
+// Must match the backend limit in back/src/libs/modules/clipboard/constants.ts
+export const CLIPBOARD_MAX_SIZE_BYTES = 5 * 1024 * 1024;
+
+type ClipboardEntryInput = {
+    name: string;
+    content: string;
+    ttlSeconds: number;
+    isPublic: boolean;
+};
+
+// Text entries are a single call. Entries with a file work like Reactor uploads:
+// 1. the API reserves the entry and signs an upload URL
+// 2. the browser uploads the file straight to the bucket
+// 3. the API checks the file is there and lists the entry
+export const uploadToClipboard = async (input: ClipboardEntryInput, file: File | null) => {
+    if (!file) {
+        return client2.clipboard.addEntry(input);
+    }
+
+    // The browser reports an empty type for unknown files
+    const mimetype = file.type || 'application/octet-stream';
+    const { linkId, uploadUrl } = await client2.clipboard.prepareUpload({
+        ...input,
+        mimetype,
+        sizeBytes: file.size
+    });
+
+    await putFileToPresignedUrl({
+        uploadUrl,
+        file,
+        contentType: mimetype,
+        failureHint: `The name "${input.name}" stays reserved for up to 2 hours: retry later or use another name.`
+    });
+
+    await client2.clipboard.confirmUpload({ linkId });
+};
 export const deleteClipboardEntry = client2.clipboard.deleteEntry;

@@ -4,25 +4,39 @@ import { assert } from 'chai';
 import { th } from '../../helpers/index.js';
 
 describe('clipboard/addEntry', () => {
-    // TODO Have a proper s3 mock so that we can test that the transaction
-    // is rolled back when call to s3 fails. Too lazy to do for now
     describe('should reject', () => {
-        it('Query with no file and no content', async () => {
+        it('when unauthenticated', async () => {
             await request(app)
                 .post('/clipboard/addEntry')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .set('Accept', 'application/json')
-                .send({ name: 'A cool entry' })
-                .expect(400)
-                .then((response) => {
-                    assert.deepEqual(response.body, {
-                        httpStatus: 400,
-                        code: 'FILE_OR_CONTENT_REQUIRED'
-                    });
-                });
+                .send({ name: 'A cool entry', content: 'foo' })
+                .expect(401);
+            await th.mysql.checkTableLength('Clipboard', 0);
         });
 
-        it('Query with duplicate entry (no file)', async () => {
+        const invalidInputs: [string, Record<string, unknown>][] = [
+            ['a query with no content', { name: 'A cool entry' }],
+            ['a query with empty content', { name: 'A cool entry', content: '' }],
+            ['a query with empty name', { name: '', content: 'foo' }],
+            ['a negative ttl', { name: 'A cool entry', content: 'foo', ttlSeconds: -1 }],
+            ['a ttl sent as a string', { name: 'A cool entry', content: 'foo', ttlSeconds: '60' }]
+        ];
+        for (const [label, input] of invalidInputs) {
+            it(label, async () => {
+                await request(app)
+                    .post('/clipboard/addEntry')
+                    .set('Cookie', th.auth2.getPassportSessionCookie())
+                    .set('Accept', 'application/json')
+                    .send(input)
+                    .expect(400)
+                    .then((response) => {
+                        assert.equal(response.body.code, 'INPUT_VALIDATION_FAILED');
+                    });
+
+                await th.mysql.checkTableLength('Clipboard', 0);
+            });
+        }
+
+        it('a duplicate entry', async () => {
             await th.mysql.fixture({
                 Clipboard: [
                     {
@@ -61,99 +75,7 @@ describe('clipboard/addEntry', () => {
                     }
                 ]
             });
-
-            th.s3.checkNbCalls({ nbCalls: 0 });
-            await th.mysql.checkTableLength('S3Files', 0);
-        });
-
-        it('Query with duplicate entry (file) - should not call S3', async () => {
-            const buffer = Buffer.from('some data');
-            await th.mysql.fixture({
-                Clipboard: [
-                    {
-                        id: 1,
-                        name: 'A cool entry',
-                        content: 'Look at that content',
-                        creationDateUnix: 10,
-                        ttl: 100,
-                        linkId: 'aabbccdd'
-                    }
-                ]
-            });
-
-            await request(app)
-                .post('/clipboard/addEntry')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .set('content-type', 'multipart/form-data')
-                .field('name', 'A cool entry')
-                .field('content', 'entry content')
-                .attach('file', buffer)
-                .expect(400)
-                .then((response) => {
-                    assert.deepEqual(response.body, {
-                        httpStatus: 400,
-                        code: 'ITEM_ALREADY_EXISTS'
-                    });
-                });
-
-            await th.mysql.checkContains({
-                Clipboard: [
-                    {
-                        name: 'A cool entry',
-                        content: 'Look at that content',
-                        creationDateUnix: 10
-                    }
-                ]
-            });
-
-            th.s3.checkNbCalls({ nbCalls: 0 });
-            await th.mysql.checkTableLength('S3Files', 0);
-        });
-
-        it('should return 400 when file exceeds 5 MB', async () => {
-            const largeBuffer = Buffer.alloc(5 * 1024 * 1024 + 1); // 5 MB + 1 byte
-
-            await request(app)
-                .post('/clipboard/addEntry')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .field('name', 'entry name')
-                .attach('file', largeBuffer, { filename: 'large.txt', contentType: 'text/plain' })
-                .expect(400)
-                .then((response) => {
-                    assert.deepEqual(response.body, { httpStatus: 400, code: 'FILE_TOO_LARGE' });
-                });
-
-            th.s3.checkNbCalls({ nbCalls: 0 });
-            await th.mysql.checkTableLength('Clipboard', 0);
-        });
-
-        it('Failing S3 command should not commit changes in the DB', async () => {
-            const buffer = Buffer.from('some data');
-            await th.mysql.fixture({
-                Clipboard: []
-            });
-
-            await request(app)
-                .post('/clipboard/addEntry')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .set('content-type', 'multipart/form-data')
-                .field('name', 'shouldfail')
-                .field('content', 'entry content')
-                .attach('file', buffer, {
-                    filename: 'file',
-                    contentType: 'text/plain'
-                })
-                .expect(500)
-                .then((response) => {
-                    assert.deepEqual(response.body, {
-                        httpStatus: 500,
-                        code: 'INTERNAL_SERVER_ERROR'
-                    });
-                });
-
-            th.s3.checkNbCalls({ nbCalls: 1 });
-            await th.mysql.checkTableLength('Clipboard', 0);
-            await th.mysql.checkTableLength('S3Files', 0);
+            await th.mysql.checkTableLength('Clipboard', 1);
         });
     });
 
@@ -214,162 +136,6 @@ describe('clipboard/addEntry', () => {
 
             th.s3.checkNbCalls({ nbCalls: 0 });
             await th.mysql.checkTableLength('S3Files', 0);
-        });
-
-        it('file entry - file is uploaded to S3', async () => {
-            const buffer = Buffer.from('some data');
-
-            await request(app)
-                .post('/clipboard/addEntry')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .field('name', 'entry name')
-                .attach('file', buffer, {
-                    filename: 'file',
-                    contentType: 'text/plain'
-                })
-                .expect(200);
-
-            th.s3.checkNbCalls({ nbCalls: 1 });
-            th.s3.checkCall({
-                commandType: 'PutObject',
-                input: {
-                    Bucket: 'clipboard',
-                    ContentType: 'text/plain'
-                }
-            });
-            await th.mysql.checkTableLength('S3Files', 1);
-
-            await th.mysql.checkContains({
-                Clipboard: [
-                    {
-                        name: 'entry name',
-                        s3Key: (value: string) => value.match(/.*entry-name/) !== null
-                    }
-                ],
-                S3Files: [
-                    {
-                        bucket: 'clipboard',
-                        s3Key: (value: string) => value.match(/.*entry-name/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec,
-                        uploadedDateUnix: th.mysql.aroundNowSec
-                    }
-                ]
-            });
-        });
-
-        it('file entry (no additional content) - file is uploaded to S3', async () => {
-            const buffer = Buffer.from('some data');
-
-            await request(app)
-                .post('/clipboard/addEntry')
-                .set('content-type', 'multipart/form-data')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .field('name', 'entry name')
-                .field('content', 'entry content')
-                .attach('file', buffer, {
-                    filename: 'file',
-                    contentType: 'text/plain'
-                })
-                .expect(200);
-
-            th.s3.checkNbCalls({ nbCalls: 1 });
-            th.s3.checkCall({
-                commandType: 'PutObject',
-                input: {
-                    Bucket: 'clipboard',
-                    ContentType: 'text/plain'
-                }
-            });
-            await th.mysql.checkTableLength('S3Files', 1);
-
-            await th.mysql.checkContains({
-                Clipboard: [
-                    {
-                        name: 'entry name',
-                        s3Key: (value: string) => value.match(/.*entry-name/) !== null
-                    }
-                ],
-                S3Files: [
-                    {
-                        bucket: 'clipboard',
-                        s3Key: (value: string) => value.match(/.*entry-name/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec,
-                        uploadedDateUnix: th.mysql.aroundNowSec
-                    }
-                ]
-            });
-        });
-    });
-
-    describe('should set an extension based on the file type', () => {
-        it('png', async () => {
-            await request(app)
-                .post('/clipboard/addEntry')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .set('content-type', 'multipart/form-data')
-                .field('name', 'image')
-                .field('content', 'image')
-                .attach('file', 'tests/assets/glider.png')
-                .expect(200);
-
-            th.s3.checkNbCalls({ nbCalls: 1 });
-            th.s3.checkCall({
-                commandType: 'PutObject',
-                input: { Bucket: 'clipboard', ContentType: 'image/png' }
-            });
-            await th.mysql.checkTableLength('S3Files', 1);
-
-            await th.mysql.checkContains({
-                Clipboard: [
-                    {
-                        name: 'image',
-                        s3Key: (value: string) => value.match(/.*image.png/) !== null
-                    }
-                ],
-                S3Files: [
-                    {
-                        bucket: 'clipboard',
-                        s3Key: (value: string) => value.match(/.*image.png/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec,
-                        uploadedDateUnix: th.mysql.aroundNowSec
-                    }
-                ]
-            });
-        });
-
-        it('gif', async () => {
-            await request(app)
-                .post('/clipboard/addEntry')
-                .set('Cookie', th.auth2.getPassportSessionCookie())
-                .set('content-type', 'multipart/form-data')
-                .field('name', 'animated_image')
-                .field('content', 'animated_image')
-                .attach('file', 'tests/assets/burns.gif')
-                .expect(200);
-
-            th.s3.checkNbCalls({ nbCalls: 1 });
-            th.s3.checkCall({
-                commandType: 'PutObject',
-                input: { Bucket: 'clipboard', ContentType: 'image/gif' }
-            });
-            await th.mysql.checkTableLength('S3Files', 1);
-
-            await th.mysql.checkContains({
-                Clipboard: [
-                    {
-                        name: 'animated_image',
-                        s3Key: (value: string) => value.match(/.*animatedimage.gif/) !== null
-                    }
-                ],
-                S3Files: [
-                    {
-                        bucket: 'clipboard',
-                        s3Key: (value: string) => value.match(/.*animatedimage.gif/) !== null,
-                        creationDateUnix: th.mysql.aroundNowSec,
-                        uploadedDateUnix: th.mysql.aroundNowSec
-                    }
-                ]
-            });
         });
     });
 });
