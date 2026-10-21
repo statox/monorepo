@@ -19,7 +19,7 @@ import slug from 'slug';
 import { generate4BytesHex } from '../random.js';
 import { ApiFile } from '../../routes/index.js';
 
-type ManagedBuckets = 'clipboard' | 'reactor';
+export type ManagedBuckets = 'clipboard' | 'reactor';
 
 export const createS3Key = (params: {
     filename: string;

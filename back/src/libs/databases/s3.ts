@@ -89,7 +89,7 @@ export const setLocalBucketsCors = async (buckets: string[]) => {
 
 const requiredBuckets = ['clipboard', 'reactor'];
 // Buckets receiving direct browser uploads through presigned PUT URLs
-const directUploadBuckets = ['reactor'];
+const directUploadBuckets = ['reactor', 'clipboard'];
 
 export const initS3 = async () => {
     if (isProd) {
