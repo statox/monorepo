@@ -26,13 +26,20 @@ type ClipboardEntryDB = {
     s3PresignedUrl?: string;
 };
 
+// Entries prepared with prepareEntryUpload() whose file isn't confirmed yet are not listed.
+// An s3Key with no S3Files row is deliberately kept: enrichEntries() fails loudly on it.
+const PENDING_UPLOADS_JOIN = `LEFT JOIN S3Files s ON s.bucket = 'clipboard' AND s.s3Key = c.s3Key`;
+const NOT_PENDING_UPLOAD = `(c.s3Key IS NULL OR s.id IS NULL OR s.uploadedDateUnix IS NOT NULL)`;
+
 export const getPublicEntries = async () => {
     const [entries] = await db.query<(ClipboardEntryDB & RowDataPacket)[]>(
         `SELECT
-            id, name, content, creationDateUnix, ttl, isPublic, linkId, s3Key
-        FROM Clipboard
-        WHERE isPublic = 1
-        AND creationDateUnix + ttl > UNIX_TIMESTAMP()
+            c.id, c.name, c.content, c.creationDateUnix, c.ttl, c.isPublic, c.linkId, c.s3Key
+        FROM Clipboard c
+        ${PENDING_UPLOADS_JOIN}
+        WHERE c.isPublic = 1
+        AND c.creationDateUnix + c.ttl > UNIX_TIMESTAMP()
+        AND ${NOT_PENDING_UPLOAD}
 `
     );
     return await enrichEntries(entries);
@@ -41,8 +48,10 @@ export const getPublicEntries = async () => {
 export const getAllEntries = async () => {
     const [entries] = await db.query<(ClipboardEntryDB & RowDataPacket)[]>(
         `SELECT
-            id, name, content, creationDateUnix, ttl, isPublic, linkId, s3Key
-        FROM Clipboard`
+            c.id, c.name, c.content, c.creationDateUnix, c.ttl, c.isPublic, c.linkId, c.s3Key
+        FROM Clipboard c
+        ${PENDING_UPLOADS_JOIN}
+        WHERE ${NOT_PENDING_UPLOAD}`
     );
     return await enrichEntries(entries);
 };
