@@ -118,6 +118,7 @@ export type AppLogComponent =
     | 'app'
     | 'auth'
     | 'chords'
+    | 'clipboard'
     | 'debug'
     | 'env-helpers'
     | 'gravitrips'
