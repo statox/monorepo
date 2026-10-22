@@ -161,4 +161,46 @@ describe('clipboard/getAllEntries', () => {
                 assert.exists(privateEntryWithS3Response.s3PresignedUrl);
             });
     });
+
+    it('should skip entries whose file upload is still pending', async () => {
+        const textEntry = {
+            id: 1,
+            name: 'text entry',
+            content: 'foo',
+            creationDateUnix: th.mysql.nowSec(),
+            ttl: 60,
+            linkId: 'aaaaaaaa',
+            isPublic: false
+        };
+        const pendingFileEntry = {
+            id: 2,
+            name: 'pending file entry',
+            creationDateUnix: th.mysql.nowSec(),
+            ttl: 60,
+            linkId: 'bbbbbbbb',
+            isPublic: false,
+            s3Key: 'bbbbbbbb_pending.png'
+        };
+        await th.mysql.fixture({
+            Clipboard: [textEntry, pendingFileEntry],
+            S3Files: [
+                {
+                    bucket: 'clipboard',
+                    s3Key: 'bbbbbbbb_pending.png',
+                    creationDateUnix: th.mysql.nowSec(),
+                    uploadedDateUnix: null
+                }
+            ]
+        });
+
+        await request(app)
+            .get('/clipboard/getAllEntries')
+            .set('Cookie', th.auth2.getPassportSessionCookie())
+            .set('Accept', 'application/json')
+            .expect(200)
+            .then((response) => {
+                assert.lengthOf(response.body, 1);
+                assert.equal(response.body[0].name, 'text entry');
+            });
+    });
 });

@@ -2,7 +2,8 @@ import { slog } from '../modules/logging/index.js';
 import { doHomeTrackerMonitoring } from '../modules/homeTracker/index.js';
 import { doMeteoFrance } from '../modules/meteofrance/index.js';
 import { doPersonalTrackerReminder } from '../modules/personalTracker/index.js';
-import { cleanupAbandonedUploads } from '../modules/reactor/index.js';
+import { cleanupAbandonedUploads as cleanupAbandonedClipboardUploads } from '../modules/clipboard/index.js';
+import { cleanupAbandonedUploads as cleanupAbandonedReactorUploads } from '../modules/reactor/index.js';
 import { doWebWatcher } from '../modules/webWatcher/index.js';
 import { PeriodicTask } from './PeriodicTask.js';
 
@@ -37,7 +38,12 @@ const tasks = [
     }),
     new PeriodicTask({
         taskName: 'Reactor abandoned uploads',
-        task: cleanupAbandonedUploads,
+        task: cleanupAbandonedReactorUploads,
+        intervalMinutes: 60
+    }),
+    new PeriodicTask({
+        taskName: 'Clipboard abandoned uploads',
+        task: cleanupAbandonedClipboardUploads,
         intervalMinutes: 60
     })
 ];

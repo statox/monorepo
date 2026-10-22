@@ -1,61 +1,35 @@
 import { FromSchema } from 'json-schema-to-ts';
-import { EmptyOutput, PostWithFileRoute, RouteWithFileHandler } from '../types.js';
-import { addEntry, FileOrContentRequiredError } from '../../modules/clipboard/index.js';
+import { EmptyOutput, PostRoute, RouteHandler } from '../types.js';
+import { addEntry } from '../../modules/clipboard/index.js';
 import { emptyObjectSchema } from '../helpers.js';
 
-const handler: RouteWithFileHandler<Input> = async (params) => {
-    const { name, content, isPublic: isPublicInput } = params.input;
-    params.loggableContext.addData('entryName', name);
-
-    // We allow multiple types because when uploading a file with multipart/formdata
-    // the fields are not casted by Formidable
-    // TODO: Fix that
-    let ttlSeconds: number | undefined = undefined;
-    if (!isNaN(Number(params.input.ttlSeconds))) {
-        ttlSeconds = Number(params.input.ttlSeconds);
-    }
-    const isPublic = typeof isPublicInput === 'string' ? isPublicInput === 'true' : isPublicInput;
-
-    const file = params.file;
-
-    if (!content && !file) {
-        throw new FileOrContentRequiredError();
-    }
-
-    await addEntry({ name, content, ttlSeconds, isPublic, file });
+const handler: RouteHandler<Input> = async (params) => {
+    params.loggableContext.addData('entryName', params.input.name);
+    await addEntry(params.input);
 };
 
+// Entries with a file go through prepareUpload and confirmUpload
 const inputSchema = {
     type: 'object',
-    required: ['name'],
+    required: ['name', 'content'],
     additionalProperties: false,
     properties: {
-        name: {
-            type: 'string'
-        },
-        content: {
-            type: 'string'
-        },
-        ttlSeconds: {
-            type: ['number', 'string'],
-            minimum: 0
-        },
-        isPublic: {
-            type: ['boolean', 'string']
-        }
+        name: { type: 'string', minLength: 1 },
+        content: { type: 'string', minLength: 1 },
+        ttlSeconds: { type: 'number', minimum: 0 },
+        isPublic: { type: 'boolean' }
     }
 } as const;
 
 type Input = FromSchema<typeof inputSchema>;
 
-export const route: PostWithFileRoute<Input, EmptyOutput> = {
+export const route: PostRoute<Input, EmptyOutput> = {
     method: 'post',
     path: '/clipboard/addEntry',
     inputSchema,
     handler,
     authentication: 'user2',
     scope: 'admin',
-    clientErrors: ['FILE_OR_CONTENT_REQUIRED', 'ITEM_ALREADY_EXISTS'],
-    outputSchema: emptyObjectSchema,
-    file: true
+    clientErrors: ['ITEM_ALREADY_EXISTS'],
+    outputSchema: emptyObjectSchema
 };

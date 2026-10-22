@@ -14,7 +14,6 @@ export const ERROR_CODES = [
     // Route-level business errors
     'ITEM_ALREADY_EXISTS',
     'ITEM_NOT_FOUND',
-    'FILE_OR_CONTENT_REQUIRED',
     'FILE_TOO_LARGE',
     'ITEM_IS_EXPIRED',
     'TOO_MANY_ENTRIES',

@@ -1,0 +1,2 @@
+export const CLIPBOARD_MAX_SIZE_BYTES = 5 * 1024 * 1024;
+export const CLIPBOARD_DEFAULT_TTL_SECONDS = 60 * 5;

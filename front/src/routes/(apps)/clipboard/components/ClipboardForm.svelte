@@ -8,7 +8,7 @@
     } from '$lib/components/FormLayout';
     import type { NoticeItem } from '$lib/components/Notice';
     import { DurationPicker } from '$lib/components/DurationPicker';
-    import { uploadToClipboard } from '$lib/Clipboard';
+    import { CLIPBOARD_MAX_SIZE_BYTES, uploadToClipboard } from '$lib/Clipboard';
     import { getPageTitle } from '$lib/pageTitle';
 
     interface Props {
@@ -45,6 +45,11 @@
         fieldErrors.name = name?.length ? '' : 'Name is required';
     };
 
+    const validateFile = (file: File | null) => {
+        fieldErrors.file =
+            file && file.size > CLIPBOARD_MAX_SIZE_BYTES ? 'The file must be 5 MB or less' : '';
+    };
+
     const upload = async () => {
         noticeMessages = [];
         validateName();
@@ -55,11 +60,12 @@
             fieldErrors.ttl = '';
         }
 
+        const file = files?.[0] ?? null;
+        validateFile(file);
+
         if (Object.values(fieldErrors).some((e) => e)) {
             return;
         }
-
-        const file = files?.[0] ?? null;
 
         if (!content?.length && !file) {
             noticeMessages.push({
@@ -102,6 +108,9 @@
 
         <label for="file">File</label>
         <FormFileInput bind:files />
+        {#if fieldErrors.file}
+            <span class="field-error">{fieldErrors.file}</span>
+        {/if}
 
         <label for="ttlSeconds">TTL</label>
         <DurationPicker

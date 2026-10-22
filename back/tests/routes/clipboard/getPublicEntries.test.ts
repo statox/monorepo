@@ -100,4 +100,35 @@ describe('clipboard/getPublicEntries', () => {
                 assert.deepEqual(response.body, [ttlOk]);
             });
     });
+
+    it('should skip entries whose file upload is still pending', async () => {
+        const pendingFileEntry = {
+            id: 1,
+            name: 'pending file entry',
+            creationDateUnix: th.mysql.nowSec(),
+            ttl: 60,
+            linkId: 'aaaaaaaa',
+            isPublic: true,
+            s3Key: 'aaaaaaaa_pending.png'
+        };
+        await th.mysql.fixture({
+            Clipboard: [pendingFileEntry],
+            S3Files: [
+                {
+                    bucket: 'clipboard',
+                    s3Key: 'aaaaaaaa_pending.png',
+                    creationDateUnix: th.mysql.nowSec(),
+                    uploadedDateUnix: null
+                }
+            ]
+        });
+
+        await request(app)
+            .get('/clipboard/getPublicEntries')
+            .set('Accept', 'application/json')
+            .expect(200)
+            .then((response) => {
+                assert.deepEqual(response.body, []);
+            });
+    });
 });

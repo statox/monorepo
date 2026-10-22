@@ -11,9 +11,11 @@ import { route as Chords_getAll } from './chords/getAll.js';
 import { route as Chords_getEntry } from './chords/getEntry.js';
 import { route as Chords_updateEntry } from './chords/updateEntry.js';
 import { route as Clipboard_addEntry } from './clipboard/addEntry.js';
+import { route as Clipboard_confirmUpload } from './clipboard/confirmUpload.js';
 import { route as Clipboard_deleteEntry } from './clipboard/deleteEntry.js';
 import { route as Clipboard_geAllEntries } from './clipboard/getAllEntries.js';
 import { route as Clipboard_getPublicEntries } from './clipboard/getPublicEntries.js';
+import { route as Clipboard_prepareUpload } from './clipboard/prepareUpload.js';
 import { route as Clipboard_staticView } from './clipboard/staticView.js';
 import { route as Cookbook_addRecipe } from './cookbook/addRecipe.js';
 import { route as Cookbook_getRecipe } from './cookbook/getRecipe.js';
@@ -74,9 +76,11 @@ export const routes: {
         Chords_getEntry,
         Chords_updateEntry,
         Clipboard_addEntry,
+        Clipboard_confirmUpload,
         Clipboard_deleteEntry,
         Clipboard_geAllEntries,
         Clipboard_getPublicEntries,
+        Clipboard_prepareUpload,
         Clipboard_staticView,
         Cookbook_addRecipe,
         Cookbook_getRecipe,

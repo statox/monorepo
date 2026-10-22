@@ -1,53 +1,33 @@
-import mime from 'mime-types';
 import { generate4BytesHex } from '../random.js';
 import { db } from '../../databases/db.js';
-import { createS3FileInTransaction, createS3Key } from '../s3files/index.js';
 import { handleDuplicateEntry } from '../../errors/dbHelpers.js';
-import { ApiFile } from '../../routes/index.js';
+import { CLIPBOARD_DEFAULT_TTL_SECONDS } from './constants.js';
 
 type NewEntryParams = {
     name: string;
-    content?: string;
+    content: string;
     ttlSeconds?: number;
     isPublic?: boolean;
-    file?: ApiFile;
 };
 
+// Adds a text entry. Entries with a file use prepareEntryUpload() and confirmEntryUpload()
 export const addEntry = async (newEntry: NewEntryParams) => {
-    const DEFAULT_TTL = 60 * 5; // 5 MINUTES
-    const { name, content, ttlSeconds = DEFAULT_TTL, isPublic = false, file } = newEntry;
+    const {
+        name,
+        content,
+        ttlSeconds = CLIPBOARD_DEFAULT_TTL_SECONDS,
+        isPublic = false
+    } = newEntry;
 
-    let linkId: string;
-    let s3Key: string | undefined;
-
-    if (file) {
-        const mimeExtension = mime.extension(file.mimetype ?? '') || undefined;
-        ({ linkId, s3Key } = createS3Key({ filename: name, extension: mimeExtension }));
-    } else {
-        linkId = generate4BytesHex();
-        s3Key = undefined;
-    }
-
-    const conn = await db.getConnection();
-    await conn.beginTransaction();
     try {
-        await conn.query(
+        await db.query(
             `
-INSERT INTO Clipboard (name, content, ttl, isPublic, linkId, s3Key, creationDateUnix)
-VALUES (?, ?, ?, ?, ?, ?, UNIX_TIMESTAMP())
+INSERT INTO Clipboard (name, content, ttl, isPublic, linkId, creationDateUnix)
+VALUES (?, ?, ?, ?, ?, UNIX_TIMESTAMP())
 `,
-            [name, content, ttlSeconds, isPublic, linkId, s3Key]
+            [name, content, ttlSeconds, isPublic, generate4BytesHex()]
         );
-
-        if (file && s3Key) {
-            await createS3FileInTransaction(conn, { file, bucket: 'clipboard', s3Key });
-        }
-
-        return conn.commit();
     } catch (error) {
-        await conn.rollback();
         handleDuplicateEntry(error, 'ITEM_ALREADY_EXISTS');
-    } finally {
-        conn.release();
     }
 };
