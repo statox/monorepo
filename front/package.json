@@ -46,7 +46,7 @@
         "svelte-check": "^4.7.1",
         "svelte-modals": "^2.0.1",
         "svelte-super-date-picker": "file:../packages/svelte-super-date-picker",
-        "typescript": "^6.0.3",
+        "typescript": "^7.0.2",
         "typescript-eslint": "^8.62.1",
         "vite": "^8.1.2",
         "vite-plugin-plain-text": "^1.4.2"
